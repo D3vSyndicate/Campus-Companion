@@ -7,6 +7,27 @@ import '@/global.css';
 
 import { Platform } from 'react-native';
 
+const COLORS = {
+  background: '#F6F8F7',
+  surface: '#FFFFFF',
+  surfaceMuted: '#F0F4F2',
+
+  primary: '#0F766E',
+  primaryDark: '#115E59',
+  primarySoft: '#E6F4F1',
+
+  text: '#10201D',
+  textSecondary: '#64736F',
+  textMuted: '#94A39F',
+
+  border: '#E3EAE7',
+
+  danger: '#DC5A5A',
+  warning: '#C58A28',
+
+  white: '#FFFFFF',
+}
+
 export const Colors = {
   light: {
     text: '#000000',
