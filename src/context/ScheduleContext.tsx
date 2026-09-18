@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { supabase } from '../lib/superbase';
 
 export type ScheduleItem = {
@@ -9,6 +9,16 @@ export type ScheduleItem = {
   location: string;
   description: string;
 };
+
+function toDatabaseItem(item: Omit<ScheduleItem, 'id'>) {
+  return {
+    title: item.title,
+    date: item.date,
+    start_time: item.time || null,
+    venue: item.location || null,
+    description: item.description || null,
+  };
+}
 
 type ScheduleContextValue = {
   items: ScheduleItem[];
@@ -46,7 +56,11 @@ export function ScheduleProvider({ children }: { children: ReactNode }) {
 
   const addItem: ScheduleContextValue['addItem'] = (item) => {
     return (async () => {
-      const { data, error } = await supabase.from('schedule_items').insert(item).select().single();
+      const { data, error } = await supabase
+        .from('schedule_items')
+        .insert(toDatabaseItem(item))
+        .select()
+        .single();
       if (error) {
         console.error('Error adding schedule item:', error.message);
         return;
@@ -57,7 +71,17 @@ export function ScheduleProvider({ children }: { children: ReactNode }) {
 
   const updateItem: ScheduleContextValue['updateItem'] = (id, updates) => {
     return (async () => {
-      const { error } = await supabase.from('schedule_items').update(updates).eq('id', id);
+      const databaseUpdates = {
+        ...(updates.title !== undefined ? { title: updates.title } : {}),
+        ...(updates.date !== undefined ? { date: updates.date } : {}),
+        ...(updates.time !== undefined ? { start_time: updates.time || null } : {}),
+        ...(updates.location !== undefined ? { venue: updates.location || null } : {}),
+        ...(updates.description !== undefined ? { description: updates.description || null } : {}),
+      };
+      const { error } = await supabase
+        .from('schedule_items')
+        .update(databaseUpdates)
+        .eq('id', id);
       if (error) {
         console.error('Error updating schedule item:', error.message);
         return;

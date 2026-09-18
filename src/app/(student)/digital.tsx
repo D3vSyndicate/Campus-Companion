@@ -1,50 +1,31 @@
-import { useEffect, useState } from 'react';
-import { ActivityIndicator, Linking, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { Linking, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { PageHeader } from '../../components/PageHeader';
 import { ScaledText as Text } from '../../components/ScaledText';
 import { ShameResilientBanner } from '../../components/ShameResilientBanner';
-import { fetchWithOfflineFallback } from '../../lib/offlineData';
 import { useTheme } from '../../theme/ThemeContext';
-
-interface DigitalGuide {
-  id: string;
-  title: string;
-  desc: string;
-  steps: string[];
-  link?: string;
-}
 
 export default function DigitalReadinessScreen() {
   const { colors } = useTheme();
-  const [guides, setGuides] = useState<DigitalGuide[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const loadGuides = async () => {
-      const { data, error } = await fetchWithOfflineFallback('digital_guides');
-      if (error) {
-        console.error('Failed to load digital readiness guides from Supabase.', error);
-      }
-
-      setGuides(data.map((row, index) => {
-        const item = row as Record<string, unknown>;
-        const steps = Array.isArray(item.steps)
-          ? item.steps.map(String)
-          : String(item.steps ?? '').split('\n').filter(Boolean);
-
-        return {
-          id: String(item.id ?? item.guide_id ?? index + 1),
-          title: String(item.title ?? item.name ?? ''),
-          desc: String(item.description ?? item.desc ?? ''),
-          steps,
-          link: item.link ? String(item.link) : undefined,
-        };
-      }));
-      setLoading(false);
-    };
-
-    void loadGuides();
-  }, []);
+  const { t } = useTranslation();
+  const guides = [
+    {
+      title: 'Accessing Funda (LMS)',
+      desc: 'Funda may be new to you. This platform is where lecturers post notes, assignments, and announcements.',
+      steps: ['Go to funda.mandela.ac.za', 'Log in using your Student Number', 'Use your standard university password.'],
+      link: 'https://funda.mandela.ac.za'
+    },
+    {
+      title: 'Connecting to Campus Wi-Fi (eduroam)',
+      desc: 'Stay connected across all Nelson Mandela University campuses seamlessly.',
+      steps: ['Select eduroam from Wi-Fi settings', 'Username: sXXXXX@mandela.ac.za', 'Password: Your password.'],
+    },
+    {
+      title: 'Lab Computer Access',
+      desc: 'School of IT labs give you access to development tools and software needed for your modules.',
+      steps: ['Find an open machine in Lab 1 or 2', 'Log in with your student number and password', 'Always save files to your OneDrive.'],
+    }
+  ];
 
   return (
     <ScrollView
@@ -52,17 +33,17 @@ export default function DigitalReadinessScreen() {
       contentContainerStyle={styles.content}
     >
       <PageHeader
-        eyebrow="GET CONNECTED"
-        title="Digital readiness"
-        subtitle="Set up the tools you will use for learning, communication, and campus life."
+        eyebrow={t('common.getConnected')}
+        title={t('common.digitalTitle')}
+        subtitle={t('common.digitalSubtitle')}
       />
       <ShameResilientBanner 
-        message="Everyone starts as a beginner with university tech. Don't worry if it takes a few tries to get logged in!"
+        message={t('common.digitalBanner')}
         type="encouragement"
       />
 
-      {loading ? <ActivityIndicator size="large" color={colors.accent} /> : guides.map(item => (
-        <View key={item.id} style={[styles.card, { backgroundColor: colors.surface }]}>
+      {guides.map((item, index) => (
+        <View key={index} style={[styles.card, { backgroundColor: colors.surface }]}>
           <Text style={[styles.title, { color: colors.text }]}>{item.title}</Text>
           <Text style={[styles.desc, { color: colors.textSecondary }]}>{item.desc}</Text>
           
@@ -74,16 +55,11 @@ export default function DigitalReadinessScreen() {
 
           {item.link && (
             <TouchableOpacity style={[styles.button, { backgroundColor: colors.accent }]} onPress={() => Linking.openURL(item.link!)}>
-              <Text style={[styles.buttonText, { color: colors.text }]}>Open Funda Portal</Text>
+              <Text style={[styles.buttonText, { color: colors.text }]}>{t('common.openFunda')}</Text>
             </TouchableOpacity>
           )}
         </View>
       ))}
-      {!loading && guides.length === 0 && (
-        <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
-          No digital readiness guides are available yet.
-        </Text>
-      )}
     </ScrollView>
   );
 }
@@ -98,5 +74,4 @@ const styles = StyleSheet.create({
   stepText: { fontSize: 12, marginBottom: 4 },
   button: { padding: 10, borderRadius: 6, marginTop: 8, alignItems: 'center' },
   buttonText: { fontWeight: '600', fontSize: 13 },
-  emptyText: { fontSize: 14, textAlign: 'center', marginTop: 20 },
 });

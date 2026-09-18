@@ -1,15 +1,15 @@
+import * as Localization from 'expo-localization';
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import * as Localization from 'expo-localization';
 
+import afri from './locales/afri.json';
 import en from './locales/en.json';
 import xh from './locales/xh.json';
-import afri from './locales/afri.json';
 
 const resources = {
   en: { translation: en },
   xh: { translation: xh },
-  zu: { translation: afri },
+  af: { translation: afri },
 };
 
 i18n
