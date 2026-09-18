@@ -12,6 +12,7 @@ type AuthContextValue = {
     email: string,
     password: string,
   ) => Promise<{ error: string | null; role: UserRole | null }>;
+  signUp: (email: string, password: string) => Promise<{ error: string | null }>;
   resetPassword: (email: string) => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
 };
@@ -21,6 +22,20 @@ export type UserRole = 'admin' | 'coordinator' | 'student';
 export function getUserRole(user: User | null): UserRole | null {
   const role = user?.app_metadata?.role ?? user?.user_metadata?.role;
   return role === 'admin' || role === 'coordinator' || role === 'student' ? role : null;
+}
+
+function getLoginErrorMessage(message: string) {
+  const normalized = message.toLowerCase();
+
+  if (normalized.includes('invalid login credentials')) {
+    return 'That email or password is incorrect, or the account does not exist in this Supabase project.';
+  }
+
+  if (normalized.includes('email not confirmed')) {
+    return 'Confirm your email address from the Supabase confirmation email before logging in.';
+  }
+
+  return message;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -78,7 +93,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
 
     if (signInError) {
-      const message = signInError.message;
+      const message = getLoginErrorMessage(signInError.message);
       setError(message);
       return { error: message, role: null };
     }
@@ -97,6 +112,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return { error: message };
     }
 
+    return { error: null };
+  };
+
+  const signUp = async (email: string, password: string) => {
+    setError(null);
+    const { data, error: signUpError } = await supabase.auth.signUp({
+      email: email.trim(),
+      password,
+      options: { data: { role: 'student' } },
+    });
+
+    if (signUpError) {
+      const message = signUpError.message;
+      setError(message);
+      return { error: message };
+    }
+
+    setSession(data.session);
     return { error: null };
   };
 
@@ -122,6 +155,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         loading,
         error,
         signIn,
+        signUp,
         resetPassword,
         signOut,
       }}

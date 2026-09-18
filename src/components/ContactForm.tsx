@@ -1,14 +1,14 @@
 import { useNavigation, useRouter } from 'expo-router';
 import React, { useCallback, useLayoutEffect, useState } from 'react';
 import {
-    Alert,
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    StyleSheet,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { Contact, useContacts } from '../context/ContactsContext';
 import { useTheme } from '../theme/ThemeContext';
@@ -32,7 +32,7 @@ export default function ContactForm({ existing }: Props) {
 
   const handleDelete = useCallback(() => {
     if (!existing) return;
-    Alert.alert('Delete contact', `Delete "${name} ${surname}".trim()? This can't be undone.`, [
+    Alert.alert('Delete contact', `Delete "${`${name} ${surname}`.trim()}"? This can't be undone.`, [
       { text: 'Cancel', style: 'cancel' },
       {
         text: 'Delete',

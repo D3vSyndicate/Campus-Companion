@@ -6,6 +6,7 @@ import { AppearanceProvider, useAppearance } from '../context/AppearanceContext'
 import { AuthProvider } from '../context/AuthContext';
 import { ToastProvider } from '../context/ToastContext';
 import { ThemeProvider as AppThemeProvider } from '../theme/ThemeContext';
+import '../i18n';
 
 void NativeSplashScreen.preventAutoHideAsync();
 

@@ -1,0 +1,10 @@
+{
+  "common": {
+    "home": "Home",
+    "schedule": "Schedule",
+    "checklist": "Checklist",
+    "digital": "Digital",
+    "faqs": "FAQs",
+    "support": "Support"
+  }
+}
