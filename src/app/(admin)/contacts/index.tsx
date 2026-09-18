@@ -1,7 +1,8 @@
 import { useNavigation, useRouter } from 'expo-router';
 import { useLayoutEffect } from 'react';
-import { Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
 import ListItemCard from '../../../components/ListItemCard';
+import { ScaledText as Text } from '../../../components/ScaledText';
 import { useContacts } from '../../../context/ContactsContext';
 import { useTheme } from '../../../theme/ThemeContext';
 

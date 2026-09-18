@@ -1,20 +1,23 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
 import { AuthGate } from '../../components/AuthGate';
+import { useTheme } from '../../theme/ThemeContext';
 
 const TAB_ICON_SIZE = 22;
 
 export default function StudentLayout() {
+  const { colors } = useTheme();
+
   return (
     <AuthGate requiredRole="student">
       <Tabs
         screenOptions={{
-          tabBarActiveTintColor: '#0B1F3A',
-          tabBarInactiveTintColor: '#64748B',
+          tabBarActiveTintColor: colors.accent,
+          tabBarInactiveTintColor: colors.textSecondary,
           tabBarLabelStyle: { fontSize: 11, fontWeight: '700' },
           tabBarStyle: {
-            backgroundColor: '#FFFFFF',
-            borderTopColor: '#D9E0E8',
+            backgroundColor: colors.surface,
+            borderTopColor: colors.border,
             height: 68,
             paddingTop: 6,
           },

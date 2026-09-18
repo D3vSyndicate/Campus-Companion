@@ -1,7 +1,8 @@
 import { useRouter, useSegments } from 'expo-router';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../theme/ThemeContext';
+import { ScaledText as Text } from './ScaledText';
 
 // Title bar used at the top of the coordinator dashboard. Tapping the avatar
 // opens profile settings, theme, account details, and sign out.

@@ -5,6 +5,10 @@ import SplashScreen from '../components/splash-scrren';
 import { AppearanceProvider, useAppearance } from '../context/AppearanceContext';
 import { AuthProvider } from '../context/AuthContext';
 import { ToastProvider } from '../context/ToastContext';
+<<<<<<< HEAD
+=======
+import { ThemeProvider as AppThemeProvider } from '../theme/ThemeContext';
+>>>>>>> 2b26f3ab3bafb8d06515d75b4ebd5fe12fc1fc80
 
 void NativeSplashScreen.preventAutoHideAsync();
 
@@ -28,9 +32,11 @@ export default function RootLayout() {
   return (
     <AuthProvider>
       <AppearanceProvider>
-        <ToastProvider>
-          <AppThemeShell />
-        </ToastProvider>
+        <AppThemeProvider>
+          <ToastProvider>
+            <AppThemeShell />
+          </ToastProvider>
+        </AppThemeProvider>
       </AppearanceProvider>
     </AuthProvider>
   );

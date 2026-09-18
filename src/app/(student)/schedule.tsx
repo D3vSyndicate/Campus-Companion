@@ -1,36 +1,25 @@
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { PageHeader } from '../../components/PageHeader';
+import { ScaledText as Text } from '../../components/ScaledText';
 import { ShameResilientBanner } from '../../components/ShameResilientBanner';
-import { useAppearance } from '../../context/AppearanceContext';
 import { fetchWithOfflineFallback } from '../../lib/offlineData';
+import { useTheme } from '../../theme/ThemeContext';
 import { ScheduleItem } from '../../types';
 
 export default function ScheduleScreen() {
-  const { darkMode } = useAppearance();
-  const palette = darkMode
-    ? {
-        screenBg: '#0B1220',
-        cardBg: '#111B2E',
-        mutedBg: '#17253E',
-        title: '#E8EEF7',
-        body: '#B9C9DD',
-        secondary: '#8DA3C1',
-        badge: '#FFF8D9',
-        badgeText: '#806414',
-        emptyBg: '#111B2E',
-      }
-    : {
-        screenBg: '#F4F6F9',
-        cardBg: '#FFFFFF',
-        mutedBg: '#F1F5F9',
-        title: '#0F172A',
-        body: '#475569',
-        secondary: '#0B1F3A',
-        badge: '#FFF8D9',
-        badgeText: '#806414',
-        emptyBg: '#FFFFFF',
-      };
+  const { colors } = useTheme();
+  const palette = {
+    screenBg: colors.background,
+    cardBg: colors.surface,
+    mutedBg: colors.card,
+    title: colors.text,
+    body: colors.textSecondary,
+    secondary: colors.text,
+    badge: colors.accent,
+    badgeText: colors.text,
+    emptyBg: colors.surface,
+  };
 
   const [schedule, setSchedule] = useState<ScheduleItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -72,7 +61,7 @@ export default function ScheduleScreen() {
   }, []);
 
   const renderItem = ({ item }: { item: ScheduleItem }) => (
-    <View style={[styles.card, { backgroundColor: palette.cardBg }, item.isPast && styles.pastCard]}>
+    <View style={[styles.card, { backgroundColor: palette.cardBg, borderColor: colors.border }, item.isPast && styles.pastCard]}>
       <View style={[styles.timeBadge, { backgroundColor: palette.badge }]}>
         <Text style={[styles.timeText, { color: palette.badgeText }]}>{item.startTime} - {item.endTime}</Text>
       </View>
@@ -87,11 +76,11 @@ export default function ScheduleScreen() {
           </Text>
         </View>
       ) : (
-        <TouchableOpacity 
-          style={styles.directionBtn}
+          <TouchableOpacity
+          style={[styles.directionBtn, { backgroundColor: colors.accent }]}
           onPress={() => Alert.alert('Directions', `Start at main entrance and follow signs to ${item.venue}.`)}
         >
-          <Text style={styles.directionText}>Show me where to go</Text>
+          <Text style={[styles.directionText, { color: colors.text }]}>Show me where to go</Text>
         </TouchableOpacity>
       )}
     </View>
@@ -118,7 +107,7 @@ export default function ScheduleScreen() {
       />
 
       {loading ? (
-        <ActivityIndicator size="large" color="#0B1F3A" />
+        <ActivityIndicator size="large" color={colors.accent} />
       ) : schedule.length === 0 ? (
         <View style={[styles.emptyState, { backgroundColor: palette.emptyBg }]}>
           <Text style={[styles.emptyTitle, { color: palette.title }]}>No schedule loaded yet</Text>
@@ -137,20 +126,20 @@ export default function ScheduleScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F4F6F9', padding: 16 },
+  container: { flex: 1, padding: 16 },
   list: { paddingBottom: 20 },
-  card: { backgroundColor: '#FFFFFF', padding: 16, borderRadius: 12, marginBottom: 12 },
-  pastCard: { opacity: 0.85, borderColor: '#E2E8F0', borderWidth: 1 },
-  timeBadge: { backgroundColor: '#FFF8D9', alignSelf: 'flex-start', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6, marginBottom: 8 },
-  timeText: { color: '#806414', fontSize: 12, fontWeight: '600' },
-  title: { fontSize: 16, fontWeight: 'bold', color: '#0F172A' },
-  venue: { fontSize: 13, color: '#0B1F3A', marginVertical: 4 },
-  desc: { fontSize: 13, color: '#475569', marginBottom: 10 },
-  recoveryBox: { backgroundColor: '#F1F5F9', padding: 10, borderRadius: 6, marginTop: 4 },
-  recoveryText: { fontSize: 12, color: '#475569', fontStyle: 'italic' },
-  directionBtn: { backgroundColor: '#0B1F3A', paddingVertical: 8, paddingHorizontal: 12, borderRadius: 6, alignSelf: 'flex-start' },
-  directionText: { color: '#FFFFFF', fontSize: 12, fontWeight: '600' },
-  emptyState: { backgroundColor: '#FFFFFF', borderRadius: 12, padding: 20, alignItems: 'center', marginTop: 20 },
-  emptyTitle: { fontSize: 16, fontWeight: '700', color: '#0B1F3A', marginBottom: 8 },
-  emptyText: { fontSize: 13, color: '#475569', textAlign: 'center' },
+  card: { padding: 16, borderRadius: 12, marginBottom: 12 },
+  pastCard: { opacity: 0.85, borderWidth: 1 },
+  timeBadge: { alignSelf: 'flex-start', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6, marginBottom: 8 },
+  timeText: { fontSize: 12, fontWeight: '600' },
+  title: { fontSize: 16, fontWeight: 'bold' },
+  venue: { fontSize: 13, marginVertical: 4 },
+  desc: { fontSize: 13, marginBottom: 10 },
+  recoveryBox: { padding: 10, borderRadius: 6, marginTop: 4 },
+  recoveryText: { fontSize: 12, fontStyle: 'italic' },
+  directionBtn: { paddingVertical: 8, paddingHorizontal: 12, borderRadius: 6, alignSelf: 'flex-start' },
+  directionText: { fontSize: 12, fontWeight: '600' },
+  emptyState: { borderRadius: 12, padding: 20, alignItems: 'center', marginTop: 20 },
+  emptyTitle: { fontSize: 16, fontWeight: '700', marginBottom: 8 },
+  emptyText: { fontSize: 13, textAlign: 'center' },
 });

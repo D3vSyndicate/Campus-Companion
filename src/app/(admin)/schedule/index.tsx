@@ -1,9 +1,10 @@
-import React, { useLayoutEffect } from 'react';
-import { Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useRouter, useNavigation } from 'expo-router';
+import { useNavigation, useRouter } from 'expo-router';
+import { useLayoutEffect } from 'react';
+import { Alert, FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
+import ListItemCard from '../../../components/ListItemCard';
+import { ScaledText as Text } from '../../../components/ScaledText';
 import { useSchedule } from '../../../context/ScheduleContext';
 import { useTheme } from '../../../theme/ThemeContext';
-import ListItemCard from '../../../components/ListItemCard';
 
 export default function ScheduleListScreen() {
   const { items, deleteItem } = useSchedule();

@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { PageHeader } from '../../components/PageHeader';
-import { useAppearance } from '../../context/AppearanceContext';
+import { ScaledText as Text } from '../../components/ScaledText';
 import { fetchWithOfflineFallback } from '../../lib/offlineData';
+import { useTheme } from '../../theme/ThemeContext';
 
 interface FAQ {
   id: string;
@@ -33,30 +34,18 @@ const FALLBACK_FAQS: FAQ[] = [
 ];
 
 export default function FAQScreen() {
-  const { darkMode } = useAppearance();
-  const palette = darkMode
-    ? {
-        pageBg: '#0B1220',
-        inputBg: '#111B2E',
-        inputBorder: '#223552',
-        cardBg: '#111B2E',
-        question: '#F2F7FF',
-        answer: '#D3DDF0',
-        tagBg: '#243754',
-        tagText: '#EAF3FF',
-        text: '#DCEAFB',
-      }
-    : {
-        pageBg: '#F4F6F9',
-        inputBg: '#FFF',
-        inputBorder: '#B8C4D1',
-        cardBg: '#FFF',
-        question: '#1E293B',
-        answer: '#334155',
-        tagBg: '#E2E8F0',
-        tagText: '#0F172A',
-        text: '#0B1F3A',
-      };
+  const { colors } = useTheme();
+  const palette = {
+    pageBg: colors.background,
+    inputBg: colors.card,
+    inputBorder: colors.border,
+    cardBg: colors.surface,
+    question: colors.text,
+    answer: colors.textSecondary,
+    tagBg: colors.card,
+    tagText: colors.text,
+    text: colors.text,
+  };
 
   const [search, setSearch] = useState('');
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -107,7 +96,7 @@ export default function FAQScreen() {
       />
 
       {loading ? (
-        <ActivityIndicator size="large" color="#0B1F3A" />
+        <ActivityIndicator size="large" color={colors.accent} />
       ) : (
         <FlatList
           data={filteredFaqs}
@@ -123,7 +112,7 @@ export default function FAQScreen() {
             </View>
             
             {expandedId === item.id && (
-              <Text style={[styles.answer, { color: palette.answer }]}>{item.answer}</Text>
+              <Text style={[styles.answer, { color: palette.answer, borderTopColor: colors.border }]}>{item.answer}</Text>
             )}
           </TouchableOpacity>
           )}
@@ -134,11 +123,11 @@ export default function FAQScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F4F6F9', padding: 16 },
-  searchInput: { backgroundColor: '#FFF', padding: 12, borderRadius: 8, borderWidth: 1, borderColor: '#B8C4D1', marginBottom: 16, color: '#0B1F3A' },
-  card: { backgroundColor: '#FFF', padding: 14, borderRadius: 10, marginBottom: 10 },
+  container: { flex: 1, padding: 16 },
+  searchInput: { padding: 12, borderRadius: 8, borderWidth: 1, marginBottom: 16 },
+  card: { padding: 14, borderRadius: 10, marginBottom: 10 },
   cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  question: { fontSize: 14, fontWeight: '600', color: '#1E293B', flex: 1 },
-  tag: { fontSize: 10, backgroundColor: '#E2E8F0', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4, marginLeft: 8 },
-  answer: { fontSize: 13, color: '#334155', marginTop: 10, borderTopWidth: 1, borderTopColor: '#F1F5F9', paddingTop: 8 },
+  question: { fontSize: 14, fontWeight: '600', flex: 1 },
+  tag: { fontSize: 10, paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4, marginLeft: 8 },
+  answer: { fontSize: 13, marginTop: 10, borderTopWidth: 1, paddingTop: 8 },
 });

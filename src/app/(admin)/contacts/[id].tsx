@@ -1,8 +1,7 @@
-import React from 'react';
-import { Text } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
-import { useContacts } from '../../../context/ContactsContext';
 import ContactForm from '../../../components/ContactForm';
+import { ScaledText as Text } from '../../../components/ScaledText';
+import { useContacts } from '../../../context/ContactsContext';
 
 export default function EditContactScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();

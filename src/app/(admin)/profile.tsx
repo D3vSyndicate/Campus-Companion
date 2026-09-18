@@ -1,7 +1,7 @@
-import React from 'react';
-import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useTheme, ThemeMode } from '../../theme/ThemeContext';
+import { Alert, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ScaledText as Text } from '../../components/ScaledText';
 import { useAuth } from '../../context/AuthContext';
+import { ThemeMode, useTheme } from '../../theme/ThemeContext';
 
 const MODES: { key: ThemeMode; label: string }[] = [
   { key: 'system', label: 'System' },

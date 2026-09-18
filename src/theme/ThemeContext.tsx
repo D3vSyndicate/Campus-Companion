@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useMemo, useState, ReactNode } from 'react';
-import { useColorScheme } from 'react-native';
+import { createContext, ReactNode, useContext, useMemo } from 'react';
+import { useAppearance } from '../context/AppearanceContext';
 import { darkColors, lightColors, ThemeColors } from './colors';
 
 export type ThemeMode = 'system' | 'light' | 'dark';
@@ -15,12 +15,18 @@ type ThemeContextValue = {
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const systemScheme = useColorScheme(); // 'light' | 'dark' | null
-  const [mode, setMode] = useState<ThemeMode>('system');
+  const { darkMode, userOverride, setDarkModeOverride } = useAppearance();
+  const mode: ThemeMode =
+    userOverride === null ? 'system' : userOverride ? 'dark' : 'light';
 
-  const resolvedScheme: 'light' | 'dark' =
-    mode === 'system' ? (systemScheme === 'dark' ? 'dark' : 'light') : mode;
+  const resolvedScheme: 'light' | 'dark' = darkMode ? 'dark' : 'light';
   const colors = resolvedScheme === 'dark' ? darkColors : lightColors;
+
+  const setMode = (nextMode: ThemeMode) => {
+    setDarkModeOverride(
+      nextMode === 'system' ? null : nextMode === 'dark',
+    );
+  };
 
   const value = useMemo(
     () => ({
