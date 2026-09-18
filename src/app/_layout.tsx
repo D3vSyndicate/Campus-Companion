@@ -1,9 +1,8 @@
 import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import { AuthProvider } from '../context/AuthContext';
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { AppearanceProvider, useAppearance } from '../context/AppearanceContext';
-import { ToastProvider } from '../context/ToastContext';
+import { AuthProvider } from '../context/AuthContext';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -23,18 +22,10 @@ function AppThemeShell() {
 
 export default function RootLayout() {
   return (
-<<<<<<< HEAD
-    <AppearanceProvider>
-      <ToastProvider>
-        <AppThemeShell />
-      </ToastProvider>
-    </AppearanceProvider>
-=======
     <AuthProvider>
       <AppearanceProvider>
         <AppThemeShell />
       </AppearanceProvider>
     </AuthProvider>
->>>>>>> 0720c1202f0168b90c49af8ad3c50360ed8f9933
   );
 }
