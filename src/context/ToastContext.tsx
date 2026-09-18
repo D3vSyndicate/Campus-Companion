@@ -2,28 +2,39 @@ import { createContext, ReactNode, useContext, useEffect, useState } from 'react
 import { StyleSheet, Text, View } from 'react-native';
 
 type ToastContextValue = {
-  showToast: (message: string) => void;
+  showToast: (message: string, type?: ToastType) => void;
+};
+
+type ToastType = 'success' | 'error' | 'info';
+
+type ToastState = {
+  message: string;
+  type: ToastType;
 };
 
 const ToastContext = createContext<ToastContextValue | null>(null);
 
 export function ToastProvider({ children }: { children: ReactNode }) {
-  const [message, setMessage] = useState<string | null>(null);
+  const [toast, setToast] = useState<ToastState | null>(null);
 
   useEffect(() => {
-    if (!message) return;
+    if (!toast) return;
 
-    const timeout = setTimeout(() => setMessage(null), 2500);
+    const timeout = setTimeout(() => setToast(null), 2500);
     return () => clearTimeout(timeout);
-  }, [message]);
+  }, [toast]);
+
+  const showToast = (message: string, type: ToastType = 'success') => {
+    setToast({ message, type });
+  };
 
   return (
-    <ToastContext.Provider value={{ showToast: setMessage }}>
+    <ToastContext.Provider value={{ showToast }}>
       {children}
-      {message ? (
+      {toast ? (
         <View pointerEvents="none" style={styles.container}>
-          <View style={styles.toast}>
-            <Text style={styles.message}>{message}</Text>
+          <View style={[styles.toast, styles[`${toast.type}Toast`]]}>
+            <Text style={styles.message}>{toast.message}</Text>
           </View>
         </View>
       ) : null}
@@ -42,7 +53,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 16,
     right: 16,
-    bottom: 32,
+    top: 48,
     alignItems: 'center',
   },
   toast: {
@@ -50,12 +61,21 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 18,
     paddingVertical: 12,
-    backgroundColor: '#142B3D',
+    backgroundColor: '#1F9D55',
     shadowColor: '#000',
     shadowOpacity: 0.2,
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 3 },
     elevation: 4,
+  },
+  successToast: {
+    backgroundColor: '#1F9D55',
+  },
+  errorToast: {
+    backgroundColor: '#C0392B',
+  },
+  infoToast: {
+    backgroundColor: '#2563EB',
   },
   message: {
     color: '#FFFFFF',

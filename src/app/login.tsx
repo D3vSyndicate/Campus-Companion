@@ -3,15 +3,15 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  ActivityIndicator,
-  Image,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View,
+    ActivityIndicator,
+    Image,
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
 import { ScaledText as Text } from '../components/ScaledText';
@@ -63,7 +63,7 @@ export default function LoginScreen() {
       return;
     }
 
-    showToast('Login successful');
+    showToast('Login successful', 'success');
     const destination =
       result.role === 'coordinator'
         ? '/(coordinator)'

@@ -22,6 +22,7 @@ import {
 
 import { ShameResilientBanner } from '../../components/ShameResilientBanner';
 import { useAppearance } from '../../context/AppearanceContext';
+import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/superbase';
 import { useTheme } from '../../theme/ThemeContext';
 
@@ -410,6 +411,7 @@ export default function HomeScreen() {
   const router = useRouter();
   const { t } = useTranslation();
   const { colors } = useTheme();
+  const { user } = useAuth();
 
   const {
     darkMode,
@@ -443,6 +445,19 @@ export default function HomeScreen() {
   );
 
   const greeting = t(`common.${getGreeting()}`);
+  const userMetadata = user?.user_metadata ?? {};
+  const studentName = String(
+    userMetadata.full_name ??
+      userMetadata.name ??
+      userMetadata.first_name ??
+      'Student',
+  ).trim();
+  const studentNumber = String(
+    userMetadata.student_number ??
+      userMetadata.studentNumber ??
+      userMetadata.student_id ??
+      '',
+  ).trim();
 
   // ---------------------------------------------------------------------------
   // Load last-seen announcement
@@ -810,6 +825,12 @@ export default function HomeScreen() {
         <View style={styles.heroContent}>
           <Text style={styles.greeting}>
             {greeting}
+          </Text>
+
+          <Text style={styles.studentInfo}>
+            {studentName}
+            {studentNumber ? ` · ${studentNumber}` : ''}
+            {user?.email ? `\n${user.email}` : ''}
           </Text>
 
           <Text style={styles.welcomeTitle}>
@@ -1331,6 +1352,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     marginBottom: 5,
+  },
+
+  studentInfo: {
+    color: 'rgba(255,255,255,0.78)',
+    fontSize: 12,
+    lineHeight: 18,
+    marginBottom: 16,
   },
 
   welcomeTitle: {

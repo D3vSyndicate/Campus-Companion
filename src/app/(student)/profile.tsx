@@ -17,7 +17,7 @@ export default function StudentProfileScreen() {
   const router = useRouter();
   const { colors, mode, setMode } = useTheme();
   const { fontScale, changeFontScale } = useAppearance();
-  const { user, signOut } = useAuth();
+  const { user, role, signOut } = useAuth();
   const [loggingOut, setLoggingOut] = useState(false);
 
   const confirmSignOut = () => {
@@ -50,7 +50,7 @@ export default function StudentProfileScreen() {
         <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>MY ACCOUNT</Text>
         <View style={[styles.card, { backgroundColor: colors.card, borderColor: colors.border }]}>
           <Text style={[styles.email, { color: colors.text }]}>{user?.email ?? 'Not signed in'}</Text>
-          <Text style={[styles.role, { color: colors.textSecondary }]}>First-Year Student</Text>
+          <Text style={[styles.role, { color: colors.textSecondary }]}>{role === 'student' ? 'Student' : role ?? 'Student'}</Text>
         </View>
       </View>
 
