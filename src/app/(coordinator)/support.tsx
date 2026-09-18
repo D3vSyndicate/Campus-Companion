@@ -1,0 +1,2 @@
+import CoordinatorContentScreen from '../../components/CoordinatorContentScreen';
+export default function SupportScreen() { return <CoordinatorContentScreen title="Support Information" description="Update student support services and recommended help pathways." placeholder="Add a support pathway" initialItems={['Student Support Centre - general queries and lab access', 'Senior Student Mentors - peer advice and campus navigation']} />; }

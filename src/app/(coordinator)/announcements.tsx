@@ -1,0 +1,2 @@
+import CoordinatorContentScreen from '../../components/CoordinatorContentScreen';
+export default function AnnouncementsScreen() { return <CoordinatorContentScreen title="Announcements" description="Create, publish, and archive student announcements." placeholder="Write an announcement" initialItems={['Orientation registration is now open', 'Bring your student number to check-in']} />; }

@@ -1,0 +1,2 @@
+import CoordinatorContentScreen from '../../components/CoordinatorContentScreen';
+export default function VenueScreen() { return <CoordinatorContentScreen title="Venue Information" description="Publish rooms, directions, maps, and accessibility information." placeholder="Add a venue or direction" initialItems={['Main Hall - accessible entrance via North Gate', 'Room B - Goldfields Building, Level 1']} />; }

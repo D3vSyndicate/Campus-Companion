@@ -3,6 +3,7 @@ import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { AppearanceProvider, useAppearance } from '../context/AppearanceContext';
 import { AuthProvider } from '../context/AuthContext';
+import { ToastProvider } from '../context/ToastContext';
 import { ThemeProvider as AppThemeProvider } from '../theme/ThemeContext';
 
 SplashScreen.preventAutoHideAsync();
@@ -16,6 +17,7 @@ function AppThemeShell() {
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(student)" options={{ headerShown: false }} />
         <Stack.Screen name="(admin)" options={{ headerShown: false }} />
+        <Stack.Screen name="(coordinator)" options={{ headerShown: false }} />
       </Stack>
     </ThemeProvider>
   );
@@ -26,7 +28,9 @@ export default function RootLayout() {
     <AuthProvider>
       <AppearanceProvider>
         <AppThemeProvider>
-          <AppThemeShell />
+          <ToastProvider>
+            <AppThemeShell />
+          </ToastProvider>
         </AppThemeProvider>
       </AppearanceProvider>
     </AuthProvider>

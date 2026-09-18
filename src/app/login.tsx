@@ -14,12 +14,14 @@ import {
 } from 'react-native';
 import { ScaledText as Text } from '../components/ScaledText';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 import { useTheme } from '../theme/ThemeContext';
 
 export default function LoginScreen() {
   const router = useRouter();
   const { signIn, resetPassword } = useAuth();
   const { colors } = useTheme();
+  const { showToast } = useToast();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -50,7 +52,13 @@ export default function LoginScreen() {
       return;
     }
 
-    router.replace('/(admin)');
+    showToast('Login successful');
+    if (!result.role) {
+      setError('Your account does not have a valid role. Ask an administrator to set it to admin or student.');
+      return;
+    }
+
+    router.replace(result.role === 'admin' ? '/(admin)' : '/(student)');
   };
 
   const handleForgotPassword = async () => {
