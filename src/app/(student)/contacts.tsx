@@ -28,7 +28,8 @@ export default function ContactsScreen() {
 
   useEffect(() => {
     const loadContacts = async () => {
-      const { data, error } = await fetchWithOfflineFallback('contacts');
+     
+      const { data, error } = await fetchWithOfflineFallback('Contact');
       if (error) {
         console.error('Failed to load contacts from Supabase.', error);
       }
@@ -39,10 +40,10 @@ export default function ContactsScreen() {
             return {
               id: String(item.id ?? item.contact_id ?? index + 1),
               name: String(item.name ?? item.title ?? ''),
+              surname: String(item.surname ?? ''),
               role: String(item.role ?? ''),
               email: String(item.email ?? ''),
-              office: String(item.office ?? item.location ?? ''),
-              supportType: String(item.support_type ?? item.supportType ?? item.description ?? ''),
+              support_category: String(item.support_type ?? item.supportType ?? item.description ?? ''),
             };
           })
         : [];
@@ -59,7 +60,10 @@ export default function ContactsScreen() {
   };
 
   return (
-    <ScrollView style={[styles.container, { backgroundColor: palette.pageBg }]} contentContainerStyle={[styles.content, { backgroundColor: palette.pageBg }]}>
+    <ScrollView
+      style={[styles.container, { backgroundColor: palette.pageBg }]}
+      contentContainerStyle={[styles.content, { backgroundColor: palette.pageBg }]}
+    >
       <PageHeader
         eyebrow={t('common.notAlone')}
         title={t('common.contactsTitle')}
@@ -79,25 +83,30 @@ export default function ContactsScreen() {
           <View key={contact.id} style={[styles.card, { backgroundColor: palette.cardBg, borderColor: palette.border }]}>
             <TouchableOpacity
               accessibilityRole="button"
-              onPress={() => setSelectedContact(isExpanded ? null : contact.id)}>
+              onPress={() => setSelectedContact(isExpanded ? null : contact.id)}
+            >
               <View style={styles.cardTop}>
                 <View style={[styles.avatar, { backgroundColor: colors.card }]}>
-                  <Text style={[styles.avatarText, { color: colors.text }]}>{contact.name.charAt(0)}</Text>
+                  <Text style={[styles.avatarText, { color: colors.text }]}>
+                    {contact.name.charAt(0)}{contact.surname.charAt(0)}
+                  </Text>
                 </View>
                 <View style={styles.cardHeading}>
-                  <Text style={[styles.name, { color: palette.name }]}>{contact.name}</Text>
+                  <Text style={[styles.name, { color: palette.name }]}>{contact.name} {contact.surname}</Text>
                   <Text style={[styles.role, { color: palette.role }]}>{contact.role}</Text>
                 </View>
                 <Text style={[styles.chevron, { color: colors.text }]}>{isExpanded ? '−' : '+'}</Text>
               </View>
-              <Text style={[styles.supportType, { color: palette.body }]}>{contact.supportType}</Text>
+              <Text style={[styles.supportType, { color: palette.body }]}>{contact.support_category}</Text>
             </TouchableOpacity>
 
             {isExpanded && (
-                <View style={[styles.details, { borderTopColor: colors.border }]}>
-                <Text style={[styles.detail, { color: palette.body }]}>{t('common.office')}: {contact.office}</Text>
+              <View style={[styles.details, { borderTopColor: colors.border }]}>
                 <Text style={[styles.detail, { color: palette.body }]}>{t('common.email')}: {contact.email}</Text>
-                <TouchableOpacity style={[styles.button, { backgroundColor: colors.accent }]} onPress={() => void openEmail(contact)}>
+                <TouchableOpacity
+                  style={[styles.button, { backgroundColor: colors.accent }]}
+                  onPress={() => void openEmail(contact)}
+                >
                   <Text style={[styles.buttonText, { color: colors.text }]}>{t('common.emailTeam')}</Text>
                 </TouchableOpacity>
               </View>

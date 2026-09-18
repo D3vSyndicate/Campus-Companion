@@ -10,9 +10,16 @@ import { ChecklistItem } from '../../types';
 
 const CHECKLIST_CACHE_KEY = '@checklist_cache';
 
+const normalizeBoolean = (value: unknown): boolean => {
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'string') return value.toLowerCase() === 'true';
+  return Boolean(value);
+};
+
 export default function ChecklistScreen() {
   const { colors } = useTheme();
   const { t } = useTranslation();
+
   const palette = {
     pageBg: colors.background,
     headerBox: colors.card,
@@ -22,6 +29,8 @@ export default function ChecklistScreen() {
     taskText: colors.text,
     taskMuted: colors.textSecondary,
     category: colors.textSecondary,
+    progressTrack: colors.border,
+    celebrationBg: colors.surface,
   };
 
   const [tasks, setTasks] = useState<ChecklistItem[]>([]);
@@ -41,22 +50,25 @@ export default function ChecklistScreen() {
       const { data, error } = await supabase
         .from('checklist_item')
         .select('*')
-        .order('id');
+        .order('created_at', { ascending: true });
 
-      if (error) {
-        throw error;
-      }
+      if (error) throw error;
 
       const remoteTasks = (data ?? []).map((row, index) => {
-          const item = row as Record<string, unknown>;
-          return {
-            id: String(item.id ?? item.item_id ?? index + 1),
-            task: String(item.task ?? item.title ?? item.name ?? ''),
-            category: String(item.category ?? 'General'),
-            completed: Boolean(item.completed ?? item.is_completed),
-          };
-        });
+        const item = row as Record<string, unknown>;
+        const id = String(item.checklist_item_id ?? item.id ?? `checklist-${index}`);
+
+        return {
+          id,
+          created_at: new Date((item.created_at as string) ?? new Date().toISOString()),
+          task_description: String(item.task_description ?? ''),
+          category: String(item.category ?? item.support_category ?? 'General'),
+          completion_status: normalizeBoolean(item.completion_status),
+        };
+      });
+
       setTasks(remoteTasks);
+
       if (remoteTasks.length) {
         await AsyncStorage.setItem(CHECKLIST_CACHE_KEY, JSON.stringify(remoteTasks));
       }
@@ -77,9 +89,10 @@ export default function ChecklistScreen() {
     }
   };
 
-  const toggleTask = async (taskId: string, task: string, currentStatus: boolean) => {
-    const updatedTasks = tasks.map(task =>
-      task.id === taskId ? { ...task, completed: !currentStatus } : task,
+  const toggleTask = async (taskId: string, currentStatus: boolean) => {
+    const nextStatus = !currentStatus;
+    const updatedTasks = tasks.map((task) =>
+      task.id === taskId ? { ...task, completion_status: nextStatus } : task
     );
 
     setTasks(updatedTasks);
@@ -88,17 +101,19 @@ export default function ChecklistScreen() {
     try {
       const { error } = await supabase
         .from('checklist_item')
-        .update({ completed: !currentStatus })
-        .eq('task', task);
-      if (error) {
-        throw error;
-      }
+        .update({ completion_status: nextStatus ? 'true' : 'false' })
+        .eq('checklist_item_id', taskId);
+
+      if (error) throw error;
     } catch (error) {
       console.error('Failed to sync checklist item to Supabase.', error);
     }
   };
 
-  const completedCount = tasks.filter(task => task.completed).length;
+  const completedCount = tasks.filter((task) => task.completion_status).length;
+  const totalCount = tasks.length;
+  const progressPercent = totalCount ? (completedCount / totalCount) * 100 : 0;
+  const isAllComplete = totalCount > 0 && completedCount === totalCount;
 
   return (
     <View style={[styles.container, { backgroundColor: palette.pageBg }]}>
@@ -107,35 +122,68 @@ export default function ChecklistScreen() {
         title={t('common.checklistTitle')}
         subtitle={t('common.checklistSubtitle')}
       />
+
       <View style={[styles.headerBox, { backgroundColor: palette.headerBox, borderColor: colors.border }]}>
         <Text style={[styles.headerTitle, { color: palette.headerTitle }]}>{t('common.progress')}</Text>
         <Text style={[styles.headerSub, { color: palette.headerSub }]}>
-          {t('common.stepsCompleted', { completed: completedCount, total: tasks.length })}
+          {t('common.stepsCompleted', { completed: completedCount, total: totalCount })}
         </Text>
+        <View style={[styles.progressTrack, { backgroundColor: palette.progressTrack }]}>
+          <View
+            style={[
+              styles.progressFill,
+              {
+                width: `${progressPercent}%`,
+                backgroundColor: colors.accent,
+              },
+            ]}
+          />
+        </View>
       </View>
+
+      {isAllComplete && (
+        <View
+          style={[
+            styles.celebrationCard,
+            {
+              backgroundColor: palette.celebrationBg,
+              borderColor: colors.border,
+            },
+          ]}
+        >
+          <Text style={[styles.celebrationText, { color: colors.text }]}>🎉 You’re crushing it! You’ve finished your checklist.</Text>
+        </View>
+      )}
 
       {loading ? (
         <ActivityIndicator size="large" color={colors.accent} />
       ) : (
         <FlatList
           data={tasks}
-          keyExtractor={item => item.id}
+          keyExtractor={(item, index) => item.id || index.toString()}
           renderItem={({ item }) => (
             <TouchableOpacity
               style={[styles.taskCard, { backgroundColor: palette.cardBg }]}
-              onPress={() => void toggleTask(item.id, item.task, item.completed)}>
+              onPress={() => void toggleTask(item.id, item.completion_status)}
+            >
               <View
                 style={[
                   styles.checkbox,
                   { borderColor: colors.border },
-                  item.completed && { backgroundColor: colors.accent, borderColor: colors.accent },
+                  item.completion_status && { backgroundColor: colors.accent, borderColor: colors.accent },
                 ]}
               >
-                {item.completed && <Text style={[styles.checkmark, { color: colors.text }]}>✓</Text>}
+                {item.completion_status && <Text style={[styles.checkmark, { color: colors.text }]}>✓</Text>}
               </View>
               <View style={styles.textContainer}>
-                <Text style={[styles.taskText, { color: palette.taskText }, item.completed && styles.taskCompleted]}>
-                  {item.task}
+                <Text
+                  style={[
+                    styles.taskText,
+                    { color: palette.taskText },
+                    item.completion_status && styles.taskCompleted,
+                  ]}
+                >
+                  {item.task_description}
                 </Text>
                 <Text style={[styles.category, { color: palette.category }]}>{item.category}</Text>
               </View>
@@ -149,9 +197,13 @@ export default function ChecklistScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16 },
-  headerBox: { padding: 16, borderRadius: 10, marginBottom: 16, borderWidth: 1 },
+  headerBox: { padding: 16, borderRadius: 10, marginBottom: 12, borderWidth: 1 },
   headerTitle: { fontSize: 16, fontWeight: 'bold' },
   headerSub: { fontSize: 13, marginTop: 4 },
+  progressTrack: { height: 8, borderRadius: 999, overflow: 'hidden', marginTop: 12 },
+  progressFill: { height: '100%', borderRadius: 999 },
+  celebrationCard: { padding: 12, borderRadius: 12, marginBottom: 12, borderWidth: 1 },
+  celebrationText: { fontSize: 13, fontWeight: '700' },
   taskCard: { flexDirection: 'row', padding: 16, borderRadius: 10, marginBottom: 8, alignItems: 'center' },
   checkbox: { width: 22, height: 22, borderRadius: 6, borderWidth: 2, marginRight: 12, justifyContent: 'center', alignItems: 'center' },
   checkmark: { fontSize: 12, fontWeight: 'bold' },
