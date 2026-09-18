@@ -2,6 +2,7 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
+<<<<<<< HEAD
     Image,
     KeyboardAvoidingView,
     Platform,
@@ -17,15 +18,83 @@ import { useToast } from '../context/ToastContext';
 export default function LoginScreen() {
   const router = useRouter();
   const { showToast } = useToast();
+=======
+  ActivityIndicator,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { useAuth } from '../context/AuthContext';
+
+export default function LoginScreen() {
+  const router = useRouter();
+  const { signIn, resetPassword } = useAuth();
+>>>>>>> 0720c1202f0168b90c49af8ad3c50360ed8f9933
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
 
+  const handleLogin = async () => {
+    setError(null);
+    setMessage(null);
+
+    if (!email.trim() || !password) {
+      setError('Enter your email and password.');
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      setError('Enter a valid email address, for example name@mandela.ac.za.');
+      return;
+    }
+
+    setLoading(true);
+    const result = await signIn(email, password);
+    setLoading(false);
+
+    if (result.error) {
+      setError(result.error);
+      return;
+    }
+
+<<<<<<< HEAD
   const handleLogin = () => {
     // Temporary navigation while authentication is being built.
     // Replace this with your real login API later.
     showToast('Login successful');
+=======
+>>>>>>> 0720c1202f0168b90c49af8ad3c50360ed8f9933
     router.replace('/(admin)');
+  };
+
+  const handleForgotPassword = async () => {
+    setError(null);
+    setMessage(null);
+
+    if (!email.trim()) {
+      setError('Enter your email address first.');
+      return;
+    }
+
+    setLoading(true);
+    const result = await resetPassword(email);
+    setLoading(false);
+
+    if (result.error) {
+      setError(result.error);
+      return;
+    }
+
+    setMessage('Password reset instructions have been sent to your email.');
   };
 
   return (
@@ -93,9 +162,8 @@ export default function LoginScreen() {
             {/* Forgot Password */}
             <TouchableOpacity
               style={styles.forgotButton}
-              onPress={() => {
-                // Add forgot password navigation later
-              }}
+              onPress={() => void handleForgotPassword()}
+              disabled={loading}
             >
               <Text style={styles.forgotText}>
                 Forgot password?
@@ -106,12 +174,18 @@ export default function LoginScreen() {
             <TouchableOpacity
               style={styles.loginButton}
               activeOpacity={0.8}
-              onPress={handleLogin}
+              onPress={() => void handleLogin()}
+              disabled={loading}
             >
-              <Text style={styles.loginButtonText}>
-                Login
-              </Text>
+              {loading ? (
+                <ActivityIndicator color="#071B2C" />
+              ) : (
+                <Text style={styles.loginButtonText}>Login</Text>
+              )}
             </TouchableOpacity>
+
+            {error && <Text style={styles.errorText}>{error}</Text>}
+            {message && <Text style={styles.messageText}>{message}</Text>}
 
           </View>
 
@@ -254,6 +328,20 @@ const styles = StyleSheet.create({
     color: '#071B2C',
     fontSize: 16,
     fontWeight: '700',
+  },
+
+  errorText: {
+    color: '#B42318',
+    fontSize: 13,
+    textAlign: 'center',
+    marginTop: 14,
+  },
+
+  messageText: {
+    color: '#16794A',
+    fontSize: 13,
+    textAlign: 'center',
+    marginTop: 14,
   },
 });
 

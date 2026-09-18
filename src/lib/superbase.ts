@@ -3,8 +3,12 @@ import { createClient } from '@supabase/supabase-js';
 import { Platform } from 'react-native';
 import 'react-native-url-polyfill/auto';
 
-const supabaseUrl = 'https://lrubpqzdabhxvrjfgfiq.supabase.co';
-const supabaseAnonKey = 'sb_publishable_ZLp4DaCusiOEeljy1GmXMw_q_jKwP3';
+const supabaseUrl =
+  process.env.EXPO_PUBLIC_SUPABASE_URL?.trim() ||
+  'https://lrubpqzdabhxvrjfgfiq.supabase.co';
+const supabaseAnonKey =
+  process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY?.trim() ||
+  'missing-supabase-key';
 const isBrowser = typeof window !== 'undefined';
 
 const webStorage = {
