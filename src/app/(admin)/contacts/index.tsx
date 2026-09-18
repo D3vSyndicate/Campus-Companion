@@ -1,9 +1,9 @@
-import React, { useLayoutEffect } from 'react';
+import { useNavigation, useRouter } from 'expo-router';
+import { useLayoutEffect } from 'react';
 import { Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useRouter, useNavigation } from 'expo-router';
+import ListItemCard from '../../../components/ListItemCard';
 import { useContacts } from '../../../context/ContactsContext';
 import { useTheme } from '../../../theme/ThemeContext';
-import ListItemCard from '../../../components/ListItemCard';
 
 export default function ContactsListScreen() {
   const { items, deleteItem } = useContacts();
@@ -19,16 +19,18 @@ export default function ContactsListScreen() {
         </TouchableOpacity>
       ),
     });
-  }, [navigation, colors]);
+  }, [navigation, router, colors]);
 
-  const confirmDelete = (id: string, name: string) => {
-    Alert.alert('Delete contact', `Delete "${name}"? This can't be undone.`, [
+  const confirmDelete = (id: string, fullName: string) => {
+    Alert.alert('Delete contact', `Delete "${fullName}"? This can't be undone.`, [
       { text: 'Cancel', style: 'cancel' },
       { text: 'Delete', style: 'destructive', onPress: () => deleteItem(id) },
     ]);
   };
 
-  const sorted = [...items].sort((a, b) => a.name.localeCompare(b.name));
+  const sorted = [...items].sort((a, b) =>
+    `${a.name} ${a.surname}`.localeCompare(`${b.name} ${b.surname}`)
+  );
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
@@ -41,18 +43,23 @@ export default function ContactsListScreen() {
             No contacts yet. Tap + Add to create one.
           </Text>
         }
-        renderItem={({ item }) => (
-          <ListItemCard
-            title={item.name}
-            subtitle={`${item.role} · ${item.phone}`}
-            onPress={() => router.push(`/contacts/${item.id}`)}
-            right={
-              <TouchableOpacity onPress={() => confirmDelete(item.id, item.name)}>
-                <Text style={[styles.deleteText, { color: colors.danger }]}>Delete</Text>
-              </TouchableOpacity>
-            }
-          />
-        )}
+        renderItem={({ item }) => {
+          const fullName = `${item.name} ${item.surname}`.trim();
+          const subtitleDetails = [item.role, item.supportCategory].filter(Boolean).join(' · ');
+
+          return (
+            <ListItemCard
+              title={fullName}
+              subtitle={subtitleDetails || item.email}
+              onPress={() => router.push(`/contacts/${item.id}`)}
+              right={
+                <TouchableOpacity onPress={() => confirmDelete(item.id, fullName)}>
+                  <Text style={[styles.deleteText, { color: colors.danger }]}>Delete</Text>
+                </TouchableOpacity>
+              }
+            />
+          );
+        }}
       />
     </View>
   );
