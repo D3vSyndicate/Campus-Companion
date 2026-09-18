@@ -458,6 +458,12 @@ export default function HomeScreen() {
       userMetadata.student_id ??
       '',
   ).trim();
+  const studentInitials = studentName
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part.charAt(0).toUpperCase())
+    .join('');
 
   // ---------------------------------------------------------------------------
   // Load last-seen announcement
@@ -827,11 +833,24 @@ export default function HomeScreen() {
             {greeting}
           </Text>
 
-          <Text style={styles.studentInfo}>
-            {studentName}
-            {studentNumber ? ` · ${studentNumber}` : ''}
-            {user?.email ? `\n${user.email}` : ''}
-          </Text>
+          <View style={styles.studentIdentity}>
+            <View style={styles.studentAvatar}>
+              <Text style={styles.studentAvatarText}>{studentInitials || 'S'}</Text>
+            </View>
+
+            <View style={styles.studentIdentityCopy}>
+              <Text style={styles.studentName}>{studentName}</Text>
+              <Text style={styles.studentEmail} numberOfLines={1}>
+                {user?.email ?? 'Student account'}
+              </Text>
+            </View>
+
+            {studentNumber ? (
+              <View style={styles.studentNumberBadge}>
+                <Text style={styles.studentNumberText}>{studentNumber}</Text>
+              </View>
+            ) : null}
+          </View>
 
           <Text style={styles.welcomeTitle}>
             {t('common.startStrong')}
@@ -1354,11 +1373,62 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 
-  studentInfo: {
-    color: 'rgba(255,255,255,0.78)',
-    fontSize: 12,
-    lineHeight: 18,
-    marginBottom: 16,
+  studentIdentity: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    maxWidth: '100%',
+    marginBottom: 22,
+    paddingRight: 10,
+  },
+
+  studentAvatar: {
+    width: 46,
+    height: 46,
+    borderRadius: 23,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#F4C542',
+    marginRight: 11,
+  },
+
+  studentAvatarText: {
+    color: COLORS.primary,
+    fontSize: 16,
+    fontWeight: '800',
+  },
+
+  studentIdentityCopy: {
+    flexShrink: 1,
+    marginRight: 10,
+  },
+
+  studentName: {
+    color: COLORS.white,
+    fontSize: 16,
+    fontWeight: '800',
+  },
+
+  studentEmail: {
+    color: 'rgba(255,255,255,0.68)',
+    fontSize: 11,
+    marginTop: 3,
+  },
+
+  studentNumberBadge: {
+    maxWidth: 120,
+    borderRadius: 999,
+    paddingHorizontal: 9,
+    paddingVertical: 6,
+    backgroundColor: 'rgba(255,255,255,0.12)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.18)',
+  },
+
+  studentNumberText: {
+    color: '#FFF8D9',
+    fontSize: 10,
+    fontWeight: '800',
   },
 
   welcomeTitle: {

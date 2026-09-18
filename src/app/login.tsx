@@ -20,7 +20,7 @@ import { useToast } from '../context/ToastContext';
 import { useTheme } from '../theme/ThemeContext';
 export default function LoginScreen() {
   const router = useRouter();
-  const { signIn, signUp, resetPassword } = useAuth();
+  const { signIn, resetPassword } = useAuth();
   const { showToast } = useToast();
   const { colors } = useTheme();
   const { t } = useTranslation();
@@ -30,8 +30,6 @@ export default function LoginScreen() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
-  const [registering, setRegistering] = useState(false);
-
   const handleLogin = async () => {
     setError(null);
     setMessage(null);
@@ -47,19 +45,11 @@ export default function LoginScreen() {
     }
 
     setLoading(true);
-    const result = registering
-      ? await signUp(email, password).then(({ error }) => ({ error, role: 'student' as const }))
-      : await signIn(email, password);
+    const result = await signIn(email, password);
     setLoading(false);
 
     if (result.error) {
       setError(result.error);
-      return;
-    }
-
-    if (registering && !result.error) {
-      setMessage('Account created. Check your email to confirm it, then log in.');
-      setRegistering(false);
       return;
     }
 
@@ -186,27 +176,13 @@ export default function LoginScreen() {
                 <ActivityIndicator color={colors.text} />
               ) : (
                 <Text style={[styles.loginButtonText, { color: colors.text }]}>
-                  {registering ? t('common.createAccount') : t('common.login')}
+                  {t('common.login')}
                 </Text>
               )}
             </TouchableOpacity>
 
             {error && <Text style={[styles.errorText, { color: colors.danger }]}>{error}</Text>}
             {message && <Text style={[styles.messageText, { color: colors.accent }]}>{message}</Text>}
-
-            <TouchableOpacity
-              style={styles.registerButton}
-              onPress={() => {
-                setError(null);
-                setMessage(null);
-                setRegistering(!registering);
-              }}
-              disabled={loading}
-            >
-              <Text style={[styles.registerText, { color: colors.textSecondary }]}> 
-                {registering ? 'Already have an account? Log in' : 'New student? Create an account'}
-              </Text>
-            </TouchableOpacity>
 
           </View>
 
@@ -351,14 +327,5 @@ const styles = StyleSheet.create({
     marginTop: 14,
   },
 
-  registerButton: {
-    alignItems: 'center',
-    marginTop: 18,
-  },
-
-  registerText: {
-    fontSize: 13,
-    textAlign: 'center',
-  },
 });
 

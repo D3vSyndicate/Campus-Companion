@@ -70,6 +70,13 @@ export default function StudentLayout() {
           }}
         />
         <Tabs.Screen
+          name="tribe"
+          options={{
+            title: t('common.tribe'),
+            tabBarIcon: ({ color }) => <Ionicons name="chatbubbles-outline" size={TAB_ICON_SIZE} color={color} />,
+          }}
+        />
+        <Tabs.Screen
           name="profile"
           options={{
             title: 'Profile',
