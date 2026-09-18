@@ -1,4 +1,5 @@
 import { AnimatedSplashOverlay } from '@/components/animated-icon';
+import { AuthProvider } from '../context/AuthContext';
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { AppearanceProvider, useAppearance } from '../context/AppearanceContext';
@@ -21,8 +22,10 @@ function AppThemeShell() {
 
 export default function RootLayout() {
   return (
-    <AppearanceProvider>
-      <AppThemeShell />
-    </AppearanceProvider>
+    <AuthProvider>
+      <AppearanceProvider>
+        <AppThemeShell />
+      </AppearanceProvider>
+    </AuthProvider>
   );
 }

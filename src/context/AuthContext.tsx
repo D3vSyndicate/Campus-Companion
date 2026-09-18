@@ -1,30 +1,114 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
-
-// PLACEHOLDER — your team is building the real auth flow. This just gives
-// the admin screens (Header avatar, Profile screen) something to read from
-// so they're not blocked. Swap this out for whatever your team's auth
-// context ends up exposing, as long as it keeps a similar shape
-// (user.email, signOut()) — or update the two call sites (Header, Profile)
-// to match their API.
-
-type PlaceholderUser = { email: string } | null;
+import type { Session, User } from '@supabase/supabase-js';
+import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import { supabase } from '../lib/superbase';
 
 type AuthContextValue = {
-  user: PlaceholderUser;
-  signOut: () => void;
+  user: User | null;
+  session: Session | null;
+  loading: boolean;
+  error: string | null;
+  signIn: (email: string, password: string) => Promise<{ error: string | null }>;
+  resetPassword: (email: string) => Promise<{ error: string | null }>;
+  signOut: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user] = useState<PlaceholderUser>({ email: 'admin@example.com' });
+  const [session, setSession] = useState<Session | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const signOut = () => {
-    // TODO: replace with supabase.auth.signOut() from your team's client
-    console.log('signOut() called — wire this up to real auth');
+  useEffect(() => {
+    let mounted = true;
+
+    supabase.auth.getSession().then(({ data }) => {
+      if (mounted) {
+        setSession(data.session);
+        setLoading(false);
+      }
+    });
+
+    const { data: subscription } = supabase.auth.onAuthStateChange(
+      (_event, nextSession) => {
+        if (mounted) {
+          setSession(nextSession);
+          setLoading(false);
+        }
+      },
+    );
+
+    return () => {
+      mounted = false;
+      subscription.subscription.unsubscribe();
+    };
+  }, []);
+
+  const signIn = async (email: string, password: string) => {
+    setError(null);
+
+    const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL?.trim();
+    const supabaseKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY?.trim();
+
+    if (
+      !supabaseUrl ||
+      !supabaseKey ||
+      supabaseUrl === 'https://your-project-ref.supabase.co' ||
+      supabaseKey === 'your-publishable-or-anon-key'
+    ) {
+      const message = 'Supabase is not configured. Add the values from .env.example to .env.';
+      setError(message);
+      return { error: message };
+    }
+
+    const { data, error: signInError } = await supabase.auth.signInWithPassword({
+      email: email.trim(),
+      password,
+    });
+
+    if (signInError) {
+      const message = signInError.message;
+      setError(message);
+      return { error: message };
+    }
+
+    setSession(data.session);
+    return { error: null };
   };
 
-  return <AuthContext.Provider value={{ user, signOut }}>{children}</AuthContext.Provider>;
+  const resetPassword = async (email: string) => {
+    setError(null);
+    const { error: resetError } = await supabase.auth.resetPasswordForEmail(email.trim());
+
+    if (resetError) {
+      const message = resetError.message;
+      setError(message);
+      return { error: message };
+    }
+
+    return { error: null };
+  };
+
+  const signOut = async () => {
+    await supabase.auth.signOut();
+    setSession(null);
+  };
+
+  return (
+    <AuthContext.Provider
+      value={{
+        user: session?.user ?? null,
+        session,
+        loading,
+        error,
+        signIn,
+        resetPassword,
+        signOut,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {

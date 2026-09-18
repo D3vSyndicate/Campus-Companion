@@ -1,5 +1,5 @@
 import { Stack } from 'expo-router';
-import { AuthProvider } from '../../context/AuthContext';
+import { AuthGate } from '../../components/AuthGate';
 import { ContactsProvider } from '../../context/ContactsContext';
 import { ScheduleProvider } from '../../context/ScheduleContext';
 import { ThemeProvider } from '../../theme/ThemeContext';
@@ -56,14 +56,14 @@ function AdminStack() {
 }
 export default function AdminLayout() {
   return (
-    <ThemeProvider>
-      <AuthProvider>
+    <AuthGate>
+      <ThemeProvider>
         <ScheduleProvider>
           <ContactsProvider>
             <AdminStack />
           </ContactsProvider>
         </ScheduleProvider>
-      </AuthProvider>
-    </ThemeProvider>
+      </ThemeProvider>
+    </AuthGate>
   );
 }
