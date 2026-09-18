@@ -1,2 +1,418 @@
-import CoordinatorContentScreen from '../../components/CoordinatorContentScreen';
-export default function AnnouncementsScreen() { return <CoordinatorContentScreen title="Announcements" description="Create, publish, and archive student announcements." placeholder="Write an announcement" initialItems={['Orientation registration is now open', 'Bring your student number to check-in']} />; }
+import { useCallback, useEffect, useState } from 'react';
+import {
+    Alert,
+    FlatList,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
+} from 'react-native';
+
+import { supabase } from '../../lib/superbase';
+import { useTheme } from '../../theme/ThemeContext';
+
+type Announcement = {
+  id: string;
+  title: string;
+  message: string;
+  priority: string;
+  postedBy: string;
+};
+
+export default function AnnouncementsScreen() {
+  const { colors } = useTheme();
+
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [title, setTitle] = useState('');
+  const [message, setMessage] = useState('');
+  const [priority, setPriority] = useState('Normal');
+  const [loading, setLoading] = useState(true);
+
+  const loadAnnouncements = useCallback(async () => {
+    const { data, error } = await supabase
+      .from('Announcement')
+      .select(
+        '"Announcement ID", "Posted By", "Title", "Message", "Priority level"',
+      )
+      .order('"Posted By"', { ascending: false });
+
+    if (error) {
+      console.error('Failed to load announcements:', error);
+      Alert.alert('Error', 'Could not load announcements.');
+      return;
+    }
+
+    const mapped: Announcement[] = (data ?? []).map((row) => ({
+      id: String(row['Announcement ID']),
+      title: String(row['Title'] ?? ''),
+      message: String(row['Message'] ?? ''),
+      priority: String(row['Priority level'] ?? 'Normal'),
+      postedBy: String(row['Posted By'] ?? ''),
+    }));
+
+    setAnnouncements(mapped);
+  }, []);
+
+  useEffect(() => {
+    const load = async () => {
+      setLoading(true);
+      await loadAnnouncements();
+      setLoading(false);
+    };
+
+    load();
+  }, [loadAnnouncements]);
+
+  const addAnnouncement = async () => {
+    if (!title.trim() || !message.trim()) {
+      Alert.alert(
+        'Missing information',
+        'Please enter both a title and a message.',
+      );
+      return;
+    }
+
+    const { error } = await supabase
+      .from('Announcement')
+      .insert({
+        Title: title.trim(),
+        Message: message.trim(),
+        'Priority level': priority.trim() || 'Normal',
+      });
+
+    if (error) {
+      console.error('Failed to add announcement:', error);
+      Alert.alert(
+        'Error',
+        `Could not add announcement.\n\n${error.message}`,
+      );
+      return;
+    }
+
+    setTitle('');
+    setMessage('');
+    setPriority('Normal');
+
+    await loadAnnouncements();
+
+    Alert.alert('Success', 'Announcement added successfully.');
+  };
+
+  const deleteAnnouncement = (announcement: Announcement) => {
+    Alert.alert(
+      'Delete announcement',
+      `Delete "${announcement.title}"?`,
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            const { error } = await supabase
+              .from('Announcement')
+              .delete()
+              .eq('Announcement ID', announcement.id);
+
+            if (error) {
+              console.error(
+                'Failed to delete announcement:',
+                error,
+              );
+
+              Alert.alert(
+                'Error',
+                `Could not delete announcement.\n\n${error.message}`,
+              );
+
+              return;
+            }
+
+            await loadAnnouncements();
+          },
+        },
+      ],
+    );
+  };
+
+  return (
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: colors.background },
+      ]}
+    >
+      <FlatList
+        data={announcements}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={styles.content}
+        refreshing={loading}
+        onRefresh={loadAnnouncements}
+        ListHeaderComponent={
+          <View>
+            <Text
+              style={[
+                styles.title,
+                { color: colors.text },
+              ]}
+            >
+              Announcements
+            </Text>
+
+            <Text
+              style={[
+                styles.description,
+                { color: colors.textSecondary },
+              ]}
+            >
+              Create, publish, and archive student announcements.
+            </Text>
+
+            <View style={styles.form}>
+              <TextInput
+                value={title}
+                onChangeText={setTitle}
+                placeholder="Announcement title"
+                placeholderTextColor={colors.textSecondary}
+                style={[
+                  styles.input,
+                  {
+                    color: colors.text,
+                    borderColor: colors.border,
+                    backgroundColor: colors.card,
+                  },
+                ]}
+              />
+
+              <TextInput
+                value={message}
+                onChangeText={setMessage}
+                placeholder="Write an announcement"
+                placeholderTextColor={colors.textSecondary}
+                multiline
+                style={[
+                  styles.messageInput,
+                  {
+                    color: colors.text,
+                    borderColor: colors.border,
+                    backgroundColor: colors.card,
+                  },
+                ]}
+              />
+
+              <TextInput
+                value={priority}
+                onChangeText={setPriority}
+                placeholder="Priority"
+                placeholderTextColor={colors.textSecondary}
+                style={[
+                  styles.input,
+                  {
+                    color: colors.text,
+                    borderColor: colors.border,
+                    backgroundColor: colors.card,
+                  },
+                ]}
+              />
+
+              <TouchableOpacity
+                onPress={addAnnouncement}
+                style={[
+                  styles.addButton,
+                  { backgroundColor: colors.accent },
+                ]}
+              >
+                <Text style={styles.addText}>
+                  Add Announcement
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            <Text
+              style={[
+                styles.sectionTitle,
+                { color: colors.text },
+              ]}
+            >
+              Published Announcements
+            </Text>
+          </View>
+        }
+        ListEmptyComponent={
+          <Text
+            style={[
+              styles.empty,
+              { color: colors.textSecondary },
+            ]}
+          >
+            No announcements yet.
+          </Text>
+        }
+        renderItem={({ item }) => (
+          <View
+            style={[
+              styles.item,
+              {
+                backgroundColor: colors.card,
+                borderColor: colors.border,
+              },
+            ]}
+          >
+            <View style={styles.itemContent}>
+              <Text
+                style={[
+                  styles.itemTitle,
+                  { color: colors.text },
+                ]}
+              >
+                {item.title}
+              </Text>
+
+              <Text
+                style={[
+                  styles.itemMessage,
+                  { color: colors.textSecondary },
+                ]}
+              >
+                {item.message}
+              </Text>
+
+              <Text
+                style={[
+                  styles.priority,
+                  { color: colors.accent },
+                ]}
+              >
+                Priority: {item.priority}
+              </Text>
+            </View>
+
+            <TouchableOpacity
+              onPress={() => deleteAnnouncement(item)}
+            >
+              <Text
+                style={[
+                  styles.removeText,
+                  { color: colors.danger },
+                ]}
+              >
+                Delete
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+
+  content: {
+    padding: 16,
+    paddingBottom: 32,
+  },
+
+  title: {
+    fontSize: 22,
+    fontWeight: '700',
+    marginBottom: 6,
+  },
+
+  description: {
+    fontSize: 14,
+    lineHeight: 20,
+    marginBottom: 16,
+  },
+
+  form: {
+    marginBottom: 24,
+  },
+
+  input: {
+    minHeight: 46,
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    fontSize: 15,
+    marginBottom: 10,
+  },
+
+  messageInput: {
+    minHeight: 100,
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    fontSize: 15,
+    textAlignVertical: 'top',
+    marginBottom: 10,
+  },
+
+  addButton: {
+    minHeight: 46,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 14,
+  },
+
+  addText: {
+    color: '#071B2C',
+    fontWeight: '700',
+  },
+
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    marginBottom: 12,
+  },
+
+  item: {
+    minHeight: 80,
+    borderWidth: 1,
+    borderRadius: 12,
+    padding: 14,
+    marginBottom: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+
+  itemContent: {
+    flex: 1,
+  },
+
+  itemTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    marginBottom: 5,
+  },
+
+  itemMessage: {
+    fontSize: 14,
+    lineHeight: 20,
+    marginBottom: 6,
+  },
+
+  priority: {
+    fontSize: 12,
+    fontWeight: '600',
+  },
+
+  removeText: {
+    fontSize: 13,
+    fontWeight: '600',
+  },
+
+  empty: {
+    textAlign: 'center',
+    marginTop: 20,
+  },
+});
