@@ -135,13 +135,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signOut = async () => {
     setError(null);
+    setSession(null);
+
     try {
       const { error: signOutError } = await supabase.auth.signOut({ scope: 'local' });
       if (signOutError) {
         setError(signOutError.message);
       }
     } finally {
-      // Clear local auth state even when the network is unavailable.
+      // Keep the local session cleared even when the network is unavailable.
       setSession(null);
     }
   };
