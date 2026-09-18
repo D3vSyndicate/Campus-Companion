@@ -5,12 +5,23 @@ import { supabase } from '../lib/superbase';
 type AuthContextValue = {
   user: User | null;
   session: Session | null;
+  role: UserRole | null;
   loading: boolean;
   error: string | null;
-  signIn: (email: string, password: string) => Promise<{ error: string | null }>;
+  signIn: (
+    email: string,
+    password: string,
+  ) => Promise<{ error: string | null; role: UserRole | null }>;
   resetPassword: (email: string) => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
 };
+
+export type UserRole = 'admin' | 'student';
+
+export function getUserRole(user: User | null): UserRole | null {
+  const role = user?.app_metadata?.role ?? user?.user_metadata?.role;
+  return role === 'admin' || role === 'student' ? role : null;
+}
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
@@ -58,7 +69,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     ) {
       const message = 'Supabase is not configured. Add the values from .env.example to .env.';
       setError(message);
-      return { error: message };
+      return { error: message, role: null };
     }
 
     const { data, error: signInError } = await supabase.auth.signInWithPassword({
@@ -69,11 +80,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (signInError) {
       const message = signInError.message;
       setError(message);
-      return { error: message };
+      return { error: message, role: null };
     }
 
     setSession(data.session);
-    return { error: null };
+    return { error: null, role: getUserRole(data.user) };
   };
 
   const resetPassword = async (email: string) => {
@@ -99,6 +110,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       value={{
         user: session?.user ?? null,
         session,
+        role: getUserRole(session?.user ?? null),
         loading,
         error,
         signIn,

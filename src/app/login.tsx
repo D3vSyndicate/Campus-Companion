@@ -50,7 +50,7 @@ export default function LoginScreen() {
       return;
     }
 
-    router.replace('/(student)');
+    router.replace('/(admin)');
   };
 
   const handleForgotPassword = async () => {

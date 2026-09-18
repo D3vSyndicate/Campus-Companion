@@ -56,7 +56,7 @@ function AdminStack() {
 }
 export default function AdminLayout() {
   return (
-    <AuthGate>
+    <AuthGate requiredRole="admin">
       <ThemeProvider>
         <ScheduleProvider>
           <ContactsProvider>

@@ -9,7 +9,7 @@ export default function StudentLayout() {
   const { colors } = useTheme();
 
   return (
-    <AuthGate>
+    <AuthGate requiredRole="student">
       <Tabs
         screenOptions={{
           tabBarActiveTintColor: colors.accent,
