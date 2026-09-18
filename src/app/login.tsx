@@ -2,19 +2,21 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
-  Image,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    Image,
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from 'react-native';
+import { useToast } from '../context/ToastContext';
 
 export default function LoginScreen() {
   const router = useRouter();
+  const { showToast } = useToast();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -22,6 +24,7 @@ export default function LoginScreen() {
   const handleLogin = () => {
     // Temporary navigation while authentication is being built.
     // Replace this with your real login API later.
+    showToast('Login successful');
     router.replace('/(admin)');
   };
 
