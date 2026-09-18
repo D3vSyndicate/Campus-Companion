@@ -29,13 +29,14 @@ export default function AnnouncementsScreen() {
   const [priority, setPriority] = useState('Normal');
   const [loading, setLoading] = useState(true);
 
+  // ---------------------------------------------------------------------------
+  // Load announcements from Supabase
+  // ---------------------------------------------------------------------------
+
   const loadAnnouncements = useCallback(async () => {
     const { data, error } = await supabase
       .from('Announcement')
-      .select(
-        '"Announcement ID", "Posted By", "Title", "Message", "Priority level"',
-      )
-      .order('"Posted By"', { ascending: false });
+      .select('*');
 
     if (error) {
       console.error('Failed to load announcements:', error);
@@ -43,16 +44,52 @@ export default function AnnouncementsScreen() {
       return;
     }
 
-    const mapped: Announcement[] = (data ?? []).map((row) => ({
-      id: String(row['Announcement ID']),
-      title: String(row['Title'] ?? ''),
-      message: String(row['Message'] ?? ''),
-      priority: String(row['Priority level'] ?? 'Normal'),
-      postedBy: String(row['Posted By'] ?? ''),
+    console.log('Announcements from Supabase:', data);
+
+    const mapped: Announcement[] = (data ?? []).map((row: any, index) => ({
+      id: String(
+        row['Announcement ID'] ??
+          row.announcement_id ??
+          row.id ??
+          index + 1,
+      ),
+
+      title: String(
+        row.Title ??
+          row.title ??
+          '',
+      ),
+
+      message: String(
+        row.Message ??
+          row.message ??
+          row.Description ??
+          row.description ??
+          '',
+      ),
+
+      priority: String(
+        row['Priority level'] ??
+          row.priority_level ??
+          row.Priority ??
+          row.priority ??
+          'Normal',
+      ),
+
+      postedBy: String(
+        row['Posted By'] ??
+          row.posted_by ??
+          row.postedBy ??
+          '',
+      ),
     }));
 
     setAnnouncements(mapped);
   }, []);
+
+  // ---------------------------------------------------------------------------
+  // Initial load
+  // ---------------------------------------------------------------------------
 
   useEffect(() => {
     const load = async () => {
@@ -63,6 +100,10 @@ export default function AnnouncementsScreen() {
 
     load();
   }, [loadAnnouncements]);
+
+  // ---------------------------------------------------------------------------
+  // Add announcement
+  // ---------------------------------------------------------------------------
 
   const addAnnouncement = async () => {
     if (!title.trim() || !message.trim()) {
@@ -83,10 +124,12 @@ export default function AnnouncementsScreen() {
 
     if (error) {
       console.error('Failed to add announcement:', error);
+
       Alert.alert(
         'Error',
         `Could not add announcement.\n\n${error.message}`,
       );
+
       return;
     }
 
@@ -96,8 +139,15 @@ export default function AnnouncementsScreen() {
 
     await loadAnnouncements();
 
-    Alert.alert('Success', 'Announcement added successfully.');
+    Alert.alert(
+      'Success',
+      'Announcement added successfully.',
+    );
   };
+
+  // ---------------------------------------------------------------------------
+  // Delete announcement
+  // ---------------------------------------------------------------------------
 
   const deleteAnnouncement = (announcement: Announcement) => {
     Alert.alert(
@@ -108,9 +158,11 @@ export default function AnnouncementsScreen() {
           text: 'Cancel',
           style: 'cancel',
         },
+
         {
           text: 'Delete',
           style: 'destructive',
+
           onPress: async () => {
             const { error } = await supabase
               .from('Announcement')
@@ -138,11 +190,17 @@ export default function AnnouncementsScreen() {
     );
   };
 
+  // ---------------------------------------------------------------------------
+  // Render
+  // ---------------------------------------------------------------------------
+
   return (
     <View
       style={[
         styles.container,
-        { backgroundColor: colors.background },
+        {
+          backgroundColor: colors.background,
+        },
       ]}
     >
       <FlatList
@@ -151,12 +209,15 @@ export default function AnnouncementsScreen() {
         contentContainerStyle={styles.content}
         refreshing={loading}
         onRefresh={loadAnnouncements}
+
         ListHeaderComponent={
           <View>
             <Text
               style={[
                 styles.title,
-                { color: colors.text },
+                {
+                  color: colors.text,
+                },
               ]}
             >
               Announcements
@@ -165,11 +226,17 @@ export default function AnnouncementsScreen() {
             <Text
               style={[
                 styles.description,
-                { color: colors.textSecondary },
+                {
+                  color: colors.textSecondary,
+                },
               ]}
             >
               Create, publish, and archive student announcements.
             </Text>
+
+            {/* ------------------------------------------------------------- */}
+            {/* FORM */}
+            {/* ------------------------------------------------------------- */}
 
             <View style={styles.form}>
               <TextInput
@@ -222,7 +289,9 @@ export default function AnnouncementsScreen() {
                 onPress={addAnnouncement}
                 style={[
                   styles.addButton,
-                  { backgroundColor: colors.accent },
+                  {
+                    backgroundColor: colors.accent,
+                  },
                 ]}
               >
                 <Text style={styles.addText}>
@@ -231,26 +300,36 @@ export default function AnnouncementsScreen() {
               </TouchableOpacity>
             </View>
 
+            {/* ------------------------------------------------------------- */}
+            {/* PUBLISHED */}
+            {/* ------------------------------------------------------------- */}
+
             <Text
               style={[
                 styles.sectionTitle,
-                { color: colors.text },
+                {
+                  color: colors.text,
+                },
               ]}
             >
               Published Announcements
             </Text>
           </View>
         }
+
         ListEmptyComponent={
           <Text
             style={[
               styles.empty,
-              { color: colors.textSecondary },
+              {
+                color: colors.textSecondary,
+              },
             ]}
           >
             No announcements yet.
           </Text>
         }
+
         renderItem={({ item }) => (
           <View
             style={[
@@ -262,33 +341,62 @@ export default function AnnouncementsScreen() {
             ]}
           >
             <View style={styles.itemContent}>
+              {/* TITLE */}
+
               <Text
                 style={[
                   styles.itemTitle,
-                  { color: colors.text },
+                  {
+                    color: colors.text,
+                  },
                 ]}
               >
                 {item.title}
               </Text>
 
+              {/* MESSAGE */}
+
               <Text
                 style={[
                   styles.itemMessage,
-                  { color: colors.textSecondary },
+                  {
+                    color: colors.textSecondary,
+                  },
                 ]}
               >
                 {item.message}
               </Text>
 
+              {/* PRIORITY */}
+
               <Text
                 style={[
                   styles.priority,
-                  { color: colors.accent },
+                  {
+                    color: colors.accent,
+                  },
                 ]}
               >
                 Priority: {item.priority}
               </Text>
+
+              {/* POSTED BY */}
+
+              {item.postedBy !== '' && (
+                <Text
+                  style={[
+                    styles.postedBy,
+                    {
+                      color: colors.textSecondary,
+                    },
+                  ]}
+                >
+                  Posted: {item.postedBy}
+                </Text>
+              )}
             </View>
+
+            {/* DELETE */}
 
             <TouchableOpacity
               onPress={() => deleteAnnouncement(item)}
@@ -296,7 +404,9 @@ export default function AnnouncementsScreen() {
               <Text
                 style={[
                   styles.removeText,
-                  { color: colors.danger },
+                  {
+                    color: colors.danger,
+                  },
                 ]}
               >
                 Delete
@@ -308,6 +418,10 @@ export default function AnnouncementsScreen() {
     </View>
   );
 }
+
+// -----------------------------------------------------------------------------
+// Styles
+// -----------------------------------------------------------------------------
 
 const styles = StyleSheet.create({
   container: {
@@ -375,7 +489,7 @@ const styles = StyleSheet.create({
   },
 
   item: {
-    minHeight: 80,
+    minHeight: 100,
     borderWidth: 1,
     borderRadius: 12,
     padding: 14,
@@ -404,6 +518,11 @@ const styles = StyleSheet.create({
   priority: {
     fontSize: 12,
     fontWeight: '600',
+  },
+
+  postedBy: {
+    fontSize: 11,
+    marginTop: 4,
   },
 
   removeText: {
