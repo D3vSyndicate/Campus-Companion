@@ -243,6 +243,7 @@ function AnnouncementCard({
   isNew: boolean;
 }) {
   const { colors } = useTheme();
+
   const urgent =
     item.priority?.toLowerCase() === 'urgent' ||
     item.priority?.toLowerCase() === 'high';
@@ -251,7 +252,13 @@ function AnnouncementCard({
     <Pressable
       onPress={onToggle}
       style={({ pressed }) => [
-        [styles.announcementCard, { backgroundColor: colors.surface, borderColor: colors.border }],
+        [
+          styles.announcementCard,
+          {
+            backgroundColor: colors.surface,
+            borderColor: colors.border,
+          },
+        ],
         urgent && styles.announcementUrgent,
         pressed && styles.announcementPressed,
       ]}
@@ -281,7 +288,10 @@ function AnnouncementCard({
         {isNew && (
           <View style={styles.newBadge}>
             <View style={styles.newBadgeDot} />
-            <Text style={styles.newBadgeText}>NEW</Text>
+
+            <Text style={styles.newBadgeText}>
+              NEW
+            </Text>
           </View>
         )}
 
@@ -331,18 +341,27 @@ function ActionCard({
   onPress: () => void;
 }) {
   const { colors } = useTheme();
+
   return (
     <Pressable
       onPress={onPress}
       style={({ pressed }) => [
-        [styles.actionCard, { backgroundColor: colors.surface, borderColor: colors.border }],
+        [
+          styles.actionCard,
+          {
+            backgroundColor: colors.surface,
+            borderColor: colors.border,
+          },
+        ],
         pressed && styles.actionCardPressed,
       ]}
     >
       <View
         style={[
           styles.iconBadge,
-          { backgroundColor: colors.card },
+          {
+            backgroundColor: colors.card,
+          },
         ]}
       >
         <Ionicons
@@ -353,11 +372,21 @@ function ActionCard({
       </View>
 
       <View style={styles.actionText}>
-        <Text style={[styles.cardTitle, { color: colors.text }]}> 
+        <Text
+          style={[
+            styles.cardTitle,
+            { color: colors.text },
+          ]}
+        >
           {action.title}
         </Text>
 
-        <Text style={[styles.cardSub, { color: colors.textSecondary }]}> 
+        <Text
+          style={[
+            styles.cardSub,
+            { color: colors.textSecondary },
+          ]}
+        >
           {action.subtitle}
         </Text>
       </View>
@@ -381,6 +410,7 @@ export default function HomeScreen() {
   const router = useRouter();
   const { t } = useTranslation();
   const { colors } = useTheme();
+
   const {
     darkMode,
     userOverride,
@@ -436,9 +466,17 @@ export default function HomeScreen() {
   const fetchAnnouncements = useCallback(async () => {
     const { data, error } = await supabase
       .from('Announcement')
-      .select('*');
+      .select(
+        '"Announcement ID", "Posted By", "Title", "Message", "Priority level"',
+      )
+      .order('"Posted By"', { ascending: false });
 
     if (error || !data?.length) {
+      console.error(
+        'Failed to load announcements:',
+        error,
+      );
+
       return [];
     }
 
@@ -447,18 +485,20 @@ export default function HomeScreen() {
 
       return {
         id: String(
-          item.id ??
-            item.announcement_id ??
+          item['Announcement ID'] ??
             index + 1,
         ),
-        title: String(item.title ?? ''),
-        message: String(
-          item.message ??
-            item.description ??
-            '',
+
+        title: String(
+          item['Title'] ?? '',
         ),
-        priority: item.priority
-          ? String(item.priority)
+
+        message: String(
+          item['Message'] ?? '',
+        ),
+
+        priority: item['Priority level']
+          ? String(item['Priority level'])
           : undefined,
       };
     });
@@ -567,6 +607,10 @@ export default function HomeScreen() {
     announcements.length > 0 &&
     announcements[0].id !== lastSeenId;
 
+  // ---------------------------------------------------------------------------
+  // Theme
+  // ---------------------------------------------------------------------------
+
   const handleThemeToggle = () => {
     if (userOverride === null) {
       setDarkModeOverride(!darkMode);
@@ -581,14 +625,28 @@ export default function HomeScreen() {
     setDarkModeOverride(null);
   };
 
-  const themeLabel = userOverride === null ? 'System' : darkMode ? 'Dark' : 'Light';
+  const themeLabel =
+    userOverride === null
+      ? 'System'
+      : darkMode
+        ? 'Dark'
+        : 'Light';
+
+  // ---------------------------------------------------------------------------
+  // Font size
+  // ---------------------------------------------------------------------------
 
   const adjustFontScale = (change: number) => {
     tap();
+
     const nextScale = Math.min(
       1.3,
-      Math.max(0.7, Math.round((fontScale + change) * 10) / 10),
+      Math.max(
+        0.7,
+        Math.round((fontScale + change) * 10) / 10,
+      ),
     );
+
     changeFontScale(nextScale);
   };
 
@@ -637,7 +695,12 @@ export default function HomeScreen() {
 
   return (
     <ScrollView
-      style={[styles.container, { backgroundColor: colors.background }]}
+      style={[
+        styles.container,
+        {
+          backgroundColor: colors.background,
+        },
+      ]}
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
       refreshControl={
@@ -654,13 +717,19 @@ export default function HomeScreen() {
       {/* ================================================================= */}
 
       <LinearGradient
-        colors={[colors.headerBackground, colors.text, colors.background]}
+        colors={[
+          colors.headerBackground,
+          colors.text,
+          colors.background,
+        ]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.hero}
       >
         {/* Decorative glow */}
+
         <View style={styles.heroGlowOne} />
+
         <View style={styles.heroGlowTwo} />
 
         <View style={styles.heroTopRow}>
@@ -675,18 +744,26 @@ export default function HomeScreen() {
           </View>
 
           <View style={styles.appearanceControls}>
-            <View style={styles.fontSizeControls} accessibilityLabel="Text size">
+            <View
+              style={styles.fontSizeControls}
+              accessibilityLabel="Text size"
+            >
               <Pressable
                 style={[
                   styles.fontSizeButton,
-                  fontScale <= 0.7 && styles.fontSizeButtonDisabled,
+                  fontScale <= 0.7 &&
+                    styles.fontSizeButtonDisabled,
                 ]}
-                onPress={() => adjustFontScale(-0.1)}
+                onPress={() =>
+                  adjustFontScale(-0.1)
+                }
                 disabled={fontScale <= 0.7}
                 accessibilityRole="button"
                 accessibilityLabel="Decrease text size"
               >
-                <Text style={styles.fontSizeButtonText}>A-</Text>
+                <Text style={styles.fontSizeButtonText}>
+                  A-
+                </Text>
               </Pressable>
 
               <Text style={styles.fontSizeValue}>
@@ -696,14 +773,19 @@ export default function HomeScreen() {
               <Pressable
                 style={[
                   styles.fontSizeButton,
-                  fontScale >= 1.3 && styles.fontSizeButtonDisabled,
+                  fontScale >= 1.3 &&
+                    styles.fontSizeButtonDisabled,
                 ]}
-                onPress={() => adjustFontScale(0.1)}
+                onPress={() =>
+                  adjustFontScale(0.1)
+                }
                 disabled={fontScale >= 1.3}
                 accessibilityRole="button"
                 accessibilityLabel="Increase text size"
               >
-                <Text style={styles.fontSizeButtonText}>A+</Text>
+                <Text style={styles.fontSizeButtonText}>
+                  A+
+                </Text>
               </Pressable>
             </View>
 
@@ -713,7 +795,9 @@ export default function HomeScreen() {
               accessibilityRole="button"
               accessibilityLabel={`Theme: ${themeLabel}`}
             >
-              <Text style={styles.themeToggleText}>Theme: {themeLabel}</Text>
+              <Text style={styles.themeToggleText}>
+                Theme: {themeLabel}
+              </Text>
             </Pressable>
           </View>
         </View>
@@ -837,25 +921,52 @@ export default function HomeScreen() {
 
       {(loading || announcements.length > 0) && (
         <View style={styles.section}>
-          <View style={styles.sectionHeaderContainer}>
+          <View
+            style={styles.sectionHeaderContainer}
+          >
             <View style={styles.sectionHeading}>
               <View style={styles.sectionTitleRow}>
-                <Text style={[styles.sectionEyebrow, { color: colors.accent }]}> 
+                <Text
+                  style={[
+                    styles.sectionEyebrow,
+                    {
+                      color: colors.accent,
+                    },
+                  ]}
+                >
                   {t('common.latest')}
                 </Text>
 
                 {hasUnread && !loading && (
-                  <View style={styles.unreadIndicator}>
-                    <View style={styles.unreadDot} />
+                  <View
+                    style={styles.unreadIndicator}
+                  >
+                    <View
+                      style={styles.unreadDot}
+                    />
 
-                    <Text style={[styles.unreadText, { color: colors.accent }]}> 
+                    <Text
+                      style={[
+                        styles.unreadText,
+                        {
+                          color: colors.accent,
+                        },
+                      ]}
+                    >
                       {t('common.new')}
                     </Text>
                   </View>
                 )}
               </View>
 
-              <Text style={[styles.sectionHeader, { color: colors.text }]}> 
+              <Text
+                style={[
+                  styles.sectionHeader,
+                  {
+                    color: colors.text,
+                  },
+                ]}
+              >
                 {t('common.latestFromSchool')}
               </Text>
             </View>
@@ -865,23 +976,27 @@ export default function HomeScreen() {
             ? [0, 1].map((item) => (
                 <SkeletonCard key={item} />
               ))
-            : announcements.map((announcement, index) => (
-                <AnnouncementCard
-                  key={announcement.id}
-                  item={announcement}
-                  expanded={
-                    expandedId === announcement.id
-                  }
-                  onToggle={() =>
-                    toggleAnnouncement(
-                      announcement.id,
-                    )
-                  }
-                  isNew={
-                    index === 0 && hasUnread
-                  }
-                />
-              ))}
+            : announcements.map(
+                (announcement, index) => (
+                  <AnnouncementCard
+                    key={announcement.id}
+                    item={announcement}
+                    expanded={
+                      expandedId ===
+                      announcement.id
+                    }
+                    onToggle={() =>
+                      toggleAnnouncement(
+                        announcement.id,
+                      )
+                    }
+                    isNew={
+                      index === 0 &&
+                      hasUnread
+                    }
+                  />
+                ),
+              )}
         </View>
       )}
 
@@ -890,26 +1005,46 @@ export default function HomeScreen() {
       {/* ================================================================= */}
 
       <View style={styles.section}>
-        <View style={styles.sectionHeaderContainer}>
+        <View
+          style={styles.sectionHeaderContainer}
+        >
           <View>
-            <Text style={[styles.sectionEyebrow, { color: colors.accent }]}> 
+            <Text
+              style={[
+                styles.sectionEyebrow,
+                {
+                  color: colors.accent,
+                },
+              ]}
+            >
               {t('common.quickAccess')}
             </Text>
 
-            <Text style={[styles.sectionHeader, { color: colors.text }]}> 
+            <Text
+              style={[
+                styles.sectionHeader,
+                {
+                  color: colors.text,
+                },
+              ]}
+            >
               {t('common.whatNeed')}
             </Text>
           </View>
         </View>
 
         {ACTIONS.map((action) => (
-            <ActionCard
+          <ActionCard
             key={action.key}
-              action={{
-                ...action,
-                title: t(`common.${action.key}Title`),
-                subtitle: t(`common.${action.key}Subtitle`),
-              }}
+            action={{
+              ...action,
+              title: t(
+                `common.${action.key}Title`,
+              ),
+              subtitle: t(
+                `common.${action.key}Subtitle`,
+              ),
+            }}
             onPress={() =>
               handleNavigate(action.route)
             }
@@ -1057,8 +1192,10 @@ const styles = StyleSheet.create({
   },
 
   themeToggle: {
-    backgroundColor: 'rgba(255,255,255,0.12)',
-    borderColor: 'rgba(255,255,255,0.26)',
+    backgroundColor:
+      'rgba(255,255,255,0.12)',
+    borderColor:
+      'rgba(255,255,255,0.26)',
     borderWidth: 1,
     borderRadius: 999,
     paddingHorizontal: 10,
@@ -1083,8 +1220,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 5,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.26)',
-    backgroundColor: 'rgba(255,255,255,0.08)',
+    borderColor:
+      'rgba(255,255,255,0.26)',
+    backgroundColor:
+      'rgba(255,255,255,0.08)',
   },
 
   fontSizeButtonDisabled: {
@@ -1548,4 +1687,3 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
 });
-
