@@ -2,7 +2,7 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
-<<<<<<< HEAD
+    ActivityIndicator,
     Image,
     KeyboardAvoidingView,
     Platform,
@@ -13,29 +13,13 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
+import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 
 export default function LoginScreen() {
   const router = useRouter();
-  const { showToast } = useToast();
-=======
-  ActivityIndicator,
-  Image,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import { useAuth } from '../context/AuthContext';
-
-export default function LoginScreen() {
-  const router = useRouter();
   const { signIn, resetPassword } = useAuth();
->>>>>>> 0720c1202f0168b90c49af8ad3c50360ed8f9933
+  const { showToast } = useToast();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -66,14 +50,8 @@ export default function LoginScreen() {
       return;
     }
 
-<<<<<<< HEAD
-  const handleLogin = () => {
-    // Temporary navigation while authentication is being built.
-    // Replace this with your real login API later.
     showToast('Login successful');
-=======
->>>>>>> 0720c1202f0168b90c49af8ad3c50360ed8f9933
-    router.replace('/(admin)');
+    router.replace('/(coordinator)' as any);
   };
 
   const handleForgotPassword = async () => {

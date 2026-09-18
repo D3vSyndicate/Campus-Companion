@@ -1,0 +1,2 @@
+import CoordinatorContentScreen from '../../components/CoordinatorContentScreen';
+export default function ChecklistScreen() { return <CoordinatorContentScreen title="Checklist" description="Organise tasks students need to complete during orientation." placeholder="Add a checklist task" initialItems={['Activate student email', 'Access the Funda LMS', 'Save key support contacts']} />; }

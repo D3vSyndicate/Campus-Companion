@@ -1,16 +1,17 @@
-import React from 'react';
+import { useRouter, useSegments } from 'expo-router';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useRouter } from 'expo-router';
-import { useTheme } from '../theme/ThemeContext';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../theme/ThemeContext';
 
-// Title bar used at the top of the Dashboard. Tapping the avatar opens
-// /(admin)/profile (settings, theme, account details, sign out).
+// Title bar used at the top of the coordinator dashboard. Tapping the avatar
+// opens profile settings, theme, account details, and sign out.
 
 export default function Header({ title }: { title: string }) {
   const { colors } = useTheme();
   const { user } = useAuth();
   const router = useRouter();
+  const segments = useSegments();
+  const isAdminFlow = segments[0] === '(admin)';
 
   const initials = user?.email ? user.email.charAt(0).toUpperCase() : '?';
 
@@ -23,7 +24,7 @@ export default function Header({ title }: { title: string }) {
     >
       <Text style={[styles.title, { color: colors.headerText }]}>{title}</Text>
       <TouchableOpacity
-        onPress={() => router.push('/profile')}
+        onPress={() => router.push((isAdminFlow ? '/(admin)/profile' : '/(coordinator)/profile') as any)}
         style={[styles.avatar, { backgroundColor: colors.accent }]}
         accessibilityLabel="Open profile and settings"
       >
