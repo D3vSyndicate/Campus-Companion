@@ -7,7 +7,7 @@ export type Contact = {
   surname: string;
   role: string;
   email: string;
-  supportCategory: string;
+  support_category: string;
 };
 
 type ContactsContextValue = {
@@ -27,7 +27,7 @@ export function ContactsProvider({ children }: { children: ReactNode }) {
 
   const fetchContacts = async () => {
     setLoading(true);
-    const { data, error } = await supabase.from('contacts').select('*');
+    const { data, error } = await supabase.from('Contact').select('*');
     if (error) {
       console.error('Error fetching contacts:', error.message);
     } else if (data) {
@@ -42,7 +42,7 @@ export function ContactsProvider({ children }: { children: ReactNode }) {
 
   const addItem: ContactsContextValue['addItem'] = async (item) => {
     const { data, error } = await supabase
-      .from('contacts')
+      .from('Contact')
       .insert([item])
       .select();
 
@@ -55,7 +55,7 @@ export function ContactsProvider({ children }: { children: ReactNode }) {
 
   const updateItem: ContactsContextValue['updateItem'] = async (id, updates) => {
     const { error } = await supabase
-      .from('contacts')
+      .from('Contact')
       .update(updates)
       .eq('id', id);
 
@@ -69,7 +69,7 @@ export function ContactsProvider({ children }: { children: ReactNode }) {
   };
 
   const deleteItem: ContactsContextValue['deleteItem'] = async (id) => {
-    const { error } = await supabase.from('contacts').delete().eq('id', id);
+    const { error } = await supabase.from('Contact').delete().eq('id', id);
 
     if (error) {
       console.error('Error deleting contact:', error.message);

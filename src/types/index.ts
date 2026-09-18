@@ -12,16 +12,17 @@ export interface ScheduleItem {
 
 export interface ChecklistItem {
   id: string;
-  task: string;
+  created_at: Date;
+  task_description: string;
   category: string;
-  completed: boolean;
+  completion_status: boolean;
 }
 
 export interface ContactItem {
   id: string;
   name: string;
+  surname: string;
   role: string;
   email: string;
-  office: string;
-  supportType: string;
+  support_category: string;
 }

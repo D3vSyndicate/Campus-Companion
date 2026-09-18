@@ -6,22 +6,23 @@ import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  Animated,
-  Easing,
-  LayoutAnimation,
-  Text as NativeText,
-  Platform,
-  Pressable,
-  RefreshControl,
-  ScrollView,
-  StyleSheet,
-  TextProps,
-  UIManager,
-  View,
+    Animated,
+    Easing,
+    LayoutAnimation,
+    Text as NativeText,
+    Platform,
+    Pressable,
+    RefreshControl,
+    ScrollView,
+    StyleSheet,
+    TextProps,
+    UIManager,
+    View,
 } from 'react-native';
 
 import { ShameResilientBanner } from '../../components/ShameResilientBanner';
 import { useAppearance } from '../../context/AppearanceContext';
+import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/superbase';
 import { useTheme } from '../../theme/ThemeContext';
 
@@ -84,7 +85,7 @@ interface ActionItem {
 const ACTIONS: ActionItem[] = [
   {
     key: 'schedule',
-    route: '/schedule',
+    route: '/(student)/schedule',
     icon: 'calendar-outline',
     iconBg: '#FFF8D9',
     iconColor: '#0B1F3A',
@@ -93,7 +94,7 @@ const ACTIONS: ActionItem[] = [
   },
   {
     key: 'checklist',
-    route: '/checklist',
+    route: '/(student)/checklist',
     icon: 'checkmark-circle-outline',
     iconBg: '#EEF3F9',
     iconColor: '#0B1F3A',
@@ -102,7 +103,7 @@ const ACTIONS: ActionItem[] = [
   },
   {
     key: 'contacts',
-    route: '/contacts',
+    route: '/(student)/contacts',
     icon: 'people-outline',
     iconBg: '#F4F6F9',
     iconColor: '#0B1F3A',
@@ -111,7 +112,7 @@ const ACTIONS: ActionItem[] = [
   },
   {
     key: 'digital',
-    route: '/digital',
+    route: '/(student)/digital',
     icon: 'laptop-outline',
     iconBg: '#FFF8D9',
     iconColor: '#0B1F3A',
@@ -120,7 +121,7 @@ const ACTIONS: ActionItem[] = [
   },
   {
     key: 'faqs',
-    route: '/faqs',
+    route: '/(student)/faqs',
     icon: 'help-circle-outline',
     iconBg: '#EEF3F9',
     iconColor: '#0B1F3A',
@@ -243,6 +244,7 @@ function AnnouncementCard({
   isNew: boolean;
 }) {
   const { colors } = useTheme();
+
   const urgent =
     item.priority?.toLowerCase() === 'urgent' ||
     item.priority?.toLowerCase() === 'high';
@@ -251,7 +253,13 @@ function AnnouncementCard({
     <Pressable
       onPress={onToggle}
       style={({ pressed }) => [
-        [styles.announcementCard, { backgroundColor: colors.surface, borderColor: colors.border }],
+        [
+          styles.announcementCard,
+          {
+            backgroundColor: colors.surface,
+            borderColor: colors.border,
+          },
+        ],
         urgent && styles.announcementUrgent,
         pressed && styles.announcementPressed,
       ]}
@@ -281,7 +289,10 @@ function AnnouncementCard({
         {isNew && (
           <View style={styles.newBadge}>
             <View style={styles.newBadgeDot} />
-            <Text style={styles.newBadgeText}>NEW</Text>
+
+            <Text style={styles.newBadgeText}>
+              NEW
+            </Text>
           </View>
         )}
 
@@ -331,18 +342,27 @@ function ActionCard({
   onPress: () => void;
 }) {
   const { colors } = useTheme();
+
   return (
     <Pressable
       onPress={onPress}
       style={({ pressed }) => [
-        [styles.actionCard, { backgroundColor: colors.surface, borderColor: colors.border }],
+        [
+          styles.actionCard,
+          {
+            backgroundColor: colors.surface,
+            borderColor: colors.border,
+          },
+        ],
         pressed && styles.actionCardPressed,
       ]}
     >
       <View
         style={[
           styles.iconBadge,
-          { backgroundColor: colors.card },
+          {
+            backgroundColor: colors.card,
+          },
         ]}
       >
         <Ionicons
@@ -353,11 +373,21 @@ function ActionCard({
       </View>
 
       <View style={styles.actionText}>
-        <Text style={[styles.cardTitle, { color: colors.text }]}> 
+        <Text
+          style={[
+            styles.cardTitle,
+            { color: colors.text },
+          ]}
+        >
           {action.title}
         </Text>
 
-        <Text style={[styles.cardSub, { color: colors.textSecondary }]}> 
+        <Text
+          style={[
+            styles.cardSub,
+            { color: colors.textSecondary },
+          ]}
+        >
           {action.subtitle}
         </Text>
       </View>
@@ -381,6 +411,8 @@ export default function HomeScreen() {
   const router = useRouter();
   const { t } = useTranslation();
   const { colors } = useTheme();
+  const { user } = useAuth();
+
   const {
     darkMode,
     userOverride,
@@ -395,6 +427,14 @@ export default function HomeScreen() {
 
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [checklistItems, setChecklistItems] = useState<
+    Array<{ id: string; databaseId: string; databaseKey: 'checklist_item_id' | 'id'; task_description: string; category: string; completion_status: boolean }>
+  >([]);
+  const [checklistSummary, setChecklistSummary] = useState({
+    total: 0,
+    completed: 0,
+    loading: true,
+  });
 
   const [expandedId, setExpandedId] = useState<string | null>(
     null,
@@ -405,6 +445,25 @@ export default function HomeScreen() {
   );
 
   const greeting = t(`common.${getGreeting()}`);
+  const userMetadata = user?.user_metadata ?? {};
+  const studentName = String(
+    userMetadata.full_name ??
+      userMetadata.name ??
+      userMetadata.first_name ??
+      'Student',
+  ).trim();
+  const studentNumber = String(
+    userMetadata.student_number ??
+      userMetadata.studentNumber ??
+      userMetadata.student_id ??
+      '',
+  ).trim();
+  const studentInitials = studentName
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part.charAt(0).toUpperCase())
+    .join('');
 
   // ---------------------------------------------------------------------------
   // Load last-seen announcement
@@ -430,7 +489,12 @@ export default function HomeScreen() {
       .from('Announcement')
       .select('*');
 
-    if (error || !data?.length) {
+    if (error) {
+      console.error('Failed to load announcements:', error);
+      return [];
+    }
+
+    if (!data?.length) {
       return [];
     }
 
@@ -439,18 +503,28 @@ export default function HomeScreen() {
 
       return {
         id: String(
-          item.id ??
+          item['Announcement ID'] ??
             item.announcement_id ??
+            item.id ??
             index + 1,
         ),
-        title: String(item.title ?? ''),
+
+        title: String(
+          item.Title ??
+            item.title ??
+            '',
+        ),
+
         message: String(
-          item.message ??
+          item.Message ??
+            item.message ??
+            item.Description ??
             item.description ??
             '',
         ),
-        priority: item.priority
-          ? String(item.priority)
+
+        priority: (item['Priority level'] ?? item.priority_level ?? item.Priority ?? item.priority)
+          ? String(item['Priority level'] ?? item.priority_level ?? item.Priority ?? item.priority)
           : undefined,
       };
     });
@@ -472,6 +546,74 @@ export default function HomeScreen() {
     })();
   }, [fetchAnnouncements]);
 
+  const fetchChecklistSummary = useCallback(async () => {
+    const { data, error } = await supabase
+      .from('checklist_item')
+      .select('*')
+      .order('created_at', { ascending: true });
+
+    if (error || !data) {
+      setChecklistItems([]);
+      setChecklistSummary({ total: 0, completed: 0, loading: false });
+      return;
+    }
+
+    const tasks = (data ?? []).map((row, index) => {
+      const item = row as Record<string, unknown>;
+      const databaseKey: 'checklist_item_id' | 'id' = item.checklist_item_id != null ? 'checklist_item_id' : 'id';
+      const databaseId = String(item[databaseKey] ?? `home-checklist-${index}`);
+      return {
+        id: databaseId,
+        databaseId,
+        databaseKey,
+        task_description: String(item.task_description ?? ''),
+        category: String(item.category ?? item.support_category ?? 'General'),
+        completion_status: item.completion_status === true || item.completion_status === 'true',
+      };
+    });
+
+    setChecklistItems(tasks);
+    setChecklistSummary({
+      total: tasks.length,
+      completed: tasks.filter((task) => task.completion_status).length,
+      loading: false,
+    });
+  }, []);
+
+  const toggleChecklistTask = useCallback(async (taskId: string, currentStatus: boolean) => {
+    const nextStatus = !currentStatus;
+
+    setChecklistItems((current) =>
+      current.map((task) =>
+        task.id === taskId ? { ...task, completion_status: nextStatus } : task,
+      ),
+    );
+
+    setChecklistSummary((current) => {
+      const newCompleted = current.completed + (nextStatus && !currentStatus ? 1 : !nextStatus && currentStatus ? -1 : 0);
+      return {
+        ...current,
+        completed: Math.max(0, Math.min(current.total, newCompleted)),
+      };
+    });
+
+    const { error } = await supabase
+      .from('checklist_item')
+      .update({ completion_status: nextStatus ? 'true' : 'false' })
+      .eq(
+        checklistItems.find((task) => task.id === taskId)?.databaseKey ?? 'checklist_item_id',
+        checklistItems.find((task) => task.id === taskId)?.databaseId ?? taskId,
+      );
+
+    if (error) {
+      console.error('Failed to sync home checklist item to Supabase.', error);
+    }
+  }, [checklistItems]);
+
+  useEffect(() => {
+    void fetchChecklistSummary();
+  }, [fetchChecklistSummary]);
+
   // ---------------------------------------------------------------------------
   // Pull to refresh
   // ---------------------------------------------------------------------------
@@ -482,13 +624,13 @@ export default function HomeScreen() {
     tap();
 
     try {
-      const list = await fetchAnnouncements();
+      const [list] = await Promise.all([fetchAnnouncements(), fetchChecklistSummary()]);
 
       setAnnouncements(list);
     } finally {
       setRefreshing(false);
     }
-  }, [fetchAnnouncements]);
+  }, [fetchAnnouncements, fetchChecklistSummary]);
 
   // ---------------------------------------------------------------------------
   // Unread state
@@ -497,6 +639,10 @@ export default function HomeScreen() {
   const hasUnread =
     announcements.length > 0 &&
     announcements[0].id !== lastSeenId;
+
+  // ---------------------------------------------------------------------------
+  // Theme
+  // ---------------------------------------------------------------------------
 
   const handleThemeToggle = () => {
     if (userOverride === null) {
@@ -512,14 +658,28 @@ export default function HomeScreen() {
     setDarkModeOverride(null);
   };
 
-  const themeLabel = userOverride === null ? 'System' : darkMode ? 'Dark' : 'Light';
+  const themeLabel =
+    userOverride === null
+      ? 'System'
+      : darkMode
+        ? 'Dark'
+        : 'Light';
+
+  // ---------------------------------------------------------------------------
+  // Font size
+  // ---------------------------------------------------------------------------
 
   const adjustFontScale = (change: number) => {
     tap();
+
     const nextScale = Math.min(
       1.3,
-      Math.max(0.7, Math.round((fontScale + change) * 10) / 10),
+      Math.max(
+        0.7,
+        Math.round((fontScale + change) * 10) / 10,
+      ),
     );
+
     changeFontScale(nextScale);
   };
 
@@ -568,7 +728,12 @@ export default function HomeScreen() {
 
   return (
     <ScrollView
-      style={[styles.container, { backgroundColor: colors.background }]}
+      style={[
+        styles.container,
+        {
+          backgroundColor: colors.background,
+        },
+      ]}
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
       refreshControl={
@@ -585,13 +750,19 @@ export default function HomeScreen() {
       {/* ================================================================= */}
 
       <LinearGradient
-        colors={[colors.headerBackground, colors.text, colors.background]}
+        colors={[
+          colors.headerBackground,
+          colors.text,
+          colors.background,
+        ]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.hero}
       >
         {/* Decorative glow */}
+
         <View style={styles.heroGlowOne} />
+
         <View style={styles.heroGlowTwo} />
 
         <View style={styles.heroTopRow}>
@@ -606,18 +777,26 @@ export default function HomeScreen() {
           </View>
 
           <View style={styles.appearanceControls}>
-            <View style={styles.fontSizeControls} accessibilityLabel="Text size">
+            <View
+              style={styles.fontSizeControls}
+              accessibilityLabel="Text size"
+            >
               <Pressable
                 style={[
                   styles.fontSizeButton,
-                  fontScale <= 0.7 && styles.fontSizeButtonDisabled,
+                  fontScale <= 0.7 &&
+                    styles.fontSizeButtonDisabled,
                 ]}
-                onPress={() => adjustFontScale(-0.1)}
+                onPress={() =>
+                  adjustFontScale(-0.1)
+                }
                 disabled={fontScale <= 0.7}
                 accessibilityRole="button"
                 accessibilityLabel="Decrease text size"
               >
-                <Text style={styles.fontSizeButtonText}>A-</Text>
+                <Text style={styles.fontSizeButtonText}>
+                  A-
+                </Text>
               </Pressable>
 
               <Text style={styles.fontSizeValue}>
@@ -627,14 +806,19 @@ export default function HomeScreen() {
               <Pressable
                 style={[
                   styles.fontSizeButton,
-                  fontScale >= 1.3 && styles.fontSizeButtonDisabled,
+                  fontScale >= 1.3 &&
+                    styles.fontSizeButtonDisabled,
                 ]}
-                onPress={() => adjustFontScale(0.1)}
+                onPress={() =>
+                  adjustFontScale(0.1)
+                }
                 disabled={fontScale >= 1.3}
                 accessibilityRole="button"
                 accessibilityLabel="Increase text size"
               >
-                <Text style={styles.fontSizeButtonText}>A+</Text>
+                <Text style={styles.fontSizeButtonText}>
+                  A+
+                </Text>
               </Pressable>
             </View>
 
@@ -644,7 +828,9 @@ export default function HomeScreen() {
               accessibilityRole="button"
               accessibilityLabel={`Theme: ${themeLabel}`}
             >
-              <Text style={styles.themeToggleText}>Theme: {themeLabel}</Text>
+              <Text style={styles.themeToggleText}>
+                Theme: {themeLabel}
+              </Text>
             </Pressable>
           </View>
         </View>
@@ -653,6 +839,25 @@ export default function HomeScreen() {
           <Text style={styles.greeting}>
             {greeting}
           </Text>
+
+          <View style={styles.studentIdentity}>
+            <View style={styles.studentAvatar}>
+              <Text style={styles.studentAvatarText}>{studentInitials || 'S'}</Text>
+            </View>
+
+            <View style={styles.studentIdentityCopy}>
+              <Text style={styles.studentName}>{studentName}</Text>
+              <Text style={styles.studentEmail} numberOfLines={1}>
+                {user?.email ?? 'Student account'}
+              </Text>
+            </View>
+
+            {studentNumber ? (
+              <View style={styles.studentNumberBadge}>
+                <Text style={styles.studentNumberText}>{studentNumber}</Text>
+              </View>
+            ) : null}
+          </View>
 
           <Text style={styles.welcomeTitle}>
             {t('common.startStrong')}
@@ -691,31 +896,129 @@ export default function HomeScreen() {
         type="encouragement"
       />
 
+      {!checklistSummary.loading && checklistSummary.total > 0 && (
+        <View style={styles.section}>
+          <Pressable
+            onPress={() => handleNavigate('/(student)/checklist')}
+            style={({ pressed }) => [
+              styles.checklistSummaryCard,
+              { backgroundColor: colors.surface, borderColor: colors.border },
+              pressed && styles.actionCardPressed,
+            ]}
+          >
+            <View style={styles.checklistSummaryHeader}>
+              <Text style={[styles.sectionEyebrow, { color: colors.accent }]}>Checklist</Text>
+              <Text style={[styles.checklistSummaryBadge, { color: colors.accent }]}>
+                {checklistSummary.completed}/{checklistSummary.total}
+              </Text>
+            </View>
+
+            <Text style={[styles.sectionHeader, { color: colors.text }]}>Your orientation checklist</Text>
+
+            <View style={[styles.progressTrack, { backgroundColor: colors.card }]}>
+              <View
+                style={[
+                  styles.progressFill,
+                  {
+                    width: `${checklistSummary.total ? (checklistSummary.completed / checklistSummary.total) * 100 : 0}%`,
+                    backgroundColor: colors.accent,
+                  },
+                ]}
+              />
+            </View>
+
+            {checklistItems.slice(0, 3).map((task) => (
+              <Pressable
+                key={task.id}
+                onPress={() => void toggleChecklistTask(task.id, task.completion_status)}
+                style={styles.checklistMiniRow}
+              >
+                <View
+                  style={[
+                    styles.checklistMiniBox,
+                    {
+                      borderColor: colors.border,
+                      backgroundColor: task.completion_status ? colors.accent : 'transparent',
+                    },
+                  ]}
+                >
+                  {task.completion_status && <Ionicons name="checkmark" size={12} color={colors.background} />}
+                </View>
+
+                <Text
+                  style={[
+                    styles.checklistMiniText,
+                    { color: colors.text },
+                    task.completion_status && styles.checklistMiniTextDone,
+                  ]}
+                  numberOfLines={1}
+                >
+                  {task.task_description}
+                </Text>
+              </Pressable>
+            ))}
+
+            <Text style={[styles.checklistSummaryText, { color: colors.textSecondary }]}>
+              {checklistSummary.completed === checklistSummary.total
+                ? 'Nice work — you finished everything. Keep going!'
+                : 'Tap a task to update it, or open the full checklist.'}
+            </Text>
+          </Pressable>
+        </View>
+      )}
+
       {/* ================================================================= */}
       {/* ANNOUNCEMENTS */}
       {/* ================================================================= */}
 
       {(loading || announcements.length > 0) && (
         <View style={styles.section}>
-          <View style={styles.sectionHeaderContainer}>
+          <View
+            style={styles.sectionHeaderContainer}
+          >
             <View style={styles.sectionHeading}>
               <View style={styles.sectionTitleRow}>
-                <Text style={[styles.sectionEyebrow, { color: colors.accent }]}> 
+                <Text
+                  style={[
+                    styles.sectionEyebrow,
+                    {
+                      color: colors.accent,
+                    },
+                  ]}
+                >
                   {t('common.latest')}
                 </Text>
 
                 {hasUnread && !loading && (
-                  <View style={styles.unreadIndicator}>
-                    <View style={styles.unreadDot} />
+                  <View
+                    style={styles.unreadIndicator}
+                  >
+                    <View
+                      style={styles.unreadDot}
+                    />
 
-                    <Text style={[styles.unreadText, { color: colors.accent }]}> 
+                    <Text
+                      style={[
+                        styles.unreadText,
+                        {
+                          color: colors.accent,
+                        },
+                      ]}
+                    >
                       {t('common.new')}
                     </Text>
                   </View>
                 )}
               </View>
 
-              <Text style={[styles.sectionHeader, { color: colors.text }]}> 
+              <Text
+                style={[
+                  styles.sectionHeader,
+                  {
+                    color: colors.text,
+                  },
+                ]}
+              >
                 {t('common.latestFromSchool')}
               </Text>
             </View>
@@ -725,23 +1028,27 @@ export default function HomeScreen() {
             ? [0, 1].map((item) => (
                 <SkeletonCard key={item} />
               ))
-            : announcements.map((announcement, index) => (
-                <AnnouncementCard
-                  key={announcement.id}
-                  item={announcement}
-                  expanded={
-                    expandedId === announcement.id
-                  }
-                  onToggle={() =>
-                    toggleAnnouncement(
-                      announcement.id,
-                    )
-                  }
-                  isNew={
-                    index === 0 && hasUnread
-                  }
-                />
-              ))}
+            : announcements.map(
+                (announcement, index) => (
+                  <AnnouncementCard
+                    key={announcement.id}
+                    item={announcement}
+                    expanded={
+                      expandedId ===
+                      announcement.id
+                    }
+                    onToggle={() =>
+                      toggleAnnouncement(
+                        announcement.id,
+                      )
+                    }
+                    isNew={
+                      index === 0 &&
+                      hasUnread
+                    }
+                  />
+                ),
+              )}
         </View>
       )}
 
@@ -750,26 +1057,46 @@ export default function HomeScreen() {
       {/* ================================================================= */}
 
       <View style={styles.section}>
-        <View style={styles.sectionHeaderContainer}>
+        <View
+          style={styles.sectionHeaderContainer}
+        >
           <View>
-            <Text style={[styles.sectionEyebrow, { color: colors.accent }]}> 
+            <Text
+              style={[
+                styles.sectionEyebrow,
+                {
+                  color: colors.accent,
+                },
+              ]}
+            >
               {t('common.quickAccess')}
             </Text>
 
-            <Text style={[styles.sectionHeader, { color: colors.text }]}> 
+            <Text
+              style={[
+                styles.sectionHeader,
+                {
+                  color: colors.text,
+                },
+              ]}
+            >
               {t('common.whatNeed')}
             </Text>
           </View>
         </View>
 
         {ACTIONS.map((action) => (
-            <ActionCard
+          <ActionCard
             key={action.key}
-              action={{
-                ...action,
-                title: t(`common.${action.key}Title`),
-                subtitle: t(`common.${action.key}Subtitle`),
-              }}
+            action={{
+              ...action,
+              title: t(
+                `common.${action.key}Title`,
+              ),
+              subtitle: t(
+                `common.${action.key}Subtitle`,
+              ),
+            }}
             onPress={() =>
               handleNavigate(action.route)
             }
@@ -818,6 +1145,67 @@ const styles = StyleSheet.create({
 
   section: {
     marginTop: 4,
+  },
+
+  checklistSummaryCard: {
+    borderWidth: 1,
+    borderRadius: 18,
+    padding: 16,
+    marginBottom: 16,
+  },
+
+  checklistSummaryHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+
+  checklistSummaryBadge: {
+    fontSize: 12,
+    fontWeight: '800',
+  },
+
+  checklistSummaryText: {
+    marginTop: 10,
+    fontSize: 12,
+  },
+
+  progressTrack: {
+    height: 10,
+    borderRadius: 999,
+    overflow: 'hidden',
+    marginTop: 12,
+  },
+
+  progressFill: {
+    height: '100%',
+    borderRadius: 999,
+  },
+
+  checklistMiniRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 12,
+  },
+
+  checklistMiniBox: {
+    width: 20,
+    height: 20,
+    borderWidth: 1.5,
+    borderRadius: 6,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 10,
+  },
+
+  checklistMiniText: {
+    flex: 1,
+    fontSize: 13,
+  },
+
+  checklistMiniTextDone: {
+    textDecorationLine: 'line-through',
+    opacity: 0.65,
   },
 
   // ===========================================================================
@@ -882,8 +1270,10 @@ const styles = StyleSheet.create({
   },
 
   themeToggle: {
-    backgroundColor: 'rgba(255,255,255,0.12)',
-    borderColor: 'rgba(255,255,255,0.26)',
+    backgroundColor:
+      'rgba(255,255,255,0.12)',
+    borderColor:
+      'rgba(255,255,255,0.26)',
     borderWidth: 1,
     borderRadius: 999,
     paddingHorizontal: 10,
@@ -908,8 +1298,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 5,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.26)',
-    backgroundColor: 'rgba(255,255,255,0.08)',
+    borderColor:
+      'rgba(255,255,255,0.26)',
+    backgroundColor:
+      'rgba(255,255,255,0.08)',
   },
 
   fontSizeButtonDisabled: {
@@ -986,6 +1378,64 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     marginBottom: 5,
+  },
+
+  studentIdentity: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    maxWidth: '100%',
+    marginBottom: 22,
+    paddingRight: 10,
+  },
+
+  studentAvatar: {
+    width: 46,
+    height: 46,
+    borderRadius: 23,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#F4C542',
+    marginRight: 11,
+  },
+
+  studentAvatarText: {
+    color: COLORS.primary,
+    fontSize: 16,
+    fontWeight: '800',
+  },
+
+  studentIdentityCopy: {
+    flexShrink: 1,
+    marginRight: 10,
+  },
+
+  studentName: {
+    color: COLORS.white,
+    fontSize: 16,
+    fontWeight: '800',
+  },
+
+  studentEmail: {
+    color: 'rgba(255,255,255,0.68)',
+    fontSize: 11,
+    marginTop: 3,
+  },
+
+  studentNumberBadge: {
+    maxWidth: 120,
+    borderRadius: 999,
+    paddingHorizontal: 9,
+    paddingVertical: 6,
+    backgroundColor: 'rgba(255,255,255,0.12)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.18)',
+  },
+
+  studentNumberText: {
+    color: '#FFF8D9',
+    fontSize: 10,
+    fontWeight: '800',
   },
 
   welcomeTitle: {
@@ -1373,4 +1823,3 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
 });
-

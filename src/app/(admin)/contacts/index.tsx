@@ -15,7 +15,7 @@ export default function ContactsListScreen() {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity onPress={() => router.push('/contacts/new')} style={styles.addButton}>
+        <TouchableOpacity onPress={() => router.push('./new')} style={styles.addButton}>
           <Text style={[styles.addButtonText, { color: colors.accent }]}>+ Add</Text>
         </TouchableOpacity>
       ),
@@ -46,13 +46,13 @@ export default function ContactsListScreen() {
         }
         renderItem={({ item }) => {
           const fullName = `${item.name} ${item.surname}`.trim();
-          const subtitleDetails = [item.role, item.supportCategory].filter(Boolean).join(' · ');
+          const subtitleDetails = [item.role, item.support_category].filter(Boolean).join(' · ');
 
           return (
             <ListItemCard
               title={fullName}
               subtitle={subtitleDetails || item.email}
-              onPress={() => router.push(`/contacts/${item.id}`)}
+              onPress={() => router.push(`./${item.id}`)}
               right={
                 <TouchableOpacity onPress={() => confirmDelete(item.id, fullName)}>
                   <Text style={[styles.deleteText, { color: colors.danger }]}>Delete</Text>

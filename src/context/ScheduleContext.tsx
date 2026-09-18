@@ -20,6 +20,17 @@ function toDatabaseItem(item: Omit<ScheduleItem, 'id'>) {
   };
 }
 
+function fromDatabaseItem(row: Record<string, unknown>): ScheduleItem {
+  return {
+    id: String(row.id ?? row.schedule_id ?? ''),
+    title: String(row.title ?? ''),
+    date: String(row.date ?? ''),
+    time: String(row.time ?? row.start_time ?? ''),
+    location: String(row.location ?? row.venue ?? row.venue_name ?? ''),
+    description: String(row.description ?? ''),
+  };
+}
+
 type ScheduleContextValue = {
   items: ScheduleItem[];
   addItem: (item: Omit<ScheduleItem, 'id'>) => Promise<void>;
@@ -41,14 +52,7 @@ export function ScheduleProvider({ children }: { children: ReactNode }) {
         return;
       }
 
-      setItems((data ?? []).map((row) => ({
-        id: String(row.id),
-        title: String(row.title ?? ''),
-        date: String(row.date ?? ''),
-        time: String(row.time ?? row.start_time ?? ''),
-        location: String(row.location ?? row.venue ?? ''),
-        description: String(row.description ?? ''),
-      })));
+      setItems((data ?? []).map((row) => fromDatabaseItem(row as Record<string, unknown>)));
     };
 
     void loadItems();
@@ -65,7 +69,7 @@ export function ScheduleProvider({ children }: { children: ReactNode }) {
         console.error('Error adding schedule item:', error.message);
         return;
       }
-      if (data) setItems((prev) => [...prev, data as ScheduleItem]);
+      if (data) setItems((prev) => [...prev, fromDatabaseItem(data as Record<string, unknown>)]);
     })();
   };
 

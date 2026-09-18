@@ -1,2 +1,2 @@
 import CoordinatorContentScreen from '../../components/CoordinatorContentScreen';
-export default function DigitalScreen() { return <CoordinatorContentScreen title="Digital Readiness" description="Manage guidance for Funda, email, Wi-Fi, labs, and student portals." placeholder="Add digital readiness guidance" initialItems={['Connect to campus Wi-Fi using your student account', 'Sign in to Funda with your student email']} />; }
+export default function DigitalScreen() { return <CoordinatorContentScreen storageKey="digital" title="Digital Readiness" description="Manage guidance for Funda, email, Wi-Fi, labs, and student portals." placeholder="Add digital readiness guidance" />; }

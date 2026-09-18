@@ -42,6 +42,7 @@ export default function StudentLayout() {
         <Tabs.Screen
           name="checklist"
           options={{
+            href: null,
             title: t('common.checklist'),
             tabBarIcon: ({ color }) => <Ionicons name="checkmark-circle-outline" size={TAB_ICON_SIZE} color={color} />,
           }}
@@ -56,6 +57,7 @@ export default function StudentLayout() {
         <Tabs.Screen
           name="faqs"
           options={{
+            href: null,
             title: t('common.faqs'),
             tabBarIcon: ({ color }) => <Ionicons name="help-circle-outline" size={TAB_ICON_SIZE} color={color} />,
           }}
@@ -65,6 +67,20 @@ export default function StudentLayout() {
           options={{
             title: t('common.support'),
             tabBarIcon: ({ color }) => <Ionicons name="people-outline" size={TAB_ICON_SIZE} color={color} />,
+          }}
+        />
+        <Tabs.Screen
+          name="tribe"
+          options={{
+            title: t('common.tribe'),
+            tabBarIcon: ({ color }) => <Ionicons name="chatbubbles-outline" size={TAB_ICON_SIZE} color={color} />,
+          }}
+        />
+        <Tabs.Screen
+          name="profile"
+          options={{
+            title: 'Profile',
+            tabBarIcon: ({ color }) => <Ionicons name="person-outline" size={TAB_ICON_SIZE} color={color} />,
           }}
         />
       </Tabs>

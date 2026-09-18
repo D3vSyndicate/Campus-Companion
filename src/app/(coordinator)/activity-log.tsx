@@ -1,2 +1,2 @@
 import CoordinatorContentScreen from '../../components/CoordinatorContentScreen';
-export default function ActivityLogScreen() { return <CoordinatorContentScreen title="Activity Log" description="Review changes made to orientation content." placeholder="Record an activity" initialItems={['Schedule item updated: Opening Ceremony', 'Venue information published: Main Hall']} />; }
+export default function ActivityLogScreen() { return <CoordinatorContentScreen storageKey="activity-log" title="Activity Log" description="Review changes made to orientation content." placeholder="Record an activity" />; }

@@ -1,2 +1,2 @@
 import CoordinatorContentScreen from '../../components/CoordinatorContentScreen';
-export default function FaqsScreen() { return <CoordinatorContentScreen title="FAQs" description="Maintain answers to common orientation questions." placeholder="Add a frequently asked question" initialItems={['Where do I collect my orientation pack?', 'How do I access campus Wi-Fi?']} />; }
+export default function FaqsScreen() { return <CoordinatorContentScreen storageKey="faqs" title="FAQs" description="Maintain answers to common orientation questions." placeholder="Add a frequently asked question" />; }
