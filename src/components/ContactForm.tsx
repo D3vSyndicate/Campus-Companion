@@ -1,4 +1,5 @@
-import React, { useLayoutEffect, useState } from 'react';
+import { useNavigation, useRouter } from 'expo-router';
+import React, { useCallback, useLayoutEffect, useState } from 'react';
 import {
   Alert,
   KeyboardAvoidingView,
@@ -10,12 +11,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { useNavigation, useRouter } from 'expo-router';
-import { useContacts, Contact } from '../context/ContactsContext';
+import { Contact, useContacts } from '../context/ContactsContext';
 import { useTheme } from '../theme/ThemeContext';
 
 type Props = {
-  existing?: Contact; // omit for "new contact" mode
+  existing?: Contact;
 };
 
 export default function ContactForm({ existing }: Props) {
@@ -25,9 +25,25 @@ export default function ContactForm({ existing }: Props) {
   const navigation = useNavigation();
 
   const [name, setName] = useState(existing?.name ?? '');
+  const [surname, setSurname] = useState(existing?.surname ?? '');
   const [role, setRole] = useState(existing?.role ?? '');
-  const [phone, setPhone] = useState(existing?.phone ?? '');
   const [email, setEmail] = useState(existing?.email ?? '');
+  const [supportCategory, setSupportCategory] = useState(existing?.supportCategory ?? '');
+
+  const handleDelete = useCallback(() => {
+    if (!existing) return;
+    Alert.alert('Delete contact', `Delete "${name} ${surname}".trim()? This can't be undone.`, [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: () => {
+          deleteItem(existing.id);
+          router.back();
+        },
+      },
+    ]);
+  }, [existing, name, surname, deleteItem, router]);
 
   useLayoutEffect(() => {
     if (existing) {
@@ -39,15 +55,14 @@ export default function ContactForm({ existing }: Props) {
         ),
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [existing, colors]);
+  }, [existing, colors.danger, navigation, handleDelete]);
 
   const handleSave = () => {
     if (!name.trim()) {
       Alert.alert('Missing info', 'Name is required.');
       return;
     }
-    const payload = { name, role, phone, email };
+    const payload = { name, surname, role, email, supportCategory };
     if (existing) {
       updateItem(existing.id, payload);
     } else {
@@ -56,23 +71,11 @@ export default function ContactForm({ existing }: Props) {
     router.back();
   };
 
-  const handleDelete = () => {
-    if (!existing) return;
-    Alert.alert('Delete contact', `Delete "${name}"? This can't be undone.`, [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Delete',
-        style: 'destructive',
-        onPress: () => {
-          deleteItem(existing.id);
-          router.back();
-        },
-      },
-    ]);
-  };
-
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    >
       <ScrollView
         style={[styles.container, { backgroundColor: colors.background }]}
         contentContainerStyle={styles.content}
@@ -82,7 +85,17 @@ export default function ContactForm({ existing }: Props) {
             style={[styles.input, inputStyle(colors)]}
             value={name}
             onChangeText={setName}
-            placeholder="Sipho Nkosi"
+            placeholder="Sipho"
+            placeholderTextColor={colors.textSecondary}
+          />
+        </Field>
+
+        <Field label="Surname" colors={colors}>
+          <TextInput
+            style={[styles.input, inputStyle(colors)]}
+            value={surname}
+            onChangeText={setSurname}
+            placeholder="Nkosi"
             placeholderTextColor={colors.textSecondary}
           />
         </Field>
@@ -97,18 +110,7 @@ export default function ContactForm({ existing }: Props) {
           />
         </Field>
 
-        <Field label="Phone" colors={colors}>
-          <TextInput
-            style={[styles.input, inputStyle(colors)]}
-            value={phone}
-            onChangeText={setPhone}
-            placeholder="+27 82 555 0101"
-            placeholderTextColor={colors.textSecondary}
-            keyboardType="phone-pad"
-          />
-        </Field>
-
-        <Field label="Email" colors={colors}>
+        <Field label="E-mail" colors={colors}>
           <TextInput
             style={[styles.input, inputStyle(colors)]}
             value={email}
@@ -120,8 +122,23 @@ export default function ContactForm({ existing }: Props) {
           />
         </Field>
 
-        <TouchableOpacity style={[styles.saveButton, { backgroundColor: colors.accent }]} onPress={handleSave}>
-          <Text style={styles.saveButtonText}>{existing ? 'Save Changes' : 'Add Contact'}</Text>
+        <Field label="Support Category" colors={colors}>
+          <TextInput
+            style={[styles.input, inputStyle(colors)]}
+            value={supportCategory}
+            onChangeText={setSupportCategory}
+            placeholder="Technical Support"
+            placeholderTextColor={colors.textSecondary}
+          />
+        </Field>
+
+        <TouchableOpacity
+          style={[styles.saveButton, { backgroundColor: colors.accent }]}
+          onPress={handleSave}
+        >
+          <Text style={[styles.saveButtonText, { color: '#FFFFFF' }]}>
+            {existing ? 'Save Changes' : 'Add Contact'}
+          </Text>
         </TouchableOpacity>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -148,5 +165,5 @@ const styles = StyleSheet.create({
   label: { fontSize: 13, fontWeight: '600', marginBottom: 6 },
   input: { borderWidth: StyleSheet.hairlineWidth, borderRadius: 10, paddingHorizontal: 14, paddingVertical: 12, fontSize: 15 },
   saveButton: { marginTop: 12, borderRadius: 10, paddingVertical: 14, alignItems: 'center' },
-  saveButtonText: { color: '#071B2C', fontWeight: '700', fontSize: 15 },
+  saveButtonText: { fontWeight: '700', fontSize: 15 },
 });

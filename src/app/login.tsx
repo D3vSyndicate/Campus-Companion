@@ -2,6 +2,7 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
+<<<<<<< HEAD
     ActivityIndicator,
     Image,
     KeyboardAvoidingView,
@@ -15,11 +16,28 @@ import {
 } from 'react-native';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
+=======
+  ActivityIndicator,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { useAuth } from '../context/AuthContext';
+>>>>>>> 5f1d37291bf2c8ec1ecd544456d0a4bb733f8b15
 
 export default function LoginScreen() {
   const router = useRouter();
   const { signIn, resetPassword } = useAuth();
+<<<<<<< HEAD
   const { showToast } = useToast();
+=======
+>>>>>>> 5f1d37291bf2c8ec1ecd544456d0a4bb733f8b15
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -50,8 +68,17 @@ export default function LoginScreen() {
       return;
     }
 
+<<<<<<< HEAD
     showToast('Login successful');
     router.replace('/(coordinator)' as any);
+=======
+    if (!result.role) {
+      setError('Your account does not have a valid role. Ask an administrator to set it to admin or student.');
+      return;
+    }
+
+    router.replace(result.role === 'admin' ? '/(admin)' : '/(student)');
+>>>>>>> 5f1d37291bf2c8ec1ecd544456d0a4bb733f8b15
   };
 
   const handleForgotPassword = async () => {
