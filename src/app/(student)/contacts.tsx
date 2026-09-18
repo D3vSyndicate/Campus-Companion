@@ -3,9 +3,9 @@ import { ActivityIndicator, Linking, ScrollView, StyleSheet, Text, TouchableOpac
 import { PageHeader } from '../../components/PageHeader';
 import { ShameResilientBanner } from '../../components/ShameResilientBanner';
 import { useAppearance } from '../../context/AppearanceContext';
+import { fetchWithOfflineFallback } from '../../lib/offlineData';
 import { MOCK_CONTACTS } from '../../mockData';
 import { ContactItem } from '../../types';
-import { fetchWithOfflineFallback } from '../lib/offlineData';
 
 export default function ContactsScreen() {
   const { darkMode } = useAppearance();

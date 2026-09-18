@@ -5,23 +5,23 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
-  Animated,
-  Easing,
-  LayoutAnimation,
-  Text as NativeText,
-  Platform,
-  Pressable,
-  RefreshControl,
-  ScrollView,
-  StyleSheet,
-  TextProps,
-  UIManager,
-  View,
+    Animated,
+    Easing,
+    LayoutAnimation,
+    Text as NativeText,
+    Platform,
+    Pressable,
+    RefreshControl,
+    ScrollView,
+    StyleSheet,
+    TextProps,
+    UIManager,
+    View,
 } from 'react-native';
 
 import { ShameResilientBanner } from '../../components/ShameResilientBanner';
 import { useAppearance } from '../../context/AppearanceContext';
-import { supabase } from '../lib/superbase';
+import { supabase } from '../../lib/superbase';
 
 // Enable LayoutAnimation on Android
 if (

@@ -4,7 +4,8 @@ import { Platform } from 'react-native';
 import 'react-native-url-polyfill/auto';
 
 const supabaseUrl = 'https://lrubpqzdabhxvrjfgfiq.supabase.co';
-const supabaseAnonKey = 'sb_publishable_ZLp4DaCusiOEeljy1GmXMw_q_jKw7P3';
+const supabaseAnonKey = 'sb_publishable_ZLp4DaCusiOEeljy1GmXMw_q_jKwP3';
+const isBrowser = typeof window !== 'undefined';
 
 const webStorage = {
   getItem: async (key: string) =>
@@ -23,9 +24,13 @@ const webStorage = {
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
-    storage: Platform.OS === 'web' ? webStorage : AsyncStorage,
-    autoRefreshToken: true,
-    persistSession: true,
+    storage: isBrowser
+      ? webStorage
+      : Platform.OS === 'web'
+        ? undefined
+        : AsyncStorage,
+    autoRefreshToken: isBrowser,
+    persistSession: isBrowser,
     detectSessionInUrl: false,
   },
 });

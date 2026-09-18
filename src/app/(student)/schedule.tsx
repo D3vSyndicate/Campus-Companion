@@ -3,8 +3,8 @@ import { ActivityIndicator, Alert, FlatList, StyleSheet, Text, TouchableOpacity,
 import { PageHeader } from '../../components/PageHeader';
 import { ShameResilientBanner } from '../../components/ShameResilientBanner';
 import { useAppearance } from '../../context/AppearanceContext';
+import { fetchWithOfflineFallback } from '../../lib/offlineData';
 import { ScheduleItem } from '../../types';
-import { fetchWithOfflineFallback } from '../lib/offlineData';
 
 export default function ScheduleScreen() {
   const { darkMode } = useAppearance();

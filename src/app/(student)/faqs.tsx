@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { PageHeader } from '../../components/PageHeader';
 import { useAppearance } from '../../context/AppearanceContext';
-import { fetchWithOfflineFallback } from '../lib/offlineData';
+import { fetchWithOfflineFallback } from '../../lib/offlineData';
 
 interface FAQ {
   id: string;

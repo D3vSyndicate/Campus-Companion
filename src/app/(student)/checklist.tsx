@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { PageHeader } from '../../components/PageHeader';
 import { useAppearance } from '../../context/AppearanceContext';
+import { supabase } from '../../lib/superbase';
 import { MOCK_CHECKLIST } from '../../mockData';
 import { ChecklistItem } from '../../types';
-import { supabase } from '../lib/superbase';
 
 const CHECKLIST_CACHE_KEY = '@checklist_cache';
 
