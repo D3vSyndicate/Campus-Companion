@@ -1,3 +1,4 @@
+import { useRouter } from 'expo-router';
 import { Alert, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { ScaledText as Text } from '../../components/ScaledText';
 import { useAuth } from '../../context/AuthContext';
@@ -10,13 +11,26 @@ const MODES: { key: ThemeMode; label: string }[] = [
 ];
 
 export default function ProfileScreen() {
+  const router = useRouter();
   const { colors, mode, setMode } = useTheme();
   const { user, signOut } = useAuth();
 
   const confirmSignOut = () => {
     Alert.alert('Sign out', 'Are you sure you want to sign out?', [
-      { text: 'Cancel', style: 'cancel' },
-      { text: 'Sign out', style: 'destructive', onPress: signOut },
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'Sign out',
+        style: 'destructive',
+        onPress: () => {
+          void (async () => {
+            await signOut();
+            router.replace('/login');
+          })();
+        },
+      },
     ]);
   };
 

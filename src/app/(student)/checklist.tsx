@@ -5,7 +5,6 @@ import { ActivityIndicator, FlatList, StyleSheet, TouchableOpacity, View } from 
 import { PageHeader } from '../../components/PageHeader';
 import { ScaledText as Text } from '../../components/ScaledText';
 import { supabase } from '../../lib/superbase';
-import { MOCK_CHECKLIST } from '../../mockData';
 import { useTheme } from '../../theme/ThemeContext';
 import { ChecklistItem } from '../../types';
 
@@ -48,8 +47,7 @@ export default function ChecklistScreen() {
         throw error;
       }
 
-      if (data?.length) {
-        const remoteTasks = data.map((row, index) => {
+      const remoteTasks = (data ?? []).map((row, index) => {
           const item = row as Record<string, unknown>;
           return {
             id: String(item.id ?? item.item_id ?? index + 1),
@@ -58,15 +56,21 @@ export default function ChecklistScreen() {
             completed: Boolean(item.completed ?? item.is_completed),
           };
         });
-        setTasks(remoteTasks);
+      setTasks(remoteTasks);
+      if (remoteTasks.length) {
         await AsyncStorage.setItem(CHECKLIST_CACHE_KEY, JSON.stringify(remoteTasks));
-      } else if (!cached) {
-        setTasks(MOCK_CHECKLIST);
       }
-    } catch {
+    } catch (error) {
+      console.error('Failed to load checklist from Supabase.', error);
       const cached = await AsyncStorage.getItem(CHECKLIST_CACHE_KEY);
-      if (!cached) {
-        setTasks(MOCK_CHECKLIST);
+      if (cached) {
+        try {
+          setTasks(JSON.parse(cached) as ChecklistItem[]);
+        } catch (cacheError) {
+          console.error('Failed to parse cached checklist data.', cacheError);
+        }
+      } else {
+        setTasks([]);
       }
     } finally {
       setLoading(false);
@@ -82,12 +86,15 @@ export default function ChecklistScreen() {
     await AsyncStorage.setItem(CHECKLIST_CACHE_KEY, JSON.stringify(updatedTasks));
 
     try {
-      await supabase
+      const { error } = await supabase
         .from('checklist_item')
         .update({ completed: !currentStatus })
         .eq('task', task);
-    } catch {
-      // Keep the local cache when the remote sync is unavailable.
+      if (error) {
+        throw error;
+      }
+    } catch (error) {
+      console.error('Failed to sync checklist item to Supabase.', error);
     }
   };
 

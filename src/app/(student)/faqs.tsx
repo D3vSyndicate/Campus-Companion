@@ -13,27 +13,6 @@ interface FAQ {
   category: string;
 }
 
-const FALLBACK_FAQS: FAQ[] = [
-  {
-    id: '1',
-    question: 'What should I do if I cannot access Funda?',
-    answer: 'Funda can feel confusing at first. Check that your password is active. If you are stuck, visit Info@IT in Building 12 or ask a mentor.',
-    category: 'Digital'
-  },
-  {
-    id: '2',
-    question: 'What if I arrive late or miss an orientation session?',
-    answer: 'Missing a session is not the end of the world! Check the schedule screen for catch-up notes or ask a How2buddy mentor.',
-    category: 'General'
-  },
-  {
-    id: '3',
-    question: 'Where can I find my timetable?',
-    answer: 'Timetables are published on the Student Portal. Your mentor can also show you how to read your timetable slots.',
-    category: 'Academics'
-  }
-];
-
 export default function FAQScreen() {
   const { colors } = useTheme();
   const { t } = useTranslation();
@@ -56,7 +35,10 @@ export default function FAQScreen() {
 
   useEffect(() => {
     const loadFaqs = async () => {
-      const { data } = await fetchWithOfflineFallback('FAQ');
+      const { data, error } = await fetchWithOfflineFallback('FAQ');
+      if (error) {
+        console.error('Failed to load FAQs from Supabase.', error);
+      }
 
       const mappedFaqs = Array.isArray(data) && data.length
         ? data.map((row, index) => {
@@ -68,7 +50,7 @@ export default function FAQScreen() {
               category: String(item.category ?? 'General'),
             };
           })
-        : FALLBACK_FAQS;
+        : [];
 
       setFaqs(mappedFaqs);
       setLoading(false);
