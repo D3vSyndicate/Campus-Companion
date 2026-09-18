@@ -97,8 +97,8 @@ export default function DashboardScreen() {
             </Text>
           </TouchableOpacity>
         ))}
-
       </ScrollView>
+
     </View>
   );
 }
