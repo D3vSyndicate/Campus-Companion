@@ -27,10 +27,13 @@ export default function ScheduleScreen() {
 
   useEffect(() => {
     const loadSchedule = async () => {
-      const { data, fromCache } = await fetchWithOfflineFallback('schedule_items');
+      const { data, fromCache, error } = await fetchWithOfflineFallback('schedule_items');
 
       if (fromCache) {
         setShowOfflineBanner(true);
+      }
+      if (error) {
+        console.error('Failed to load schedule from Supabase.', error);
       }
 
       if (Array.isArray(data) && data.length > 0) {

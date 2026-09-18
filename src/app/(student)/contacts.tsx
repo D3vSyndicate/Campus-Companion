@@ -4,7 +4,6 @@ import { PageHeader } from '../../components/PageHeader';
 import { ScaledText as Text } from '../../components/ScaledText';
 import { ShameResilientBanner } from '../../components/ShameResilientBanner';
 import { fetchWithOfflineFallback } from '../../lib/offlineData';
-import { MOCK_CONTACTS } from '../../mockData';
 import { useTheme } from '../../theme/ThemeContext';
 import { ContactItem } from '../../types';
 
@@ -27,7 +26,10 @@ export default function ContactsScreen() {
 
   useEffect(() => {
     const loadContacts = async () => {
-      const { data } = await fetchWithOfflineFallback('Contact');
+      const { data, error } = await fetchWithOfflineFallback('contacts');
+      if (error) {
+        console.error('Failed to load contacts from Supabase.', error);
+      }
 
       const mappedContacts = Array.isArray(data) && data.length
         ? data.map((row, index) => {
@@ -41,7 +43,7 @@ export default function ContactsScreen() {
               supportType: String(item.support_type ?? item.supportType ?? item.description ?? ''),
             };
           })
-        : MOCK_CONTACTS;
+        : [];
 
       setContacts(mappedContacts);
       setLoading(false);
