@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { PageHeader } from '../../components/PageHeader';
-import { supabase } from '../lib/superbase';
+import { useAppearance } from '../../context/AppearanceContext';
+import { fetchWithOfflineFallback } from '../lib/offlineData';
 
 interface FAQ {
   id: string;
@@ -32,6 +33,31 @@ const FALLBACK_FAQS: FAQ[] = [
 ];
 
 export default function FAQScreen() {
+  const { darkMode } = useAppearance();
+  const palette = darkMode
+    ? {
+        pageBg: '#0B1220',
+        inputBg: '#111B2E',
+        inputBorder: '#223552',
+        cardBg: '#111B2E',
+        question: '#F2F7FF',
+        answer: '#D3DDF0',
+        tagBg: '#243754',
+        tagText: '#EAF3FF',
+        text: '#DCEAFB',
+      }
+    : {
+        pageBg: '#F4F6F9',
+        inputBg: '#FFF',
+        inputBorder: '#B8C4D1',
+        cardBg: '#FFF',
+        question: '#1E293B',
+        answer: '#334155',
+        tagBg: '#E2E8F0',
+        tagText: '#0F172A',
+        text: '#0B1F3A',
+      };
+
   const [search, setSearch] = useState('');
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [faqs, setFaqs] = useState<FAQ[]>([]);
@@ -39,16 +65,21 @@ export default function FAQScreen() {
 
   useEffect(() => {
     const loadFaqs = async () => {
-      const { data, error } = await supabase.from('FAQ').select('*');
-      setFaqs(!error && data?.length ? data.map((row, index) => {
-        const item = row as Record<string, unknown>;
-        return {
-          id: String(item.id ?? item.faq_id ?? index + 1),
-          question: String(item.question ?? item.title ?? ''),
-          answer: String(item.answer ?? item.description ?? ''),
-          category: String(item.category ?? 'General'),
-        };
-      }) : FALLBACK_FAQS);
+      const { data } = await fetchWithOfflineFallback('FAQ');
+
+      const mappedFaqs = Array.isArray(data) && data.length
+        ? data.map((row, index) => {
+            const item = row as Record<string, unknown>;
+            return {
+              id: String(item.id ?? item.faq_id ?? index + 1),
+              question: String(item.question ?? item.title ?? ''),
+              answer: String(item.answer ?? item.description ?? ''),
+              category: String(item.category ?? 'General'),
+            };
+          })
+        : FALLBACK_FAQS;
+
+      setFaqs(mappedFaqs);
       setLoading(false);
     };
 
@@ -61,7 +92,7 @@ export default function FAQScreen() {
   );
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: palette.pageBg }]}>
       <PageHeader
         eyebrow="NEED A QUICK ANSWER?"
         title="Frequently asked questions"
@@ -69,7 +100,7 @@ export default function FAQScreen() {
       />
 
       <TextInput
-        style={styles.searchInput}
+        style={[styles.searchInput, { backgroundColor: palette.inputBg, borderColor: palette.inputBorder, color: palette.text }]}
         placeholder="Search FAQs (e.g., Funda, Venues, Timetable)..."
         value={search}
         onChangeText={setSearch}
@@ -83,16 +114,16 @@ export default function FAQScreen() {
           keyExtractor={item => item.id}
           renderItem={({ item }) => (
           <TouchableOpacity 
-            style={styles.card} 
+            style={[styles.card, { backgroundColor: palette.cardBg }]}
             onPress={() => setExpandedId(expandedId === item.id ? null : item.id)}
           >
             <View style={styles.cardHeader}>
-              <Text style={styles.question}>❓ {item.question}</Text>
-              <Text style={styles.tag}>{item.category}</Text>
+              <Text style={[styles.question, { color: palette.question }]}>❓ {item.question}</Text>
+              <Text style={[styles.tag, { backgroundColor: palette.tagBg, color: palette.tagText }]}>{item.category}</Text>
             </View>
             
             {expandedId === item.id && (
-              <Text style={styles.answer}>{item.answer}</Text>
+              <Text style={[styles.answer, { color: palette.answer }]}>{item.answer}</Text>
             )}
           </TouchableOpacity>
           )}

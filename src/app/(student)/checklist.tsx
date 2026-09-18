@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { PageHeader } from '../../components/PageHeader';
+import { useAppearance } from '../../context/AppearanceContext';
 import { MOCK_CHECKLIST } from '../../mockData';
 import { ChecklistItem } from '../../types';
 import { supabase } from '../lib/superbase';
@@ -9,6 +10,29 @@ import { supabase } from '../lib/superbase';
 const CHECKLIST_CACHE_KEY = '@checklist_cache';
 
 export default function ChecklistScreen() {
+  const { darkMode } = useAppearance();
+  const palette = darkMode
+    ? {
+        pageBg: '#0B1220',
+        headerBox: '#1B2437',
+        headerTitle: '#F1F7FF',
+        headerSub: '#C4D3EA',
+        cardBg: '#111B2E',
+        taskText: '#EFF7FF',
+        taskMuted: '#A8B9D1',
+        category: '#A8B9D1',
+      }
+    : {
+        pageBg: '#F4F6F9',
+        headerBox: '#FFF8D9',
+        headerTitle: '#0B1F3A',
+        headerSub: '#5F501C',
+        cardBg: '#FFFFFF',
+        taskText: '#1E293B',
+        taskMuted: '#94A3B8',
+        category: '#64748B',
+      };
+
   const [tasks, setTasks] = useState<ChecklistItem[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -78,15 +102,15 @@ export default function ChecklistScreen() {
   const completedCount = tasks.filter(task => task.completed).length;
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: palette.pageBg }]}>
       <PageHeader
         eyebrow="YOUR FIRST STEPS"
         title="New student checklist"
         subtitle="Small steps add up. Keep track of what is done and what is next."
       />
-      <View style={styles.headerBox}>
-        <Text style={styles.headerTitle}>You are making progress</Text>
-        <Text style={styles.headerSub}>
+      <View style={[styles.headerBox, { backgroundColor: palette.headerBox }]}>
+        <Text style={[styles.headerTitle, { color: palette.headerTitle }]}>You are making progress</Text>
+        <Text style={[styles.headerSub, { color: palette.headerSub }]}>
           {completedCount} of {tasks.length} steps completed. Take one step at a time.
         </Text>
       </View>
@@ -99,16 +123,16 @@ export default function ChecklistScreen() {
           keyExtractor={item => item.id}
           renderItem={({ item }) => (
             <TouchableOpacity
-              style={styles.taskCard}
+              style={[styles.taskCard, { backgroundColor: palette.cardBg }]}
               onPress={() => void toggleTask(item.id, item.task, item.completed)}>
               <View style={[styles.checkbox, item.completed && styles.checked]}>
                 {item.completed && <Text style={styles.checkmark}>✓</Text>}
               </View>
               <View style={styles.textContainer}>
-                <Text style={[styles.taskText, item.completed && styles.taskCompleted]}>
+                <Text style={[styles.taskText, { color: palette.taskText }, item.completed && styles.taskCompleted]}>
                   {item.task}
                 </Text>
-                <Text style={styles.category}>{item.category}</Text>
+                <Text style={[styles.category, { color: palette.category }]}>{item.category}</Text>
               </View>
             </TouchableOpacity>
           )}

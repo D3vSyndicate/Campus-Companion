@@ -8,17 +8,19 @@ import {
   Animated,
   Easing,
   LayoutAnimation,
+  Text as NativeText,
   Platform,
   Pressable,
   RefreshControl,
   ScrollView,
   StyleSheet,
-  Text,
+  TextProps,
   UIManager,
   View,
 } from 'react-native';
 
 import { ShameResilientBanner } from '../../components/ShameResilientBanner';
+import { useAppearance } from '../../context/AppearanceContext';
 import { supabase } from '../lib/superbase';
 
 // Enable LayoutAnimation on Android
@@ -141,6 +143,28 @@ function getGreeting() {
 const tap = () => {
   void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 };
+
+function ScaledText({ style, ...props }: TextProps) {
+  const { fontScale } = useAppearance();
+  const flattenedStyle = StyleSheet.flatten(style);
+
+  return (
+    <NativeText
+      {...props}
+      style={[
+        flattenedStyle,
+        typeof flattenedStyle?.fontSize === 'number' && {
+          fontSize: flattenedStyle.fontSize * fontScale,
+        },
+        typeof flattenedStyle?.lineHeight === 'number' && {
+          lineHeight: flattenedStyle.lineHeight * fontScale,
+        },
+      ]}
+    />
+  );
+}
+
+const Text = ScaledText;
 
 // -----------------------------------------------------------------------------
 // Skeleton
@@ -350,6 +374,13 @@ function ActionCard({
 
 export default function HomeScreen() {
   const router = useRouter();
+  const {
+    darkMode,
+    userOverride,
+    setDarkModeOverride,
+    fontScale,
+    changeFontScale,
+  } = useAppearance();
 
   const [announcements, setAnnouncements] = useState<
     Announcement[]
@@ -460,6 +491,31 @@ export default function HomeScreen() {
     announcements.length > 0 &&
     announcements[0].id !== lastSeenId;
 
+  const handleThemeToggle = () => {
+    if (userOverride === null) {
+      setDarkModeOverride(!darkMode);
+      return;
+    }
+
+    if (darkMode) {
+      setDarkModeOverride(false);
+      return;
+    }
+
+    setDarkModeOverride(null);
+  };
+
+  const themeLabel = userOverride === null ? 'System' : darkMode ? 'Dark' : 'Light';
+
+  const adjustFontScale = (change: number) => {
+    tap();
+    const nextScale = Math.min(
+      1.3,
+      Math.max(0.7, Math.round((fontScale + change) * 10) / 10),
+    );
+    changeFontScale(nextScale);
+  };
+
   // ---------------------------------------------------------------------------
   // Announcement interaction
   // ---------------------------------------------------------------------------
@@ -546,7 +602,48 @@ export default function HomeScreen() {
             </Text>
           </View>
 
-          
+          <View style={styles.appearanceControls}>
+            <View style={styles.fontSizeControls} accessibilityLabel="Text size">
+              <Pressable
+                style={[
+                  styles.fontSizeButton,
+                  fontScale <= 0.7 && styles.fontSizeButtonDisabled,
+                ]}
+                onPress={() => adjustFontScale(-0.1)}
+                disabled={fontScale <= 0.7}
+                accessibilityRole="button"
+                accessibilityLabel="Decrease text size"
+              >
+                <Text style={styles.fontSizeButtonText}>A-</Text>
+              </Pressable>
+
+              <Text style={styles.fontSizeValue}>
+                {Math.round(fontScale * 100)}%
+              </Text>
+
+              <Pressable
+                style={[
+                  styles.fontSizeButton,
+                  fontScale >= 1.3 && styles.fontSizeButtonDisabled,
+                ]}
+                onPress={() => adjustFontScale(0.1)}
+                disabled={fontScale >= 1.3}
+                accessibilityRole="button"
+                accessibilityLabel="Increase text size"
+              >
+                <Text style={styles.fontSizeButtonText}>A+</Text>
+              </Pressable>
+            </View>
+
+            <Pressable
+              style={styles.themeToggle}
+              onPress={handleThemeToggle}
+              accessibilityRole="button"
+              accessibilityLabel={`Theme: ${themeLabel}`}
+            >
+              <Text style={styles.themeToggleText}>Theme: {themeLabel}</Text>
+            </Pressable>
+          </View>
         </View>
 
         <View style={styles.heroContent}>
@@ -776,6 +873,62 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
+  },
+
+  themeToggle: {
+    backgroundColor: 'rgba(255,255,255,0.12)',
+    borderColor: 'rgba(255,255,255,0.26)',
+    borderWidth: 1,
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+  },
+
+  appearanceControls: {
+    alignItems: 'flex-end',
+    gap: 6,
+  },
+
+  fontSizeControls: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+  },
+
+  fontSizeButton: {
+    minWidth: 26,
+    minHeight: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.26)',
+    backgroundColor: 'rgba(255,255,255,0.08)',
+  },
+
+  fontSizeButtonDisabled: {
+    opacity: 0.45,
+  },
+
+  fontSizeButtonText: {
+    color: '#FFFFFF',
+    fontSize: 11,
+    fontWeight: '800',
+  },
+
+  fontSizeValue: {
+    color: '#FFFFFF',
+    minWidth: 34,
+    textAlign: 'center',
+    fontSize: 10,
+    fontWeight: '700',
+  },
+
+  themeToggleText: {
+    color: '#FFFFFF',
+    fontSize: 11,
+    fontWeight: '700',
+    letterSpacing: 0.5,
   },
 
   eyebrow: {
