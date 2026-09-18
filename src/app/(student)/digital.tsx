@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Linking, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { PageHeader } from '../../components/PageHeader';
 import { ScaledText as Text } from '../../components/ScaledText';
@@ -6,6 +7,7 @@ import { useTheme } from '../../theme/ThemeContext';
 
 export default function DigitalReadinessScreen() {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const guides = [
     {
       title: 'Accessing Funda (LMS)',
@@ -31,12 +33,12 @@ export default function DigitalReadinessScreen() {
       contentContainerStyle={styles.content}
     >
       <PageHeader
-        eyebrow="GET CONNECTED"
-        title="Digital readiness"
-        subtitle="Set up the tools you will use for learning, communication, and campus life."
+        eyebrow={t('common.getConnected')}
+        title={t('common.digitalTitle')}
+        subtitle={t('common.digitalSubtitle')}
       />
       <ShameResilientBanner 
-        message="Everyone starts as a beginner with university tech. Don't worry if it takes a few tries to get logged in!"
+        message={t('common.digitalBanner')}
         type="encouragement"
       />
 
@@ -53,7 +55,7 @@ export default function DigitalReadinessScreen() {
 
           {item.link && (
             <TouchableOpacity style={[styles.button, { backgroundColor: colors.accent }]} onPress={() => Linking.openURL(item.link!)}>
-              <Text style={[styles.buttonText, { color: colors.text }]}>Open Funda Portal</Text>
+              <Text style={[styles.buttonText, { color: colors.text }]}>{t('common.openFunda')}</Text>
             </TouchableOpacity>
           )}
         </View>

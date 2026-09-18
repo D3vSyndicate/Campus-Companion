@@ -1,6 +1,7 @@
 
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
   Image,
@@ -22,6 +23,7 @@ export default function LoginScreen() {
   const { signIn, signUp, resetPassword } = useAuth();
   const { showToast } = useToast();
   const { colors } = useTheme();
+  const { t } = useTranslation();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -117,24 +119,24 @@ export default function LoginScreen() {
           <View style={[styles.card, { backgroundColor: colors.surface, shadowColor: colors.text }]}> 
 
 
-            <Text style={[styles.title, { color: colors.text }]}>Welcome Back</Text>
+            <Text style={[styles.title, { color: colors.text }]}>{t('common.welcomeBack')}</Text>
 
             <Text style={[styles.subtitle, { color: colors.textSecondary }]}> 
-              Sign in to your Campus Companion account
+              {t('common.loginSubtitle')}
             </Text>
 
              <LanguageSwitcher />
 
             {/* Email */}
             <View style={styles.inputContainer}>
-              <Text style={[styles.label, { color: colors.text }]}>Email</Text>
+              <Text style={[styles.label, { color: colors.text }]}>{t('common.email')}</Text>
 
               <TextInput
                   style={[
                     styles.input,
                     { backgroundColor: colors.card, borderColor: colors.border, color: colors.text },
                   ]}
-                  placeholder="Enter your email"
+                  placeholder={t('common.email')}
                   placeholderTextColor={colors.textSecondary}
                 value={email}
                 onChangeText={setEmail}
@@ -146,14 +148,14 @@ export default function LoginScreen() {
 
             {/* Password */}
             <View style={styles.inputContainer}>
-                <Text style={[styles.label, { color: colors.text }]}>Password</Text>
+                <Text style={[styles.label, { color: colors.text }]}>{t('common.password')}</Text>
 
               <TextInput
                   style={[
                     styles.input,
                     { backgroundColor: colors.card, borderColor: colors.border, color: colors.text },
                   ]}
-                  placeholder="Enter your password"
+                  placeholder={t('common.password')}
                   placeholderTextColor={colors.textSecondary}
                 value={password}
                 onChangeText={setPassword}
@@ -169,7 +171,7 @@ export default function LoginScreen() {
               disabled={loading}
             >
               <Text style={[styles.forgotText, { color: colors.text }]}> 
-                Forgot password?
+                {t('common.forgotPassword')}
               </Text>
             </TouchableOpacity>
 
@@ -184,7 +186,7 @@ export default function LoginScreen() {
                 <ActivityIndicator color={colors.text} />
               ) : (
                 <Text style={[styles.loginButtonText, { color: colors.text }]}>
-                  {registering ? 'Create account' : 'Login'}
+                  {registering ? t('common.createAccount') : t('common.login')}
                 </Text>
               )}
             </TouchableOpacity>

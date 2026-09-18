@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Alert, FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { PageHeader } from '../../components/PageHeader';
 import { ScaledText as Text } from '../../components/ScaledText';
@@ -9,6 +10,7 @@ import { ScheduleItem } from '../../types';
 
 export default function ScheduleScreen() {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const palette = {
     screenBg: colors.background,
     cardBg: colors.surface,
@@ -72,7 +74,7 @@ export default function ScheduleScreen() {
       {item.isPast ? (
         <View style={[styles.recoveryBox, { backgroundColor: palette.mutedBg }]}>
           <Text style={[styles.recoveryText, { color: palette.body }]}>
-            This session has passed. Don't worry—you can review materials on Funda or ask a How2buddy mentor for a quick recap!
+            {t('common.pastSession')}
           </Text>
         </View>
       ) : (
@@ -80,7 +82,7 @@ export default function ScheduleScreen() {
           style={[styles.directionBtn, { backgroundColor: colors.accent }]}
           onPress={() => Alert.alert('Directions', `Start at main entrance and follow signs to ${item.venue}.`)}
         >
-          <Text style={[styles.directionText, { color: colors.text }]}>Show me where to go</Text>
+          <Text style={[styles.directionText, { color: colors.text }]}>{t('common.directions')}</Text>
         </TouchableOpacity>
       )}
     </View>
@@ -89,20 +91,20 @@ export default function ScheduleScreen() {
   return (
     <View style={[styles.container, { backgroundColor: palette.screenBg }]}>
       <PageHeader
-        eyebrow="ORIENTATION"
-        title="Your schedule"
-        subtitle="See what is happening today and find your way to each session."
+        eyebrow={t('common.orientation')}
+        title={t('common.scheduleTitle')}
+        subtitle={t('common.scheduleSubtitle')}
       />
 
       {showOfflineBanner && (
         <ShameResilientBanner
-          message="You are viewing saved schedule data because your connection is unavailable right now."
+          message={t('common.savedSchedule')}
           type="info"
         />
       )}
 
       <ShameResilientBanner
-        message="If you miss a session, don't worry. Every session has catch-up pathways listed below."
+        message={t('common.missedSession')}
         type="recovery"
       />
 
@@ -110,8 +112,8 @@ export default function ScheduleScreen() {
         <ActivityIndicator size="large" color={colors.accent} />
       ) : schedule.length === 0 ? (
         <View style={[styles.emptyState, { backgroundColor: palette.emptyBg }]}>
-          <Text style={[styles.emptyTitle, { color: palette.title }]}>No schedule loaded yet</Text>
-          <Text style={[styles.emptyText, { color: palette.body }]}>Check your connection or try again later.</Text>
+          <Text style={[styles.emptyTitle, { color: palette.title }]}>{t('common.noSchedule')}</Text>
+          <Text style={[styles.emptyText, { color: palette.body }]}>{t('common.tryAgain')}</Text>
         </View>
       ) : (
         <FlatList

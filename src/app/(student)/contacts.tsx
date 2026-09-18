@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Linking, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { PageHeader } from '../../components/PageHeader';
 import { ScaledText as Text } from '../../components/ScaledText';
@@ -10,6 +11,7 @@ import { ContactItem } from '../../types';
 
 export default function ContactsScreen() {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const palette = {
     pageBg: colors.background,
     cardBg: colors.surface,
@@ -57,13 +59,13 @@ export default function ContactsScreen() {
   return (
     <ScrollView style={[styles.container, { backgroundColor: palette.pageBg }]} contentContainerStyle={[styles.content, { backgroundColor: palette.pageBg }]}>
       <PageHeader
-        eyebrow="YOU ARE NOT ON YOUR OWN"
-        title="People who can help"
-        subtitle="Reach out early for questions, practical support, and a quick reset when university feels like a lot."
+        eyebrow={t('common.notAlone')}
+        title={t('common.contactsTitle')}
+        subtitle={t('common.contactsSubtitle')}
       />
 
       <ShameResilientBanner
-        message="You do not need to have the perfect words before asking for help. A simple 'I am stuck' is enough."
+        message={t('common.helpBanner')}
         type="info"
       />
 
@@ -91,10 +93,10 @@ export default function ContactsScreen() {
 
             {isExpanded && (
                 <View style={[styles.details, { borderTopColor: colors.border }]}>
-                <Text style={[styles.detail, { color: palette.body }]}>Office: {contact.office}</Text>
-                <Text style={[styles.detail, { color: palette.body }]}>Email: {contact.email}</Text>
+                <Text style={[styles.detail, { color: palette.body }]}>{t('common.office')}: {contact.office}</Text>
+                <Text style={[styles.detail, { color: palette.body }]}>{t('common.email')}: {contact.email}</Text>
                 <TouchableOpacity style={[styles.button, { backgroundColor: colors.accent }]} onPress={() => void openEmail(contact)}>
-                  <Text style={[styles.buttonText, { color: colors.text }]}>Email this team</Text>
+                  <Text style={[styles.buttonText, { color: colors.text }]}>{t('common.emailTeam')}</Text>
                 </TouchableOpacity>
               </View>
             )}

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, FlatList, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { PageHeader } from '../../components/PageHeader';
 import { ScaledText as Text } from '../../components/ScaledText';
@@ -35,6 +36,7 @@ const FALLBACK_FAQS: FAQ[] = [
 
 export default function FAQScreen() {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const palette = {
     pageBg: colors.background,
     inputBg: colors.card,
@@ -83,14 +85,14 @@ export default function FAQScreen() {
   return (
     <View style={[styles.container, { backgroundColor: palette.pageBg }]}>
       <PageHeader
-        eyebrow="NEED A QUICK ANSWER?"
-        title="Frequently asked questions"
-        subtitle="Search common questions about Funda, venues, timetables, and support."
+        eyebrow={t('common.quickAnswer')}
+        title={t('common.faqsTitle')}
+        subtitle={t('common.faqsSubtitle')}
       />
 
       <TextInput
         style={[styles.searchInput, { backgroundColor: palette.inputBg, borderColor: palette.inputBorder, color: palette.text }]}
-        placeholder="Search FAQs (e.g., Funda, Venues, Timetable)..."
+        placeholder={t('common.searchFaqs')}
         value={search}
         onChangeText={setSearch}
       />

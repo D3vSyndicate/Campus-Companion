@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { PageHeader } from '../../components/PageHeader';
 import { ScaledText as Text } from '../../components/ScaledText';
@@ -12,6 +13,7 @@ const CHECKLIST_CACHE_KEY = '@checklist_cache';
 
 export default function ChecklistScreen() {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const palette = {
     pageBg: colors.background,
     headerBox: colors.card,
@@ -94,14 +96,14 @@ export default function ChecklistScreen() {
   return (
     <View style={[styles.container, { backgroundColor: palette.pageBg }]}>
       <PageHeader
-        eyebrow="YOUR FIRST STEPS"
-        title="New student checklist"
-        subtitle="Small steps add up. Keep track of what is done and what is next."
+        eyebrow={t('common.firstSteps')}
+        title={t('common.checklistTitle')}
+        subtitle={t('common.checklistSubtitle')}
       />
       <View style={[styles.headerBox, { backgroundColor: palette.headerBox, borderColor: colors.border }]}>
-        <Text style={[styles.headerTitle, { color: palette.headerTitle }]}>You are making progress</Text>
+        <Text style={[styles.headerTitle, { color: palette.headerTitle }]}>{t('common.progress')}</Text>
         <Text style={[styles.headerSub, { color: palette.headerSub }]}>
-          {completedCount} of {tasks.length} steps completed. Take one step at a time.
+          {t('common.stepsCompleted', { completed: completedCount, total: tasks.length })}
         </Text>
       </View>
 

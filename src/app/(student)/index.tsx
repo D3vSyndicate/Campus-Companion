@@ -3,25 +3,27 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Haptics from 'expo-haptics';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
-    Animated,
-    Easing,
-    LayoutAnimation,
-    Text as NativeText,
-    Platform,
-    Pressable,
-    RefreshControl,
-    ScrollView,
-    StyleSheet,
-    TextProps,
-    UIManager,
-    View,
+  Animated,
+  Easing,
+  LayoutAnimation,
+  Text as NativeText,
+  Platform,
+  Pressable,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  TextProps,
+  UIManager,
+  View,
 } from 'react-native';
 
 import { ShameResilientBanner } from '../../components/ShameResilientBanner';
 import { useAppearance } from '../../context/AppearanceContext';
 import { supabase } from '../../lib/superbase';
+import { useTheme } from '../../theme/ThemeContext';
 
 // Enable LayoutAnimation on Android
 if (
@@ -134,10 +136,10 @@ const ACTIONS: ActionItem[] = [
 function getGreeting() {
   const h = new Date().getHours();
 
-  if (h < 12) return 'Good morning';
-  if (h < 18) return 'Good afternoon';
+  if (h < 12) return 'goodMorning';
+  if (h < 18) return 'goodAfternoon';
 
-  return 'Good evening';
+  return 'goodEvening';
 }
 
 const tap = () => {
@@ -240,6 +242,7 @@ function AnnouncementCard({
   onToggle: () => void;
   isNew: boolean;
 }) {
+  const { colors } = useTheme();
   const urgent =
     item.priority?.toLowerCase() === 'urgent' ||
     item.priority?.toLowerCase() === 'high';
@@ -248,7 +251,7 @@ function AnnouncementCard({
     <Pressable
       onPress={onToggle}
       style={({ pressed }) => [
-        styles.announcementCard,
+        [styles.announcementCard, { backgroundColor: colors.surface, borderColor: colors.border }],
         urgent && styles.announcementUrgent,
         pressed && styles.announcementPressed,
       ]}
@@ -267,7 +270,7 @@ function AnnouncementCard({
 
         <Text
           style={[
-            styles.announcementTitle,
+            [styles.announcementTitle, { color: colors.text }],
             urgent && styles.announcementUrgentTitle,
           ]}
           numberOfLines={expanded ? undefined : 1}
@@ -294,6 +297,7 @@ function AnnouncementCard({
       <Text
         style={[
           styles.announcementMessage,
+          { color: colors.textSecondary },
           urgent && styles.announcementUrgentMessage,
         ]}
         numberOfLines={expanded ? undefined : 2}
@@ -304,7 +308,7 @@ function AnnouncementCard({
       {!expanded && (
         <Text
           style={[
-            styles.readMore,
+            [styles.readMore, { color: colors.accent }],
             urgent && styles.readMoreUrgent,
           ]}
         >
@@ -326,33 +330,34 @@ function ActionCard({
   action: ActionItem;
   onPress: () => void;
 }) {
+  const { colors } = useTheme();
   return (
     <Pressable
       onPress={onPress}
       style={({ pressed }) => [
-        styles.actionCard,
+        [styles.actionCard, { backgroundColor: colors.surface, borderColor: colors.border }],
         pressed && styles.actionCardPressed,
       ]}
     >
       <View
         style={[
           styles.iconBadge,
-          { backgroundColor: action.iconBg },
+          { backgroundColor: colors.card },
         ]}
       >
         <Ionicons
           name={action.icon}
           size={22}
-          color={action.iconColor}
+          color={colors.accent}
         />
       </View>
 
       <View style={styles.actionText}>
-        <Text style={styles.cardTitle}>
+        <Text style={[styles.cardTitle, { color: colors.text }]}> 
           {action.title}
         </Text>
 
-        <Text style={styles.cardSub}>
+        <Text style={[styles.cardSub, { color: colors.textSecondary }]}> 
           {action.subtitle}
         </Text>
       </View>
@@ -361,7 +366,7 @@ function ActionCard({
         <Ionicons
           name="arrow-forward"
           size={17}
-          color={COLORS.primary}
+          color={colors.accent}
         />
       </View>
     </Pressable>
@@ -374,6 +379,8 @@ function ActionCard({
 
 export default function HomeScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
+  const { colors } = useTheme();
   const {
     darkMode,
     userOverride,
@@ -397,7 +404,7 @@ export default function HomeScreen() {
     null,
   );
 
-  const greeting = useMemo(getGreeting, []);
+  const greeting = t(`common.${getGreeting()}`);
 
   // ---------------------------------------------------------------------------
   // Load last-seen announcement
@@ -561,15 +568,15 @@ export default function HomeScreen() {
 
   return (
     <ScrollView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: colors.background }]}
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
       refreshControl={
         <RefreshControl
           refreshing={refreshing}
           onRefresh={onRefresh}
-          tintColor={COLORS.primary}
-          colors={[COLORS.primary]}
+          tintColor={colors.accent}
+          colors={[colors.accent]}
         />
       }
     >
@@ -578,11 +585,7 @@ export default function HomeScreen() {
       {/* ================================================================= */}
 
       <LinearGradient
-        colors={[
-          '#102D52',
-          '#0B1F3A',
-          '#07162A',
-        ]}
+        colors={[colors.headerBackground, colors.text, colors.background]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.hero}
@@ -594,11 +597,11 @@ export default function HomeScreen() {
         <View style={styles.heroTopRow}>
           <View>
             <Text style={styles.eyebrow}>
-              SCHOOL OF IT
+              {t('common.schoolOfIt')}
             </Text>
 
             <Text style={styles.heroMiniText}>
-              CAMPUS COMPANION
+              {t('common.campusCompanion')}
             </Text>
           </View>
 
@@ -652,16 +655,15 @@ export default function HomeScreen() {
           </Text>
 
           <Text style={styles.welcomeTitle}>
-            Start strong.
+            {t('common.startStrong')}
           </Text>
 
           <Text style={styles.welcomeTitleAccent}>
-            Stay connected.
+            {t('common.stayConnected')}
           </Text>
 
           <Text style={styles.subtitle}>
-            Everything you need for your first
-            week, in one place.
+            {t('common.weekSubtitle')}
           </Text>
         </View>
 
@@ -669,13 +671,13 @@ export default function HomeScreen() {
           <View style={styles.statusIndicator} />
 
           <Text style={styles.heroStatus}>
-            Your campus companion
+            {t('common.campusStatus')}
           </Text>
 
           <Ionicons
             name="arrow-forward"
             size={15}
-            color="#F4C542"
+            color={colors.accent}
           />
         </View>
       </LinearGradient>
@@ -685,7 +687,7 @@ export default function HomeScreen() {
       {/* ================================================================= */}
 
       <ShameResilientBanner
-        message="Feeling unsure about where to go or what to ask? That is completely normal. Take it one step at a time."
+        message={t('common.supportBanner')}
         type="encouragement"
       />
 
@@ -698,23 +700,23 @@ export default function HomeScreen() {
           <View style={styles.sectionHeaderContainer}>
             <View style={styles.sectionHeading}>
               <View style={styles.sectionTitleRow}>
-                <Text style={styles.sectionEyebrow}>
-                  LATEST
+                <Text style={[styles.sectionEyebrow, { color: colors.accent }]}> 
+                  {t('common.latest')}
                 </Text>
 
                 {hasUnread && !loading && (
                   <View style={styles.unreadIndicator}>
                     <View style={styles.unreadDot} />
 
-                    <Text style={styles.unreadText}>
-                      NEW
+                    <Text style={[styles.unreadText, { color: colors.accent }]}> 
+                      {t('common.new')}
                     </Text>
                   </View>
                 )}
               </View>
 
-              <Text style={styles.sectionHeader}>
-                Latest from the School
+              <Text style={[styles.sectionHeader, { color: colors.text }]}> 
+                {t('common.latestFromSchool')}
               </Text>
             </View>
           </View>
@@ -750,20 +752,24 @@ export default function HomeScreen() {
       <View style={styles.section}>
         <View style={styles.sectionHeaderContainer}>
           <View>
-            <Text style={styles.sectionEyebrow}>
-              QUICK ACCESS
+            <Text style={[styles.sectionEyebrow, { color: colors.accent }]}> 
+              {t('common.quickAccess')}
             </Text>
 
-            <Text style={styles.sectionHeader}>
-              What do you need?
+            <Text style={[styles.sectionHeader, { color: colors.text }]}> 
+              {t('common.whatNeed')}
             </Text>
           </View>
         </View>
 
         {ACTIONS.map((action) => (
-          <ActionCard
+            <ActionCard
             key={action.key}
-            action={action}
+              action={{
+                ...action,
+                title: t(`common.${action.key}Title`),
+                subtitle: t(`common.${action.key}Subtitle`),
+              }}
             onPress={() =>
               handleNavigate(action.route)
             }
@@ -779,11 +785,11 @@ export default function HomeScreen() {
         <View style={styles.footerLine} />
 
         <Text style={styles.footerText}>
-          SCHOOL OF IT
+          {t('common.schoolOfIt')}
         </Text>
 
         <Text style={styles.footerSubtext}>
-          Your first week, made simpler.
+          {t('common.footerSubtitle')}
         </Text>
       </View>
     </ScrollView>
