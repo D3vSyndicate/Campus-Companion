@@ -42,6 +42,7 @@ export default function StudentLayout() {
         <Tabs.Screen
           name="checklist"
           options={{
+            href: null,
             title: t('common.checklist'),
             tabBarIcon: ({ color }) => <Ionicons name="checkmark-circle-outline" size={TAB_ICON_SIZE} color={color} />,
           }}
@@ -56,6 +57,7 @@ export default function StudentLayout() {
         <Tabs.Screen
           name="faqs"
           options={{
+            href: null,
             title: t('common.faqs'),
             tabBarIcon: ({ color }) => <Ionicons name="help-circle-outline" size={TAB_ICON_SIZE} color={color} />,
           }}

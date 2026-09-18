@@ -6,18 +6,18 @@ import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  Animated,
-  Easing,
-  LayoutAnimation,
-  Text as NativeText,
-  Platform,
-  Pressable,
-  RefreshControl,
-  ScrollView,
-  StyleSheet,
-  TextProps,
-  UIManager,
-  View,
+    Animated,
+    Easing,
+    LayoutAnimation,
+    Text as NativeText,
+    Platform,
+    Pressable,
+    RefreshControl,
+    ScrollView,
+    StyleSheet,
+    TextProps,
+    UIManager,
+    View,
 } from 'react-native';
 
 import { ShameResilientBanner } from '../../components/ShameResilientBanner';
@@ -466,17 +466,14 @@ export default function HomeScreen() {
   const fetchAnnouncements = useCallback(async () => {
     const { data, error } = await supabase
       .from('Announcement')
-      .select(
-        '"Announcement ID", "Posted By", "Title", "Message", "Priority level"',
-      )
-      .order('"Posted By"', { ascending: false });
+      .select('*');
 
-    if (error || !data?.length) {
-      console.error(
-        'Failed to load announcements:',
-        error,
-      );
+    if (error) {
+      console.error('Failed to load announcements:', error);
+      return [];
+    }
 
+    if (!data?.length) {
       return [];
     }
 
@@ -486,19 +483,27 @@ export default function HomeScreen() {
       return {
         id: String(
           item['Announcement ID'] ??
+            item.announcement_id ??
+            item.id ??
             index + 1,
         ),
 
         title: String(
-          item['Title'] ?? '',
+          item.Title ??
+            item.title ??
+            '',
         ),
 
         message: String(
-          item['Message'] ?? '',
+          item.Message ??
+            item.message ??
+            item.Description ??
+            item.description ??
+            '',
         ),
 
-        priority: item['Priority level']
-          ? String(item['Priority level'])
+        priority: (item['Priority level'] ?? item.priority_level ?? item.Priority ?? item.priority)
+          ? String(item['Priority level'] ?? item.priority_level ?? item.Priority ?? item.priority)
           : undefined,
       };
     });
@@ -847,7 +852,7 @@ export default function HomeScreen() {
       {!checklistSummary.loading && checklistSummary.total > 0 && (
         <View style={styles.section}>
           <Pressable
-            onPress={() => handleNavigate('/checklist')}
+            onPress={() => handleNavigate('/(student)/checklist')}
             style={({ pressed }) => [
               styles.checklistSummaryCard,
               { backgroundColor: colors.surface, borderColor: colors.border },
@@ -1128,6 +1133,32 @@ const styles = StyleSheet.create({
   progressFill: {
     height: '100%',
     borderRadius: 999,
+  },
+
+  checklistMiniRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 12,
+  },
+
+  checklistMiniBox: {
+    width: 20,
+    height: 20,
+    borderWidth: 1.5,
+    borderRadius: 6,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 10,
+  },
+
+  checklistMiniText: {
+    flex: 1,
+    fontSize: 13,
+  },
+
+  checklistMiniTextDone: {
+    textDecorationLine: 'line-through',
+    opacity: 0.65,
   },
 
   // ===========================================================================
