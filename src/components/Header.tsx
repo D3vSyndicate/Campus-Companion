@@ -13,6 +13,7 @@ export default function Header({ title }: { title: string }) {
   const router = useRouter();
   const segments = useSegments();
   const isAdminFlow = segments[0] === '(admin)';
+  const isHodFlow = segments[0] === '(hod)';
 
   const metadata = user?.user_metadata ?? {};
   const displayName = String(
@@ -24,7 +25,7 @@ export default function Header({ title }: { title: string }) {
     .slice(0, 2)
     .map((part) => part.charAt(0).toUpperCase())
     .join('') || '?';
-  const roleLabel = role === 'coordinator' ? 'Coordinator' : role === 'admin' ? 'Administrator' : 'User';
+  const roleLabel = role === 'coordinator' ? 'Coordinator' : role === 'hod' ? 'Head of Department' : role === 'admin' ? 'Administrator' : 'User';
 
   return (
     <View
@@ -38,7 +39,7 @@ export default function Header({ title }: { title: string }) {
         <Text style={[styles.roleLabel, { color: colors.textSecondary }]}>{roleLabel}</Text>
       </View>
       <TouchableOpacity
-        onPress={() => router.push((isAdminFlow ? '/(admin)/profile' : '/(coordinator)/profile') as any)}
+        onPress={() => router.push((isAdminFlow ? '/(admin)/profile' : isHodFlow ? '/(hod)/profile' : '/(coordinator)/profile') as any)}
         style={styles.identityButton}
         accessibilityLabel="Open profile and settings"
       >

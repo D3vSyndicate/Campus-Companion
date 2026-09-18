@@ -22,6 +22,8 @@ export function AuthGate({ children, requiredRole }: { children: ReactNode; requ
     const destination =
       role === 'coordinator'
         ? '/(coordinator)'
+        : role === 'hod'
+          ? '/(hod)'
         : role === 'admin'
           ? '/(admin)'
           : role === 'student'
