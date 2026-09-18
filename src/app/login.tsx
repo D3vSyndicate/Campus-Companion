@@ -15,19 +15,13 @@ import {
 import { ScaledText as Text } from '../components/ScaledText';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-<<<<<<< HEAD
-=======
 import { useTheme } from '../theme/ThemeContext';
->>>>>>> 2b26f3ab3bafb8d06515d75b4ebd5fe12fc1fc80
 
 export default function LoginScreen() {
   const router = useRouter();
   const { signIn, resetPassword } = useAuth();
-<<<<<<< HEAD
-=======
-  const { colors } = useTheme();
->>>>>>> 2b26f3ab3bafb8d06515d75b4ebd5fe12fc1fc80
   const { showToast } = useToast();
+  const { colors } = useTheme();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -59,7 +53,6 @@ export default function LoginScreen() {
     }
 
     showToast('Login successful');
-<<<<<<< HEAD
     const destination =
       result.role === 'coordinator'
         ? '/(coordinator)'
@@ -67,14 +60,6 @@ export default function LoginScreen() {
           ? '/(admin)'
           : '/(student)';
     router.replace(destination as any);
-=======
-    if (!result.role) {
-      setError('Your account does not have a valid role. Ask an administrator to set it to admin or student.');
-      return;
-    }
-
-    router.replace(result.role === 'admin' ? '/(admin)' : '/(student)');
->>>>>>> 2b26f3ab3bafb8d06515d75b4ebd5fe12fc1fc80
   };
 
   const handleForgotPassword = async () => {
