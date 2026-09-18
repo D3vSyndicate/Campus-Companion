@@ -1,7 +1,8 @@
 
 import { useRouter } from 'expo-router';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Header from '../../components/Header';
+import { ScaledText as Text } from '../../components/ScaledText';
 import { useTheme } from '../../theme/ThemeContext';
 
 const SECTIONS: { href: string; label: string; desc: string }[] = [

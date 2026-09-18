@@ -1,8 +1,9 @@
 import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import { AuthProvider } from '../context/AuthContext';
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { AppearanceProvider, useAppearance } from '../context/AppearanceContext';
+import { AuthProvider } from '../context/AuthContext';
+import { ThemeProvider as AppThemeProvider } from '../theme/ThemeContext';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -24,7 +25,9 @@ export default function RootLayout() {
   return (
     <AuthProvider>
       <AppearanceProvider>
-        <AppThemeShell />
+        <AppThemeProvider>
+          <AppThemeShell />
+        </AppThemeProvider>
       </AppearanceProvider>
     </AuthProvider>
   );

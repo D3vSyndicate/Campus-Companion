@@ -1,8 +1,8 @@
-import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useTheme } from '../theme/ThemeContext';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../theme/ThemeContext';
+import { ScaledText as Text } from './ScaledText';
 
 // Title bar used at the top of the Dashboard. Tapping the avatar opens
 // /(admin)/profile (settings, theme, account details, sign out).

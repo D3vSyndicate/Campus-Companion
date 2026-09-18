@@ -1,6 +1,7 @@
-import React, { ReactNode } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ReactNode } from 'react';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useTheme } from '../theme/ThemeContext';
+import { ScaledText as Text } from './ScaledText';
 
 type Props = {
   title: string;

@@ -8,16 +8,18 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  Text,
   TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
+import { ScaledText as Text } from '../components/ScaledText';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../theme/ThemeContext';
 
 export default function LoginScreen() {
   const router = useRouter();
   const { signIn, resetPassword } = useAuth();
+  const { colors } = useTheme();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -48,7 +50,7 @@ export default function LoginScreen() {
       return;
     }
 
-    router.replace('/(admin)');
+    router.replace('/(student)');
   };
 
   const handleForgotPassword = async () => {
@@ -73,7 +75,7 @@ export default function LoginScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}> 
 
       {/* Background Logo */}
       <View style={styles.backgroundLogoContainer}>
@@ -94,23 +96,26 @@ export default function LoginScreen() {
         >
 
           {/* Login Card */}
-          <View style={styles.card}>
+          <View style={[styles.card, { backgroundColor: colors.surface, shadowColor: colors.text }]}> 
 
 
-            <Text style={styles.title}>Welcome Back</Text>
+            <Text style={[styles.title, { color: colors.text }]}>Welcome Back</Text>
 
-            <Text style={styles.subtitle}>
+            <Text style={[styles.subtitle, { color: colors.textSecondary }]}> 
               Sign in to your Campus Companion account
             </Text>
 
             {/* Email */}
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Email</Text>
+              <Text style={[styles.label, { color: colors.text }]}>Email</Text>
 
               <TextInput
-                style={styles.input}
-                placeholder="Enter your email"
-                placeholderTextColor="#8A8A8A"
+                  style={[
+                    styles.input,
+                    { backgroundColor: colors.card, borderColor: colors.border, color: colors.text },
+                  ]}
+                  placeholder="Enter your email"
+                  placeholderTextColor={colors.textSecondary}
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
@@ -121,12 +126,15 @@ export default function LoginScreen() {
 
             {/* Password */}
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Password</Text>
+                <Text style={[styles.label, { color: colors.text }]}>Password</Text>
 
               <TextInput
-                style={styles.input}
-                placeholder="Enter your password"
-                placeholderTextColor="#8A8A8A"
+                  style={[
+                    styles.input,
+                    { backgroundColor: colors.card, borderColor: colors.border, color: colors.text },
+                  ]}
+                  placeholder="Enter your password"
+                  placeholderTextColor={colors.textSecondary}
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
@@ -140,27 +148,27 @@ export default function LoginScreen() {
               onPress={() => void handleForgotPassword()}
               disabled={loading}
             >
-              <Text style={styles.forgotText}>
+              <Text style={[styles.forgotText, { color: colors.text }]}> 
                 Forgot password?
               </Text>
             </TouchableOpacity>
 
             {/* Login Button */}
             <TouchableOpacity
-              style={styles.loginButton}
+              style={[styles.loginButton, { backgroundColor: colors.accent }]}
               activeOpacity={0.8}
               onPress={() => void handleLogin()}
               disabled={loading}
             >
               {loading ? (
-                <ActivityIndicator color="#071B2C" />
+                <ActivityIndicator color={colors.text} />
               ) : (
-                <Text style={styles.loginButtonText}>Login</Text>
+                <Text style={[styles.loginButtonText, { color: colors.text }]}>Login</Text>
               )}
             </TouchableOpacity>
 
-            {error && <Text style={styles.errorText}>{error}</Text>}
-            {message && <Text style={styles.messageText}>{message}</Text>}
+            {error && <Text style={[styles.errorText, { color: colors.danger }]}>{error}</Text>}
+            {message && <Text style={[styles.messageText, { color: colors.accent }]}>{message}</Text>}
 
           </View>
 
@@ -173,7 +181,6 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#071B2C',
   },
 
   keyboardView: {
@@ -208,7 +215,6 @@ const styles = StyleSheet.create({
   /* Login Card */
 
   card: {
-    backgroundColor: '#FFFFFF',
     borderRadius: 28,
     paddingHorizontal: 28,
     paddingVertical: 32,
@@ -216,7 +222,6 @@ const styles = StyleSheet.create({
 
     justifyContent: 'center',
 
-    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 8,
@@ -240,14 +245,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: '700',
-    color: '#071B2C',
     textAlign: 'center',
     marginBottom: 6,
   },
 
   subtitle: {
     fontSize: 14,
-    color: '#6B7280',
     textAlign: 'center',
     marginBottom: 28,
   },
@@ -261,19 +264,15 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#071B2C',
     marginBottom: 7,
   },
 
   input: {
     height: 52,
     borderWidth: 1,
-    borderColor: '#D9DDE2',
     borderRadius: 12,
     paddingHorizontal: 15,
     fontSize: 15,
-    color: '#071B2C',
-    backgroundColor: '#F8F9FA',
   },
 
   /* Forgot Password */
@@ -286,7 +285,6 @@ const styles = StyleSheet.create({
   forgotText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#071B2C',
   },
 
   /* Login */
@@ -294,26 +292,22 @@ const styles = StyleSheet.create({
   loginButton: {
     height: 52,
     borderRadius: 12,
-    backgroundColor: '#F8A705',
     justifyContent: 'center',
     alignItems: 'center',
   },
 
   loginButtonText: {
-    color: '#071B2C',
     fontSize: 16,
     fontWeight: '700',
   },
 
   errorText: {
-    color: '#B42318',
     fontSize: 13,
     textAlign: 'center',
     marginTop: 14,
   },
 
   messageText: {
-    color: '#16794A',
     fontSize: 13,
     textAlign: 'center',
     marginTop: 14,

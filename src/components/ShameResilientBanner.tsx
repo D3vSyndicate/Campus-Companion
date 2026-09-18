@@ -1,5 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { useTheme } from '../theme/ThemeContext';
+import { ScaledText as Text } from './ScaledText';
 
 interface Props {
   message: string;
@@ -7,9 +9,17 @@ interface Props {
 }
 
 export const ShameResilientBanner: React.FC<Props> = ({ message, type = 'encouragement' }) => {
+  const { colors } = useTheme();
+
   return (
-    <View style={[styles.container, styles[type]]}>
-      <Text style={styles.text}>{message}</Text>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: colors.card, borderColor: colors.border },
+        type === 'encouragement' && { backgroundColor: colors.accent },
+      ]}
+    >
+      <Text style={[styles.text, { color: colors.text }]}>{message}</Text>
     </View>
   );
 };
@@ -21,23 +31,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     borderLeftWidth: 4,
   },
-  encouragement: {
-    backgroundColor: '#F4C542',
-    borderColor: '#F4C542',
-    borderWidth: 1,
-  },
-  info: {
-    backgroundColor: '#EEF3F9',
-    borderColor: '#9FB2C8',
-    borderWidth: 1,
-  },
-  recovery: {
-    backgroundColor: '#EEF3F9',
-    borderColor: '#9FB2C8',
-    borderWidth: 1,
-  },
   text: {
-    color: '#132c4d',
     fontSize: 14,
     lineHeight: 20,
     fontWeight: '500',

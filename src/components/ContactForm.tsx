@@ -1,18 +1,18 @@
+import { useNavigation, useRouter } from 'expo-router';
 import React, { useLayoutEffect, useState } from 'react';
 import {
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    Alert,
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from 'react-native';
-import { useNavigation, useRouter } from 'expo-router';
-import { useContacts, Contact } from '../context/ContactsContext';
+import { Contact, useContacts } from '../context/ContactsContext';
 import { useTheme } from '../theme/ThemeContext';
+import { ScaledText as Text } from './ScaledText';
 
 type Props = {
   existing?: Contact; // omit for "new contact" mode

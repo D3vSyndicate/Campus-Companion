@@ -1,37 +1,27 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { PageHeader } from '../../components/PageHeader';
-import { useAppearance } from '../../context/AppearanceContext';
+import { ScaledText as Text } from '../../components/ScaledText';
 import { supabase } from '../../lib/superbase';
 import { MOCK_CHECKLIST } from '../../mockData';
+import { useTheme } from '../../theme/ThemeContext';
 import { ChecklistItem } from '../../types';
 
 const CHECKLIST_CACHE_KEY = '@checklist_cache';
 
 export default function ChecklistScreen() {
-  const { darkMode } = useAppearance();
-  const palette = darkMode
-    ? {
-        pageBg: '#0B1220',
-        headerBox: '#1B2437',
-        headerTitle: '#F1F7FF',
-        headerSub: '#C4D3EA',
-        cardBg: '#111B2E',
-        taskText: '#EFF7FF',
-        taskMuted: '#A8B9D1',
-        category: '#A8B9D1',
-      }
-    : {
-        pageBg: '#F4F6F9',
-        headerBox: '#FFF8D9',
-        headerTitle: '#0B1F3A',
-        headerSub: '#5F501C',
-        cardBg: '#FFFFFF',
-        taskText: '#1E293B',
-        taskMuted: '#94A3B8',
-        category: '#64748B',
-      };
+  const { colors } = useTheme();
+  const palette = {
+    pageBg: colors.background,
+    headerBox: colors.card,
+    headerTitle: colors.text,
+    headerSub: colors.textSecondary,
+    cardBg: colors.surface,
+    taskText: colors.text,
+    taskMuted: colors.textSecondary,
+    category: colors.textSecondary,
+  };
 
   const [tasks, setTasks] = useState<ChecklistItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -108,7 +98,7 @@ export default function ChecklistScreen() {
         title="New student checklist"
         subtitle="Small steps add up. Keep track of what is done and what is next."
       />
-      <View style={[styles.headerBox, { backgroundColor: palette.headerBox }]}>
+      <View style={[styles.headerBox, { backgroundColor: palette.headerBox, borderColor: colors.border }]}>
         <Text style={[styles.headerTitle, { color: palette.headerTitle }]}>You are making progress</Text>
         <Text style={[styles.headerSub, { color: palette.headerSub }]}>
           {completedCount} of {tasks.length} steps completed. Take one step at a time.
@@ -116,7 +106,7 @@ export default function ChecklistScreen() {
       </View>
 
       {loading ? (
-        <ActivityIndicator size="large" color="#0B1F3A" />
+        <ActivityIndicator size="large" color={colors.accent} />
       ) : (
         <FlatList
           data={tasks}
@@ -125,8 +115,14 @@ export default function ChecklistScreen() {
             <TouchableOpacity
               style={[styles.taskCard, { backgroundColor: palette.cardBg }]}
               onPress={() => void toggleTask(item.id, item.task, item.completed)}>
-              <View style={[styles.checkbox, item.completed && styles.checked]}>
-                {item.completed && <Text style={styles.checkmark}>✓</Text>}
+              <View
+                style={[
+                  styles.checkbox,
+                  { borderColor: colors.border },
+                  item.completed && { backgroundColor: colors.accent, borderColor: colors.accent },
+                ]}
+              >
+                {item.completed && <Text style={[styles.checkmark, { color: colors.text }]}>✓</Text>}
               </View>
               <View style={styles.textContainer}>
                 <Text style={[styles.taskText, { color: palette.taskText }, item.completed && styles.taskCompleted]}>
@@ -143,16 +139,15 @@ export default function ChecklistScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F4F6F9', padding: 16 },
-  headerBox: { backgroundColor: '#FFF8D9', padding: 16, borderRadius: 10, marginBottom: 16, borderWidth: 1, borderColor: '#F4C542' },
-  headerTitle: { fontSize: 16, fontWeight: 'bold', color: '#0B1F3A' },
-  headerSub: { fontSize: 13, color: '#5F501C', marginTop: 4 },
-  taskCard: { flexDirection: 'row', backgroundColor: '#FFFFFF', padding: 16, borderRadius: 10, marginBottom: 8, alignItems: 'center' },
-  checkbox: { width: 22, height: 22, borderRadius: 6, borderWidth: 2, borderColor: '#94A3B8', marginRight: 12, justifyContent: 'center', alignItems: 'center' },
-  checked: { backgroundColor: '#16A34A', borderColor: '#16A34A' },
-  checkmark: { color: '#FFF', fontSize: 12, fontWeight: 'bold' },
+  container: { flex: 1, padding: 16 },
+  headerBox: { padding: 16, borderRadius: 10, marginBottom: 16, borderWidth: 1 },
+  headerTitle: { fontSize: 16, fontWeight: 'bold' },
+  headerSub: { fontSize: 13, marginTop: 4 },
+  taskCard: { flexDirection: 'row', padding: 16, borderRadius: 10, marginBottom: 8, alignItems: 'center' },
+  checkbox: { width: 22, height: 22, borderRadius: 6, borderWidth: 2, marginRight: 12, justifyContent: 'center', alignItems: 'center' },
+  checkmark: { fontSize: 12, fontWeight: 'bold' },
   textContainer: { flex: 1 },
-  taskText: { fontSize: 14, color: '#1E293B' },
-  taskCompleted: { textDecorationLine: 'line-through', color: '#94A3B8' },
-  category: { fontSize: 11, color: '#64748B', marginTop: 2 },
+  taskText: { fontSize: 14 },
+  taskCompleted: { textDecorationLine: 'line-through' },
+  category: { fontSize: 11, marginTop: 2 },
 });

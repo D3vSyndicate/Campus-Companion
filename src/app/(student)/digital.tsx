@@ -1,8 +1,11 @@
-import { Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Linking, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { PageHeader } from '../../components/PageHeader';
+import { ScaledText as Text } from '../../components/ScaledText';
 import { ShameResilientBanner } from '../../components/ShameResilientBanner';
+import { useTheme } from '../../theme/ThemeContext';
 
 export default function DigitalReadinessScreen() {
+  const { colors } = useTheme();
   const guides = [
     {
       title: 'Accessing Funda (LMS)',
@@ -23,7 +26,10 @@ export default function DigitalReadinessScreen() {
   ];
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+    <ScrollView
+      style={[styles.container, { backgroundColor: colors.background }]}
+      contentContainerStyle={styles.content}
+    >
       <PageHeader
         eyebrow="GET CONNECTED"
         title="Digital readiness"
@@ -35,19 +41,19 @@ export default function DigitalReadinessScreen() {
       />
 
       {guides.map((item, index) => (
-        <View key={index} style={styles.card}>
-          <Text style={styles.title}>{item.title}</Text>
-          <Text style={styles.desc}>{item.desc}</Text>
+        <View key={index} style={[styles.card, { backgroundColor: colors.surface }]}>
+          <Text style={[styles.title, { color: colors.text }]}>{item.title}</Text>
+          <Text style={[styles.desc, { color: colors.textSecondary }]}>{item.desc}</Text>
           
-          <View style={styles.stepsContainer}>
+          <View style={[styles.stepsContainer, { backgroundColor: colors.card }]}>
             {item.steps.map((step, idx) => (
-              <Text key={idx} style={styles.stepText}>• {step}</Text>
+              <Text key={idx} style={[styles.stepText, { color: colors.textSecondary }]}>• {step}</Text>
             ))}
           </View>
 
           {item.link && (
-            <TouchableOpacity style={styles.button} onPress={() => Linking.openURL(item.link!)}>
-              <Text style={styles.buttonText}>Open Funda Portal</Text>
+            <TouchableOpacity style={[styles.button, { backgroundColor: colors.accent }]} onPress={() => Linking.openURL(item.link!)}>
+              <Text style={[styles.buttonText, { color: colors.text }]}>Open Funda Portal</Text>
             </TouchableOpacity>
           )}
         </View>
@@ -57,13 +63,13 @@ export default function DigitalReadinessScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F4F6F9' },
+  container: { flex: 1 },
   content: { padding: 16 },
-  card: { backgroundColor: '#FFFFFF', padding: 16, borderRadius: 12, marginBottom: 12 },
-  title: { fontSize: 16, fontWeight: 'bold', color: '#1E293B', marginBottom: 4 },
-  desc: { fontSize: 13, color: '#475569', marginBottom: 8 },
-  stepsContainer: { backgroundColor: '#EEF3F9', padding: 10, borderRadius: 8, marginVertical: 6 },
-  stepText: { fontSize: 12, color: '#334155', marginBottom: 4 },
-  button: { backgroundColor: '#0B1F3A', padding: 10, borderRadius: 6, marginTop: 8, alignItems: 'center' },
-  buttonText: { color: '#FFF', fontWeight: '600', fontSize: 13 },
+  card: { padding: 16, borderRadius: 12, marginBottom: 12 },
+  title: { fontSize: 16, fontWeight: 'bold', marginBottom: 4 },
+  desc: { fontSize: 13, marginBottom: 8 },
+  stepsContainer: { padding: 10, borderRadius: 8, marginVertical: 6 },
+  stepText: { fontSize: 12, marginBottom: 4 },
+  button: { padding: 10, borderRadius: 6, marginTop: 8, alignItems: 'center' },
+  buttonText: { fontWeight: '600', fontSize: 13 },
 });

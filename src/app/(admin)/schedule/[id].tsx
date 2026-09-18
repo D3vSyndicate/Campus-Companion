@@ -1,8 +1,7 @@
-import React from 'react';
-import { Text } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
-import { useSchedule } from '../../../context/ScheduleContext';
+import { ScaledText as Text } from '../../../components/ScaledText';
 import ScheduleForm from '../../../components/ScheduleForm';
+import { useSchedule } from '../../../context/ScheduleContext';
 
 export default function EditScheduleItemScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
