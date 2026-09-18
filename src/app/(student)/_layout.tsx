@@ -6,7 +6,7 @@ const TAB_ICON_SIZE = 22;
 
 export default function StudentLayout() {
   return (
-    <AuthGate>
+    <AuthGate requiredRole="student">
       <Tabs
         screenOptions={{
           tabBarActiveTintColor: '#0B1F3A',

@@ -16,6 +16,15 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    npx expo start
    ```
 
+Before starting the app, copy `.env.example` to `.env` and set
+`EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_ANON_KEY` to the URL and
+publishable (or legacy anon) key from the Supabase project settings.
+
+Login routing uses the signed-in user's Supabase Auth metadata. Set a user's
+role to `admin` or `student` in `app_metadata.role` (preferred) or
+`user_metadata.role` for existing test users. Accounts without a valid role
+cannot enter either dashboard.
+
 In the output, you'll find options to open the app in a
 
 - [development build](https://docs.expo.dev/develop/development-builds/introduction/)

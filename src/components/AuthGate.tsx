@@ -1,10 +1,10 @@
 import { Redirect } from 'expo-router';
 import type { ReactNode } from 'react';
 import { ActivityIndicator, View } from 'react-native';
-import { useAuth } from '../context/AuthContext';
+import { useAuth, UserRole } from '../context/AuthContext';
 
-export function AuthGate({ children }: { children: ReactNode }) {
-  const { loading, user } = useAuth();
+export function AuthGate({ children, requiredRole }: { children: ReactNode; requiredRole: UserRole }) {
+  const { loading, role, user } = useAuth();
 
   if (loading) {
     return (
@@ -16,6 +16,10 @@ export function AuthGate({ children }: { children: ReactNode }) {
 
   if (!user) {
     return <Redirect href="/login" />;
+  }
+
+  if (role !== requiredRole) {
+    return <Redirect href={role ? (role === 'admin' ? '/(admin)' : '/(student)') : '/login'} />;
   }
 
   return <>{children}</>;

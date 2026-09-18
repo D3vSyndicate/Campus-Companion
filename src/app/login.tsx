@@ -48,7 +48,12 @@ export default function LoginScreen() {
       return;
     }
 
-    router.replace('/(admin)');
+    if (!result.role) {
+      setError('Your account does not have a valid role. Ask an administrator to set it to admin or student.');
+      return;
+    }
+
+    router.replace(result.role === 'admin' ? '/(admin)' : '/(student)');
   };
 
   const handleForgotPassword = async () => {
