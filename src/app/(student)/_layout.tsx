@@ -1,5 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { AuthGate } from '../../components/AuthGate';
 import { useTheme } from '../../theme/ThemeContext';
 
@@ -7,6 +8,7 @@ const TAB_ICON_SIZE = 22;
 
 export default function StudentLayout() {
   const { colors } = useTheme();
+  const { t } = useTranslation();
 
   return (
     <AuthGate requiredRole="student">
@@ -26,42 +28,42 @@ export default function StudentLayout() {
         <Tabs.Screen
           name="index"
           options={{
-            title: 'Home',
+            title: t('common.home'),
             tabBarIcon: ({ color }) => <Ionicons name="home-outline" size={TAB_ICON_SIZE} color={color} />,
           }}
         />
         <Tabs.Screen
           name="schedule"
           options={{
-            title: 'Schedule',
+            title: t('common.schedule'),
             tabBarIcon: ({ color }) => <Ionicons name="calendar-outline" size={TAB_ICON_SIZE} color={color} />,
           }}
         />
         <Tabs.Screen
           name="checklist"
           options={{
-            title: 'Checklist',
+            title: t('common.checklist'),
             tabBarIcon: ({ color }) => <Ionicons name="checkmark-circle-outline" size={TAB_ICON_SIZE} color={color} />,
           }}
         />
         <Tabs.Screen
           name="digital"
           options={{
-            title: 'Digital',
+            title: t('common.digital'),
             tabBarIcon: ({ color }) => <Ionicons name="laptop-outline" size={TAB_ICON_SIZE} color={color} />,
           }}
         />
         <Tabs.Screen
           name="faqs"
           options={{
-            title: 'FAQs',
+            title: t('common.faqs'),
             tabBarIcon: ({ color }) => <Ionicons name="help-circle-outline" size={TAB_ICON_SIZE} color={color} />,
           }}
         />
         <Tabs.Screen
           name="contacts"
           options={{
-            title: 'Support',
+            title: t('common.support'),
             tabBarIcon: ({ color }) => <Ionicons name="people-outline" size={TAB_ICON_SIZE} color={color} />,
           }}
         />
