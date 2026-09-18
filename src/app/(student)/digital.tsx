@@ -10,20 +10,32 @@ export default function DigitalReadinessScreen() {
   const { t } = useTranslation();
   const guides = [
     {
+      title: 'Plan your study week',
+      desc: 'Break your workload into small, realistic study blocks and leave space for rest.',
+      steps: ['Check your schedule first', 'Choose one priority topic per block', 'Review what you completed before bed.'],
+    },
+    {
+      title: 'Focus timer',
+      desc: 'Try a simple focus cycle to stay consistent without burning out.',
+      steps: ['Study for 25 minutes', 'Take a 5-minute break', 'Repeat four times, then take a longer break.'],
+    },
+    {
       title: 'Accessing Funda (LMS)',
-      desc: 'Funda may be new to you. This platform is where lecturers post notes, assignments, and announcements.',
-      steps: ['Go to funda.mandela.ac.za', 'Log in using your Student Number', 'Use your standard university password.'],
+      desc: 'Find lecture notes, assignments, announcements, and course resources in one place.',
+      steps: ['Go to funda.mandela.ac.za', 'Log in using your Student Number', 'Check announcements before starting assignments.'],
       link: 'https://funda.mandela.ac.za'
     },
     {
-      title: 'Connecting to Campus Wi-Fi (eduroam)',
-      desc: 'Stay connected across all Nelson Mandela University campuses seamlessly.',
-      steps: ['Select eduroam from Wi-Fi settings', 'Username: sXXXXX@mandela.ac.za', 'Password: Your password.'],
+      title: 'Store your work safely',
+      desc: 'Keep assignments and notes backed up so you can access them from campus or home.',
+      steps: ['Save important files to OneDrive', 'Use clear module and date names', 'Keep a second copy before submitting.'],
+      link: 'https://www.office.com/onedrive',
+      linkLabel: 'Open OneDrive'
     },
     {
-      title: 'Lab Computer Access',
-      desc: 'School of IT labs give you access to development tools and software needed for your modules.',
-      steps: ['Find an open machine in Lab 1 or 2', 'Log in with your student number and password', 'Always save files to your OneDrive.'],
+      title: 'Get academic support',
+      desc: 'Asking early is part of studying well. Use your mentors, lecturers, and support contacts.',
+      steps: ['Write down the exact part you do not understand', 'Ask one focused question', 'Use the Support tab when you need a contact.'],
     }
   ];
 
@@ -55,7 +67,7 @@ export default function DigitalReadinessScreen() {
 
           {item.link && (
             <TouchableOpacity style={[styles.button, { backgroundColor: colors.accent }]} onPress={() => Linking.openURL(item.link!)}>
-              <Text style={[styles.buttonText, { color: colors.text }]}>{t('common.openFunda')}</Text>
+              <Text style={[styles.buttonText, { color: colors.text }]}>{item.linkLabel ?? t('common.openFunda')}</Text>
             </TouchableOpacity>
           )}
         </View>

@@ -27,7 +27,7 @@ export default function ProfileScreen() {
         onPress: () => {
           void (async () => {
             await signOut();
-            router.replace('/login');
+            router.replace('/');
           })();
         },
       },

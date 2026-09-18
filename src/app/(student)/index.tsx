@@ -84,7 +84,7 @@ interface ActionItem {
 const ACTIONS: ActionItem[] = [
   {
     key: 'schedule',
-    route: '/schedule',
+    route: '/(student)/schedule',
     icon: 'calendar-outline',
     iconBg: '#FFF8D9',
     iconColor: '#0B1F3A',
@@ -93,7 +93,7 @@ const ACTIONS: ActionItem[] = [
   },
   {
     key: 'checklist',
-    route: '/checklist',
+    route: '/(student)/checklist',
     icon: 'checkmark-circle-outline',
     iconBg: '#EEF3F9',
     iconColor: '#0B1F3A',
@@ -102,7 +102,7 @@ const ACTIONS: ActionItem[] = [
   },
   {
     key: 'contacts',
-    route: '/contacts',
+    route: '/(student)/contacts',
     icon: 'people-outline',
     iconBg: '#F4F6F9',
     iconColor: '#0B1F3A',
@@ -111,7 +111,7 @@ const ACTIONS: ActionItem[] = [
   },
   {
     key: 'digital',
-    route: '/digital',
+    route: '/(student)/digital',
     icon: 'laptop-outline',
     iconBg: '#FFF8D9',
     iconColor: '#0B1F3A',
@@ -120,7 +120,7 @@ const ACTIONS: ActionItem[] = [
   },
   {
     key: 'faqs',
-    route: '/faqs',
+    route: '/(student)/faqs',
     icon: 'help-circle-outline',
     iconBg: '#EEF3F9',
     iconColor: '#0B1F3A',
