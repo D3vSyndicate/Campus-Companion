@@ -1,4 +1,3 @@
-
 import { useRouter } from 'expo-router';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Header from '../../components/Header';
@@ -8,6 +7,7 @@ import { useTheme } from '../../theme/ThemeContext';
 const SECTIONS: { href: string; label: string; desc: string }[] = [
   { href: '/(admin)/schedule', label: 'Schedule Items', desc: 'Add, edit and remove schedule entries' },
   { href: '/(admin)/contacts', label: 'Contacts', desc: 'Manage the student support directory' },
+  { href: '/(admin)/faqs', label: 'FAQs', desc: 'Write answers and choose which ones students can see' },
   { href: '/(admin)/profile', label: 'Profile & Settings', desc: 'Manage your account and preferences' },
 ];
 
@@ -156,4 +156,3 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
 });
-
