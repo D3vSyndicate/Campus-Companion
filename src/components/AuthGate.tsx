@@ -19,7 +19,15 @@ export function AuthGate({ children, requiredRole }: { children: ReactNode; requ
   }
 
   if (role !== requiredRole) {
-    return <Redirect href={role ? (role === 'admin' ? '/(admin)' : '/(student)') : '/login'} />;
+    const destination =
+      role === 'coordinator'
+        ? '/(coordinator)'
+        : role === 'admin'
+          ? '/(admin)'
+          : role === 'student'
+            ? '/(student)'
+            : '/login';
+    return <Redirect href={destination as any} />;
   }
 
   return <>{children}</>;

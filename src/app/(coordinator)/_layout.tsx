@@ -64,7 +64,7 @@ function CoordinatorStack() {
 }
 export default function CoordinatorLayout() {
   return (
-    <AuthGate>
+    <AuthGate requiredRole="coordinator">
       <ThemeProvider>
         <ScheduleProvider>
           <ContactsProvider>
