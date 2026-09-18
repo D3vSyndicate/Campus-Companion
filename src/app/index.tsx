@@ -17,5 +17,12 @@ export default function Index() {
     return <Redirect href="/login" />;
   }
 
-  return <Redirect href={role === 'admin' ? '/(admin)' : '/(student)'} />;
+  const destination =
+    role === 'coordinator'
+      ? '/(coordinator)'
+      : role === 'admin'
+        ? '/(admin)'
+        : '/(student)';
+
+  return <Redirect href={destination as any} />;
 }

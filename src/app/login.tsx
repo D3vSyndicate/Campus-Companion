@@ -20,8 +20,8 @@ import { useTheme } from '../theme/ThemeContext';
 export default function LoginScreen() {
   const router = useRouter();
   const { signIn, signUp, resetPassword } = useAuth();
-  const { colors } = useTheme();
   const { showToast } = useToast();
+  const { colors } = useTheme();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -62,12 +62,13 @@ export default function LoginScreen() {
     }
 
     showToast('Login successful');
-    if (!result.role) {
-      setError('Login succeeded, but this account has no role. Set user_metadata.role to student or admin in Supabase.');
-      return;
-    }
-
-    router.replace(result.role === 'admin' ? '/(admin)' : '/(student)');
+    const destination =
+      result.role === 'coordinator'
+        ? '/(coordinator)'
+        : result.role === 'admin'
+          ? '/(admin)'
+          : '/(student)';
+    router.replace(destination as any);
   };
 
   const handleForgotPassword = async () => {

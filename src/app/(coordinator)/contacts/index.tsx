@@ -44,7 +44,7 @@ export default function ContactsListScreen() {
         renderItem={({ item }) => (
           <ListItemCard
             title={item.name}
-            subtitle={`${item.role} · ${item.phone}`}
+            subtitle={`${item.role} · ${item.email}`}
             onPress={() => router.push(`/(coordinator)/contacts/${item.id}` as any)}
             right={
               <TouchableOpacity onPress={() => confirmDelete(item.id, item.name)}>

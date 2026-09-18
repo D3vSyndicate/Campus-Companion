@@ -1,9 +1,10 @@
+import * as NativeSplashScreen from "expo-splash-screen";
 import { useEffect, useRef } from "react";
 import {
-  Animated,
-  Image,
-  StyleSheet,
-  View,
+    Animated,
+    Image,
+    StyleSheet,
+    View,
 } from "react-native";
 
 type SplashScreenProps = {
@@ -25,6 +26,9 @@ export default function SplashScreen({
   ).current;
 
   useEffect(() => {
+
+    // Let the custom splash replace Expo's native splash once JavaScript is ready.
+    void NativeSplashScreen.hideAsync();
 
     // Start animations
     Animated.parallel([

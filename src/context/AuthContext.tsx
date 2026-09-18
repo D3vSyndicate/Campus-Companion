@@ -17,11 +17,11 @@ type AuthContextValue = {
   signOut: () => Promise<void>;
 };
 
-export type UserRole = 'admin' | 'student';
+export type UserRole = 'admin' | 'coordinator' | 'student';
 
 export function getUserRole(user: User | null): UserRole | null {
   const role = user?.app_metadata?.role ?? user?.user_metadata?.role;
-  return role === 'admin' || role === 'student' ? role : null;
+  return role === 'admin' || role === 'coordinator' || role === 'student' ? role : null;
 }
 
 function getLoginErrorMessage(message: string) {
