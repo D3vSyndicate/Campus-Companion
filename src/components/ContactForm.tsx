@@ -1,14 +1,14 @@
 import { useNavigation, useRouter } from 'expo-router';
 import React, { useCallback, useLayoutEffect, useState } from 'react';
 import {
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View,
+    Alert,
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 import { Contact, useContacts } from '../context/ContactsContext';
 import { useTheme } from '../theme/ThemeContext';
@@ -28,7 +28,7 @@ export default function ContactForm({ existing }: Props) {
   const [surname, setSurname] = useState(existing?.surname ?? '');
   const [role, setRole] = useState(existing?.role ?? '');
   const [email, setEmail] = useState(existing?.email ?? '');
-  const [supportCategory, setSupportCategory] = useState(existing?.supportCategory ?? '');
+  const [supportCategory, setSupportCategory] = useState(existing?.support_category ?? '');
 
   const handleDelete = useCallback(() => {
     if (!existing) return;
@@ -62,7 +62,7 @@ export default function ContactForm({ existing }: Props) {
       Alert.alert('Missing info', 'Name is required.');
       return;
     }
-    const payload = { name, surname, role, email, supportCategory };
+    const payload = { name, surname, role, email, support_category: supportCategory };
     if (existing) {
       updateItem(existing.id, payload);
     } else {

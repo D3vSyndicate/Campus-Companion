@@ -4,11 +4,17 @@ import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { PageHeader } from '../../components/PageHeader';
 import { ScaledText as Text } from '../../components/ScaledText';
+import { ShameResilientBanner } from '../../components/ShameResilientBanner';
 import { supabase } from '../../lib/superbase';
 import { useTheme } from '../../theme/ThemeContext';
 import { ChecklistItem } from '../../types';
 
 const CHECKLIST_CACHE_KEY = '@checklist_cache';
+
+type ChecklistTask = ChecklistItem & {
+  databaseId: string;
+  databaseKey: 'checklist_item_id' | 'id';
+};
 
 const normalizeBoolean = (value: unknown): boolean => {
   if (typeof value === 'boolean') return value;
@@ -33,8 +39,9 @@ export default function ChecklistScreen() {
     celebrationBg: colors.surface,
   };
 
-  const [tasks, setTasks] = useState<ChecklistItem[]>([]);
+  const [tasks, setTasks] = useState<ChecklistTask[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
 
   useEffect(() => {
     void fetchChecklist();
@@ -44,7 +51,7 @@ export default function ChecklistScreen() {
     try {
       const cached = await AsyncStorage.getItem(CHECKLIST_CACHE_KEY);
       if (cached) {
-        setTasks(JSON.parse(cached) as ChecklistItem[]);
+        setTasks(JSON.parse(cached) as ChecklistTask[]);
       }
 
       const { data, error } = await supabase
@@ -53,13 +60,17 @@ export default function ChecklistScreen() {
         .order('created_at', { ascending: true });
 
       if (error) throw error;
+      setLoadError(false);
 
       const remoteTasks = (data ?? []).map((row, index) => {
         const item = row as Record<string, unknown>;
-        const id = String(item.checklist_item_id ?? item.id ?? `checklist-${index}`);
+        const databaseKey: 'checklist_item_id' | 'id' = item.checklist_item_id != null ? 'checklist_item_id' : 'id';
+        const databaseId = String(item[databaseKey] ?? `checklist-${index}`);
 
         return {
-          id,
+          id: databaseId,
+          databaseId,
+          databaseKey,
           created_at: new Date((item.created_at as string) ?? new Date().toISOString()),
           task_description: String(item.task_description ?? ''),
           category: String(item.category ?? item.support_category ?? 'General'),
@@ -74,10 +85,11 @@ export default function ChecklistScreen() {
       }
     } catch (error) {
       console.error('Failed to load checklist from Supabase.', error);
+      setLoadError(true);
       const cached = await AsyncStorage.getItem(CHECKLIST_CACHE_KEY);
       if (cached) {
         try {
-          setTasks(JSON.parse(cached) as ChecklistItem[]);
+          setTasks(JSON.parse(cached) as ChecklistTask[]);
         } catch (cacheError) {
           console.error('Failed to parse cached checklist data.', cacheError);
         }
@@ -102,7 +114,10 @@ export default function ChecklistScreen() {
       const { error } = await supabase
         .from('checklist_item')
         .update({ completion_status: nextStatus ? 'true' : 'false' })
-        .eq('checklist_item_id', taskId);
+        .eq(
+          tasks.find((task) => task.id === taskId)?.databaseKey ?? 'checklist_item_id',
+          tasks.find((task) => task.id === taskId)?.databaseId ?? taskId,
+        );
 
       if (error) throw error;
     } catch (error) {
@@ -122,6 +137,13 @@ export default function ChecklistScreen() {
         title={t('common.checklistTitle')}
         subtitle={t('common.checklistSubtitle')}
       />
+
+      {loadError && (
+        <ShameResilientBanner
+          message={t('common.tryAgain')}
+          type="info"
+        />
+      )}
 
       <View style={[styles.headerBox, { backgroundColor: palette.headerBox, borderColor: colors.border }]}>
         <Text style={[styles.headerTitle, { color: palette.headerTitle }]}>{t('common.progress')}</Text>
@@ -157,6 +179,11 @@ export default function ChecklistScreen() {
 
       {loading ? (
         <ActivityIndicator size="large" color={colors.accent} />
+      ) : tasks.length === 0 ? (
+        <View style={[styles.emptyState, { backgroundColor: palette.cardBg, borderColor: colors.border }]}>
+          <Text style={[styles.emptyTitle, { color: palette.taskText }]}>Your checklist is not available yet</Text>
+          <Text style={[styles.emptyText, { color: palette.taskMuted }]}>Your orientation steps will appear here when they are published.</Text>
+        </View>
       ) : (
         <FlatList
           data={tasks}
@@ -211,4 +238,7 @@ const styles = StyleSheet.create({
   taskText: { fontSize: 14 },
   taskCompleted: { textDecorationLine: 'line-through' },
   category: { fontSize: 11, marginTop: 2 },
+  emptyState: { borderWidth: 1, borderRadius: 14, padding: 20, alignItems: 'center' },
+  emptyTitle: { fontSize: 16, fontWeight: '800', textAlign: 'center' },
+  emptyText: { fontSize: 13, lineHeight: 19, textAlign: 'center', marginTop: 7 },
 });

@@ -69,7 +69,7 @@ export function ContactsProvider({ children }: { children: ReactNode }) {
   };
 
   const deleteItem: ContactsContextValue['deleteItem'] = async (id) => {
-    const { error } = await supabase.from('contacts').delete().eq('id', id);
+    const { error } = await supabase.from('Contact').delete().eq('id', id);
 
     if (error) {
       console.error('Error deleting contact:', error.message);

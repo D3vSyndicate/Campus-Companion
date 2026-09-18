@@ -6,11 +6,9 @@ import { ScaledText as Text } from '../../components/ScaledText';
 import { useTheme } from '../../theme/ThemeContext';
 
 const SECTIONS: { href: string; label: string; desc: string }[] = [
-  { href: '/schedule', label: 'Schedule Items', desc: 'Add, edit and remove schedule entries' },
-  { href: '/announcements', label: 'Announcements', desc: 'Manage posted announcements' },
-  { href: '/faqs', label: 'FAQs', desc: 'Control which FAQs are visible' },
-  { href: '/contacts', label: 'Contacts', desc: 'Manage contact directory' },
-  { href: '/venue', label: 'Venue Information', desc: 'Edit venue details' },
+  { href: '/(admin)/schedule', label: 'Schedule Items', desc: 'Add, edit and remove schedule entries' },
+  { href: '/(admin)/contacts', label: 'Contacts', desc: 'Manage the student support directory' },
+  { href: '/(admin)/profile', label: 'Profile & Settings', desc: 'Manage your account and preferences' },
 ];
 
 export default function DashboardScreen() {

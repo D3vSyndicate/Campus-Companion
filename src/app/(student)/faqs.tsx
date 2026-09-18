@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, FlatList, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { PageHeader } from '../../components/PageHeader';
 import { ScaledText as Text } from '../../components/ScaledText';
+import { ShameResilientBanner } from '../../components/ShameResilientBanner';
 import { fetchWithOfflineFallback } from '../../lib/offlineData';
 import { useTheme } from '../../theme/ThemeContext';
 
@@ -32,10 +33,12 @@ export default function FAQScreen() {
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [faqs, setFaqs] = useState<FAQ[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showOfflineBanner, setShowOfflineBanner] = useState(false);
 
   useEffect(() => {
     const loadFaqs = async () => {
-      const { data, error } = await fetchWithOfflineFallback('FAQ');
+      const { data, fromCache, error } = await fetchWithOfflineFallback('FAQ');
+      setShowOfflineBanner(fromCache && Boolean(error));
       if (error) {
         console.error('Failed to load FAQs from Supabase.', error);
       }
@@ -79,8 +82,20 @@ export default function FAQScreen() {
         onChangeText={setSearch}
       />
 
+      {showOfflineBanner && (
+        <ShameResilientBanner
+          message={t('common.tryAgain')}
+          type="info"
+        />
+      )}
+
       {loading ? (
         <ActivityIndicator size="large" color={colors.accent} />
+      ) : filteredFaqs.length === 0 ? (
+        <View style={[styles.emptyState, { backgroundColor: palette.cardBg, borderColor: colors.border }]}>
+          <Text style={[styles.emptyTitle, { color: palette.question }]}>{faqs.length ? 'No matching answers' : 'No FAQs published yet'}</Text>
+          <Text style={[styles.emptyText, { color: palette.answer }]}>{faqs.length ? 'Try a different search term.' : 'Common campus answers will appear here when they are available.'}</Text>
+        </View>
       ) : (
         <FlatList
           data={filteredFaqs}
@@ -114,4 +129,7 @@ const styles = StyleSheet.create({
   question: { fontSize: 14, fontWeight: '600', flex: 1 },
   tag: { fontSize: 10, paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4, marginLeft: 8 },
   answer: { fontSize: 13, marginTop: 10, borderTopWidth: 1, paddingTop: 8 },
+  emptyState: { borderWidth: 1, borderRadius: 14, padding: 20, alignItems: 'center' },
+  emptyTitle: { fontSize: 16, fontWeight: '800' },
+  emptyText: { fontSize: 13, lineHeight: 19, textAlign: 'center', marginTop: 7 },
 });

@@ -428,7 +428,7 @@ export default function HomeScreen() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [checklistItems, setChecklistItems] = useState<
-    Array<{ id: string; task_description: string; category: string; completion_status: boolean }>
+    Array<{ id: string; databaseId: string; databaseKey: 'checklist_item_id' | 'id'; task_description: string; category: string; completion_status: boolean }>
   >([]);
   const [checklistSummary, setChecklistSummary] = useState({
     total: 0,
@@ -560,8 +560,12 @@ export default function HomeScreen() {
 
     const tasks = (data ?? []).map((row, index) => {
       const item = row as Record<string, unknown>;
+      const databaseKey: 'checklist_item_id' | 'id' = item.checklist_item_id != null ? 'checklist_item_id' : 'id';
+      const databaseId = String(item[databaseKey] ?? `home-checklist-${index}`);
       return {
-        id: String(item.checklist_item_id ?? item.id ?? `home-checklist-${index}`),
+        id: databaseId,
+        databaseId,
+        databaseKey,
         task_description: String(item.task_description ?? ''),
         category: String(item.category ?? item.support_category ?? 'General'),
         completion_status: item.completion_status === true || item.completion_status === 'true',
@@ -596,12 +600,15 @@ export default function HomeScreen() {
     const { error } = await supabase
       .from('checklist_item')
       .update({ completion_status: nextStatus ? 'true' : 'false' })
-      .eq('checklist_item_id', taskId);
+      .eq(
+        checklistItems.find((task) => task.id === taskId)?.databaseKey ?? 'checklist_item_id',
+        checklistItems.find((task) => task.id === taskId)?.databaseId ?? taskId,
+      );
 
     if (error) {
       console.error('Failed to sync home checklist item to Supabase.', error);
     }
-  }, []);
+  }, [checklistItems]);
 
   useEffect(() => {
     void fetchChecklistSummary();

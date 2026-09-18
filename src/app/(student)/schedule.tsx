@@ -8,6 +8,12 @@ import { fetchWithOfflineFallback } from '../../lib/offlineData';
 import { useTheme } from '../../theme/ThemeContext';
 import { ScheduleItem } from '../../types';
 
+const normalizeBoolean = (value: unknown): boolean => {
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'string') return value.toLowerCase() === 'true';
+  return Boolean(value);
+};
+
 export default function ScheduleScreen() {
   const { colors } = useTheme();
   const { t } = useTranslation();
@@ -51,7 +57,7 @@ export default function ScheduleScreen() {
               venue: String(item.venue ?? item.location ?? item.venue_name ?? ''),
               description: String(item.description ?? ''),
               category: (item.category ?? 'academic') as ScheduleItem['category'],
-              isPast: Boolean(item.is_past ?? item.isPast),
+              isPast: normalizeBoolean(item.is_past ?? item.isPast),
             };
           }),
         );

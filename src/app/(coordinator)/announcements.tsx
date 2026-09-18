@@ -14,6 +14,7 @@ import { useTheme } from '../../theme/ThemeContext';
 
 type Announcement = {
   id: string;
+  databaseKey: 'Announcement ID' | 'announcement_id' | 'id';
   title: string;
   message: string;
   priority: string;
@@ -46,13 +47,16 @@ export default function AnnouncementsScreen() {
 
     console.log('Announcements from Supabase:', data);
 
-    const mapped: Announcement[] = (data ?? []).map((row: any, index) => ({
-      id: String(
-        row['Announcement ID'] ??
-          row.announcement_id ??
-          row.id ??
-          index + 1,
-      ),
+    const mapped: Announcement[] = (data ?? []).map((row: any, index) => {
+      const databaseKey = row['Announcement ID'] != null
+        ? 'Announcement ID'
+        : row.announcement_id != null
+          ? 'announcement_id'
+          : 'id';
+
+      return {
+      id: String(row[databaseKey] ?? index + 1),
+      databaseKey,
 
       title: String(
         row.Title ??
@@ -82,7 +86,8 @@ export default function AnnouncementsScreen() {
           row.postedBy ??
           '',
       ),
-    }));
+      };
+    });
 
     setAnnouncements(mapped);
   }, []);
@@ -167,7 +172,7 @@ export default function AnnouncementsScreen() {
             const { error } = await supabase
               .from('Announcement')
               .delete()
-              .eq('Announcement ID', announcement.id);
+              .eq(announcement.databaseKey, announcement.id);
 
             if (error) {
               console.error(

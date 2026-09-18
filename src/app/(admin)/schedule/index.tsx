@@ -15,7 +15,7 @@ export default function ScheduleListScreen() {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity onPress={() => router.push('/schedule/new')} style={styles.addButton}>
+        <TouchableOpacity onPress={() => router.push('./new')} style={styles.addButton}>
           <Text style={[styles.addButtonText, { color: colors.accent }]}>+ Add</Text>
         </TouchableOpacity>
       ),
@@ -46,7 +46,7 @@ export default function ScheduleListScreen() {
           <ListItemCard
             title={item.title}
             subtitle={`${item.date} · ${item.time} · ${item.location}`}
-            onPress={() => router.push(`/schedule/${item.id}`)}
+            onPress={() => router.push(`./${item.id}`)}
             right={
               <TouchableOpacity onPress={() => confirmDelete(item.id, item.title)}>
                 <Text style={[styles.deleteText, { color: colors.danger }]}>Delete</Text>

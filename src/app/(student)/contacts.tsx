@@ -25,11 +25,13 @@ export default function ContactsScreen() {
   const [contacts, setContacts] = useState<ContactItem[]>([]);
   const [selectedContact, setSelectedContact] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showOfflineBanner, setShowOfflineBanner] = useState(false);
 
   useEffect(() => {
     const loadContacts = async () => {
      
-      const { data, error } = await fetchWithOfflineFallback('Contact');
+      const { data, fromCache, error } = await fetchWithOfflineFallback('Contact');
+      setShowOfflineBanner(fromCache && Boolean(error));
       if (error) {
         console.error('Failed to load contacts from Supabase.', error);
       }
@@ -75,8 +77,20 @@ export default function ContactsScreen() {
         type="info"
       />
 
+      {showOfflineBanner && (
+        <ShameResilientBanner
+          message={t('common.tryAgain')}
+          type="info"
+        />
+      )}
+
       {loading ? (
         <ActivityIndicator size="large" color={colors.accent} />
+      ) : contacts.length === 0 ? (
+        <View style={[styles.emptyState, { backgroundColor: palette.cardBg, borderColor: palette.border }]}>
+          <Text style={[styles.emptyTitle, { color: palette.name }]}>No support contacts yet</Text>
+          <Text style={[styles.emptyText, { color: palette.body }]}>Your support team will appear here when contacts are published.</Text>
+        </View>
       ) : contacts.map(contact => {
         const isExpanded = selectedContact === contact.id;
         return (
@@ -134,4 +148,7 @@ const styles = StyleSheet.create({
   detail: { fontSize: 13, marginBottom: 6 },
   button: { alignSelf: 'flex-start', borderRadius: 8, paddingHorizontal: 14, paddingVertical: 10, marginTop: 6 },
   buttonText: { fontSize: 13, fontWeight: '700' },
+  emptyState: { borderWidth: 1, borderRadius: 14, padding: 20, alignItems: 'center' },
+  emptyTitle: { fontSize: 16, fontWeight: '800' },
+  emptyText: { fontSize: 13, lineHeight: 19, textAlign: 'center', marginTop: 7 },
 });
