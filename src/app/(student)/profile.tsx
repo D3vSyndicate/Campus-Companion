@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Alert, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { LanguageSwitcher } from '../../components/LanguageSwitcher';
 import { ScaledText as Text } from '../../components/ScaledText';
 import { useAppearance } from '../../context/AppearanceContext';
@@ -20,21 +20,14 @@ export default function StudentProfileScreen() {
   const { user, role, signOut } = useAuth();
   const [loggingOut, setLoggingOut] = useState(false);
 
-  const confirmSignOut = () => {
-    Alert.alert('Sign out', 'Are you sure you want to sign out?', [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Sign out',
-        style: 'destructive',
-        onPress: () => {
-          void (async () => {
-            setLoggingOut(true);
-            await signOut();
-            router.replace('/');
-          })();
-        },
-      },
-    ]);
+  const handleSignOut = async () => {
+    setLoggingOut(true);
+    try {
+      await signOut();
+    } finally {
+      router.replace('/login');
+      setLoggingOut(false);
+    }
   };
 
   const adjustFontScale = (change: number) => {
@@ -128,7 +121,7 @@ export default function StudentProfileScreen() {
 
       <TouchableOpacity
         disabled={loggingOut}
-        onPress={confirmSignOut}
+        onPress={() => void handleSignOut()}
         style={[styles.signOut, { borderColor: colors.danger }]}
       >
         <Text style={[styles.signOutText, { color: colors.danger }]}>Log Out</Text>
