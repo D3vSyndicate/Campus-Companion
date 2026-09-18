@@ -395,6 +395,14 @@ export default function HomeScreen() {
 
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [checklistItems, setChecklistItems] = useState<
+    Array<{ id: string; task_description: string; category: string; completion_status: boolean }>
+  >([]);
+  const [checklistSummary, setChecklistSummary] = useState({
+    total: 0,
+    completed: 0,
+    loading: true,
+  });
 
   const [expandedId, setExpandedId] = useState<string | null>(
     null,
@@ -472,6 +480,67 @@ export default function HomeScreen() {
     })();
   }, [fetchAnnouncements]);
 
+  const fetchChecklistSummary = useCallback(async () => {
+    const { data, error } = await supabase
+      .from('checklist_item')
+      .select('*')
+      .order('created_at', { ascending: true });
+
+    if (error || !data) {
+      setChecklistItems([]);
+      setChecklistSummary({ total: 0, completed: 0, loading: false });
+      return;
+    }
+
+    const tasks = (data ?? []).map((row, index) => {
+      const item = row as Record<string, unknown>;
+      return {
+        id: String(item.checklist_item_id ?? item.id ?? `home-checklist-${index}`),
+        task_description: String(item.task_description ?? ''),
+        category: String(item.category ?? item.support_category ?? 'General'),
+        completion_status: item.completion_status === true || item.completion_status === 'true',
+      };
+    });
+
+    setChecklistItems(tasks);
+    setChecklistSummary({
+      total: tasks.length,
+      completed: tasks.filter((task) => task.completion_status).length,
+      loading: false,
+    });
+  }, []);
+
+  const toggleChecklistTask = useCallback(async (taskId: string, currentStatus: boolean) => {
+    const nextStatus = !currentStatus;
+
+    setChecklistItems((current) =>
+      current.map((task) =>
+        task.id === taskId ? { ...task, completion_status: nextStatus } : task,
+      ),
+    );
+
+    setChecklistSummary((current) => {
+      const newCompleted = current.completed + (nextStatus && !currentStatus ? 1 : !nextStatus && currentStatus ? -1 : 0);
+      return {
+        ...current,
+        completed: Math.max(0, Math.min(current.total, newCompleted)),
+      };
+    });
+
+    const { error } = await supabase
+      .from('checklist_item')
+      .update({ completion_status: nextStatus ? 'true' : 'false' })
+      .eq('checklist_item_id', taskId);
+
+    if (error) {
+      console.error('Failed to sync home checklist item to Supabase.', error);
+    }
+  }, []);
+
+  useEffect(() => {
+    void fetchChecklistSummary();
+  }, [fetchChecklistSummary]);
+
   // ---------------------------------------------------------------------------
   // Pull to refresh
   // ---------------------------------------------------------------------------
@@ -482,13 +551,13 @@ export default function HomeScreen() {
     tap();
 
     try {
-      const list = await fetchAnnouncements();
+      const [list] = await Promise.all([fetchAnnouncements(), fetchChecklistSummary()]);
 
       setAnnouncements(list);
     } finally {
       setRefreshing(false);
     }
-  }, [fetchAnnouncements]);
+  }, [fetchAnnouncements, fetchChecklistSummary]);
 
   // ---------------------------------------------------------------------------
   // Unread state
@@ -691,6 +760,77 @@ export default function HomeScreen() {
         type="encouragement"
       />
 
+      {!checklistSummary.loading && checklistSummary.total > 0 && (
+        <View style={styles.section}>
+          <Pressable
+            onPress={() => handleNavigate('/checklist')}
+            style={({ pressed }) => [
+              styles.checklistSummaryCard,
+              { backgroundColor: colors.surface, borderColor: colors.border },
+              pressed && styles.actionCardPressed,
+            ]}
+          >
+            <View style={styles.checklistSummaryHeader}>
+              <Text style={[styles.sectionEyebrow, { color: colors.accent }]}>Checklist</Text>
+              <Text style={[styles.checklistSummaryBadge, { color: colors.accent }]}>
+                {checklistSummary.completed}/{checklistSummary.total}
+              </Text>
+            </View>
+
+            <Text style={[styles.sectionHeader, { color: colors.text }]}>Your orientation checklist</Text>
+
+            <View style={[styles.progressTrack, { backgroundColor: colors.card }]}>
+              <View
+                style={[
+                  styles.progressFill,
+                  {
+                    width: `${checklistSummary.total ? (checklistSummary.completed / checklistSummary.total) * 100 : 0}%`,
+                    backgroundColor: colors.accent,
+                  },
+                ]}
+              />
+            </View>
+
+            {checklistItems.slice(0, 3).map((task) => (
+              <Pressable
+                key={task.id}
+                onPress={() => void toggleChecklistTask(task.id, task.completion_status)}
+                style={styles.checklistMiniRow}
+              >
+                <View
+                  style={[
+                    styles.checklistMiniBox,
+                    {
+                      borderColor: colors.border,
+                      backgroundColor: task.completion_status ? colors.accent : 'transparent',
+                    },
+                  ]}
+                >
+                  {task.completion_status && <Ionicons name="checkmark" size={12} color={colors.background} />}
+                </View>
+
+                <Text
+                  style={[
+                    styles.checklistMiniText,
+                    { color: colors.text },
+                    task.completion_status && styles.checklistMiniTextDone,
+                  ]}
+                  numberOfLines={1}
+                >
+                  {task.task_description}
+                </Text>
+              </Pressable>
+            ))}
+
+            <Text style={[styles.checklistSummaryText, { color: colors.textSecondary }]}>
+              {checklistSummary.completed === checklistSummary.total
+                ? 'Nice work — you finished everything. Keep going!'
+                : 'Tap a task to update it, or open the full checklist.'}
+            </Text>
+          </Pressable>
+        </View>
+      )}
+
       {/* ================================================================= */}
       {/* ANNOUNCEMENTS */}
       {/* ================================================================= */}
@@ -818,6 +958,41 @@ const styles = StyleSheet.create({
 
   section: {
     marginTop: 4,
+  },
+
+  checklistSummaryCard: {
+    borderWidth: 1,
+    borderRadius: 18,
+    padding: 16,
+    marginBottom: 16,
+  },
+
+  checklistSummaryHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+
+  checklistSummaryBadge: {
+    fontSize: 12,
+    fontWeight: '800',
+  },
+
+  checklistSummaryText: {
+    marginTop: 10,
+    fontSize: 12,
+  },
+
+  progressTrack: {
+    height: 10,
+    borderRadius: 999,
+    overflow: 'hidden',
+    marginTop: 12,
+  },
+
+  progressFill: {
+    height: '100%',
+    borderRadius: 999,
   },
 
   // ===========================================================================
