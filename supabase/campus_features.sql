@@ -23,9 +23,12 @@ set search_path = public, auth
 as $$
   -- A user with no role set counts as a student. The app treats them the same way, because students
   -- usually only have a role in their sign-up details. supabase/mentor_groups.sql relies on this.
+  -- The role stored in the database is the current one, so it wins. An EMPTY stored role counts as missing,
+  -- and then the role in the login token is used. It is never the other way round: a role that was changed
+  -- in the database must not be undone by an older login token.
   select coalesce(nullif(lower(trim(coalesce(
-    (select raw_app_meta_data ->> 'role' from auth.users where id = auth.uid()),
-    auth.jwt() -> 'app_metadata' ->> 'role',
+    nullif(trim((select raw_app_meta_data ->> 'role' from auth.users where id = auth.uid())), ''),
+    nullif(trim(auth.jwt() -> 'app_metadata' ->> 'role'), ''),
     ''
   ))), ''), 'student')
 $$;

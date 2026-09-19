@@ -1,36 +1,9 @@
 -- Coordinator CRUD repair.
 -- Run after supabase/campus_features.sql in the Supabase SQL editor.
 
-create or replace function public.app_role()
-returns text
-language sql
-stable
-security definer
-set search_path = public, auth
-as $$
-  select case
-    when lower(trim(coalesce((select raw_app_meta_data ->> 'role' from auth.users where id = auth.uid()), ''))) = 'admin'
-      or lower(trim(coalesce(auth.jwt() -> 'app_metadata' ->> 'role', ''))) = 'admin'
-      then 'admin'
-    when lower(trim(coalesce((select raw_app_meta_data ->> 'role' from auth.users where id = auth.uid()), ''))) = 'coordinator'
-      or lower(trim(coalesce(auth.jwt() -> 'app_metadata' ->> 'role', ''))) = 'coordinator'
-      then 'coordinator'
-    else lower(trim(coalesce(
-      (select raw_app_meta_data ->> 'role' from auth.users where id = auth.uid()),
-      auth.jwt() -> 'app_metadata' ->> 'role',
-      ''
-    )))
-  end
-$$;
-
-create or replace function public.is_staff()
-returns boolean
-language sql
-stable
-as $$ select public.app_role() in ('coordinator', 'admin') $$;
-
-grant execute on function public.app_role() to authenticated;
-grant execute on function public.is_staff() to authenticated;
+-- The role helpers (public.app_role() and public.is_staff()) are defined once, in supabase/campus_features.sql.
+-- They are not redefined here, so running this file can never replace them. (An earlier version of this file
+-- redefined app_role(), which dropped the rule that an account with no role counts as a student.)
 
 do $$
 begin

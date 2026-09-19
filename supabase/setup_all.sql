@@ -13,16 +13,17 @@
 --
 -- WHAT IT SETS UP
 --   1. Tables, staff rules, tribes and chat, shuttle times, sport & gym, digital readiness
---   2. Coordinator content
---   3. School of IT programmes and advisors
---   4. Campus events schedule: date, time, cost and sign-up link
---   5. Head of department: programme information, expectations, assignments, resources, contacts
---   6. Sport & gym: the real Madibaz clubs and how to join
---   7. Shuttle times: the real 2026 Gqeberha schedule
---   8. Mentor groups, join requests and QR codes
+--   2. Coordinator repair: clears leftover rules so staff can add, edit and delete
+--   3. Coordinator content
+--   4. School of IT programmes and advisors
+--   5. Campus events schedule: date, time, cost and sign-up link
+--   6. Head of department: programme information, expectations, assignments, resources, contacts
+--   7. Sport & gym: the real Madibaz clubs and how to join
+--   8. Shuttle times: the real 2026 Gqeberha schedule
+--   9. Mentor groups, join requests and QR codes
 
 -- ===========================================================================
--- PART 1 OF 8: supabase/campus_features.sql
+-- PART 1 OF 9: supabase/campus_features.sql
 -- Tables, staff rules, tribes and chat, shuttle times, sport & gym, digital readiness
 -- ===========================================================================
 
@@ -51,9 +52,12 @@ set search_path = public, auth
 as $$
   -- A user with no role set counts as a student. The app treats them the same way, because students
   -- usually only have a role in their sign-up details. supabase/mentor_groups.sql relies on this.
+  -- The role stored in the database is the current one, so it wins. An EMPTY stored role counts as missing,
+  -- and then the role in the login token is used. It is never the other way round: a role that was changed
+  -- in the database must not be undone by an older login token.
   select coalesce(nullif(lower(trim(coalesce(
-    (select raw_app_meta_data ->> 'role' from auth.users where id = auth.uid()),
-    auth.jwt() -> 'app_metadata' ->> 'role',
+    nullif(trim((select raw_app_meta_data ->> 'role' from auth.users where id = auth.uid())), ''),
+    nullif(trim(auth.jwt() -> 'app_metadata' ->> 'role'), ''),
     ''
   ))), ''), 'student')
 $$;
@@ -687,7 +691,82 @@ $$;
 -- unedited "SAMPLE:" rows.
 
 -- ===========================================================================
--- PART 2 OF 8: supabase/coordinator_content.sql
+-- PART 2 OF 9: supabase/migrations/20260919213000_coordinator_crud_policies.sql
+-- Coordinator repair: clears leftover rules so staff can add, edit and delete
+-- ===========================================================================
+
+-- Coordinator CRUD repair.
+-- Run after supabase/campus_features.sql in the Supabase SQL editor.
+
+-- The role helpers (public.app_role() and public.is_staff()) are defined once, in supabase/campus_features.sql.
+-- They are not redefined here, so running this file can never replace them. (An earlier version of this file
+-- redefined app_role(), which dropped the rule that an account with no role counts as a student.)
+
+do $$
+begin
+  if to_regprocedure('public.is_staff()') is null then
+    raise exception 'public.is_staff() is missing. Run supabase/campus_features.sql first.';
+  end if;
+end
+$$;
+
+do $$
+declare
+  table_name text;
+  policy record;
+begin
+  foreach table_name in array array[
+    'Contact',
+    'FAQ',
+    'Announcement',
+    'schedule_items',
+    'Venue',
+    'checklist_item',
+    'Support_pathway',
+    'digital_readiness'
+  ]
+  loop
+    if to_regclass(format('public.%I', table_name)) is null then
+      raise notice 'Skipping missing Coordinator table public.%', table_name;
+      continue;
+    end if;
+
+    execute format('alter table public.%I enable row level security', table_name);
+
+    for policy in
+      select policyname
+      from pg_policies
+      where schemaname = 'public' and tablename = table_name
+    loop
+      execute format('drop policy %I on public.%I', policy.policyname, table_name);
+    end loop;
+
+    execute format(
+      'create policy cc_read on public.%I for select to anon, authenticated using (true)',
+      table_name
+    );
+    execute format(
+      'create policy cc_staff_insert on public.%I for insert to authenticated with check (public.is_staff())',
+      table_name
+    );
+    execute format(
+      'create policy cc_staff_update on public.%I for update to authenticated using (public.is_staff()) with check (public.is_staff())',
+      table_name
+    );
+    execute format(
+      'create policy cc_staff_delete on public.%I for delete to authenticated using (public.is_staff())',
+      table_name
+    );
+
+    if table_name = 'checklist_item' then
+      execute 'create policy cc_checklist_toggle on public.checklist_item for update to authenticated using (true) with check (true)';
+    end if;
+  end loop;
+end
+$$;
+
+-- ===========================================================================
+-- PART 3 OF 9: supabase/coordinator_content.sql
 -- Coordinator content
 -- ===========================================================================
 
@@ -721,7 +800,7 @@ create policy "Coordinators and admins can delete coordinator content"
   using (public.is_staff());
 
 -- ===========================================================================
--- PART 3 OF 8: supabase/migrations/20260919120000_it_programmes.sql
+-- PART 4 OF 9: supabase/migrations/20260919120000_it_programmes.sql
 -- School of IT programmes and advisors
 -- ===========================================================================
 
@@ -823,7 +902,7 @@ create policy cc_staff_delete on public.it_programmes
   for delete to authenticated using (public.is_staff());
 
 -- ===========================================================================
--- PART 4 OF 8: supabase/migrations/20260919130000_event_schedule.sql
+-- PART 5 OF 9: supabase/migrations/20260919130000_event_schedule.sql
 -- Campus events schedule: date, time, cost and sign-up link
 -- ===========================================================================
 
@@ -897,7 +976,7 @@ create policy cc_staff_delete on public.event
   for delete to authenticated using (public.is_staff());
 
 -- ===========================================================================
--- PART 5 OF 8: supabase/hod.sql
+-- PART 6 OF 9: supabase/hod.sql
 -- Head of department: programme information, expectations, assignments, resources, contacts
 -- ===========================================================================
 
@@ -1016,7 +1095,7 @@ create policy "HOD and admins can manage HOD resources" on public.hod_resources
 notify pgrst, 'reload schema';
 
 -- ===========================================================================
--- PART 6 OF 8: supabase/migrations/20260919140000_sport_gym_madibaz.sql
+-- PART 7 OF 9: supabase/migrations/20260919140000_sport_gym_madibaz.sql
 -- Sport & gym: the real Madibaz clubs and how to join
 -- ===========================================================================
 
@@ -1132,7 +1211,7 @@ where not exists (
 notify pgrst, 'reload schema';
 
 -- ===========================================================================
--- PART 7 OF 8: supabase/migrations/20260919150000_shuttle_times_2026.sql
+-- PART 8 OF 9: supabase/migrations/20260919150000_shuttle_times_2026.sql
 -- Shuttle times: the real 2026 Gqeberha schedule
 -- ===========================================================================
 
@@ -1282,7 +1361,7 @@ where not exists (
 notify pgrst, 'reload schema';
 
 -- ===========================================================================
--- PART 8 OF 8: supabase/mentor_groups.sql
+-- PART 9 OF 9: supabase/mentor_groups.sql
 -- Mentor groups, join requests and QR codes
 -- ===========================================================================
 

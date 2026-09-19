@@ -13,6 +13,7 @@ const root = path.join(__dirname, '..');
 // The order matters: everything after the first file uses the role helpers it creates.
 const parts = [
   ['supabase/campus_features.sql', 'Tables, staff rules, tribes and chat, shuttle times, sport & gym, digital readiness'],
+  ['supabase/migrations/20260919213000_coordinator_crud_policies.sql', 'Coordinator repair: clears leftover rules so staff can add, edit and delete'],
   ['supabase/coordinator_content.sql', 'Coordinator content'],
   ['supabase/migrations/20260919120000_it_programmes.sql', 'School of IT programmes and advisors'],
   ['supabase/migrations/20260919130000_event_schedule.sql', 'Campus events schedule: date, time, cost and sign-up link'],

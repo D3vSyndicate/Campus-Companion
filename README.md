@@ -35,13 +35,14 @@ generated, so after changing any of the scripts run `node scripts/build-setup-sq
 It runs these, in this order:
 
 1. `supabase/campus_features.sql` (tables, staff rules, tribes and chat, shuttle times, sport & gym, digital readiness)
-2. `supabase/coordinator_content.sql`
-3. `supabase/migrations/20260919120000_it_programmes.sql` (School of IT programmes and advisors)
-4. `supabase/migrations/20260919130000_event_schedule.sql` (the campus events schedule)
-5. `supabase/hod.sql` (head of department content)
-6. `supabase/migrations/20260919140000_sport_gym_madibaz.sql` (the Madibaz clubs and how to join)
-7. `supabase/migrations/20260919150000_shuttle_times_2026.sql` (the 2026 Gqeberha shuttle schedule)
-8. `supabase/mentor_groups.sql` (mentor groups, join requests and QR codes)
+2. `supabase/migrations/20260919213000_coordinator_crud_policies.sql` (clears leftover rules so staff can save)
+3. `supabase/coordinator_content.sql`
+4. `supabase/migrations/20260919120000_it_programmes.sql` (School of IT programmes and advisors)
+5. `supabase/migrations/20260919130000_event_schedule.sql` (the campus events schedule)
+6. `supabase/hod.sql` (head of department content)
+7. `supabase/migrations/20260919140000_sport_gym_madibaz.sql` (the Madibaz clubs and how to join)
+8. `supabase/migrations/20260919150000_shuttle_times_2026.sql` (the 2026 Gqeberha shuttle schedule)
+9. `supabase/mentor_groups.sql` (mentor groups, join requests and QR codes)
 
 Login routing uses the signed-in user's Supabase Auth metadata. Set a user's
 role to `admin`, `coordinator`, `hod`, `mentor`, or `student` in `app_metadata.role` (preferred) or
