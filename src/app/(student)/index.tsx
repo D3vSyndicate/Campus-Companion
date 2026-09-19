@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Haptics from 'expo-haptics';
+import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -815,6 +816,12 @@ export default function HomeScreen() {
           end={{ x: 1, y: 1 }}
           style={styles.hero}
         >
+          <Image
+            source={require('../../../assets/images/coordinator-hero.png')}
+            style={styles.heroBackgroundImage}
+            contentFit="fill"
+          />
+          <View style={styles.heroImageOverlay} />
           {/* Decorative glow */}
 
           <View style={styles.heroGlowOne} />
@@ -1338,6 +1345,13 @@ const styles = StyleSheet.create({
     },
 
     elevation: 8,
+  },
+  heroBackgroundImage: {
+    ...StyleSheet.absoluteFill,
+  },
+  heroImageOverlay: {
+    ...StyleSheet.absoluteFill,
+    backgroundColor: 'rgba(4, 19, 29, 0.28)',
   },
 
   heroGlowOne: {

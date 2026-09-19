@@ -1,4 +1,5 @@
 import { useRouter } from 'expo-router';
+import { Image } from 'expo-image';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Header from '../../components/Header';
 import { ScaledText as Text } from '../../components/ScaledText';
@@ -47,7 +48,13 @@ export default function DashboardScreen() {
             },
           ]}
         >
-          <Text
+        <Image
+          source={require('../../../assets/images/coordinator-hero.png')}
+          style={styles.welcomeBackground}
+          contentFit="fill"
+        />
+        <View style={styles.welcomeOverlay} />
+        <Text
             style={[
               styles.greeting,
               { color: colors.accent },
@@ -127,9 +134,18 @@ const styles = StyleSheet.create({
 
   // Welcome Card
   welcomeCard: {
+    position: 'relative',
+    overflow: 'hidden',
     borderRadius: 20,
     padding: 24,
     marginBottom: 20,
+  },
+  welcomeBackground: {
+    ...StyleSheet.absoluteFill,
+  },
+  welcomeOverlay: {
+    ...StyleSheet.absoluteFill,
+    backgroundColor: 'rgba(4, 19, 29, 0.28)',
   },
 
   greeting: {

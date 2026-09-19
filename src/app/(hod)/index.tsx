@@ -1,4 +1,5 @@
 import { useRouter } from 'expo-router';
+import { Image } from 'expo-image';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Header from '../../components/Header';
 import { useTheme } from '../../theme/ThemeContext';
@@ -17,6 +18,12 @@ export default function HodDashboard() {
     <Header title="HOD Dashboard" />
     <ScrollView contentContainerStyle={styles.content}>
       <View style={[styles.welcome, { backgroundColor: colors.headerBackground }]}>
+        <Image
+          source={require('../../../assets/images/coordinator-hero.png')}
+          style={styles.welcomeBackground}
+          contentFit="fill"
+        />
+        <View style={styles.welcomeOverlay} />
         <Text style={[styles.eyebrow, { color: colors.accent }]}>HEAD OF DEPARTMENT</Text>
         <Text style={[styles.title, { color: colors.headerText }]}>Support your department</Text>
         <Text style={[styles.description, { color: colors.headerText }]}>Give students one dependable place for programme guidance, expectations, assignments, and support.</Text>
@@ -30,5 +37,5 @@ export default function HodDashboard() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 }, content: { padding: 16, paddingBottom: 32 }, welcome: { borderRadius: 18, padding: 22, marginBottom: 18 }, eyebrow: { fontSize: 11, fontWeight: '800', letterSpacing: 1, marginBottom: 8 }, title: { fontSize: 25, fontWeight: '800', marginBottom: 8 }, description: { fontSize: 14, lineHeight: 21, opacity: 0.88 }, card: { borderWidth: 1, borderRadius: 14, padding: 18, marginBottom: 12 }, cardTitle: { fontSize: 17, fontWeight: '700' }, cardDescription: { fontSize: 13, lineHeight: 19, marginTop: 5 },
+  container: { flex: 1 }, content: { padding: 16, paddingBottom: 32 }, welcome: { position: 'relative', overflow: 'hidden', borderRadius: 18, padding: 22, marginBottom: 18 }, welcomeBackground: { ...StyleSheet.absoluteFill }, welcomeOverlay: { ...StyleSheet.absoluteFill, backgroundColor: 'rgba(4, 19, 29, 0.28)' }, eyebrow: { fontSize: 11, fontWeight: '800', letterSpacing: 1, marginBottom: 8 }, title: { fontSize: 25, fontWeight: '800', marginBottom: 8 }, description: { fontSize: 14, lineHeight: 21, opacity: 0.88 }, card: { borderWidth: 1, borderRadius: 14, padding: 18, marginBottom: 12 }, cardTitle: { fontSize: 17, fontWeight: '700' }, cardDescription: { fontSize: 13, lineHeight: 19, marginTop: 5 },
 });
