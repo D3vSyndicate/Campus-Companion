@@ -17,13 +17,13 @@ type AuthContextValue = {
   signOut: () => Promise<void>;
 };
 
-export type UserRole = 'admin' | 'coordinator' | 'student';
+export type UserRole = 'admin' | 'coordinator' | 'hod' | 'student';
 
 export function getUserRole(user: User | null): UserRole | null {
   // app_metadata can only be set by the server. user_metadata is editable by the
   // user (signUp accepts it), so it may only ever grant the student role.
   const trusted = user?.app_metadata?.role;
-  if (trusted === 'admin' || trusted === 'coordinator' || trusted === 'student') return trusted;
+  if (trusted === 'admin' || trusted === 'coordinator' || trusted === 'hod' || trusted === 'student') return trusted;
   return user?.user_metadata?.role === 'student' ? 'student' : null;
 }
 

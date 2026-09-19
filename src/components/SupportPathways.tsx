@@ -10,17 +10,14 @@ import { ScaledText as Text } from './ScaledText';
 type Pathway = {
   id: string;
   need: string;
-  category: string;
   contact: string;
-  email: string;
   action: string;
   relatedFaq: string;
-  resourceUrl: string;
-  resourceLabel: string;
-  order: number;
+  resource: string;
 };
 
 const str = (value: unknown) => String(value ?? '').trim();
+const IS_LINK = /^https?:\/\//i;
 
 // "I need help with..." — starts from what the student is feeling or facing, then points to a next step.
 export function SupportPathways() {
@@ -34,7 +31,7 @@ export function SupportPathways() {
 
   useEffect(() => {
     void (async () => {
-      const { data, error } = await fetchWithOfflineFallback('support_pathways');
+      const { data, error } = await fetchWithOfflineFallback('Support_pathway');
       if (error) console.error('Failed to load support pathways.', error);
 
       setPathways(
@@ -42,20 +39,15 @@ export function SupportPathways() {
           .map((row, index) => {
             const item = row as Record<string, unknown>;
             return {
-              id: str(item.support_pathway_id) || String(index),
+              id: str(item.support_pathway_Id) || String(index),
               need: str(item.student_need),
-              category: str(item.category),
               contact: str(item.recommended_contact),
-              email: str(item.contact_email),
               action: str(item.recommended_action),
               relatedFaq: str(item.related_faq),
-              resourceUrl: str(item.related_resource_url),
-              resourceLabel: str(item.related_resource_label),
-              order: Number(item.sort_order ?? 0),
+              resource: str(item.related_resource),
             };
           })
-          .filter((pathway) => pathway.need)
-          .sort((a, b) => a.order - b.order),
+          .filter((pathway) => pathway.need),
       );
       setLoading(false);
     })();
@@ -84,7 +76,6 @@ export function SupportPathways() {
               </View>
               <View style={styles.rowText}>
                 <Text style={[styles.need, { color: colors.text }]}>{pathway.need}</Text>
-                {pathway.category ? <Text style={[styles.category, { color: colors.textSecondary }]}>{pathway.category}</Text> : null}
               </View>
               <Ionicons name={open ? 'chevron-up' : 'chevron-down'} size={18} color={colors.textSecondary} />
             </TouchableOpacity>
@@ -105,16 +96,14 @@ export function SupportPathways() {
                   </>
                 ) : null}
 
-                <View style={styles.actions}>
-                  {pathway.email ? (
-                    <TouchableOpacity
-                      style={[styles.button, { backgroundColor: colors.accent }]}
-                      onPress={() => void Linking.openURL(`mailto:${pathway.email}`)}
-                    >
-                      <Text style={styles.buttonText}>{t('common.emailThem')}</Text>
-                    </TouchableOpacity>
-                  ) : null}
+                {pathway.resource && !IS_LINK.test(pathway.resource) ? (
+                  <>
+                    <Text style={[styles.label, { color: colors.accent }]}>{t('common.alsoSee')}</Text>
+                    <Text style={[styles.body, { color: colors.text }]}>{pathway.resource}</Text>
+                  </>
+                ) : null}
 
+                <View style={styles.actions}>
                   {pathway.relatedFaq ? (
                     <TouchableOpacity
                       style={[styles.button, styles.outlined, { borderColor: colors.border }]}
@@ -126,14 +115,12 @@ export function SupportPathways() {
                     </TouchableOpacity>
                   ) : null}
 
-                  {pathway.resourceUrl ? (
+                  {IS_LINK.test(pathway.resource) ? (
                     <TouchableOpacity
                       style={[styles.button, styles.outlined, { borderColor: colors.border }]}
-                      onPress={() => void Linking.openURL(pathway.resourceUrl)}
+                      onPress={() => void Linking.openURL(pathway.resource)}
                     >
-                      <Text style={[styles.buttonText, { color: colors.text }]}>
-                        {pathway.resourceLabel || t('common.openResource')}
-                      </Text>
+                      <Text style={[styles.buttonText, { color: colors.text }]}>{t('common.openResource')}</Text>
                     </TouchableOpacity>
                   ) : null}
                 </View>
@@ -156,7 +143,6 @@ const styles = StyleSheet.create({
   icon: { width: 36, height: 36, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
   rowText: { flex: 1 },
   need: { fontSize: 15, fontWeight: '700', lineHeight: 20 },
-  category: { fontSize: 12, marginTop: 2 },
   details: { borderTopWidth: 1, padding: 14 },
   label: { fontSize: 11, fontWeight: '800', letterSpacing: 0.8, textTransform: 'uppercase', marginTop: 4, marginBottom: 4 },
   body: { fontSize: 14, lineHeight: 20, marginBottom: 8 },

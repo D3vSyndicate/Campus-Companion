@@ -55,6 +55,14 @@ export default function StudentLayout() {
           }}
         />
         <Tabs.Screen
+          name="programme"
+          options={{
+            href: null,
+            title: 'Programme',
+            tabBarIcon: ({ color }) => <Ionicons name="school-outline" size={TAB_ICON_SIZE} color={color} />,
+          }}
+        />
+        <Tabs.Screen
           name="faqs"
           options={{
             href: null,

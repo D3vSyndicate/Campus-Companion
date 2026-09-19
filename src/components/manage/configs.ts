@@ -105,31 +105,33 @@ export const announcementConfig: ManageConfig = {
 };
 
 export const supportConfig: ManageConfig = {
-  table: 'support_pathways',
-  pk: 'support_pathway_id',
+  table: 'Support_pathway',
+  pk: 'support_pathway_Id',
   title: 'Support pathways',
-  description: 'The "I need help with..." options students see in the Support tab. Say what to do next.',
+  description: 'The "I need help with..." options students see in the Support tab. Say what to do next, and who can help.',
   itemNoun: 'Pathway',
-  orderBy: [{ column: 'sort_order' }],
+  orderBy: [{ column: 'student_need' }],
   fields: [
-    { key: 'student_need', label: 'Student need', type: 'text', required: true, placeholder: 'I am struggling with a module' },
-    {
-      key: 'category',
-      label: 'Category',
-      type: 'select',
-      allowCustom: true,
-      options: asOptions(['Academic support', 'Wellness', 'Financial aid', 'Disability support', 'IT support', 'Peer mentoring', 'Study skills', 'Basic needs']),
-    },
-    { key: 'recommended_contact', label: 'Recommended contact', type: 'text', placeholder: 'Your programme coordinator' },
-    { key: 'contact_email', label: 'Contact email', type: 'text', placeholder: 'name@mandela.ac.za' },
+    { key: 'student_need', label: 'Student need', type: 'text', required: true, placeholder: 'I need academic help' },
+    { key: 'recommended_contact', label: 'Recommended contact', type: 'text', placeholder: 'Lecturer or Academic Advisor' },
     { key: 'recommended_action', label: 'Recommended next step', type: 'multiline', placeholder: 'Asking early is a smart academic habit. Start by...' },
-    { key: 'related_faq', label: 'Related FAQ category', type: 'text', placeholder: 'Funda', help: 'Students get a shortcut to FAQs in this category.' },
-    { key: 'related_resource_url', label: 'Resource link', type: 'text', placeholder: 'https://...' },
-    { key: 'related_resource_label', label: 'Resource link label', type: 'text', placeholder: 'Open study skills guide' },
-    { key: 'sort_order', label: 'Order (1 shows first)', type: 'number', default: 0 },
+    {
+      key: 'related_faq',
+      label: 'Related FAQ',
+      type: 'text',
+      placeholder: 'Funda',
+      help: 'An FAQ category (like Funda) or the exact question. Students get a shortcut to those answers.',
+    },
+    {
+      key: 'related_resource',
+      label: 'Related resource',
+      type: 'text',
+      placeholder: 'Emthonjeni Student Wellness, or a link starting with https://',
+      help: 'The office or service to visit. A link opens in the browser.',
+    },
   ],
   listTitle: (row) => text(row, 'student_need'),
-  listSubtitle: (row) => [text(row, 'category'), text(row, 'recommended_contact')].filter(Boolean).join(' · '),
+  listSubtitle: (row) => text(row, 'recommended_contact'),
 };
 
 export const shuttleConfig: ManageConfig = {

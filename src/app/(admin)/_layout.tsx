@@ -1,6 +1,7 @@
 import { Stack } from 'expo-router';
 import { AuthGate } from '../../components/AuthGate';
 import { ContactsProvider } from '../../context/ContactsContext';
+import { FaqsProvider } from '../../context/FaqsContext';
 import { ScheduleProvider } from '../../context/ScheduleContext';
 import { ThemeProvider } from '../../theme/ThemeContext';
 
@@ -53,13 +54,27 @@ function AdminStack() {
       />
 
       <Stack.Screen name="announcements" options={{ title: 'Announcements' }} />
-      <Stack.Screen name="faqs" options={{ title: 'FAQs' }} />
       <Stack.Screen name="venue" options={{ title: 'Venue Information' }} />
       <Stack.Screen name="checklist" options={{ title: 'Checklist' }} />
       <Stack.Screen name="support" options={{ title: 'Support Pathways' }} />
       <Stack.Screen name="shuttle" options={{ title: 'Shuttle Times' }} />
       <Stack.Screen name="digital" options={{ title: 'Digital Readiness Modules' }} />
       <Stack.Screen name="digital-steps" options={{ title: 'Digital Readiness Steps' }} />
+
+      <Stack.Screen
+        name="faqs/index"
+        options={{ title: 'FAQs' }}
+      />
+
+      <Stack.Screen
+        name="faqs/new"
+        options={{ title: 'New FAQ' }}
+      />
+
+      <Stack.Screen
+        name="faqs/[id]"
+        options={{ title: 'Edit FAQ' }}
+      />
     </Stack>
   );
 }
@@ -69,7 +84,9 @@ export default function AdminLayout() {
       <ThemeProvider>
         <ScheduleProvider>
           <ContactsProvider>
-            <AdminStack />
+            <FaqsProvider>
+              <AdminStack />
+            </FaqsProvider>
           </ContactsProvider>
         </ScheduleProvider>
       </ThemeProvider>

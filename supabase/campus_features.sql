@@ -34,7 +34,7 @@ declare
   t text;
   r record;
 begin
-  foreach t in array array['Contact', 'FAQ', 'Announcement', 'schedule_items', 'Venue', 'checklist_item']
+  foreach t in array array['Contact', 'FAQ', 'Announcement', 'schedule_items', 'Venue', 'checklist_item', 'Support_pathway']
   loop
     execute format('alter table public.%I enable row level security', t);
 
@@ -60,22 +60,9 @@ create policy cc_checklist_toggle on public.checklist_item
   for update to authenticated using (true) with check (true);
 
 -- ---------------------------------------------------------------------------
--- 2. Support pathways ("I need help with...")
+-- 2. Support pathways ("I need help with...") use the existing "Support_pathway"
+--    table, covered by the policies in section 1. Nothing new to create here.
 -- ---------------------------------------------------------------------------
-
-create table if not exists public.support_pathways (
-  support_pathway_id     uuid primary key default gen_random_uuid(),
-  student_need           text not null,
-  category               text,
-  recommended_contact    text,
-  contact_email          text,
-  recommended_action     text,
-  related_faq            text,
-  related_resource_url   text,
-  related_resource_label text,
-  sort_order             int  not null default 0,
-  created_at             timestamptz not null default now()
-);
 
 -- ---------------------------------------------------------------------------
 -- 3. Shuttle times (morning / afternoon / night shifts)
@@ -156,7 +143,7 @@ declare
   t text;
   r record;
 begin
-  foreach t in array array['support_pathways', 'shuttle_times', 'readiness_modules', 'readiness_steps', 'readiness_progress']
+  foreach t in array array['shuttle_times', 'readiness_modules', 'readiness_steps', 'readiness_progress']
   loop
     execute format('alter table public.%I enable row level security', t);
     for r in select policyname from pg_policies where schemaname = 'public' and tablename = t
@@ -166,11 +153,6 @@ begin
   end loop;
 end
 $$;
-
-create policy cc_read on public.support_pathways for select to anon, authenticated using (true);
-create policy cc_staff_insert on public.support_pathways for insert to authenticated with check (public.is_staff());
-create policy cc_staff_update on public.support_pathways for update to authenticated using (public.is_staff()) with check (public.is_staff());
-create policy cc_staff_delete on public.support_pathways for delete to authenticated using (public.is_staff());
 
 create policy cc_read on public.shuttle_times for select to anon, authenticated using (is_active or public.is_staff());
 create policy cc_staff_insert on public.shuttle_times for insert to authenticated with check (public.is_staff());
@@ -388,26 +370,6 @@ $$;
 -- ---------------------------------------------------------------------------
 -- 7. Starter content. Edit or delete from the coordinator screens afterwards.
 -- ---------------------------------------------------------------------------
-
-insert into public.support_pathways (student_need, category, recommended_contact, recommended_action, related_faq, sort_order)
-select v.student_need, v.category, v.recommended_contact, v.recommended_action, v.related_faq, v.sort_order
-from (values
-  ('I am struggling with a module',          'Academic support',  'Your lecturer or programme coordinator',
-   'Write down the exact part you are stuck on, then ask one focused question. Asking early is a smart academic habit.', 'Modules', 1),
-  ('I am feeling overwhelmed or anxious',    'Wellness',          'Student counselling and wellness services',
-   'You do not need the perfect words. Book a chat with a counsellor. Support is confidential and free for students.', 'Support', 2),
-  ('I cannot pay for something I need',      'Financial aid',     'Financial aid office',
-   'Speak to the financial aid office as early as you can. Many students need this help.', 'Registration', 3),
-  ('I need learning support or accessibility help', 'Disability support', 'Disability services',
-   'Let the disability unit know what would help you learn. They will guide you on the next step.', null, 4),
-  ('I cannot log in or connect to Wi-Fi',    'IT support',        'IT Services (ITS) service desk',
-   'Check your username, password and internet connection first. If it still does not work, contact the ITS service desk.', 'Wi-fi', 5),
-  ('I want a mentor or someone who has been where I am', 'Peer mentoring', 'Your How2buddy mentor',
-   'Your mentor is a senior student who remembers what the first weeks feel like. Say hello in your Tribe chat.', 'Orientation', 6),
-  ('I need help studying or managing my time', 'Study skills',   'Academic advisor',
-   'Try short focused study blocks and plan your week around your timetable. An advisor can help you build a routine.', null, 7)
-) as v(student_need, category, recommended_contact, recommended_action, related_faq, sort_order)
-where not exists (select 1 from public.support_pathways p where p.student_need = v.student_need);
 
 -- SAMPLE shuttle times: replace with the real timetable before term starts.
 insert into public.shuttle_times (shift, route_name, pickup_point, dropoff_point, departure_time, days, notes)

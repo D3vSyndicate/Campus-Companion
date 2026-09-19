@@ -57,6 +57,8 @@ export default function LoginScreen() {
     const destination =
       result.role === 'coordinator'
         ? '/(coordinator)'
+        : result.role === 'hod'
+          ? '/(hod)'
         : result.role === 'admin'
           ? '/(admin)'
           : '/(student)';

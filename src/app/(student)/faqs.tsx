@@ -66,12 +66,22 @@ export default function FAQScreen() {
     return [...seen.values()].sort((a, b) => a.localeCompare(b));
   }, [faqs]);
 
-  // Open on the category a support pathway linked to, once we know which categories exist.
+  // A support pathway can link to a category ("Funda") or to one exact question. Open on whichever
+  // matches; if neither does, just show everything.
   useEffect(() => {
     if (!linkedCategory) return;
-    const match = categories.find((name) => name.toLowerCase() === linkedCategory.trim().toLowerCase());
-    if (match) setCategory(match);
-  }, [linkedCategory, categories]);
+    const wanted = linkedCategory.trim().toLowerCase();
+    const categoryMatch = categories.find((name) => name.toLowerCase() === wanted);
+    if (categoryMatch) {
+      setCategory(categoryMatch);
+      return;
+    }
+    const questionMatch = faqs.find((faq) => faq.question.toLowerCase() === wanted);
+    if (questionMatch) {
+      setCategory(questionMatch.category);
+      setExpandedId(questionMatch.id);
+    }
+  }, [linkedCategory, categories, faqs]);
 
   const sections = useMemo(() => {
     const query = search.trim().toLowerCase();
