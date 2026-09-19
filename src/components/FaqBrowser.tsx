@@ -33,9 +33,11 @@ type Props = {
   canShare?: boolean;
   // Mentors can tell coordinators about a question that is not answered yet.
   canSuggest?: boolean;
+  // Students reach FAQs from a card, so they need a way back. Buddies have it as a tab.
+  showBack?: boolean;
 };
 
-export function FaqBrowser({ canShare = false, canSuggest = false }: Props) {
+export function FaqBrowser({ canShare = false, canSuggest = false, showBack = false }: Props) {
   const { colors } = useTheme();
   const { t } = useTranslation();
   const params = useLocalSearchParams<{ category?: string | string[] }>();
@@ -134,6 +136,8 @@ export function FaqBrowser({ canShare = false, canSuggest = false }: Props) {
         title={t('common.faqsTitle')}
         subtitle={t('common.faqsSubtitle')}
         showSearch={false}
+        showBack={showBack}
+        backFallback="/(student)"
       />
 
       <TextInput

@@ -6,7 +6,8 @@ import { ActivityIndicator, Linking, Platform, Pressable, ScrollView, StyleSheet
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { fetchWithOfflineFallback } from '../../lib/offlineData';
 import { highlight, prepare, search, snippet, type PreparedDoc, type SearchDoc, type SearchHit, type SearchKind } from '../../lib/search';
-import { buildSearchDocs } from '../../lib/searchDocs';
+import { buildSearchDocs, type SearchSources } from '../../lib/searchDocs';
+import { SEARCH_SCOPES, type SearchScopeId } from '../../lib/searchScopes';
 import { useTheme } from '../../theme/ThemeContext';
 import { ScaledText as Text } from '../ScaledText';
 import { ShameResilientBanner } from '../ShameResilientBanner';
@@ -15,9 +16,40 @@ export type SearchArea = 'student' | 'mentor';
 
 // Each role keeps to its own screens, so a result never sends someone somewhere they cannot go.
 const ROUTES = {
-  student: { home: '/(student)', schedule: '/(student)/schedule', faqs: '/(student)/faqs', support: '/(student)/contacts', map: '/(student)/map', guides: '/(student)/digital' },
-  mentor: { home: '/(mentor)', schedule: '/(mentor)/schedule', faqs: '/(mentor)/faqs', support: '/(mentor)/refer', map: '/(mentor)/map', guides: null },
+  student: {
+    home: '/(student)', schedule: '/(student)/schedule', faqs: '/(student)/faqs', support: '/(student)/support', map: '/(student)/map',
+    contacts: '/(student)/contacts', guides: '/(student)/digital', sportGym: '/(student)/sport-gym', programme: '/(student)/it-programme-detail',
+    announcements: '/(student)', checklist: '/(student)/checklist', supportInfo: '/(student)/support', shuttle: '/(student)', profile: '/(student)/profile',
+  },
+  mentor: {
+    home: '/(mentor)', schedule: '/(mentor)/schedule', faqs: '/(mentor)/faqs', support: '/(mentor)/refer', map: '/(mentor)/map',
+    contacts: '/(mentor)/refer', guides: null, sportGym: null, programme: null,
+    announcements: '/(mentor)/announcements', checklist: null, supportInfo: null, shuttle: null, profile: '/(mentor)/profile',
+  },
 } as const;
+
+// What each role can find. A buddy has no checklist, guides or programmes screens, so none are searched.
+const AREA_KINDS: Record<SearchArea, SearchKind[]> = {
+  student: ['faq', 'support', 'schedule', 'venue', 'place', 'contact', 'guide', 'event', 'sport', 'programme', 'announcement', 'checklist', 'info', 'shuttle', 'setting'],
+  mentor: ['faq', 'support', 'schedule', 'venue', 'place', 'contact', 'event', 'announcement', 'setting'],
+};
+
+// Which table feeds which documents. Only the tables a search needs are loaded.
+const SOURCES: { key: Exclude<keyof SearchSources, 'today'>; table: string; kinds: SearchKind[]; core?: boolean }[] = [
+  { key: 'faqs', table: 'FAQ', kinds: ['faq'], core: true },
+  { key: 'support', table: 'Support_pathway', kinds: ['support'], core: true },
+  { key: 'contacts', table: 'Contact', kinds: ['contact'], core: true },
+  { key: 'venues', table: 'Venue', kinds: ['venue', 'schedule', 'event'], core: true },
+  { key: 'schedule', table: 'schedule_items', kinds: ['schedule'], core: true },
+  { key: 'guides', table: 'digital_readiness', kinds: ['guide'] },
+  { key: 'events', table: 'event', kinds: ['event'] },
+  { key: 'sport', table: 'sport_recreation', kinds: ['sport'] },
+  { key: 'programmes', table: 'it_programmes', kinds: ['programme'] },
+  { key: 'announcements', table: 'Announcement', kinds: ['announcement'] },
+  { key: 'checklist', table: 'checklist_item', kinds: ['checklist'] },
+  { key: 'info', table: 'coordinator_content', kinds: ['info'] },
+  { key: 'shuttle', table: 'shuttle_times', kinds: ['shuttle'] },
+];
 
 const KIND_META: Record<SearchKind, { label: string; icon: keyof typeof Ionicons.glyphMap; color: string }> = {
   faq: { label: 'Answers', icon: 'help-circle-outline', color: '#2563EB' },
@@ -27,10 +59,18 @@ const KIND_META: Record<SearchKind, { label: string; icon: keyof typeof Ionicons
   place: { label: 'Campus buildings', icon: 'business-outline', color: '#64748B' },
   contact: { label: 'People to contact', icon: 'people-outline', color: '#EA580C' },
   guide: { label: 'Digital guides', icon: 'laptop-outline', color: '#0891B2' },
+  event: { label: 'Events', icon: 'ticket-outline', color: '#DB2777' },
+  sport: { label: 'Sport & gym', icon: 'barbell-outline', color: '#16A34A' },
+  programme: { label: 'Programmes', icon: 'school-outline', color: '#4F46E5' },
+  announcement: { label: 'Announcements', icon: 'megaphone-outline', color: '#B45309' },
+  checklist: { label: 'Checklist', icon: 'checkmark-circle-outline', color: '#15803D' },
+  info: { label: 'Support information', icon: 'information-circle-outline', color: '#0F766E' },
+  shuttle: { label: 'Shuttle times', icon: 'bus-outline', color: '#0369A1' },
+  setting: { label: 'Settings', icon: 'settings-outline', color: '#475569' },
 };
 
-const POPULAR = ['Wi-Fi', 'Printing', 'Funda', 'Student email', 'Library', 'Registration', 'Counselling', 'Clinic'];
 const RECENT_KEY = 'search:recent';
+const WHOLE_APP_NOTE = 'To search the whole app, use the search box on the Home screen.';
 const GROUP_PREVIEW = 3;
 const ink = '#071B2C';
 
@@ -147,12 +187,21 @@ function Chip({ label, count, active, onPress }: { label: string; count?: number
 
 // ---- The screen -------------------------------------------------------------------------------
 
-export function SearchScreen({ area, initialQuery = '' }: { area: SearchArea; initialQuery?: string }) {
+export function SearchScreen({ area, initialQuery = '', scope = 'all' }: { area: SearchArea; initialQuery?: string; scope?: SearchScopeId }) {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const routes = ROUTES[area];
   const inputRef = useRef<TextInput>(null);
+
+  // The Home search covers everything the role can see. Any other screen searches only its own content.
+  const scopeInfo = SEARCH_SCOPES[scope];
+  const scoped = scope !== 'all';
+  const allowedKinds = useMemo(
+    () => AREA_KINDS[area].filter((kind) => !scopeInfo.kinds || scopeInfo.kinds.includes(kind)),
+    [area, scopeInfo],
+  );
+  const recentKey = `${RECENT_KEY}:${scope}`;
 
   const [query, setQuery] = useState(initialQuery);
   const [prepared, setPrepared] = useState<PreparedDoc[]>([]);
@@ -169,27 +218,22 @@ export function SearchScreen({ area, initialQuery = '' }: { area: SearchArea; in
     let active = true;
 
     void (async () => {
-      const includeGuides = area === 'student';
-      const names = ['FAQ', 'Support_pathway', 'Contact', 'Venue', 'schedule_items', ...(includeGuides ? ['digital_readiness'] : [])];
-      const results = await Promise.all(names.map((name) => fetchWithOfflineFallback(name)));
+      // Only the tables this search needs are loaded.
+      const needed = SOURCES.filter((source) => source.kinds.some((kind) => allowedKinds.includes(kind)));
+      const results = await Promise.all(needed.map((source) => fetchWithOfflineFallback(source.table)));
       if (!active) return;
 
-      const rows = (index: number): Record<string, unknown>[] => (Array.isArray(results[index]?.data) ? (results[index].data as Record<string, unknown>[]) : []);
-      // Only the core tables decide whether to say "offline". A guide table that is not set up yet is not a connection problem.
-      setOffline(results.slice(0, 5).some((result) => result.fromCache && Boolean(result.error)));
+      const sources: SearchSources = { today: localIsoDate(new Date()) };
+      needed.forEach((source, index) => {
+        const data = results[index]?.data;
+        sources[source.key] = (Array.isArray(data) ? data : []) as Record<string, unknown>[];
+      });
 
-      const docs = buildSearchDocs(
-        {
-          faqs: rows(0),
-          support: rows(1),
-          contacts: rows(2),
-          venues: rows(3),
-          schedule: rows(4),
-          guides: includeGuides ? rows(5) : [],
-          today: localIsoDate(new Date()),
-        },
-        { includeGuides },
-      );
+      // Only the core tables decide whether to say "offline". A table that is not set up yet is not a connection problem.
+      setOffline(needed.some((source, index) => source.core && results[index].fromCache && Boolean(results[index].error)));
+
+      // Everything loaded is turned into documents, then only this search's kinds are kept.
+      const docs = buildSearchDocs(sources).filter((doc) => allowedKinds.includes(doc.kind));
       setPrepared(prepare(docs));
       setLoading(false);
     })();
@@ -197,7 +241,7 @@ export function SearchScreen({ area, initialQuery = '' }: { area: SearchArea; in
     return () => {
       active = false;
     };
-  }, [area]);
+  }, [allowedKinds]);
 
   // A link such as /search?q=wifi opens the screen already searching.
   useEffect(() => {
@@ -207,27 +251,27 @@ export function SearchScreen({ area, initialQuery = '' }: { area: SearchArea; in
   useEffect(() => {
     void (async () => {
       try {
-        const saved = await AsyncStorage.getItem(RECENT_KEY);
-        if (saved) setRecent(JSON.parse(saved) as string[]);
+        const saved = await AsyncStorage.getItem(recentKey);
+        setRecent(saved ? (JSON.parse(saved) as string[]) : []);
       } catch {
         // Recent searches are a convenience only.
       }
     })();
-  }, []);
+  }, [recentKey]);
 
   const remember = useCallback((text: string) => {
     const value = text.trim();
     if (value.length < 2) return;
     setRecent((current) => {
       const next = [value, ...current.filter((entry) => entry.toLowerCase() !== value.toLowerCase())].slice(0, 5);
-      AsyncStorage.setItem(RECENT_KEY, JSON.stringify(next)).catch(() => undefined);
+      AsyncStorage.setItem(recentKey, JSON.stringify(next)).catch(() => undefined);
       return next;
     });
-  }, []);
+  }, [recentKey]);
 
   const forgetRecent = () => {
     setRecent([]);
-    AsyncStorage.removeItem(RECENT_KEY).catch(() => undefined);
+    AsyncStorage.removeItem(recentKey).catch(() => undefined);
   };
 
   // ---- Searching ------------------------------------------------------------------------------
@@ -279,7 +323,36 @@ export function SearchScreen({ area, initialQuery = '' }: { area: SearchArea; in
         break;
       case 'contact':
         if (doc.data.email) list.push({ label: 'Email', icon: 'mail-outline', primary: true, onPress: () => { remember(trimmed); void Linking.openURL(`mailto:${doc.data.email}`); } });
-        else list.push({ label: 'Open help options', icon: 'hand-left-outline', primary: true, onPress: () => go(routes.support) });
+        else list.push({ label: 'See who to contact', icon: 'people-outline', primary: true, onPress: () => go(routes.contacts) });
+        break;
+      case 'event':
+        list.push({ label: 'See the event', icon: 'ticket-outline', primary: true, onPress: () => go(routes.schedule, { tab: 'events', focus: doc.data.id }) });
+        if (doc.data.venue) list.push({ label: 'Show me where', icon: 'location-outline', onPress: () => go(routes.map, { q: doc.data.venue }) });
+        break;
+      case 'sport':
+        if (routes.sportGym) {
+          const gym = doc.data.tab === 'gym';
+          list.push({ label: gym ? 'How to sign up' : 'How to join', icon: gym ? 'barbell-outline' : 'football-outline', primary: true, onPress: () => go(routes.sportGym, { tab: doc.data.tab, focus: doc.data.id }) });
+        }
+        if (doc.data.venue) list.push({ label: 'Show me where', icon: 'location-outline', onPress: () => go(routes.map, { q: doc.data.venue }) });
+        break;
+      case 'programme':
+        if (routes.programme) list.push({ label: 'See the programme', icon: 'school-outline', primary: true, onPress: () => go(routes.programme, { id: doc.data.id }) });
+        break;
+      case 'announcement':
+        if (routes.announcements) list.push({ label: area === 'mentor' ? 'See announcements' : 'See it on Home', icon: 'megaphone-outline', primary: true, onPress: () => go(routes.announcements) });
+        break;
+      case 'checklist':
+        if (routes.checklist) list.push({ label: 'Open checklist', icon: 'checkmark-circle-outline', primary: true, onPress: () => go(routes.checklist) });
+        break;
+      case 'info':
+        if (routes.supportInfo) list.push({ label: 'Open support', icon: 'help-buoy-outline', primary: true, onPress: () => go(routes.supportInfo) });
+        break;
+      case 'shuttle':
+        if (routes.shuttle) list.push({ label: 'See shuttle times', icon: 'bus-outline', primary: true, onPress: () => go(routes.shuttle) });
+        break;
+      case 'setting':
+        list.push({ label: 'Open profile', icon: 'settings-outline', primary: true, onPress: () => go(routes.profile) });
         break;
       case 'guide':
         if (routes.guides) list.push({ label: 'Open the guide', icon: 'laptop-outline', primary: true, onPress: () => go(routes.guides, { guide: doc.data.id || doc.data.title }) });
@@ -330,17 +403,19 @@ export function SearchScreen({ area, initialQuery = '' }: { area: SearchArea; in
   } else if (!trimmed) {
     body = (
       <View>
-        <Text style={[styles.heading, { color: colors.text }]}>What do you need to find?</Text>
-        <Text style={[styles.hint, { color: colors.textSecondary }]}>
-          Search the schedule, answers, contacts, venues and buildings, and help options in one place. Many new students search for the same things.
-        </Text>
+        <Text style={[styles.heading, { color: colors.text }]}>{scoped ? `Search ${scopeInfo.label}` : 'What do you need to find?'}</Text>
+        <Text style={[styles.hint, { color: colors.textSecondary }]}>{scopeInfo.hint}</Text>
 
-        <Text style={[styles.label, { color: colors.textSecondary }]}>Popular searches</Text>
-        <View style={styles.chipRow}>
-          {POPULAR.map((text) => (
-            <Chip key={text} label={text} active={false} onPress={() => useSuggestion(text)} />
-          ))}
-        </View>
+        {scopeInfo.suggestions.length ? (
+          <>
+            <Text style={[styles.label, { color: colors.textSecondary }]}>{scoped ? 'Try' : 'Popular searches'}</Text>
+            <View style={styles.chipRow}>
+              {scopeInfo.suggestions.map((text) => (
+                <Chip key={text} label={text} active={false} onPress={() => useSuggestion(text)} />
+              ))}
+            </View>
+          </>
+        ) : null}
 
         {recent.length ? (
           <View>
@@ -365,21 +440,27 @@ export function SearchScreen({ area, initialQuery = '' }: { area: SearchArea; in
       <View>
         <Text style={[styles.heading, { color: colors.text }]}>We could not find that yet</Text>
         <Text style={[styles.hint, { color: colors.textSecondary }]}>
-          That is okay. Try a shorter or different word, like the number on a building or a word like library, food, timetable or clinic.
+          {scoped
+            ? `Nothing in ${scopeInfo.label} matches that. Try a shorter or different word. ${WHOLE_APP_NOTE}`
+            : 'That is okay. Try a shorter or different word, like the number on a building or a word like library, food, timetable or clinic.'}
         </Text>
-        <View style={styles.chipRow}>
-          {POPULAR.slice(0, 5).map((text) => (
-            <Chip key={text} label={text} active={false} onPress={() => useSuggestion(text)} />
-          ))}
-        </View>
-        <View style={[styles.help, { backgroundColor: colors.card, borderColor: colors.border }]}>
-          <Ionicons name="hand-left-outline" size={22} color={colors.accent} />
-          <View style={styles.helpText}>
-            <Text style={[styles.cardTitle, { color: colors.text }]}>Still stuck?</Text>
-            <Text style={[styles.cardSub, { color: colors.textSecondary }]}>Tell us what you need help with, and we will guide you to the right place.</Text>
-            <ActionButton action={{ label: 'Open help options', icon: 'arrow-forward', primary: true, onPress: () => go(routes.support) }} />
+        {scopeInfo.suggestions.length ? (
+          <View style={styles.chipRow}>
+            {scopeInfo.suggestions.slice(0, 5).map((text) => (
+              <Chip key={text} label={text} active={false} onPress={() => useSuggestion(text)} />
+            ))}
           </View>
-        </View>
+        ) : null}
+        {scoped ? null : (
+          <View style={[styles.help, { backgroundColor: colors.card, borderColor: colors.border }]}>
+            <Ionicons name="hand-left-outline" size={22} color={colors.accent} />
+            <View style={styles.helpText}>
+              <Text style={[styles.cardTitle, { color: colors.text }]}>Still stuck?</Text>
+              <Text style={[styles.cardSub, { color: colors.textSecondary }]}>Tell us what you need help with, and we will guide you to the right place.</Text>
+              <ActionButton action={{ label: 'Open help options', icon: 'arrow-forward', primary: true, onPress: () => go(routes.support) }} />
+            </View>
+          </View>
+        )}
       </View>
     );
   } else {
@@ -444,14 +525,14 @@ export function SearchScreen({ area, initialQuery = '' }: { area: SearchArea; in
                 setKindFilter('all');
               }}
               onSubmitEditing={() => remember(trimmed)}
-              placeholder="Search schedule, FAQs, contacts, venues..."
+              placeholder={scopeInfo.placeholder}
               placeholderTextColor={colors.textSecondary}
               style={[styles.inputText, { color: colors.text }]}
               autoFocus
               returnKeyType="search"
               autoCapitalize="none"
               autoCorrect={false}
-              accessibilityLabel="Search the app"
+              accessibilityLabel={scoped ? `Search ${scopeInfo.label}` : 'Search the whole app'}
             />
             {query ? (
               <Pressable accessibilityRole="button" accessibilityLabel="Clear search" onPress={() => setQuery('')} hitSlop={10}>
@@ -460,6 +541,13 @@ export function SearchScreen({ area, initialQuery = '' }: { area: SearchArea; in
             ) : null}
           </View>
         </View>
+
+        {scoped ? (
+          <View style={styles.scopeRow}>
+            <Ionicons name="funnel-outline" size={13} color={colors.textSecondary} />
+            <Text style={[styles.scopeText, { color: colors.textSecondary }]}>Searching {scopeInfo.label} only</Text>
+          </View>
+        ) : null}
 
         {groups.length > 1 ? (
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filterRow} keyboardShouldPersistTaps="handled">
@@ -487,6 +575,8 @@ const styles = StyleSheet.create({
   input: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10, borderWidth: 1, borderRadius: 14, paddingHorizontal: 12 },
   inputText: { flex: 1, paddingVertical: 12, fontSize: 15, ...(Platform.OS === 'web' ? ({ outlineStyle: 'none' } as object) : {}) },
   filterRow: { gap: 8, paddingTop: 10 },
+  scopeRow: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingTop: 8, paddingLeft: 42 },
+  scopeText: { fontSize: 12, fontWeight: '700' },
   content: { padding: 16, paddingBottom: 48 },
   center: { alignItems: 'center', gap: 10, paddingVertical: 40 },
   heading: { fontSize: 22, fontWeight: '800' },

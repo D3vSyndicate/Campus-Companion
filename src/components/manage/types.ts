@@ -2,7 +2,9 @@ import type { ChipOption } from '../ChipSelect';
 
 export type Row = Record<string, unknown>;
 
-export type FieldType = 'text' | 'multiline' | 'select' | 'boolean' | 'number' | 'decimal' | 'time';
+// 'list' is one line per item. 'imageList' is one picture per line, written as
+// "link | caption", because the pictures are stored as objects with a caption.
+export type FieldType = 'text' | 'multiline' | 'select' | 'boolean' | 'number' | 'decimal' | 'time' | 'date' | 'list' | 'imageList';
 
 export type FieldConfig = {
   key: string; // column name
@@ -18,6 +20,9 @@ export type FieldConfig = {
   allowCustom?: boolean;
   // Choices come from the matching entry in `lookups` instead of `options`.
   lookupOptions?: boolean;
+  // Left out of the saved row when it is empty, for a column a database may not have yet.
+  // Without this, saving would send null for a column that does not exist and fail the whole save.
+  omitWhenEmpty?: boolean;
 };
 
 export type LookupConfig = {
@@ -31,6 +36,9 @@ export type LookupLabels = Record<string, Record<string, string>>;
 
 export type ManageConfig = {
   table: string;
+  // Which SQL file creates this table. It is named in the message when the table is missing, so
+  // nobody has to guess which script still needs running.
+  setupFile?: string;
   pk: string; // primary key column
   title: string;
   description: string;

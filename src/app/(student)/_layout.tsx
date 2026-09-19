@@ -40,6 +40,10 @@ export default function StudentLayout() {
           }}
         />
         <Tabs.Screen name="search" options={{ href: null, title: 'Search' }} />
+        <Tabs.Screen name="sport-gym" options={{ href: null, title: 'Sport & gym' }} />
+        <Tabs.Screen name="chatbot" options={{ href: null, title: 'Support chat' }} />
+        <Tabs.Screen name="it-programmes" options={{ href: null, title: 'Programmes' }} />
+        <Tabs.Screen name="it-programme-detail" options={{ href: null, title: 'Programme' }} />
         <Tabs.Screen
           name="map"
           options={{

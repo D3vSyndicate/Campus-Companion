@@ -1,9 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { AboutProject } from './AboutProject';
+import { LogOutButton } from './LogOutButton';
 import { SearchEntry } from './search/SearchEntry';
 import { ScaledText as Text } from './ScaledText';
 import { useAppearance } from '../context/AppearanceContext';
@@ -86,22 +86,10 @@ type Props = {
 };
 
 export function UserProfile({ variant = 'student' }: Props) {
-  const router = useRouter();
   const { i18n } = useTranslation();
   const { colors, mode, setMode } = useTheme();
   const { fontScale, changeFontScale } = useAppearance();
-  const { user, role, signOut } = useAuth();
-  const [loggingOut, setLoggingOut] = useState(false);
-
-  const handleSignOut = async () => {
-    setLoggingOut(true);
-    try {
-      await signOut();
-    } finally {
-      router.replace('/login');
-      setLoggingOut(false);
-    }
-  };
+  const { user, role } = useAuth();
 
   const adjustFontScale = (change: number) => {
     const nextScale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, Math.round((fontScale + change) * 10) / 10));
@@ -126,7 +114,7 @@ export function UserProfile({ variant = 'student' }: Props) {
     <ScrollView style={[styles.container, { backgroundColor: colors.background }]} contentContainerStyle={styles.content}>
       <Text style={[styles.title, { color: colors.text }]}>Profile & Settings</Text>
 
-      <SearchEntry href={variant === 'mentor' ? '/(mentor)/search' : '/(student)/search'} style={styles.searchEntry} />
+      <SearchEntry area={variant === 'mentor' ? 'mentor' : 'student'} scope="profile" style={styles.searchEntry} />
 
       <View style={styles.section}>
         <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>MY ACCOUNT</Text>
@@ -185,13 +173,7 @@ export function UserProfile({ variant = 'student' }: Props) {
         <AboutProject variant={variant} />
       </View>
 
-      <TouchableOpacity
-        disabled={loggingOut}
-        onPress={() => void handleSignOut()}
-        style={[styles.signOut, { borderColor: colors.danger }]}
-      >
-        <Text style={[styles.signOutText, { color: colors.danger }]}>Log Out</Text>
-      </TouchableOpacity>
+      <LogOutButton style={styles.signOut} />
     </ScrollView>
   );
 }
@@ -227,6 +209,5 @@ const styles = StyleSheet.create({
   stepText: { fontSize: 14, fontWeight: '800' },
   scaleText: { minWidth: 56, textAlign: 'center', fontSize: 14, fontWeight: '700' },
 
-  signOut: { marginTop: 28, paddingVertical: 14, borderRadius: 10, borderWidth: 1, alignItems: 'center' },
-  signOutText: { fontSize: 15, fontWeight: '700' },
+  signOut: { marginTop: 28 },
 });

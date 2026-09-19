@@ -20,6 +20,7 @@ import {
   View,
 } from 'react-native';
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ReadinessCard } from '../../components/ReadinessCard';
 import { SearchEntry } from '../../components/search/SearchEntry';
 import { ShameResilientBanner } from '../../components/ShameResilientBanner';
@@ -61,6 +62,10 @@ const COLORS = {
 
 const LAST_SEEN_KEY = 'announcements:lastSeenId';
 
+// The hero carries white text, so it stays dark in both themes rather than following the theme's
+// own background and text colours.
+const HERO_GRADIENT = ['#123152', '#0B2239', '#05101F'] as const;
+
 // -----------------------------------------------------------------------------
 // Types
 // -----------------------------------------------------------------------------
@@ -97,6 +102,24 @@ const ACTIONS: ActionItem[] = [
     subtitle: "See today's events and upcoming sessions.",
   },
   {
+    key: 'events',
+    route: '/(student)/schedule?tab=events',
+    icon: 'ticket-outline',
+    iconBg: '#FDE8F1',
+    iconColor: '#0B1F3A',
+    title: 'Campus events',
+    subtitle: 'See what is on around campus, when and where.',
+  },
+  {
+    key: 'sportGym',
+    route: '/(student)/sport-gym',
+    icon: 'football-outline',
+    iconBg: '#E6F6EC',
+    iconColor: '#0B1F3A',
+    title: 'Sport & gym',
+    subtitle: 'Find a sport or club, and sign up for the gym.',
+  },
+  {
     key: 'checklist',
     route: '/(student)/checklist',
     icon: 'checkmark-circle-outline',
@@ -122,6 +145,15 @@ const ACTIONS: ActionItem[] = [
     iconColor: '#0B1F3A',
     title: 'Digital tools',
     subtitle: 'Set up Funda, eduroam, labs and OneDrive.',
+  },
+  {
+    key: 'programmes',
+    route: '/(student)/it-programmes',
+    icon: 'school-outline',
+    iconBg: '#EEF3F9',
+    iconColor: '#0B1F3A',
+    title: 'School of IT programmes',
+    subtitle: 'What each programme covers, careers, and who to ask for advice.',
   },
   {
     key: 'faqs',
@@ -414,6 +446,7 @@ function ActionCard({
 export default function HomeScreen() {
   const router = useRouter();
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
   const { colors } = useTheme();
   const { user } = useAuth();
   const readiness = useReadiness();
@@ -761,7 +794,7 @@ export default function HomeScreen() {
             backgroundColor: colors.background,
           },
         ]}
-        contentContainerStyle={styles.content}
+        contentContainerStyle={[styles.content, { paddingTop: insets.top + 18 }]}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
@@ -777,11 +810,7 @@ export default function HomeScreen() {
         {/* ================================================================= */}
 
         <LinearGradient
-          colors={[
-            colors.headerBackground,
-            colors.text,
-            colors.background,
-          ]}
+          colors={HERO_GRADIENT}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.hero}
@@ -914,7 +943,7 @@ export default function HomeScreen() {
           </View>
         </LinearGradient>
 
-        <SearchEntry href="/(student)/search" />
+        <SearchEntry area="student" scope="all" />
 
         {/* ================================================================= */}
         {/* SUPPORT BANNER */}

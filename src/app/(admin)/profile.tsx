@@ -1,6 +1,6 @@
-import { useRouter } from 'expo-router';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { AboutProject } from '../../components/AboutProject';
+import { LogOutButton } from '../../components/LogOutButton';
 import { ScaledText as Text } from '../../components/ScaledText';
 import { useAuth } from '../../context/AuthContext';
 import { ThemeMode, useTheme } from '../../theme/ThemeContext';
@@ -12,17 +12,8 @@ const MODES: { key: ThemeMode; label: string }[] = [
 ];
 
 export default function ProfileScreen() {
-  const router = useRouter();
   const { colors, mode, setMode } = useTheme();
-  const { user, signOut } = useAuth();
-
-  const handleSignOut = async () => {
-    try {
-      await signOut();
-    } finally {
-      router.replace('/login');
-    }
-  };
+  const { user } = useAuth();
 
   return (
     <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
@@ -70,12 +61,7 @@ export default function ProfileScreen() {
         <AboutProject variant="staff" />
       </View>
 
-      <TouchableOpacity
-        style={[styles.signOutButton, { borderColor: colors.danger }]}
-        onPress={() => void handleSignOut()}
-      >
-        <Text style={[styles.signOutText, { color: colors.danger }]}>Sign out</Text>
-      </TouchableOpacity>
+      <LogOutButton style={styles.signOutButton} />
     </ScrollView>
   );
 }
@@ -90,13 +76,5 @@ const styles = StyleSheet.create({
   modeRow: { flexDirection: 'row', gap: 8 },
   modeButton: { flex: 1, paddingVertical: 10, borderRadius: 8, borderWidth: 1, alignItems: 'center' },
   modeButtonText: { fontSize: 14, fontWeight: '600' },
-  signOutButton: {
-    marginTop: 28,
-    marginHorizontal: 16,
-    paddingVertical: 14,
-    borderRadius: 10,
-    borderWidth: 1,
-    alignItems: 'center',
-  },
-  signOutText: { fontSize: 15, fontWeight: '600' },
+  signOutButton: { marginTop: 28, marginHorizontal: 16 },
 });

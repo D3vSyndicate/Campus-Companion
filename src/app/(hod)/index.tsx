@@ -7,6 +7,7 @@ const SECTIONS = [
   { route: '/(hod)/programme', title: 'Programme information', description: 'Publish programme details and departmental expectations.' },
   { route: '/(hod)/assignments', title: 'Assignments', description: 'Track departmental assignments and deadlines.' },
   { route: '/(hod)/contacts', title: 'Department contacts', description: 'Keep academic and support contacts current.' },
+  { route: '/(hod)/profile', title: 'Profile & settings', description: 'Your account, appearance and log out.' },
 ];
 
 export default function HodDashboard() {

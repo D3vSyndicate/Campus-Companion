@@ -49,7 +49,8 @@ export function ShuttleCard() {
   useEffect(() => {
     void (async () => {
       const { data, error } = await fetchWithOfflineFallback('shuttle_times');
-      if (error) console.error('Failed to load shuttle times.', error);
+      // Shuttle times are optional: if the table is missing or unreachable the card is simply not shown.
+      if (error) console.warn('Could not load shuttle times.', error);
 
       setShuttles(
         (Array.isArray(data) ? data : [])

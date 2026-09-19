@@ -22,10 +22,12 @@ const IS_LINK = /^https?:\/\//i;
 type Props = {
   // Which FAQ screen the "related questions" shortcut opens. Each role has its own.
   faqRoute?: string;
+  // Lets the screen around it show its own empty state when there are no options.
+  onLoaded?: (count: number) => void;
 };
 
 // "I need help with..." — starts from what the student is feeling or facing, then points to a next step.
-export function SupportPathways({ faqRoute = '/(student)/faqs' }: Props) {
+export function SupportPathways({ faqRoute = '/(student)/faqs', onLoaded }: Props) {
   const { colors } = useTheme();
   const { t } = useTranslation();
   const router = useRouter();
@@ -57,6 +59,10 @@ export function SupportPathways({ faqRoute = '/(student)/faqs' }: Props) {
       setLoading(false);
     })();
   }, []);
+
+  useEffect(() => {
+    if (!loading) onLoaded?.(pathways.length);
+  }, [loading, pathways.length, onLoaded]);
 
   if (loading) return <ActivityIndicator color={colors.accent} style={styles.loading} />;
   if (!pathways.length) return null;

@@ -136,6 +136,8 @@ export default function ChecklistScreen() {
         eyebrow={t('common.firstSteps')}
         title={t('common.checklistTitle')}
         subtitle={t('common.checklistSubtitle')}
+        showBack
+        backFallback="/(student)"
       />
 
       {loadError && (

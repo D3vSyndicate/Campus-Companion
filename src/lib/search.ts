@@ -7,7 +7,7 @@
 //  - small typos are tolerated ("libary")
 //  - every word must match, but if nothing does, the closest partial matches are still offered
 
-export type SearchKind = 'schedule' | 'faq' | 'contact' | 'venue' | 'place' | 'support' | 'guide';
+export type SearchKind = 'schedule' | 'faq' | 'contact' | 'venue' | 'place' | 'support' | 'guide' | 'event' | 'sport' | 'programme' | 'announcement' | 'checklist' | 'info' | 'shuttle' | 'setting';
 
 export type SearchDoc = {
   id: string;
@@ -59,7 +59,7 @@ const wordsOf = (text: string | undefined) => {
 
 const STOP_WORDS = new Set([
   'a', 'an', 'the', 'of', 'to', 'in', 'on', 'at', 'for', 'and', 'or', 'is', 'are', 'am', 'i', 'me', 'my', 'we', 'you', 'it',
-  'do', 'does', 'how', 'what', 'where', 'when', 'who', 'can', 'should', 'need', 'want', 'get', 'with', 'about', 'if', 'not',
+  'do', 'does', 'how', 'what', 'where', 'when', 'who', 'can', 'should', 'need', 'want', 'get', 'with', 'about', 'if', 'not', 'up',
 ]);
 
 // Groups of words that mean nearly the same thing to a first-year student.
@@ -81,6 +81,13 @@ const SYNONYM_GROUPS: string[][] = [
   ['disability', 'disabilities', 'accessibility', 'accessible', 'wheelchair'],
   ['funda', 'lms'],
   ['email', 'emails', 'mail'],
+  ['gym', 'gyms', 'fitness', 'workout', 'exercise'],
+  ['sport', 'sports', 'athletics'],
+  ['event', 'events', 'happening'],
+  ['shuttle', 'shuttles', 'bus', 'transport', 'ride'],
+  ['dark', 'night', 'theme', 'appearance'],
+  ['font', 'text', 'bigger', 'larger', 'smaller'],
+  ['logout', 'signout'],
 ];
 
 const SYNONYMS = new Map<string, string[]>();

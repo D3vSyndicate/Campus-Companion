@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import { AboutProject } from '../../components/AboutProject';
+import { useLogOut } from '../../components/LogOutButton';
 
 import { useAuth } from '../../context/AuthContext';
 import { ThemeMode, useTheme } from '../../theme/ThemeContext';
@@ -43,29 +44,12 @@ const MODES: {
 export default function ProfileScreen() {
   const router = useRouter();
   const { colors, mode, setMode } = useTheme();
-  const { user, signOut } = useAuth();
+  const { user } = useAuth();
   const { width } = useWindowDimensions();
 
   const isWide = width >= 800;
 
-  const confirmSignOut = () => {
-    Alert.alert('Sign out', 'Are you sure you want to sign out?', [
-      {
-        text: 'Cancel',
-        style: 'cancel',
-      },
-      {
-        text: 'Sign out',
-        style: 'destructive',
-        onPress: () => {
-          void (async () => {
-            await signOut();
-            router.replace('/login');
-          })();
-        },
-      },
-    ]);
-  };
+  const confirmLogOut = useLogOut();
 
   return (
     <ScrollView
@@ -351,7 +335,7 @@ export default function ProfileScreen() {
           <AboutProject variant="staff" />
         </View>
 
-        {/* Sign out */}
+        {/* Log out */}
         <View style={styles.section}>
           <View
             style={[
@@ -385,7 +369,7 @@ export default function ProfileScreen() {
                     { color: colors.text },
                   ]}
                 >
-                  Sign out
+                  Log out
                 </Text>
 
                 <Text
@@ -401,7 +385,7 @@ export default function ProfileScreen() {
 
             <TouchableOpacity
               activeOpacity={0.85}
-              onPress={confirmSignOut}
+              onPress={confirmLogOut}
               style={[
                 styles.signOutButton,
                 {
@@ -416,7 +400,7 @@ export default function ProfileScreen() {
               />
 
               <Text style={styles.signOutButtonText}>
-                Sign out
+                Log out
               </Text>
             </TouchableOpacity>
           </View>
@@ -628,7 +612,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  /* Sign out */
+  /* Log out */
 
   signOutCard: {
     minHeight: 110,

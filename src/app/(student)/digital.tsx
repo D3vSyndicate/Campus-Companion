@@ -7,7 +7,9 @@ import { ActivityIndicator, Image, Linking, Modal, Pressable, ScrollView, StyleS
 import { PageHeader } from '../../components/PageHeader';
 import { ScaledText as Text } from '../../components/ScaledText';
 import { ShameResilientBanner } from '../../components/ShameResilientBanner';
+import { useAuth } from '../../context/AuthContext';
 import { fetchWithOfflineFallback } from '../../lib/offlineData';
+import { markGuideOpened } from '../../lib/readiness';
 import { useTheme } from '../../theme/ThemeContext';
 
 type DigitalImage = {
@@ -76,12 +78,19 @@ function mapDigitalGuide(row: Record<string, unknown>, index: number): DigitalGu
 export default function DigitalReadinessScreen() {
   const { colors } = useTheme();
   const { t } = useTranslation();
+  const { user } = useAuth();
   const { width: screenWidth } = useWindowDimensions();
   const [selectedGuide, setSelectedGuide] = useState<DigitalGuide | null>(null);
   const [imageErrors, setImageErrors] = useState<Record<string, boolean>>({});
   const [guides, setGuides] = useState<DigitalGuide[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
+
+  // Remember which guides the student has opened, so Home can show their progress.
+  const openedGuideId = selectedGuide?.id;
+  useEffect(() => {
+    if (user?.id && openedGuideId) void markGuideOpened(user.id, openedGuideId);
+  }, [user?.id, openedGuideId]);
 
   // Search results link straight to a guide: /digital?guide=<id or title>.
   const params = useLocalSearchParams<{ guide?: string | string[] }>();

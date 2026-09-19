@@ -4,7 +4,6 @@ import { ActivityIndicator, Linking, ScrollView, StyleSheet, TouchableOpacity, V
 import { PageHeader } from '../../components/PageHeader';
 import { ScaledText as Text } from '../../components/ScaledText';
 import { ShameResilientBanner } from '../../components/ShameResilientBanner';
-import { SupportPathways } from '../../components/SupportPathways';
 import { fetchWithOfflineFallback } from '../../lib/offlineData';
 import { useTheme } from '../../theme/ThemeContext';
 import { ContactItem } from '../../types';
@@ -84,10 +83,6 @@ export default function ContactsScreen() {
           type="info"
         />
       )}
-
-      <SupportPathways />
-
-      <Text style={[styles.peopleHeading, { color: palette.heading }]}>{t('common.peopleWhoCanHelp')}</Text>
 
       {loading ? (
         <ActivityIndicator size="large" color={colors.accent} />

@@ -1,3 +1,4 @@
+import { useSegments } from 'expo-router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
@@ -18,6 +19,7 @@ import { useToast } from '../../context/ToastContext';
 import { supabase } from '../../lib/superbase';
 import { useTheme } from '../../theme/ThemeContext';
 import { ChipSelect } from '../ChipSelect';
+import { PageHeader } from '../PageHeader';
 import { ScaledText as Text } from '../ScaledText';
 import type { FieldConfig, LookupLabels, ManageConfig, Row } from './types';
 
@@ -25,12 +27,24 @@ const NO_PERMISSION =
   'You do not have permission to do that. Check that your account has the coordinator or admin role.';
 
 // Turns a Supabase/PostgREST error into something a coordinator can act on.
-function friendlyError(error: { code?: string; message: string }): string {
+function friendlyError(error: { code?: string; message: string }, setupFile = 'supabase/campus_features.sql'): string {
   if (error.code === '42P01' || error.code === 'PGRST205') {
-    return 'This section is not set up in the database yet. Run supabase/campus_features.sql in the Supabase SQL editor.';
+    return `This section is not set up in the database yet. Run ${setupFile} in the Supabase SQL editor.`;
   }
 
-  if (error.code === '42501') return NO_PERMISSION;
+  // PostgREST reports a column it cannot find when the app is ahead of the database.
+  if (error.code === 'PGRST204' || error.code === '42703') {
+    return `${error.message}. The database is missing a column this screen expects: run ${setupFile} in the Supabase SQL editor.`;
+  }
+
+  // Two rows that have to stay unique.
+  if (error.code === '23505') return 'There is already an entry with those details.';
+
+  if (error.code === '22P02' || error.code === '22007') {
+    return `${error.message}. Check the format of what you typed.`;
+  }
+
+  if (error.code === '42501' || error.code === 'PGRST301') return NO_PERMISSION;
 
   return error.message;
 }
@@ -57,6 +71,23 @@ function toFormValues(
       values[field.key] = raw === true || raw === 'true';
     } else if (field.type === 'time') {
       values[field.key] = String(raw).slice(0, 5);
+    } else if (field.type === 'date') {
+      values[field.key] = String(raw).slice(0, 10);
+    } else if (field.type === 'list') {
+      values[field.key] = Array.isArray(raw) ? raw.map(String).join('\n') : String(raw);
+    } else if (field.type === 'imageList') {
+      // Each picture is stored as { url, caption }, shown here as "link | caption".
+      values[field.key] = Array.isArray(raw)
+        ? raw
+            .map((image) => {
+              const item = (image ?? {}) as Record<string, unknown>;
+              const url = String(item.url ?? '').trim();
+              const caption = String(item.caption ?? '').trim();
+              return url ? (caption ? `${url} | ${caption}` : url) : '';
+            })
+            .filter(Boolean)
+            .join('\n')
+        : '';
     } else {
       values[field.key] = String(raw);
     }
@@ -67,6 +98,9 @@ function toFormValues(
 
 export function ManageScreen({ config }: { config: ManageConfig }) {
   const { colors } = useTheme();
+  const segments = useSegments();
+  // Back goes to the dashboard of whichever staff area this screen was opened from.
+  const dashboard = `/${segments[0] ?? '(coordinator)'}`;
   const { showToast } = useToast();
   const { user } = useAuth();
 
@@ -105,7 +139,7 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
     ]);
 
     if (rowsResult.error) {
-      setLoadError(friendlyError(rowsResult.error));
+      setLoadError(friendlyError(rowsResult.error, config.setupFile));
       setRows([]);
     } else {
       setRows((rowsResult.data ?? []) as Row[]);
@@ -180,7 +214,11 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
           return `${field.label} is needed before you can save.`;
         }
 
-        payload[field.key] = field.type === 'number' ? 0 : null;
+        // Some columns only exist once a newer SQL file has been run. Leaving an empty one out keeps
+        // the rest of the form saveable in the meantime.
+        if (field.omitWhenEmpty) continue;
+
+        payload[field.key] = field.type === 'number' ? 0 : field.type === 'list' || field.type === 'imageList' ? [] : null;
       } else if (field.type === 'number') {
         const parsed = Number.parseInt(text, 10);
 
@@ -196,6 +234,28 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
       } else if (field.type === 'time') {
         if (!/^\d{1,2}:\d{2}$/.test(text)) {
           return `${field.label} should look like 09:00.`;
+        }
+
+        payload[field.key] = text;
+      } else if (field.type === 'list') {
+        // One item per line, saved as an array. A leading "-" or "*" the editor typed is dropped.
+        payload[field.key] = text
+          .split(/\r?\n/)
+          .map((line) => line.replace(/^\s*[-*\u2022]\s*/, '').trim())
+          .filter(Boolean);
+      } else if (field.type === 'imageList') {
+        payload[field.key] = text
+          .split(/\r?\n/)
+          .map((line) => {
+            const [url, ...rest] = line.split('|');
+            return { url: url.trim(), caption: rest.join('|').trim() };
+          })
+          .filter((image) => image.url);
+      } else if (field.type === 'date') {
+        const [year, month, day] = text.split('-').map(Number);
+        const real = new Date(year, (month || 1) - 1, day || 1);
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(text) || real.getMonth() !== month - 1 || real.getDate() !== day) {
+          return `${field.label} should look like 2027-02-04 (year-month-day).`;
         }
 
         payload[field.key] = text;
@@ -234,7 +294,7 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
           .single();
 
         if (error) {
-          showToast(friendlyError(error), 'error');
+          showToast(friendlyError(error, config.setupFile), 'error');
           return;
         }
 
@@ -249,7 +309,7 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
           .select();
 
         if (error) {
-          showToast(friendlyError(error), 'error');
+          showToast(friendlyError(error, config.setupFile), 'error');
           return;
         }
 
@@ -280,7 +340,7 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
     const name = config.listTitle(row, lookupLabels);
 
     Alert.alert(
-      `Delete ${config.itemNoun.toLowerCase()}`,
+      `Delete ${config.itemNoun}`,
       `Delete "${name}"? This cannot be undone.`,
       [
         {
@@ -299,7 +359,7 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
                 .select();
 
               if (error) {
-                showToast(friendlyError(error), 'error');
+                showToast(friendlyError(error, config.setupFile), 'error');
                 return;
               }
 
@@ -365,7 +425,7 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
 
   if (editing) {
     const isNew = editing === 'new';
-    const noun = config.itemNoun.toLowerCase();
+    const noun = config.itemNoun;
 
     return (
       <KeyboardAvoidingView
@@ -422,6 +482,7 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
                       <ChipSelect
                         wrap
                         options={optionsFor(field)}
+                        clearable={!field.required}
                         value={String(values[field.key] ?? '')}
                         onChange={(next) =>
                           setValues((current) => ({
@@ -437,7 +498,7 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
                     <TextInput
                       style={[
                         styles.input,
-                        field.type === 'multiline' &&
+                        (field.type === 'multiline' || field.type === 'list' || field.type === 'imageList') &&
                           styles.multiline,
                         inputStyle,
                       ]}
@@ -456,23 +517,9 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
                       placeholderTextColor={
                         colors.textSecondary
                       }
-                      multiline={field.type === 'multiline'}
-<<<<<<< HEAD
-                      keyboardType={
-                        field.type === 'number'
-                          ? 'number-pad'
-                          : 'default'
-                      }
-                      autoCapitalize={
-                        /url|link|email/.test(field.key) ||
-                        field.type === 'time'
-                          ? 'none'
-                          : 'sentences'
-                      }
-=======
-                      keyboardType={field.type === 'number' ? 'number-pad' : field.type === 'decimal' ? 'numbers-and-punctuation' : 'default'}
-                      autoCapitalize={/url|link|email/.test(field.key) || field.type === 'time' ? 'none' : 'sentences'}
->>>>>>> bb7fc8fa76ed6fffff3ccd33d4723df4e0d3f021
+                      multiline={field.type === 'multiline' || field.type === 'list' || field.type === 'imageList'}
+                      keyboardType={field.type === 'number' ? 'number-pad' : field.type === 'decimal' || field.type === 'date' ? 'numbers-and-punctuation' : 'default'}
+                      autoCapitalize={/url|link|email/.test(field.key) || field.type === 'time' || field.type === 'date' ? 'none' : 'sentences'}
                     />
                   ) : null}
                 </>
@@ -577,27 +624,14 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
         }
         ListHeaderComponent={
           <View style={styles.header}>
-            <Text
-              style={[
-                styles.title,
-                {
-                  color: colors.text,
-                },
-              ]}
-            >
-              {config.title}
-            </Text>
-
-            <Text
-              style={[
-                styles.description,
-                {
-                  color: colors.textSecondary,
-                },
-              ]}
-            >
-              {config.description}
-            </Text>
+            <PageHeader
+              eyebrow="Manage"
+              title={config.title}
+              subtitle={config.description}
+              showSearch={false}
+              showBack
+              backFallback={dashboard}
+            />
 
             {loadError ? (
               <Text
@@ -612,19 +646,20 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
               </Text>
             ) : null}
 
-            <TouchableOpacity
-              style={[
-                styles.primaryButton,
-                {
-                  backgroundColor: colors.accent,
-                },
-              ]}
-              onPress={() => openForm('new')}
-            >
-              <Text style={styles.primaryText}>
-                + Add {config.itemNoun.toLowerCase()}
-              </Text>
-            </TouchableOpacity>
+            {/* Nothing can be saved while the section is missing from the database. */}
+            {loadError ? null : (
+              <TouchableOpacity
+                style={[
+                  styles.primaryButton,
+                  {
+                    backgroundColor: colors.accent,
+                  },
+                ]}
+                onPress={() => openForm('new')}
+              >
+                <Text style={styles.primaryText}>+ Add {config.itemNoun}</Text>
+              </TouchableOpacity>
+            )}
           </View>
         }
         ListEmptyComponent={
@@ -642,8 +677,7 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
                 },
               ]}
             >
-              Nothing here yet. Tap + Add{' '}
-              {config.itemNoun.toLowerCase()} to create the first one.
+              Nothing here yet. Tap + Add {config.itemNoun} to create the first one.
             </Text>
           )
         }
