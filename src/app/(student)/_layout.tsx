@@ -40,6 +40,14 @@ export default function StudentLayout() {
           }}
         />
         <Tabs.Screen name="search" options={{ href: null, title: 'Search' }} />
+        <Tabs.Screen name="calendar" options={{ href: null, title: 'Calendar' }} />
+        <Tabs.Screen name="societies" options={{ href: null, title: 'Societies' }} />
+        <Tabs.Screen name="ai-guide" options={{ href: null, title: 'Using AI' }} />
+        <Tabs.Screen name="shuttles" options={{ href: null, title: 'Learn your shuttles' }} />
+        {/* The arcade is reached from the Home screen: the tab bar is already full. */}
+        <Tabs.Screen name="arcade" options={{ href: null, title: 'Madibaz Arcade' }} />
+        <Tabs.Screen name="arcade-game" options={{ href: null, title: 'Arcade' }} />
+        <Tabs.Screen name="fact-vault" options={{ href: null, title: 'Fact Vault' }} />
         <Tabs.Screen name="sport-gym" options={{ href: null, title: 'Sport & gym' }} />
         <Tabs.Screen name="chatbot" options={{ href: null, title: 'Support chat' }} />
         <Tabs.Screen name="it-programmes" options={{ href: null, title: 'Programmes' }} />
