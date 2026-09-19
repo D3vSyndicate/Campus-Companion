@@ -5,7 +5,7 @@ import { useTheme } from '../theme/ThemeContext';
 import { ScaledText as Text } from './ScaledText';
 
 // Title bar used at the top of the coordinator dashboard. Tapping the avatar
-// opens profile settings, theme, account details, and sign out.
+// opens profile settings, theme, account details, and log out.
 
 export default function Header({ title }: { title: string }) {
   const { colors } = useTheme();

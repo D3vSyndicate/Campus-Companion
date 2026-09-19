@@ -21,8 +21,8 @@ const SECTIONS: CoordinatorSection[] = [
   },
   {
     href: '/(coordinator)/schedule',
-    label: 'Schedule',
-    desc: 'Manage orientation events',
+    label: 'Orientation Schedule',
+    desc: "The timetable first-years follow",
     icon: 'calendar-outline',
   },
   {
@@ -52,7 +52,7 @@ const SECTIONS: CoordinatorSection[] = [
   {
     href: '/(coordinator)/digital',
     label: 'Digital Readiness',
-    desc: 'Manage digital guidance',
+    desc: 'Guides and their steps for new students',
     icon: 'laptop-outline',
   },
   {
@@ -68,10 +68,22 @@ const SECTIONS: CoordinatorSection[] = [
     icon: 'bus-outline',
   },
   {
-    href: '/(coordinator)/digital-steps',
-    label: 'Digital Readiness Steps',
-    desc: 'Guides with images and videos',
-    icon: 'film-outline',
+    href: '/(coordinator)/events',
+    label: 'Campus Events',
+    desc: 'What is on around campus, open to everyone',
+    icon: 'ticket-outline',
+  },
+  {
+    href: '/(coordinator)/sport',
+    label: 'Sport & Gym',
+    desc: 'Clubs, facilities and gym sign-up',
+    icon: 'barbell-outline',
+  },
+  {
+    href: '/(coordinator)/programmes',
+    label: 'Programmes',
+    desc: 'School of IT programmes and advisors',
+    icon: 'school-outline',
   },
   {
     href: '/(coordinator)/tribes',

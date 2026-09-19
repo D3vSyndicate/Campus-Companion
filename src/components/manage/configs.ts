@@ -20,6 +20,16 @@ export const SHUTTLE_SHIFTS = [
   { value: 'night', label: 'Night' },
 ];
 
+export const EVENT_CATEGORIES = ['Sport', 'Social', 'Culture', 'Academic', 'Wellness', 'Other'];
+
+export const CAMPUS_OPTIONS = ['North Campus', 'South Campus', 'Both campuses'];
+
+export const SPORT_KINDS = [
+  { value: 'club', label: 'Sport / club' },
+  { value: 'facility', label: 'Facility' },
+  { value: 'gym', label: 'Gym' },
+];
+
 const asOptions = (values: string[]) => values.map((value) => ({ value, label: value }));
 
 const text = (row: Record<string, unknown>, key: string) => String(row[key] ?? '').trim();
@@ -54,6 +64,15 @@ export const venueConfig: ManageConfig = {
     { key: 'directions', label: 'Directions', type: 'multiline', placeholder: 'Start at the main entrance and follow the signs to...' },
     { key: 'map_link', label: 'Online map link', type: 'text', placeholder: 'https://maps.google.com/...' },
     { key: 'accessibilty_notes', label: 'Accessibility notes', type: 'multiline', placeholder: 'Step-free entrance on the east side' },
+    {
+      key: 'latitude',
+      label: 'Map latitude',
+      type: 'decimal',
+      omitWhenEmpty: true,
+      placeholder: '-34.0091',
+      help: 'Puts this venue on the campus map. In Google Maps, press and hold the spot, then copy the two numbers shown (latitude first).',
+    },
+    { key: 'longitude', label: 'Map longitude', type: 'decimal', omitWhenEmpty: true, placeholder: '25.6672', help: 'The second number. Leave both empty to keep the venue off the map.' },
   ],
   listTitle: (row) => text(row, 'venue_name'),
   listSubtitle: (row) => [text(row, 'building'), text(row, 'room_number')].filter(Boolean).join(' · '),
@@ -99,9 +118,10 @@ export const announcementConfig: ManageConfig = {
       options: asOptions(['Low', 'Medium', 'High', 'Urgent']),
     },
   ],
-  onCreate: (user) => ({ posted_by: user.email }),
+  // posted_by is a timestamp column, so it records when the announcement went out.
+  onCreate: () => ({ posted_by: new Date().toISOString() }),
   listTitle: (row) => text(row, 'title'),
-  listSubtitle: (row) => [text(row, 'priority_level'), text(row, 'posted_by')].filter(Boolean).join(' · '),
+  listSubtitle: (row) => [text(row, 'priority_level'), text(row, 'posted_by').slice(0, 10)].filter(Boolean).join(' · '),
 };
 
 export const supportConfig: ManageConfig = {
@@ -136,6 +156,7 @@ export const supportConfig: ManageConfig = {
 
 export const shuttleConfig: ManageConfig = {
   table: 'shuttle_times',
+  setupFile: 'supabase/campus_features.sql',
   pk: 'shuttle_id',
   title: 'Shuttle times',
   description: 'Morning, afternoon and night shuttle departures shown on the student home screen.',
@@ -157,66 +178,44 @@ export const shuttleConfig: ManageConfig = {
 };
 
 export const readinessModuleConfig: ManageConfig = {
-  table: 'readiness_modules',
-  pk: 'module_id',
-  title: 'Digital readiness modules',
-  description: 'Topics in the new-student tutorial, such as basic computer skills, Funda, printing and Wi-Fi. Add the steps under Digital readiness steps.',
-  itemNoun: 'Module',
+  table: 'digital_readiness',
+  pk: 'id',
+  title: 'Digital readiness guides',
+  description:
+    'The guides students follow on the Digital screen, such as computer basics, Funda, printing and Wi-Fi.',
+  itemNoun: 'Guide',
   orderBy: [{ column: 'sort_order' }],
   fields: [
-    { key: 'title', label: 'Title', type: 'text', required: true, placeholder: 'Printing on campus' },
-    { key: 'description', label: 'Short description', type: 'multiline' },
-    { key: 'icon', label: 'Icon name', type: 'text', default: 'laptop-outline', help: 'Any Ionicons name, for example print-outline or wifi-outline.' },
+    { key: 'name', label: 'Guide name', type: 'text', required: true, placeholder: 'Printing on campus' },
+    { key: 'description', label: 'Short description', type: 'multiline', placeholder: 'Learn how to print your assignments on campus.' },
+    {
+      key: 'steps',
+      label: 'Steps',
+      type: 'list',
+      help: 'One step per line, in the order a student should follow them.',
+      placeholder: 'Log in at the printer with your student card\nChoose your document\nCollect your pages',
+    },
     { key: 'sort_order', label: 'Order (1 shows first)', type: 'number', default: 0 },
-    { key: 'is_published', label: 'Visible to students', type: 'boolean', default: true },
-  ],
-  listTitle: (row) => text(row, 'title'),
-  listSubtitle: (row) => (row.is_published === false ? 'Hidden from students' : text(row, 'description')),
-};
-
-export const readinessStepConfig: ManageConfig = {
-  table: 'readiness_steps',
-  pk: 'step_id',
-  title: 'Digital readiness steps',
-  description: 'One screen of the tutorial: a short explanation with an optional image or video.',
-  itemNoun: 'Step',
-  orderBy: [{ column: 'module_id' }, { column: 'sort_order' }],
-  lookups: [{ fieldKey: 'module_id', table: 'readiness_modules', valueColumn: 'module_id', labelColumn: 'title' }],
-  fields: [
-    { key: 'module_id', label: 'Module', type: 'select', required: true, lookupOptions: true },
-    { key: 'sort_order', label: 'Step number (1 shows first)', type: 'number', default: 1 },
-    { key: 'title', label: 'Step title', type: 'text', required: true, placeholder: 'Choose the printer' },
-    { key: 'body', label: 'Instructions', type: 'multiline', placeholder: 'Explain this step simply and kindly.' },
+    { key: 'reference_url', label: 'Reference link', type: 'text', placeholder: 'https://...' },
+    { key: 'video_url', label: 'Video link', type: 'text', placeholder: 'https://...' },
     {
-      key: 'media_type',
-      label: 'Media',
-      type: 'select',
-      default: 'none',
-      options: [
-        { value: 'none', label: 'None' },
-        { value: 'image', label: 'Image' },
-        { value: 'video', label: 'Video' },
-      ],
+      key: 'image_urls',
+      label: 'Pictures',
+      type: 'imageList',
+      help: 'One picture per line, as "link | caption". The caption is optional. Students see them under the steps.',
+      placeholder: 'https://...supabase.co/storage/v1/object/public/readiness-media/printer.png | The printer in Building 12',
     },
-    {
-      key: 'media_url',
-      label: 'Image or video link',
-      type: 'text',
-      placeholder: 'https://...supabase.co/storage/v1/object/public/readiness-media/...',
-      help: 'Upload the file in Supabase Storage (bucket: readiness-media), then paste its public link here.',
-    },
-    { key: 'link_url', label: 'Button link (optional)', type: 'text', placeholder: 'https://funda.mandela.ac.za' },
-    { key: 'link_label', label: 'Button label (optional)', type: 'text', placeholder: 'Open Funda' },
   ],
-  listTitle: (row) => text(row, 'title'),
-  listSubtitle: (row, labels) =>
-    `${labels.module_id?.[text(row, 'module_id')] ?? 'Module'} · step ${text(row, 'sort_order')}${
-      text(row, 'media_type') && text(row, 'media_type') !== 'none' ? ` · ${text(row, 'media_type')}` : ''
-    }`,
+  listTitle: (row) => text(row, 'name'),
+  listSubtitle: (row) => {
+    const steps = Array.isArray(row.steps) ? row.steps.length : 0;
+    return [steps ? `${steps} steps` : 'No steps yet', text(row, 'description')].filter(Boolean).join(' · ');
+  },
 };
 
 export const tribeConfig: ManageConfig = {
   table: 'community_groups',
+  setupFile: 'supabase/campus_features.sql',
   pk: 'id',
   title: 'Tribes',
   description: 'Mentor groups that first-years chat in. Students are placed in the tribe with the fewest members. Place buddies under Buddies.',
@@ -233,6 +232,7 @@ export const tribeConfig: ManageConfig = {
 
 export const faqSuggestionConfig: ManageConfig = {
   table: 'faq_suggestions',
+  setupFile: 'supabase/campus_features.sql',
   pk: 'suggestion_id',
   title: 'FAQ suggestions',
   description: 'Questions buddies keep hearing. Add the real answer under FAQs, then mark the suggestion as added, or dismiss it.',
@@ -256,4 +256,223 @@ export const faqSuggestionConfig: ManageConfig = {
   ],
   listTitle: (row) => text(row, 'question'),
   listSubtitle: (row) => text(row, 'status') || 'new',
+};
+
+export const eventConfig: ManageConfig = {
+  table: 'event',
+  setupFile: 'supabase/migrations/20260919130000_event_schedule.sql',
+  pk: 'id',
+  title: 'Campus events',
+  description: 'What is happening around campus, shown to students under Schedule > Campus events. Past events drop off the student list by themselves.',
+  itemNoun: 'Event',
+  orderBy: [{ column: 'event_date', ascending: false }, { column: 'start_time' }],
+  lookups: [{ fieldKey: 'venue_id', table: 'Venue', valueColumn: 'venue_id', labelColumn: 'venue_name' }],
+  fields: [
+    { key: 'title', label: 'Event name', type: 'text', required: true },
+    { key: 'category', label: 'Category', type: 'select', default: 'Social', options: asOptions(EVENT_CATEGORIES), allowCustom: true },
+    { key: 'event_date', label: 'Date (YYYY-MM-DD)', type: 'date', required: true, placeholder: '2027-02-04' },
+    { key: 'start_time', label: 'Starts (HH:MM)', type: 'time', placeholder: '10:00' },
+    { key: 'end_time', label: 'Ends (HH:MM)', type: 'time', placeholder: '14:00' },
+    { key: 'venue_id', label: 'Venue', type: 'select', lookupOptions: true, help: 'Pick a venue so students can tap "Show me where". Add new venues on the Venues screen.' },
+    { key: 'organizer', label: 'Organised by', type: 'text' },
+    { key: 'description', label: 'Details', type: 'multiline' },
+    { key: 'cost', label: 'Cost', type: 'text', placeholder: 'Free' },
+    { key: 'signup_url', label: 'Sign-up or info link', type: 'text', placeholder: 'https://...' },
+    { key: 'image_url', label: 'Picture link', type: 'text', placeholder: 'https://...' },
+    { key: 'is_active', label: 'Visible to students', type: 'boolean', default: true },
+  ],
+  listTitle: (row) => text(row, 'title'),
+  listSubtitle: (row) =>
+    [text(row, 'event_date') || 'No date yet', text(row, 'start_time').slice(0, 5), text(row, 'category'), row.is_active === false ? 'Hidden' : '']
+      .filter(Boolean)
+      .join(' · '),
+};
+
+export const sportConfig: ManageConfig = {
+  table: 'sport_recreation',
+  setupFile: 'supabase/campus_features.sql',
+  pk: 'item_id',
+  title: 'Sport & gym',
+  description: 'Sports, clubs, facilities and the gym, including how a student signs up.',
+  itemNoun: 'Entry',
+  orderBy: [{ column: 'sort_order' }, { column: 'name' }],
+  fields: [
+    { key: 'kind', label: 'Type', type: 'select', required: true, default: 'club', options: SPORT_KINDS },
+    { key: 'name', label: 'Name', type: 'text', required: true },
+    { key: 'campus', label: 'Campus', type: 'select', options: asOptions(CAMPUS_OPTIONS), allowCustom: true },
+    { key: 'venue', label: 'Venue', type: 'text', help: 'Building or field name, so students can find it on the map.' },
+    { key: 'description', label: 'About', type: 'multiline' },
+    { key: 'schedule', label: 'Training times or opening hours', type: 'multiline' },
+    { key: 'cost', label: 'Cost', type: 'text' },
+    { key: 'how_to_join', label: 'How to sign up', type: 'multiline', help: 'Write one step per line. Students see them as numbered steps.' },
+    { key: 'what_to_bring', label: 'What to bring', type: 'multiline' },
+    { key: 'contact_name', label: 'Contact person', type: 'text' },
+    { key: 'contact_email', label: 'Contact email', type: 'text' },
+    { key: 'contact_phone', label: 'Contact phone', type: 'text' },
+    { key: 'link_url', label: 'Link (sign-up form or info page)', type: 'text', placeholder: 'https://...' },
+    { key: 'sort_order', label: 'Order in the list', type: 'number', default: 10 },
+    { key: 'is_active', label: 'Visible to students', type: 'boolean', default: true },
+  ],
+  listTitle: (row) => text(row, 'name'),
+  listSubtitle: (row) =>
+    [text(row, 'kind'), text(row, 'campus'), row.is_active === false ? 'Hidden' : ''].filter(Boolean).join(' · '),
+};
+
+export const programmeConfig: ManageConfig = {
+  table: 'it_programmes',
+  setupFile: 'supabase/migrations/20260919120000_it_programmes.sql',
+  pk: 'id',
+  title: 'School of IT programmes',
+  description: 'Programmes students can browse, with year structure, modules, careers and the academic advisor.',
+  itemNoun: 'Programme',
+  orderBy: [{ column: 'display_order' }, { column: 'programme_name' }],
+  fields: [
+    { key: 'programme_name', label: 'Programme name', type: 'text', required: true },
+    { key: 'description', label: 'Description', type: 'multiline' },
+    {
+      key: 'year_structure',
+      label: 'Year level structure',
+      type: 'multiline',
+      placeholder: 'Year 1: ...\nYear 2: ...\nYear 3: ...',
+      help: 'One line per year level. Start a line with "Year 1:" to show the year in bold.',
+    },
+    { key: 'key_modules', label: 'Key modules', type: 'list', help: 'One module per line.' },
+    { key: 'career_possibilities', label: 'Career possibilities', type: 'list', help: 'One career per line.' },
+    { key: 'academic_expectations', label: 'Academic expectations', type: 'multiline' },
+    { key: 'advisor_name', label: 'Advisor name', type: 'text' },
+    { key: 'advisor_contact', label: 'Advisor contact', type: 'text', placeholder: 'name@mandela.ac.za or 041 000 0000', help: 'An email address, phone number or link. Students can tap it to get in touch.' },
+    { key: 'advisor_availability', label: 'Advisor availability', type: 'text', placeholder: 'Mon - Thu, 09:00 - 15:00' },
+    { key: 'display_order', label: 'Order in the list', type: 'number', default: 10, help: 'Lower numbers appear first.' },
+  ],
+  listTitle: (row) => text(row, 'programme_name'),
+  listSubtitle: (row) => {
+    const modules = Array.isArray(row.key_modules) ? row.key_modules.length : 0;
+    return [modules ? `${modules} key modules` : '', text(row, 'advisor_name')].filter(Boolean).join(' · ');
+  },
+};
+
+export const CONTACT_CATEGORIES = [
+  'Orientation',
+  'Academic',
+  'Peer Mentoring',
+  'Technical Support',
+  'Financial Aid',
+  'Wellness',
+  'Disability Support',
+  'Administration',
+];
+
+export const SCHEDULE_CATEGORIES = [
+  { value: 'academic', label: 'Academic' },
+  { value: 'support', label: 'Support' },
+  { value: 'social', label: 'Social' },
+  { value: 'digital', label: 'Digital' },
+  { value: 'admin', label: 'Admin' },
+];
+
+export const contactConfig: ManageConfig = {
+  table: 'Contact',
+  pk: 'contact_id',
+  title: 'Contacts',
+  description: 'The people students can reach out to, shown on the Contacts screen.',
+  itemNoun: 'Contact',
+  orderBy: [{ column: 'name' }],
+  fields: [
+    { key: 'name', label: 'First name', type: 'text', required: true },
+    { key: 'surname', label: 'Surname', type: 'text' },
+    { key: 'role', label: 'Role', type: 'text', placeholder: 'Orientation Coordinator' },
+    { key: 'email', label: 'Email', type: 'text', required: true, placeholder: 'name@mandela.ac.za' },
+    { key: 'support_category', label: 'Support area', type: 'select', options: asOptions(CONTACT_CATEGORIES), allowCustom: true },
+  ],
+  listTitle: (row) => `${text(row, 'name')} ${text(row, 'surname')}`.trim(),
+  listSubtitle: (row) => [text(row, 'role'), text(row, 'support_category')].filter(Boolean).join(' · '),
+};
+
+export const scheduleConfig: ManageConfig = {
+  table: 'schedule_items',
+  pk: 'id',
+  title: 'Orientation schedule',
+  description: 'The timetable first-years follow. Campus events are managed separately under Campus Events.',
+  itemNoun: 'Session',
+  orderBy: [{ column: 'date' }, { column: 'start_time' }],
+  lookups: [{ fieldKey: 'venue_id', table: 'Venue', valueColumn: 'venue_id', labelColumn: 'venue_name' }],
+  fields: [
+    { key: 'title', label: 'Session name', type: 'text', required: true, placeholder: 'Welcome to the School of IT' },
+    { key: 'date', label: 'Date (YYYY-MM-DD)', type: 'date', required: true, placeholder: '2027-02-04' },
+    { key: 'start_time', label: 'Starts (HH:MM)', type: 'time', placeholder: '09:00' },
+    { key: 'end_time', label: 'Ends (HH:MM)', type: 'time', placeholder: '10:00' },
+    { key: 'venue_id', label: 'Venue', type: 'select', lookupOptions: true, help: 'Pick a venue so students can tap "Show me where". Add new venues on the Venues screen.' },
+    { key: 'category', label: 'Category', type: 'select', default: 'academic', options: SCHEDULE_CATEGORIES },
+    { key: 'description', label: 'What happens in this session', type: 'multiline' },
+    { key: 'responsible_person', label: 'Led by', type: 'text' },
+  ],
+  listTitle: (row) => text(row, 'title'),
+  listSubtitle: (row, labels) =>
+    [text(row, 'date'), text(row, 'start_time').slice(0, 5), labels.venue_id?.[text(row, 'venue_id')] ?? '']
+      .filter(Boolean)
+      .join(' · '),
+};
+
+// ---- Head of department -----------------------------------------------------------------------
+
+export const hodProgrammeConfig: ManageConfig = {
+  table: 'hod_programme_content',
+  setupFile: 'supabase/hod.sql',
+  pk: 'id',
+  title: 'Programme information',
+  description: 'Guidance and expectations from the department, shown to students under Programme information.',
+  itemNoun: 'Note',
+  orderBy: [{ column: 'created_at' }],
+  fields: [
+    { key: 'title', label: 'Heading', type: 'text', required: true, placeholder: 'What we expect in first year' },
+    { key: 'content', label: 'Message to students', type: 'multiline', required: true },
+  ],
+  listTitle: (row) => text(row, 'title'),
+  listSubtitle: (row) => text(row, 'content'),
+};
+
+export const hodAssignmentConfig: ManageConfig = {
+  table: 'hod_assignments',
+  setupFile: 'supabase/hod.sql',
+  pk: 'id',
+  title: 'Assignments',
+  description: 'Departmental tasks and deadlines students should know about.',
+  itemNoun: 'Assignment',
+  orderBy: [{ column: 'due_date' }],
+  fields: [
+    { key: 'title', label: 'Assignment title', type: 'text', required: true },
+    { key: 'description', label: 'Description', type: 'multiline' },
+    { key: 'due_date', label: 'Due date (YYYY-MM-DD)', type: 'date', placeholder: '2027-03-15' },
+    {
+      key: 'status',
+      label: 'Status',
+      type: 'select',
+      default: 'Open',
+      options: [
+        { value: 'Open', label: 'Open' },
+        { value: 'In progress', label: 'In progress' },
+        { value: 'Closed', label: 'Closed' },
+      ],
+    },
+  ],
+  listTitle: (row) => text(row, 'title'),
+  listSubtitle: (row) => [text(row, 'due_date') ? `Due ${text(row, 'due_date')}` : 'No due date', text(row, 'status')].filter(Boolean).join(' · '),
+};
+
+export const hodContactConfig: ManageConfig = {
+  table: 'hod_contacts',
+  setupFile: 'supabase/hod.sql',
+  pk: 'id',
+  title: 'Department contacts',
+  description: 'Academic and support contacts for the department.',
+  itemNoun: 'Contact',
+  orderBy: [{ column: 'name' }],
+  fields: [
+    { key: 'name', label: 'Name', type: 'text', required: true },
+    { key: 'role', label: 'Role', type: 'text', placeholder: 'Head of Department' },
+    { key: 'email', label: 'Email', type: 'text', required: true, placeholder: 'name@mandela.ac.za' },
+    { key: 'phone', label: 'Phone', type: 'text', placeholder: '041 504 0000' },
+  ],
+  listTitle: (row) => text(row, 'name'),
+  listSubtitle: (row) => [text(row, 'role'), text(row, 'email')].filter(Boolean).join(' · '),
 };

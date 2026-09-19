@@ -1,32 +1,14 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useCallback, useEffect, useState } from 'react';
+import { useFocusEffect } from 'expo-router';
+import { useCallback, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { supabase } from './superbase';
+import { fetchWithOfflineFallback } from './offlineData';
 
-export type ReadinessStep = {
-  id: string;
-  moduleId: string;
-  order: number;
-  title: string;
-  body: string;
-  mediaType: 'none' | 'image' | 'video';
-  mediaUrl: string;
-  linkUrl: string;
-  linkLabel: string;
-};
-
-export type ReadinessModule = {
-  id: string;
-  title: string;
-  description: string;
-  icon: string;
-  order: number;
-  steps: ReadinessStep[];
-};
-
-const str = (value: unknown) => String(value ?? '').trim();
+// The digital readiness tutorial is the list of guides on the Digital screen (the digital_readiness
+// table). The Home screen uses these helpers to show how many guides a student has opened.
 
 const INTRO_KEY = 'readiness:intro-seen';
+const OPENED_KEY = 'readiness:opened';
 
 export async function hasSeenReadinessIntro(userId: string) {
   try {
@@ -44,103 +26,65 @@ export async function markReadinessIntroSeen(userId: string) {
   }
 }
 
-// Loads the tutorial (modules + steps) and the signed-in student's completed steps.
+async function readOpened(userId: string): Promise<string[]> {
+  try {
+    const saved = await AsyncStorage.getItem(`${OPENED_KEY}:${userId}`);
+    const parsed: unknown = saved ? JSON.parse(saved) : [];
+    return Array.isArray(parsed) ? parsed.map(String) : [];
+  } catch {
+    return [];
+  }
+}
+
+// Remembers, on this phone, that the student has opened a guide.
+export async function markGuideOpened(userId: string, guideId: string) {
+  try {
+    const opened = await readOpened(userId);
+    if (opened.includes(guideId)) return;
+    await AsyncStorage.setItem(`${OPENED_KEY}:${userId}`, JSON.stringify([...opened, guideId]));
+  } catch {
+    // Progress is a convenience. Losing it never blocks a guide.
+  }
+}
+
+// A guide row is worth counting once it has something to read.
+const hasContent = (row: Record<string, unknown>) =>
+  String(row.name ?? '').trim().length > 0 && (String(row.description ?? '').trim().length > 0 || (Array.isArray(row.steps) && row.steps.length > 0));
+
+// How many guides exist and how many this student has opened.
 export function useReadiness() {
   const { user } = useAuth();
-  const [modules, setModules] = useState<ReadinessModule[]>([]);
-  const [done, setDone] = useState<Set<string>>(new Set());
+  const userId = user?.id;
+  const [guideIds, setGuideIds] = useState<string[]>([]);
+  const [opened, setOpened] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
 
-  const load = useCallback(async () => {
-    const [moduleResult, stepResult, progressResult] = await Promise.all([
-      supabase.from('readiness_modules').select('*').order('sort_order'),
-      supabase.from('readiness_steps').select('*').order('sort_order'),
-      user
-        ? supabase.from('readiness_progress').select('step_id').eq('auth_id', user.id)
-        : Promise.resolve({ data: [], error: null }),
-    ]);
-
-    const failure = moduleResult.error ?? stepResult.error;
-    if (failure) {
-      console.error('Failed to load digital readiness.', failure);
-      setError(failure.message);
-      setLoading(false);
-      return;
-    }
-    setError('');
-
-    const steps: ReadinessStep[] = (stepResult.data ?? []).map((row) => {
-      const item = row as Record<string, unknown>;
-      const mediaType = str(item.media_type);
-      return {
-        id: str(item.step_id),
-        moduleId: str(item.module_id),
-        order: Number(item.sort_order ?? 0),
-        title: str(item.title),
-        body: str(item.body),
-        mediaType: mediaType === 'image' || mediaType === 'video' ? mediaType : 'none',
-        mediaUrl: str(item.media_url),
-        linkUrl: str(item.link_url),
-        linkLabel: str(item.link_label),
+  // Reload whenever the Home screen comes back into view, so guides opened since then are counted.
+  useFocusEffect(
+    useCallback(() => {
+      let active = true;
+      void (async () => {
+        // A missing or unreachable table just means there is nothing to count. It is not an error worth alarming anyone about.
+        const { data } = await fetchWithOfflineFallback('digital_readiness');
+        const ids = (Array.isArray(data) ? (data as Record<string, unknown>[]) : [])
+          .filter(hasContent)
+          .map((row) => String(row.id ?? row.digital_readiness_id ?? ''))
+          .filter(Boolean);
+        const seen = userId ? await readOpened(userId) : [];
+        if (!active) return;
+        setGuideIds(ids);
+        setOpened(seen);
+        setLoading(false);
+      })();
+      return () => {
+        active = false;
       };
-    });
-
-    setModules(
-      (moduleResult.data ?? []).map((row) => {
-        const item = row as Record<string, unknown>;
-        const id = str(item.module_id);
-        return {
-          id,
-          title: str(item.title),
-          description: str(item.description),
-          icon: str(item.icon) || 'laptop-outline',
-          order: Number(item.sort_order ?? 0),
-          steps: steps.filter((step) => step.moduleId === id).sort((a, b) => a.order - b.order),
-        };
-      }),
-    );
-
-    if (!progressResult.error) {
-      setDone(new Set((progressResult.data ?? []).map((row) => str((row as Record<string, unknown>).step_id))));
-    }
-    setLoading(false);
-  }, [user]);
-
-  useEffect(() => {
-    void load();
-  }, [load]);
-
-  // Optimistic: tick straight away, roll back if the database says no.
-  const setStepDone = useCallback(
-    async (stepId: string, completed: boolean) => {
-      if (!user) return;
-      setDone((current) => {
-        const next = new Set(current);
-        if (completed) next.add(stepId);
-        else next.delete(stepId);
-        return next;
-      });
-
-      const { error: writeError } = completed
-        ? await supabase.from('readiness_progress').upsert({ auth_id: user.id, step_id: stepId }, { onConflict: 'auth_id,step_id' })
-        : await supabase.from('readiness_progress').delete().eq('auth_id', user.id).eq('step_id', stepId);
-
-      if (writeError) {
-        console.error('Failed to save readiness progress.', writeError);
-        setDone((current) => {
-          const next = new Set(current);
-          if (completed) next.delete(stepId);
-          else next.add(stepId);
-          return next;
-        });
-      }
-    },
-    [user],
+    }, [userId]),
   );
 
-  const totalSteps = modules.reduce((sum, module) => sum + module.steps.length, 0);
-  const doneSteps = modules.reduce((sum, module) => sum + module.steps.filter((step) => done.has(step.id)).length, 0);
-
-  return { modules, done, loading, error, totalSteps, doneSteps, setStepDone, reload: load };
+  return {
+    loading,
+    totalSteps: guideIds.length,
+    doneSteps: guideIds.filter((id) => opened.includes(id)).length,
+  };
 }

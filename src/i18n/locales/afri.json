@@ -6,6 +6,7 @@
     "digital": "Digitaal",
     "faqs": "Gereelde vrae",
     "support": "Ondersteuning",
+    "contacts": "Kontakte",
     "tribe": "Gemeenskap",
     "email": "E-pos",
     "password": "Wagwoord",
@@ -36,7 +37,8 @@
     "office": "Kantoor",
     "emailTeam": "E-pos hierdie span",
     "searchFaqs": "Soek vrae (bv. Funda, lokale, rooster)...",
-    "openFunda": "Maak Funda-portaal oop",
+    "openLink": "Maak oop",
+    "digitalUnavailable": "Digitale leiding is nog nie beskikbaar nie. Probeer asseblief later weer.",
     "digitalBanner": "Almal begin as beginners met universiteitstegnologie."
     ,"orientation": "ORIËNTERING",
     "firstSteps": "JOU EERSTE STAPPE",

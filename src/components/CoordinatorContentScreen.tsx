@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Alert, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { supabase } from '../lib/superbase';
 import { useTheme } from '../theme/ThemeContext';
+import { PageHeader } from './PageHeader';
 
 type Props = { title: string; description: string; placeholder: string; storageKey: string };
 
@@ -98,8 +99,7 @@ export default function CoordinatorContentScreen({ title, description, placehold
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.content}
         ListHeaderComponent={<View>
-          <Text style={[styles.title, { color: colors.text }]}>{title}</Text>
-          <Text style={[styles.description, { color: colors.textSecondary }]}>{description}</Text>
+          <PageHeader eyebrow="Manage" title={title} subtitle={description} showSearch={false} showBack backFallback="/(coordinator)" />
           {syncMessage ? <Text style={[styles.syncMessage, { color: colors.danger }]}>{syncMessage}</Text> : null}
           <View style={styles.form}>
             <TextInput value={draft} onChangeText={setDraft} placeholder={placeholder} placeholderTextColor={colors.textSecondary} style={[styles.input, { color: colors.text, borderColor: colors.border, backgroundColor: colors.card }]} editable={!loading} />

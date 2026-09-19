@@ -62,6 +62,10 @@ begin
 end
 $$;
 
+-- Venues can be pinned on the campus map (set from the coordinator and admin Venue screens).
+alter table public."Venue" add column if not exists latitude  double precision;
+alter table public."Venue" add column if not exists longitude double precision;
+
 -- The student checklist currently stores "done" on the shared row, so signed-in
 -- students must be able to update it. (Known limitation: one shared tick for
 -- everyone. Per-student progress would need its own table.)
@@ -549,3 +553,75 @@ select m.module_id, 1, 'Log in to Funda',
 from public.readiness_modules m
 where m.title = 'Using Funda'
   and not exists (select 1 from public.readiness_steps s where s.module_id = m.module_id);
+
+-- ---------------------------------------------------------------------------
+-- 8. Sport & recreation, gym sign-up
+--    Students read these; coordinators and admins manage them from the app.
+--    Campus events are in public.event: see supabase/migrations/20260919130000_event_schedule.sql.
+-- ---------------------------------------------------------------------------
+
+create table if not exists public.sport_recreation (
+  item_id        uuid primary key default gen_random_uuid(),
+  kind           text not null default 'club' check (kind in ('club', 'facility', 'gym')),
+  name           text not null,
+  campus         text,
+  venue          text,
+  description    text,
+  schedule       text,      -- training times or opening hours
+  cost           text,
+  how_to_join    text,      -- one step per line
+  what_to_bring  text,
+  contact_name   text,
+  contact_email  text,
+  contact_phone  text,
+  link_url       text,
+  sort_order     int not null default 0,
+  is_active      boolean not null default true,
+  created_at     timestamptz not null default now()
+);
+
+do $$
+declare
+  t text;
+  r record;
+begin
+  foreach t in array array['sport_recreation']
+  loop
+    execute format('alter table public.%I enable row level security', t);
+    for r in select policyname from pg_policies where schemaname = 'public' and tablename = t
+    loop
+      execute format('drop policy %I on public.%I', r.policyname, t);
+    end loop;
+    execute format('create policy cc_read on public.%I for select to anon, authenticated using (is_active or public.is_staff())', t);
+    execute format('create policy cc_staff_insert on public.%I for insert to authenticated with check (public.is_staff())', t);
+    execute format('create policy cc_staff_update on public.%I for update to authenticated using (public.is_staff()) with check (public.is_staff())', t);
+    execute format('create policy cc_staff_delete on public.%I for delete to authenticated using (public.is_staff())', t);
+  end loop;
+end
+$$;
+
+-- SAMPLE content so the screen is not empty. These are placeholders, not official information:
+-- replace or delete them from the coordinator screen (Sport & Gym) before students see them.
+insert into public.sport_recreation (kind, name, description, schedule, cost, how_to_join, what_to_bring, sort_order)
+select 'gym', 'Campus gym',
+       'SAMPLE: the campus gym. Replace this with the real gym details from the Sport office.',
+       'SAMPLE: opening hours to be confirmed with the Sport office.',
+       'SAMPLE: ask the Sport office for the current membership fee.',
+       E'Take your student card to the gym reception.\nComplete the membership form and health questionnaire.\nPay the membership fee or confirm your payment.\nBook your induction with a gym staff member.\nStart training.',
+       'Student card, training clothes, closed sports shoes, a towel and a water bottle.',
+       1
+where not exists (select 1 from public.sport_recreation where kind = 'gym');
+
+insert into public.sport_recreation (kind, name, description, schedule, how_to_join, sort_order)
+select v.kind, v.name, v.description, v.schedule, v.how_to_join, v.sort_order
+from (values
+  ('club', 'Sports clubs (sample)',
+   'SAMPLE: list each club (soccer, netball, rugby, athletics...) as its own entry with training times and a contact person.',
+   'SAMPLE: training days and times',
+   E'Come to a club trial or training session.\nSpeak to the club contact person.\nRegister with the Sport office.', 2),
+  ('facility', 'Sports facilities (sample)',
+   'SAMPLE: fields, courts, pool and other facilities students can use.',
+   'SAMPLE: opening hours',
+   null, 3)
+) as v(kind, name, description, schedule, how_to_join, sort_order)
+where not exists (select 1 from public.sport_recreation where name = v.name);

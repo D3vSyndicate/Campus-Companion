@@ -15,6 +15,7 @@ import { useToast } from '../../context/ToastContext';
 import { supabase } from '../../lib/superbase';
 import { useTheme } from '../../theme/ThemeContext';
 import { ChipSelect } from '../ChipSelect';
+import { PageHeader } from '../PageHeader';
 import { ScaledText as Text } from '../ScaledText';
 
 type Group = { id: string; name: string; memberCount: number };
@@ -148,7 +149,14 @@ export function BuddyPlacement() {
           />
         }
       >
-        <Text style={[styles.title, { color: colors.text }]}>Buddies</Text>
+        <PageHeader
+          eyebrow="Manage"
+          title="Buddies"
+          subtitle="Place FYS buddies in a tribe so they can chat with their first-years."
+          showSearch={false}
+          showBack
+          backFallback="/(coordinator)"
+        />
         <Text style={[styles.description, { color: colors.textSecondary }]}>
           Place an FYS buddy in a tribe so they can chat with their first-years. The buddy needs an account with the mentor role first.
           Placing them again in another tribe moves them.

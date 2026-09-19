@@ -5,7 +5,7 @@ import { ScaledText as Text } from '../../components/ScaledText';
 import { useTheme } from '../../theme/ThemeContext';
 
 const SECTIONS: { href: string; label: string; desc: string }[] = [
-  { href: '/(admin)/schedule', label: 'Schedule Items', desc: 'Add, edit and remove schedule entries' },
+  { href: '/(admin)/schedule', label: 'Orientation Schedule', desc: 'The timetable first-years follow' },
   { href: '/(admin)/announcements', label: 'Announcements', desc: 'Manage posted announcements' },
   { href: '/(admin)/faqs', label: 'FAQs', desc: 'Write answers and choose which ones students can see' },
   { href: '/(admin)/contacts', label: 'Contacts', desc: 'Manage the student support directory' },
@@ -13,8 +13,10 @@ const SECTIONS: { href: string; label: string; desc: string }[] = [
   { href: '/(admin)/checklist', label: 'Checklist', desc: 'Organise tasks students need to complete' },
   { href: '/(admin)/support', label: 'Support Pathways', desc: 'Update the "I need help with..." options' },
   { href: '/(admin)/shuttle', label: 'Shuttle Times', desc: 'Morning, afternoon and night departures' },
-  { href: '/(admin)/digital', label: 'Digital Readiness Modules', desc: 'Tutorial topics: computer skills, Funda, printing, Wi-Fi' },
-  { href: '/(admin)/digital-steps', label: 'Digital Readiness Steps', desc: 'Step-by-step guides with images and videos' },
+  { href: '/(admin)/events', label: 'Campus Events', desc: 'What is on around campus, open to everyone' },
+  { href: '/(admin)/sport', label: 'Sport & Gym', desc: 'Clubs, facilities and gym sign-up' },
+  { href: '/(admin)/programmes', label: 'Programmes', desc: 'School of IT programmes and advisors' },
+  { href: '/(admin)/digital', label: 'Digital Readiness', desc: 'Guides and their steps: computer skills, Funda, printing, Wi-Fi' },
   { href: '/(admin)/tribes', label: 'Tribes', desc: 'Create mentor groups for first-years' },
   { href: '/(admin)/buddies', label: 'Buddies', desc: 'Place FYS buddies in tribes' },
   { href: '/(admin)/faq-suggestions', label: 'FAQ Suggestions', desc: 'Questions buddies keep hearing' },

@@ -12,9 +12,11 @@ type Action = { route: string; icon: keyof typeof Ionicons.glyphMap; title: stri
 
 const ACTIONS: Action[] = [
   { route: '/(mentor)/mentorGroup/index', icon: 'chatbubbles-outline', title: 'My Tribe', text: 'Chat with the first-years in your group.' },
+  { route: '/(mentor)/search', icon: 'search-outline', title: 'Search', text: 'Find answers, sessions, contacts and venues fast.' },
   { route: '/(mentor)/faqs', icon: 'help-circle-outline', title: 'Quick answers', text: 'Find and share answers to common questions.' },
   { route: '/(mentor)/announcements', icon: 'megaphone-outline', title: 'Announcements', text: 'Know what students are being told.' },
   { route: '/(mentor)/schedule', icon: 'calendar-outline', title: 'Orientation schedule', text: 'Where students need to be, and when.' },
+  { route: '/(mentor)/map', icon: 'map-outline', title: 'Campus map', text: 'Find any building and show first-years the way.' },
   { route: '/(mentor)/venues', icon: 'location-outline', title: 'Venue guide', text: 'Directions you can give with confidence.' },
   { route: '/(mentor)/refer', icon: 'hand-left-outline', title: 'Refer a student', text: 'Who to point students to for each kind of help.' },
   { route: '/(mentor)/guide', icon: 'book-outline', title: 'Buddy guide', text: 'Kind wording, your boundaries and a first-week checklist.' },

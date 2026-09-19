@@ -16,7 +16,7 @@ export default function StudentLayout() {
         screenOptions={{
           tabBarActiveTintColor: colors.accent,
           tabBarInactiveTintColor: colors.textSecondary,
-          tabBarLabelStyle: { fontSize: 11, fontWeight: '700' },
+          tabBarLabelStyle: { fontSize: 10, fontWeight: '700' },
           tabBarStyle: {
             backgroundColor: colors.surface,
             borderTopColor: colors.border,
@@ -37,6 +37,18 @@ export default function StudentLayout() {
           options={{
             title: t('common.schedule'),
             tabBarIcon: ({ color }) => <Ionicons name="calendar-outline" size={TAB_ICON_SIZE} color={color} />,
+          }}
+        />
+        <Tabs.Screen name="search" options={{ href: null, title: 'Search' }} />
+        <Tabs.Screen name="sport-gym" options={{ href: null, title: 'Sport & gym' }} />
+        <Tabs.Screen name="chatbot" options={{ href: null, title: 'Support chat' }} />
+        <Tabs.Screen name="it-programmes" options={{ href: null, title: 'Programmes' }} />
+        <Tabs.Screen name="it-programme-detail" options={{ href: null, title: 'Programme' }} />
+        <Tabs.Screen
+          name="map"
+          options={{
+            title: t('common.map'),
+            tabBarIcon: ({ color }) => <Ionicons name="map-outline" size={TAB_ICON_SIZE} color={color} />,
           }}
         />
         <Tabs.Screen
@@ -73,8 +85,15 @@ export default function StudentLayout() {
         <Tabs.Screen
           name="contacts"
           options={{
-            title: t('common.support'),
+            title: t('common.contacts'),
             tabBarIcon: ({ color }) => <Ionicons name="people-outline" size={TAB_ICON_SIZE} color={color} />,
+          }}
+        />
+        <Tabs.Screen
+          name="support"
+          options={{
+            title: t('common.support'),
+            tabBarIcon: ({ color }) => <Ionicons name="help-buoy-outline" size={TAB_ICON_SIZE} color={color} />,
           }}
         />
         <Tabs.Screen
