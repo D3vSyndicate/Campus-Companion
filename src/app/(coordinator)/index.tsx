@@ -61,54 +61,6 @@ const SECTIONS: CoordinatorSection[] = [
     desc: 'Manage support contacts',
     icon: 'people-outline',
   },
-  {
-    href: '/(coordinator)/shuttle',
-    label: 'Shuttle Times',
-    desc: 'Morning, afternoon and night departures',
-    icon: 'bus-outline',
-  },
-  {
-    href: '/(coordinator)/events',
-    label: 'Campus Events',
-    desc: 'What is on around campus, open to everyone',
-    icon: 'ticket-outline',
-  },
-  {
-    href: '/(coordinator)/sport',
-    label: 'Sport & Gym',
-    desc: 'Clubs, facilities and gym sign-up',
-    icon: 'barbell-outline',
-  },
-  {
-    href: '/(coordinator)/programmes',
-    label: 'Programmes',
-    desc: 'School of IT programmes and advisors',
-    icon: 'school-outline',
-  },
-  {
-    href: '/(coordinator)/tribes',
-    label: 'Tribes',
-    desc: 'Create mentor groups for first-years',
-    icon: 'people-circle-outline',
-  },
-  {
-    href: '/(coordinator)/buddies',
-    label: 'Buddies',
-    desc: 'Place FYS buddies in tribes',
-    icon: 'ribbon-outline',
-  },
-  {
-    href: '/(coordinator)/faq-suggestions',
-    label: 'FAQ Suggestions',
-    desc: 'Questions buddies keep hearing',
-    icon: 'chatbox-ellipses-outline',
-  },
-  {
-    href: '/(coordinator)/activity-log',
-    label: 'Activity Log',
-    desc: 'Review recent changes',
-    icon: 'time-outline',
-  },
 ];
 
 function tap() {

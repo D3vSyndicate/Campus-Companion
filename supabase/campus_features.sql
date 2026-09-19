@@ -4,8 +4,8 @@
 -- Run once in the Supabase dashboard: SQL Editor -> New query -> paste -> Run.
 -- The script is idempotent, so running it again is safe.
 --
--- Roles are read from the JWT *app_metadata* claim (`role`), which users cannot
--- edit themselves. Set it per user in Authentication -> Users, or with
+-- Roles are read from the server-controlled `raw_app_meta_data` claim (`role`).
+-- Set it per user in Authentication -> Users, or with
 --   update auth.users set raw_app_meta_data = raw_app_meta_data || '{"role":"coordinator"}' where email = '...';
 -- Roles used by the app: student (default), mentor (FYS buddy), coordinator, hod, admin.
 -- For a buddy use '{"role":"mentor"}', then place them in a tribe with assign_mentor_to_tribe (below).
@@ -18,13 +18,24 @@ create or replace function public.app_role()
 returns text
 language sql
 stable
-as $$ select coalesce(auth.jwt() -> 'app_metadata' ->> 'role', '') $$;
+security definer
+set search_path = public, auth
+as $$
+  select lower(trim(coalesce(
+    (select raw_app_meta_data ->> 'role' from auth.users where id = auth.uid()),
+    auth.jwt() -> 'app_metadata' ->> 'role',
+    ''
+  )))
+$$;
 
 create or replace function public.is_staff()
 returns boolean
 language sql
 stable
 as $$ select public.app_role() in ('coordinator', 'admin') $$;
+
+grant execute on function public.app_role() to authenticated;
+grant execute on function public.is_staff() to authenticated;
 
 -- FYS buddies (senior student mentors). They read everything students read and chat in their
 -- tribe as a mentor, but they cannot edit content.
@@ -39,12 +50,25 @@ as $$ select public.app_role() = 'mentor' $$;
 --    (This is what lets the admin and coordinator screens save.)
 -- ---------------------------------------------------------------------------
 
+create table if not exists public.digital_readiness (
+  id             uuid primary key default gen_random_uuid(),
+  name           text not null,
+  description    text,
+  steps          text[] not null default '{}',
+  sort_order     integer not null default 0,
+  reference_url  text,
+  video_url      text,
+  image_urls     jsonb not null default '[]'::jsonb,
+  created_at     timestamptz not null default now(),
+  updated_at     timestamptz not null default now()
+);
+
 do $$
 declare
   t text;
   r record;
 begin
-  foreach t in array array['Contact', 'FAQ', 'Announcement', 'schedule_items', 'Venue', 'checklist_item', 'Support_pathway']
+  foreach t in array array['Contact', 'FAQ', 'Announcement', 'schedule_items', 'Venue', 'checklist_item', 'Support_pathway', 'digital_readiness']
   loop
     execute format('alter table public.%I enable row level security', t);
 

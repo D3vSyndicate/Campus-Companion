@@ -20,8 +20,16 @@ Before starting the app, copy `.env.example` to `.env` and set
 `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_ANON_KEY` to the URL and
 publishable (or legacy anon) key from the Supabase project settings.
 
+### Supabase coordinator CRUD setup
+
+Run `supabase/campus_features.sql` in the Supabase SQL editor before using the
+Coordinator management screens. It creates the staff authorization function
+used by the insert, update, and delete policies. Run
+`supabase/coordinator_content.sql` as well if the Coordinator Content table is
+used. After changing a user's `app_metadata.role`, sign out and sign back in.
+
 Login routing uses the signed-in user's Supabase Auth metadata. Set a user's
-role to `admin` or `student` in `app_metadata.role` (preferred) or
+role to `admin`, `coordinator`, or `student` in `app_metadata.role` (preferred) or
 `user_metadata.role` for existing test users. Accounts without a valid role
 cannot enter either dashboard.
 
