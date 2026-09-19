@@ -30,4 +30,16 @@ where coalesce(raw_app_meta_data ->> 'role', '') = ''
   and raw_user_meta_data ->> 'role' in ('coordinator', 'mentor', 'hod', 'admin')
 order by created_at;
 
+-- 4. Check that the database rules which let staff save changes are in place.
+--    A coordinator who sees "You do not have permission" usually has one of two problems: their role is
+--    missing in step 1, or these rules are missing. Each staff-managed table should list four rules that
+--    start with cc_ (cc_read, cc_staff_insert, cc_staff_update, cc_staff_delete). If a table is missing
+--    or has fewer, run supabase/campus_features.sql in the SQL editor.
+select tablename, string_agg(policyname, ', ' order by policyname) as rules
+from pg_policies
+where schemaname = 'public'
+  and policyname like 'cc\_%'
+group by tablename
+order by tablename;
+
 -- After changing a role, that person must sign out and back in so their login carries the new role.

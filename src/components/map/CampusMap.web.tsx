@@ -16,6 +16,7 @@ export const CampusMap = forwardRef<CampusMapHandle, CampusMapProps>(function Ca
 
   const html = useMemo(
     () => buildMapHtml({ places, theme, campus: initialCampus }),
+    // Built once on purpose: later changes reach the map by message, so the page is not reloaded.
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
@@ -87,7 +88,6 @@ export const CampusMap = forwardRef<CampusMapHandle, CampusMapProps>(function Ca
 
     window.addEventListener('message', listener);
     return () => window.removeEventListener('message', listener);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onSelect, onBlank, onStatus]);
 
   return (

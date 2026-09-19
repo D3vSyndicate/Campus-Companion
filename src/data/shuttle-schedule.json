@@ -1,0 +1,965 @@
+{
+  "source": "2026 Shuttle Schedule - Gqeberha.pdf",
+  "campus": "Gqeberha",
+  "year": 2026,
+  "rules": [
+    {
+      "title": "Boarding requirement",
+      "text": "To board the shuttle, all students must present a valid student ID card along with their proof of acceptance or registration letter."
+    },
+    {
+      "title": "Early arrival",
+      "text": "Students wishing to arrive early on campus are advised to take the first scheduled shuttle of the day."
+    },
+    {
+      "title": "Assistance",
+      "text": "Shuttle marshals are available to assist. Students who are unsure of the correct shuttle should ask a marshal for guidance."
+    },
+    {
+      "title": "Code of conduct",
+      "text": "Students are required to follow marshal and driver instructions at all times. Disrespectful behaviour or refusal to comply will result in immediate suspension of shuttle service privileges."
+    },
+    {
+      "title": "Prohibited items and behaviour",
+      "text": "No eating or drinking is permitted inside the shuttles. Alcohol is strictly prohibited. Any student deemed to be intoxicated will be denied access."
+    }
+  ],
+  "rows": [
+    {
+      "shift": "morning",
+      "route_name": "Korsten (PSA 163 Durban Rd)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "06:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Korsten (PSA 163 Durban Rd)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "07:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Korsten (PSA 163 Durban Rd)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "08:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Korsten (PSA 163 Durban Rd)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "09:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Korsten (PSA 163 Durban Rd)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "12:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Korsten (PSA 163 Durban Rd)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "14:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Korsten (PSA 163 Durban Rd)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "16:00",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Korsten (PSA 163 Durban Rd)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "17:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Sydenham (Klesal/Varsity Park)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "06:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Sydenham (Klesal/Varsity Park)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "07:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Sydenham (Klesal/Varsity Park)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "08:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Sydenham (Klesal/Varsity Park)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "09:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Sydenham (Klesal/Varsity Park)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "12:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Sydenham (Klesal/Varsity Park)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "14:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Sydenham (Klesal/Varsity Park)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "16:00",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Sydenham (Klesal/Varsity Park)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "17:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "North End (Law Court & Pier 14)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "06:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "North End (Law Court & Pier 14)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "07:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "North End (Law Court & Pier 14)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "08:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "North End (Law Court & Pier 14)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "09:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "North End (Law Court & Pier 14)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "12:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "North End (Law Court & Pier 14)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "14:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "North End (Law Court & Pier 14)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "16:00",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "North End (Law Court & Pier 14)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "17:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Kalinga House - Richmond Hill",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "06:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Kalinga House - Richmond Hill",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "07:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Kalinga House - Richmond Hill",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "08:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Kalinga House - Richmond Hill",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "09:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Kalinga House - Richmond Hill",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "12:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Kalinga House - Richmond Hill",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "14:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Kalinga House - Richmond Hill",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "16:00",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Kalinga House - Richmond Hill",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "17:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "The Suites - Rink Street",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "06:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "The Suites - Rink Street",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "07:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "The Suites - Rink Street",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "08:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "The Suites - Rink Street",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "09:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "The Suites - Rink Street",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "12:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "The Suites - Rink Street",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "14:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "The Suites - Rink Street",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "16:00",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "The Suites - Rink Street",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "17:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Russell Road (Home Choice)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "06:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Russell Road (Home Choice)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "07:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Russell Road (Home Choice)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "08:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Russell Road (Home Choice)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "09:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Russell Road (Home Choice)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "12:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Russell Road (Home Choice)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "14:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Russell Road (Home Choice)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "16:00",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Russell Road (Home Choice)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "17:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Central (Belmont Terrace)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "06:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Central (Belmont Terrace)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "07:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Central (Belmont Terrace)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "08:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Central (Belmont Terrace)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "09:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Central (Belmont Terrace)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "12:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Central (Belmont Terrace)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "14:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Central (Belmont Terrace)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "16:00",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Central (Belmont Terrace)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "17:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Feather Market Hall (Govan Mbeki Ave)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "06:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Feather Market Hall (Govan Mbeki Ave)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "07:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Feather Market Hall (Govan Mbeki Ave)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "08:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Feather Market Hall (Govan Mbeki Ave)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "09:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Feather Market Hall (Govan Mbeki Ave)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "12:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Feather Market Hall (Govan Mbeki Ave)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "14:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Feather Market Hall (Govan Mbeki Ave)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "16:00",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Feather Market Hall (Govan Mbeki Ave)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "17:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Walmer PSA",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "06:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Walmer PSA",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "07:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Walmer PSA",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "08:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Walmer PSA",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "09:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Walmer PSA",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "12:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Walmer PSA",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "14:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Walmer PSA",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "16:00",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Walmer PSA",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "17:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Kings Beach, Humewood and Forrest Hill",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "06:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Kings Beach, Humewood and Forrest Hill",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "07:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Kings Beach, Humewood and Forrest Hill",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "08:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Kings Beach, Humewood and Forrest Hill",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "09:45",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Kings Beach, Humewood and Forrest Hill",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "12:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Kings Beach, Humewood and Forrest Hill",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "14:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Kings Beach, Humewood and Forrest Hill",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "16:00",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Kings Beach, Humewood and Forrest Hill",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "17:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Summerstrand - Missionvale (Medical School)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "07:00",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Summerstrand - Missionvale (Medical School)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "09:00",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Summerstrand - Missionvale (Medical School)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "13:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Summerstrand - Missionvale (Medical School)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "15:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Summerstrand - Missionvale (Medical School)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "17:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Hopper (Campus to Campus)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "07:00",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Hopper (Campus to Campus)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "08:00",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Hopper (Campus to Campus)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "09:00",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Hopper (Campus to Campus)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "11:00",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Hopper (Campus to Campus)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "12:00",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Hopper (Campus to Campus)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "14:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Hopper (Campus to Campus)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "16:00",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Hopper (Campus to Campus)",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "17:00",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Summerstrand Student Village",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "07:00",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Summerstrand Student Village",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "08:00",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Summerstrand Student Village",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "09:00",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "morning",
+      "route_name": "Summerstrand Student Village",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "11:00",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Summerstrand Student Village",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "12:00",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Summerstrand Student Village",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "14:00",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Summerstrand Student Village",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "16:00",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "afternoon",
+      "route_name": "Summerstrand Student Village",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "17:00",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "night",
+      "route_name": "Night Shift Shuttles",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "18:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "night",
+      "route_name": "Night Shift Shuttles",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "20:30",
+      "days": null,
+      "notes": null
+    },
+    {
+      "shift": "night",
+      "route_name": "Night Shift Shuttles",
+      "pickup_point": null,
+      "dropoff_point": null,
+      "departure_time": "22:00",
+      "days": null,
+      "notes": null
+    }
+  ]
+}

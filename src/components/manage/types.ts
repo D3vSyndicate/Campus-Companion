@@ -44,7 +44,10 @@ export type ManageConfig = {
   description: string;
   itemNoun: string; // "FAQ", "Venue", ...
   fields: FieldConfig[];
-  orderBy?: { column: string; ascending?: boolean }[];
+  orderBy?: { column: string; ascending?: boolean; nullsFirst?: boolean }[];
+  // Only show rows where this column has this value. Two screens can share one table this way; set the
+  // same value in onCreate so a new row lands on the screen that made it.
+  filter?: { column: string; value: string };
   lookups?: LookupConfig[];
   listTitle: (row: Row, labels: LookupLabels) => string;
   listSubtitle?: (row: Row, labels: LookupLabels) => string;

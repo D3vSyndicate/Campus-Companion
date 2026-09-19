@@ -8,6 +8,7 @@ import { PageHeader } from '../../components/PageHeader';
 import { ScaledText as Text } from '../../components/ScaledText';
 import { ShameResilientBanner } from '../../components/ShameResilientBanner';
 import { useAuth } from '../../context/AuthContext';
+import { LESSON_SECTIONS } from '../../data/digitalLessons';
 import { fetchWithOfflineFallback } from '../../lib/offlineData';
 import { markGuideOpened } from '../../lib/readiness';
 import { useTheme } from '../../theme/ThemeContext';
@@ -26,6 +27,8 @@ type DigitalGuide = {
   images: DigitalImage[];
   link?: string;
   videoUrl?: string;
+  // A short reminder shown under the steps. Only the built-in lessons have one.
+  tip?: string;
 };
 
 function getCategoryIcon(category: unknown): keyof typeof Ionicons.glyphMap {
@@ -74,6 +77,14 @@ function mapDigitalGuide(row: Record<string, unknown>, index: number): DigitalGu
     videoUrl: typeof row.video_url === 'string' && row.video_url.trim() ? row.video_url : undefined,
   };
 }
+
+// Every built-in lesson, shaped like the guides from the database so it opens in the same window.
+const LESSON_GUIDES: Record<string, DigitalGuide> = Object.fromEntries(
+  LESSON_SECTIONS.flatMap((section) => section.lessons).map((lesson) => [
+    lesson.id,
+    { id: lesson.id, icon: lesson.icon, title: lesson.title, desc: lesson.desc, steps: lesson.steps, images: [], tip: lesson.tip } satisfies DigitalGuide,
+  ]),
+);
 
 export default function DigitalReadinessScreen() {
   const { colors } = useTheme();
@@ -196,6 +207,50 @@ export default function DigitalReadinessScreen() {
         </View>
       )}
 
+      {/* Built in, so these are here even when the guides above cannot load. */}
+      {LESSON_SECTIONS.map((section) => (
+        <View key={section.id}>
+          <View style={styles.lessonsHeader}>
+            <View style={[styles.lessonsIcon, { backgroundColor: colors.card }]}>
+              <Ionicons name={section.icon} size={22} color={colors.accent} />
+            </View>
+            <View style={styles.lessonsHeaderCopy}>
+              <Text style={[styles.lessonsTitle, { color: colors.text }]} accessibilityRole="header">{section.title}</Text>
+              <Text style={[styles.lessonsSubtitle, { color: colors.textSecondary }]}>{section.subtitle}</Text>
+            </View>
+          </View>
+
+          {section.lessons.map((lesson, index) => (
+            <Pressable
+              key={lesson.id}
+              accessibilityRole="button"
+              accessibilityLabel={`Open ${section.title} lesson ${index + 1}: ${lesson.title}`}
+              onPress={() => setSelectedGuide(LESSON_GUIDES[lesson.id])}
+              style={({ pressed }) => [styles.lessonRow, { backgroundColor: colors.surface, borderColor: colors.border }, pressed && { opacity: 0.8 }]}
+            >
+              <View style={[styles.lessonNumber, { backgroundColor: colors.accent }]}>
+                <Text style={styles.lessonNumberText}>{index + 1}</Text>
+              </View>
+              <View style={styles.lessonCopy}>
+                <Text style={[styles.lessonTitle, { color: colors.text }]}>{lesson.title}</Text>
+                <Text style={[styles.lessonSummary, { color: colors.textSecondary }]}>{lesson.summary}</Text>
+              </View>
+              <Ionicons name="chevron-forward" size={19} color={colors.textSecondary} />
+            </Pressable>
+          ))}
+        </View>
+      ))}
+
+      <View style={[styles.disclaimer, { backgroundColor: colors.card, borderColor: colors.border }]}>
+        <Ionicons name="information-circle-outline" size={20} color={colors.textSecondary} />
+        <View style={styles.disclaimerCopy}>
+          <Text style={[styles.disclaimerTitle, { color: colors.text }]}>About this content</Text>
+          <Text style={[styles.disclaimerText, { color: colors.textSecondary }]}>
+            Some of the content on the Digital screen, particularly the images, was created with the help of generative AI tools. Pictures are there to help you understand and may not match the real screens exactly. Check important details, like links and dates, with IT Services or your lecturer.
+          </Text>
+        </View>
+      </View>
+
       <Modal
         visible={selectedGuide !== null}
         animationType="slide"
@@ -240,6 +295,16 @@ export default function DigitalReadinessScreen() {
                   <Text style={[styles.stepText, { color: colors.textSecondary }]}>There are no steps to show yet. You can still explore the guide below.</Text>
                 )}
               </View>
+
+              {selectedGuide.tip ? (
+                <View style={[styles.tipBox, { backgroundColor: colors.card, borderColor: colors.accent }]}>
+                  <Ionicons name="bulb-outline" size={20} color={colors.accent} />
+                  <View style={styles.tipCopy}>
+                    <Text style={[styles.tipLabel, { color: colors.textSecondary }]}>TIP</Text>
+                    <Text style={[styles.tipText, { color: colors.text }]}>{selectedGuide.tip}</Text>
+                  </View>
+                </View>
+              ) : null}
 
               {selectedGuide.videoUrl && (
                 <Pressable
@@ -336,4 +401,23 @@ const styles = StyleSheet.create({
   playButton: { width: 56, height: 56, borderRadius: 28, alignItems: 'center', justifyContent: 'center' },
   playHint: { fontSize: 13, fontWeight: '800', marginTop: 8 },
   videoLinkHint: { fontSize: 11, marginTop: 4 },
+  lessonsHeader: { flexDirection: 'row', alignItems: 'center', gap: 12, marginTop: 18, marginBottom: 14 },
+  lessonsIcon: { width: 44, height: 44, borderRadius: 13, alignItems: 'center', justifyContent: 'center' },
+  lessonsHeaderCopy: { flex: 1 },
+  lessonsTitle: { fontSize: 19, lineHeight: 24, fontWeight: '800' },
+  lessonsSubtitle: { fontSize: 13, lineHeight: 19, marginTop: 3 },
+  lessonRow: { minHeight: 68, flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderRadius: 14, padding: 12, marginBottom: 10 },
+  lessonNumber: { width: 30, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center', marginRight: 12 },
+  lessonNumberText: { color: '#071B2C', fontSize: 13, fontWeight: '800' },
+  lessonCopy: { flex: 1, minWidth: 0, marginRight: 8 },
+  lessonTitle: { fontSize: 15, lineHeight: 20, fontWeight: '800' },
+  lessonSummary: { fontSize: 12, lineHeight: 17, marginTop: 2 },
+  tipBox: { flexDirection: 'row', alignItems: 'flex-start', gap: 10, borderWidth: 1, borderRadius: 13, padding: 12, marginTop: 14 },
+  tipCopy: { flex: 1 },
+  tipLabel: { fontSize: 10, fontWeight: '800', letterSpacing: 1 },
+  tipText: { fontSize: 13, lineHeight: 19, marginTop: 2 },
+  disclaimer: { flexDirection: 'row', alignItems: 'flex-start', gap: 10, borderWidth: 1, borderRadius: 13, padding: 14, marginTop: 20 },
+  disclaimerCopy: { flex: 1 },
+  disclaimerTitle: { fontSize: 13, fontWeight: '800' },
+  disclaimerText: { fontSize: 12, lineHeight: 18, marginTop: 3 },
 });

@@ -21,11 +21,13 @@ stable
 security definer
 set search_path = public, auth
 as $$
-  select lower(trim(coalesce(
+  -- A user with no role set counts as a student. The app treats them the same way, because students
+  -- usually only have a role in their sign-up details. supabase/mentor_groups.sql relies on this.
+  select coalesce(nullif(lower(trim(coalesce(
     (select raw_app_meta_data ->> 'role' from auth.users where id = auth.uid()),
     auth.jwt() -> 'app_metadata' ->> 'role',
     ''
-  )))
+  ))), ''), 'student')
 $$;
 
 create or replace function public.is_staff()
@@ -97,6 +99,21 @@ drop policy if exists cc_checklist_toggle on public.checklist_item;
 create policy cc_checklist_toggle on public.checklist_item
   for update to authenticated using (true) with check (true);
 
+-- Announcements keep the time they were posted in posted_by, and the app shows a NEW tag for recent
+-- ones. Give the column a default, so an announcement added straight from the Supabase dashboard is
+-- stamped too. Only done when the column really is a timestamp.
+do $$
+begin
+  if exists (
+    select 1 from information_schema.columns
+    where table_schema = 'public' and table_name = 'Announcement' and column_name = 'posted_by'
+      and data_type in ('timestamp with time zone', 'timestamp without time zone')
+  ) then
+    alter table public."Announcement" alter column posted_by set default now();
+  end if;
+end
+$$;
+
 -- ---------------------------------------------------------------------------
 -- 2. Support pathways ("I need help with...") use the existing "Support_pathway"
 --    table, covered by the policies in section 1. Nothing new to create here.
@@ -113,7 +130,7 @@ create table if not exists public.shuttle_times (
   pickup_point   text,
   dropoff_point  text,
   departure_time time not null,
-  days           text not null default 'Mon - Fri',
+  days           text default 'Mon - Fri',
   notes          text,
   is_active      boolean not null default true,
   created_at     timestamptz not null default now()
@@ -255,6 +272,35 @@ alter table public.community_profiles add column if not exists username     text
 alter table public.community_messages add column if not exists auth_id      uuid;
 alter table public.community_messages add column if not exists role         text not null default 'student';
 alter table public.community_messages add column if not exists display_name text;
+
+-- Code of conduct. A chat name can only be created once the student has accepted the Tribe code of
+-- conduct: no bullying, no swearing, and respect for the University's public communication platforms.
+-- The app sends the acceptance together with the new chat name and the database refuses a new chat name
+-- without it. The time is set here, so it cannot be back-dated, and it cannot be cleared or changed later.
+-- Chat names that already exist are left as they are.
+alter table public.community_profiles add column if not exists conduct_accepted_at timestamptz;
+
+create or replace function public.community_profiles_require_conduct()
+returns trigger
+language plpgsql
+as $$
+begin
+  if tg_op = 'INSERT' then
+    if new.conduct_accepted_at is null then
+      raise exception 'Please accept the Tribe code of conduct before choosing a chat name.';
+    end if;
+    new.conduct_accepted_at := now();
+  else
+    new.conduct_accepted_at := old.conduct_accepted_at;
+  end if;
+  return new;
+end
+$$;
+
+drop trigger if exists community_profiles_require_conduct on public.community_profiles;
+create trigger community_profiles_require_conduct
+  before insert or update on public.community_profiles
+  for each row execute function public.community_profiles_require_conduct();
 
 create table if not exists public.community_members (
   auth_id   uuid primary key references auth.users(id) on delete cascade,  -- one tribe per student
@@ -539,24 +585,8 @@ create policy cc_staff_delete on public.faq_suggestions
 -- 7. Starter content. Edit or delete from the coordinator screens afterwards.
 -- ---------------------------------------------------------------------------
 
--- SAMPLE shuttle times: replace with the real timetable before term starts.
-insert into public.shuttle_times (shift, route_name, pickup_point, dropoff_point, departure_time, days, notes)
-select v.shift, v.route_name, v.pickup_point, v.dropoff_point, v.departure_time::time, v.days, 'Sample time - update before term starts'
-from (values
-  ('morning',   'Residence to Campus', 'Residence',   'Main Campus', '06:30', 'Mon - Fri'),
-  ('morning',   'Residence to Campus', 'Residence',   'Main Campus', '07:15', 'Mon - Fri'),
-  ('morning',   'Residence to Campus', 'Residence',   'Main Campus', '08:00', 'Mon - Fri'),
-  ('afternoon', 'Campus to Residence', 'Main Campus', 'Residence',   '13:00', 'Mon - Fri'),
-  ('afternoon', 'Campus to Residence', 'Main Campus', 'Residence',   '15:30', 'Mon - Fri'),
-  ('afternoon', 'Campus to Residence', 'Main Campus', 'Residence',   '17:00', 'Mon - Fri'),
-  ('night',     'Campus to Residence', 'Main Campus', 'Residence',   '19:00', 'Mon - Fri'),
-  ('night',     'Campus to Residence', 'Main Campus', 'Residence',   '21:00', 'Mon - Fri'),
-  ('night',     'Campus to Residence', 'Main Campus', 'Residence',   '22:30', 'Mon - Fri')
-) as v(shift, route_name, pickup_point, dropoff_point, departure_time, days)
-where not exists (
-  select 1 from public.shuttle_times s
-  where s.shift = v.shift and s.route_name = v.route_name and s.departure_time = v.departure_time::time
-);
+-- The real shuttle schedule is added by supabase/migrations/20260919150000_shuttle_times_2026.sql. Run it after
+-- this file. It also removes the placeholder starter times an older version of this script added.
 
 -- Tutorial modules. Steps (text, images, videos) are added later from the coordinator screens.
 insert into public.readiness_modules (title, description, icon, sort_order)
@@ -624,28 +654,6 @@ begin
 end
 $$;
 
--- SAMPLE content so the screen is not empty. These are placeholders, not official information:
--- replace or delete them from the coordinator screen (Sport & Gym) before students see them.
-insert into public.sport_recreation (kind, name, description, schedule, cost, how_to_join, what_to_bring, sort_order)
-select 'gym', 'Campus gym',
-       'SAMPLE: the campus gym. Replace this with the real gym details from the Sport office.',
-       'SAMPLE: opening hours to be confirmed with the Sport office.',
-       'SAMPLE: ask the Sport office for the current membership fee.',
-       E'Take your student card to the gym reception.\nComplete the membership form and health questionnaire.\nPay the membership fee or confirm your payment.\nBook your induction with a gym staff member.\nStart training.',
-       'Student card, training clothes, closed sports shoes, a towel and a water bottle.',
-       1
-where not exists (select 1 from public.sport_recreation where kind = 'gym');
-
-insert into public.sport_recreation (kind, name, description, schedule, how_to_join, sort_order)
-select v.kind, v.name, v.description, v.schedule, v.how_to_join, v.sort_order
-from (values
-  ('club', 'Sports clubs (sample)',
-   'SAMPLE: list each club (soccer, netball, rugby, athletics...) as its own entry with training times and a contact person.',
-   'SAMPLE: training days and times',
-   E'Come to a club trial or training session.\nSpeak to the club contact person.\nRegister with the Sport office.', 2),
-  ('facility', 'Sports facilities (sample)',
-   'SAMPLE: fields, courts, pool and other facilities students can use.',
-   'SAMPLE: opening hours',
-   null, 3)
-) as v(kind, name, description, schedule, how_to_join, sort_order)
-where not exists (select 1 from public.sport_recreation where name = v.name);
+-- The real Sport & gym content (the Madibaz clubs, how to join and the sport office numbers) is added by
+-- supabase/migrations/20260919140000_sport_gym_madibaz.sql. Run it after this file. It also removes any
+-- unedited "SAMPLE:" rows.

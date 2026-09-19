@@ -43,10 +43,6 @@ export default function ChecklistScreen() {
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
 
-  useEffect(() => {
-    void fetchChecklist();
-  }, []);
-
   const fetchChecklist = async () => {
     try {
       const cached = await AsyncStorage.getItem(CHECKLIST_CACHE_KEY);
@@ -101,6 +97,10 @@ export default function ChecklistScreen() {
     }
   };
 
+  useEffect(() => {
+    void fetchChecklist();
+  }, []);
+
   const toggleTask = async (taskId: string, currentStatus: boolean) => {
     const nextStatus = !currentStatus;
     const updatedTasks = tasks.map((task) =>
@@ -136,8 +136,6 @@ export default function ChecklistScreen() {
         eyebrow={t('common.firstSteps')}
         title={t('common.checklistTitle')}
         subtitle={t('common.checklistSubtitle')}
-        showBack
-        backFallback="/(student)"
       />
 
       {loadError && (

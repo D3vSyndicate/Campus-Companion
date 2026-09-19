@@ -78,7 +78,7 @@ export default function MentorGroupDetails() {
         <Pressable
           onPress={() =>
             router.push(
-              `/mentorGroup/${id}/edit`
+              `/mentorGroup/${id}/edit` as never
             )
           }
           style={[
@@ -210,7 +210,7 @@ export default function MentorGroupDetails() {
         colors={colors}
         onPress={() =>
           router.push(
-            `/mentorGroup/${id}/request`
+            `/mentorGroup/${id}/request` as never
           )
         }
       />
@@ -222,7 +222,7 @@ export default function MentorGroupDetails() {
         colors={colors}
         onPress={() =>
           router.push(
-            `/mentorGroup/${id}/members`
+            `/mentorGroup/${id}/members` as never
           )
         }
       />
@@ -234,7 +234,7 @@ export default function MentorGroupDetails() {
         colors={colors}
         onPress={() =>
           router.push(
-            `/mentorGroup/${id}/qr`
+            `/mentorGroup/${id}/qr` as never
           )
         }
       />
@@ -246,7 +246,7 @@ export default function MentorGroupDetails() {
         colors={colors}
         onPress={() =>
           router.push(
-            `/mentorGroup/${id}/broadcast`
+            `/mentorGroup/${id}/broadcast` as never
           )
         }
       />

@@ -2,6 +2,7 @@ import { Redirect } from 'expo-router';
 import type { ReactNode } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { useAuth, UserRole } from '../context/AuthContext';
+import { homeRouteFor } from '../lib/roleHome';
 
 export function AuthGate({ children, requiredRole }: { children: ReactNode; requiredRole: UserRole }) {
   const { loading, role, user } = useAuth();
@@ -19,19 +20,8 @@ export function AuthGate({ children, requiredRole }: { children: ReactNode; requ
   }
 
   if (role !== requiredRole) {
-    const destination =
-      role === 'coordinator'
-        ? '/(coordinator)'
-        : role === 'hod'
-          ? '/(hod)'
-        : role === 'mentor'
-          ? '/(mentor)'
-        : role === 'admin'
-          ? '/(admin)'
-          : role === 'student'
-            ? '/(student)'
-            : '/login';
-    return <Redirect href={destination as any} />;
+    // Wrong area for this account: send them to the home screen that is theirs.
+    return <Redirect href={homeRouteFor(role) as never} />;
   }
 
   return <>{children}</>;

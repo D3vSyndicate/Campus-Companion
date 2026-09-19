@@ -1,3 +1,4 @@
+import { isRecent, postedAtOf } from '../../lib/announcements';
 import type { ManageConfig } from './types';
 
 export const FAQ_CATEGORIES = [
@@ -106,6 +107,8 @@ export const announcementConfig: ManageConfig = {
   title: 'Announcements',
   description: 'Clear, calm updates for students. Urgent messages should reassure, not alarm.',
   itemNoun: 'Announcement',
+  // Newest first, like students see them.
+  orderBy: [{ column: 'posted_by', ascending: false, nullsFirst: false }],
   fields: [
     { key: 'title', label: 'Title', type: 'text', required: true, placeholder: 'Welcome session moved to 10:00' },
     { key: 'message', label: 'Message', type: 'multiline', required: true, placeholder: 'What happened and what students should do next.' },
@@ -121,7 +124,8 @@ export const announcementConfig: ManageConfig = {
   // posted_by is a timestamp column, so it records when the announcement went out.
   onCreate: () => ({ posted_by: new Date().toISOString() }),
   listTitle: (row) => text(row, 'title'),
-  listSubtitle: (row) => [text(row, 'priority_level'), text(row, 'posted_by').slice(0, 10)].filter(Boolean).join(' · '),
+  listSubtitle: (row) =>
+    [isRecent(postedAtOf(row)) ? 'New' : '', text(row, 'priority_level'), text(row, 'posted_by').slice(0, 10)].filter(Boolean).join(' · '),
 };
 
 export const supportConfig: ManageConfig = {
@@ -159,16 +163,16 @@ export const shuttleConfig: ManageConfig = {
   setupFile: 'supabase/campus_features.sql',
   pk: 'shuttle_id',
   title: 'Shuttle times',
-  description: 'Morning, afternoon and night shuttle departures shown on the student home screen.',
+  description: 'Shuttle departures for each stop, shown on the student home screen. Students choose their own stop.',
   itemNoun: 'Shuttle',
   orderBy: [{ column: 'departure_time' }],
   fields: [
     { key: 'shift', label: 'Shift', type: 'select', required: true, default: 'morning', options: SHUTTLE_SHIFTS },
     { key: 'departure_time', label: 'Departure time (HH:MM)', type: 'time', required: true, placeholder: '07:15' },
-    { key: 'route_name', label: 'Route', type: 'text', required: true, placeholder: 'Residence to Campus' },
+    { key: 'route_name', label: 'Stop or route', type: 'text', required: true, placeholder: 'Korsten (PSA 163 Durban Rd)', help: 'Students choose their stop from these names, so spell one stop the same way every time.' },
     { key: 'pickup_point', label: 'Pick-up point', type: 'text' },
     { key: 'dropoff_point', label: 'Drop-off point', type: 'text' },
-    { key: 'days', label: 'Days', type: 'text', required: true, default: 'Mon - Fri' },
+    { key: 'days', label: 'Days', type: 'text', placeholder: 'Mon - Fri', help: 'Optional.' },
     { key: 'notes', label: 'Notes', type: 'multiline' },
     { key: 'is_active', label: 'Running', type: 'boolean', default: true, help: 'Turn off to hide a shuttle without deleting it.' },
   ],
@@ -290,7 +294,7 @@ export const eventConfig: ManageConfig = {
 
 export const sportConfig: ManageConfig = {
   table: 'sport_recreation',
-  setupFile: 'supabase/campus_features.sql',
+  setupFile: 'supabase/migrations/20260919140000_sport_gym_madibaz.sql',
   pk: 'item_id',
   title: 'Sport & gym',
   description: 'Sports, clubs, facilities and the gym, including how a student signs up.',
@@ -420,12 +424,33 @@ export const hodProgrammeConfig: ManageConfig = {
   setupFile: 'supabase/hod.sql',
   pk: 'id',
   title: 'Programme information',
-  description: 'Guidance and expectations from the department, shown to students under Programme information.',
+  description: 'What students should know about the programme, shown to them under From your department.',
   itemNoun: 'Note',
   orderBy: [{ column: 'created_at' }],
+  // Programme information and departmental expectations share one table, told apart by category.
+  filter: { column: 'category', value: 'programme' },
+  onCreate: () => ({ category: 'programme' }),
   fields: [
-    { key: 'title', label: 'Heading', type: 'text', required: true, placeholder: 'What we expect in first year' },
+    { key: 'title', label: 'Heading', type: 'text', required: true, placeholder: 'About the diploma' },
     { key: 'content', label: 'Message to students', type: 'multiline', required: true },
+  ],
+  listTitle: (row) => text(row, 'title'),
+  listSubtitle: (row) => text(row, 'content'),
+};
+
+export const hodExpectationConfig: ManageConfig = {
+  table: 'hod_programme_content',
+  setupFile: 'supabase/hod.sql',
+  pk: 'id',
+  title: 'Departmental expectations',
+  description: 'What the department expects of students, such as attendance, conduct and submissions.',
+  itemNoun: 'Expectation',
+  orderBy: [{ column: 'created_at' }],
+  filter: { column: 'category', value: 'expectation' },
+  onCreate: () => ({ category: 'expectation' }),
+  fields: [
+    { key: 'title', label: 'Heading', type: 'text', required: true, placeholder: 'Attendance' },
+    { key: 'content', label: 'What is expected', type: 'multiline', required: true },
   ],
   listTitle: (row) => text(row, 'title'),
   listSubtitle: (row) => text(row, 'content'),
@@ -475,4 +500,21 @@ export const hodContactConfig: ManageConfig = {
   ],
   listTitle: (row) => text(row, 'name'),
   listSubtitle: (row) => [text(row, 'role'), text(row, 'email')].filter(Boolean).join(' · '),
+};
+
+export const hodResourceConfig: ManageConfig = {
+  table: 'hod_resources',
+  setupFile: 'supabase/hod.sql',
+  pk: 'id',
+  title: 'Support resources',
+  description: 'Guides, forms and links that help students succeed in the department.',
+  itemNoun: 'Resource',
+  orderBy: [{ column: 'title' }],
+  fields: [
+    { key: 'title', label: 'Resource name', type: 'text', required: true, placeholder: 'Academic support guide' },
+    { key: 'description', label: 'What it helps with', type: 'multiline' },
+    { key: 'url', label: 'Link', type: 'text', placeholder: 'https://...', help: 'Optional. Students can tap it to open the resource.' },
+  ],
+  listTitle: (row) => text(row, 'title'),
+  listSubtitle: (row) => text(row, 'description') || text(row, 'url'),
 };

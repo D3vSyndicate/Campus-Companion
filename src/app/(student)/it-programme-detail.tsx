@@ -27,6 +27,19 @@ function splitLabel(line: string): { label: string; rest: string } {
   return { label: '', rest: line };
 }
 
+function Section({ icon, title, children }: { icon: keyof typeof Ionicons.glyphMap; title: string; children: ReactNode }) {
+  const { colors } = useTheme();
+  return (
+    <View style={[styles.section, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+      <View style={styles.sectionHead}>
+        <Ionicons name={icon} size={18} color={colors.accent} />
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>{title}</Text>
+      </View>
+      {children}
+    </View>
+  );
+}
+
 export default function ProgrammeDetailScreen() {
   const { colors } = useTheme();
   const router = useRouter();
@@ -55,16 +68,6 @@ export default function ProgrammeDetailScreen() {
     if (router.canGoBack()) router.back();
     else router.replace('/(student)/it-programmes' as never);
   };
-
-  const Section = ({ icon, title, children }: { icon: keyof typeof Ionicons.glyphMap; title: string; children: ReactNode }) => (
-    <View style={[styles.section, { backgroundColor: colors.surface, borderColor: colors.border }]}>
-      <View style={styles.sectionHead}>
-        <Ionicons name={icon} size={18} color={colors.accent} />
-        <Text style={[styles.sectionTitle, { color: colors.text }]}>{title}</Text>
-      </View>
-      {children}
-    </View>
-  );
 
   const bullets = (items: string[]) =>
     items.map((item, index) => (
@@ -119,8 +122,6 @@ export default function ProgrammeDetailScreen() {
       <PageHeader
         eyebrow="School of IT programme"
         title={programme.name}
-        showBack
-        backFallback="/(student)/it-programmes"
       />
 
       {offline ? <ShameResilientBanner message="You are offline, so this may be out of date." type="info" /> : null}

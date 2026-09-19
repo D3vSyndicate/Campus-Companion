@@ -49,8 +49,6 @@ export default function ProgrammesScreen() {
         eyebrow="SCHOOL OF IT"
         title="Programmes"
         subtitle="Find out what each programme covers, where it can take you, and who to ask for academic advice."
-        showBack
-        backFallback="/(student)"
       />
 
       {offline ? <ShameResilientBanner message="You are offline, so this may be out of date. It will refresh when you are back online." type="info" /> : null}

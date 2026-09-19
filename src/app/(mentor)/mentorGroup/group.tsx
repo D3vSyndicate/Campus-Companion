@@ -86,7 +86,7 @@ export default function MentorGroups() {
         <Pressable
           key={group.id}
           style={[styles.groupCard, { backgroundColor: colors.surface, borderColor: colors.border }]}
-          onPress={() => router.push(`/mentorGroup/${group.id}`)}
+          onPress={() => router.push(`/mentorGroup/${group.id}` as never)}
         >
           <View style={[styles.groupIcon, { backgroundColor: colors.background }]}>
             <Ionicons name="people-outline" size={28} color={colors.accent} />

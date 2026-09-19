@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useMemo } from 'react';
+import { createContext, ReactNode, useCallback, useContext, useMemo } from 'react';
 import { useAppearance } from '../context/AppearanceContext';
 import { darkColors, lightColors, ThemeColors } from './colors';
 
@@ -22,11 +22,12 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const resolvedScheme: 'light' | 'dark' = darkMode ? 'dark' : 'light';
   const colors = resolvedScheme === 'dark' ? darkColors : lightColors;
 
-  const setMode = (nextMode: ThemeMode) => {
-    setDarkModeOverride(
-      nextMode === 'system' ? null : nextMode === 'dark',
-    );
-  };
+  const setMode = useCallback(
+    (nextMode: ThemeMode) => {
+      setDarkModeOverride(nextMode === 'system' ? null : nextMode === 'dark');
+    },
+    [setDarkModeOverride],
+  );
 
   const value = useMemo(
     () => ({
@@ -36,7 +37,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       colors,
       isDark: resolvedScheme === 'dark',
     }),
-    [mode, resolvedScheme, colors]
+    [mode, setMode, resolvedScheme, colors]
   );
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
