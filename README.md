@@ -20,8 +20,32 @@ Before starting the app, copy `.env.example` to `.env` and set
 `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_ANON_KEY` to the URL and
 publishable (or legacy anon) key from the Supabase project settings.
 
+### Supabase coordinator CRUD setup
+
+Run `supabase/campus_features.sql` in the Supabase SQL editor before using the
+Coordinator management screens. It creates the staff authorization function
+used by the insert, update, and delete policies. Run
+`supabase/coordinator_content.sql` as well if the Coordinator Content table is
+used. After changing a user's `app_metadata.role`, sign out and sign back in.
+
+The simplest way is to paste **one file**: `supabase/setup_all.sql`. It contains every database script below,
+in the right order, and it is safe to run again. Paste it into the Supabase SQL editor and press Run. It is
+generated, so after changing any of the scripts run `node scripts/build-setup-sql.js` to rebuild it.
+
+It runs these, in this order:
+
+1. `supabase/campus_features.sql` (tables, staff rules, tribes and chat, shuttle times, sport & gym, digital readiness)
+2. `supabase/migrations/20260919213000_coordinator_crud_policies.sql` (clears leftover rules so staff can save)
+3. `supabase/coordinator_content.sql`
+4. `supabase/migrations/20260919120000_it_programmes.sql` (School of IT programmes and advisors)
+5. `supabase/migrations/20260919130000_event_schedule.sql` (the campus events schedule)
+6. `supabase/hod.sql` (head of department content)
+7. `supabase/migrations/20260919140000_sport_gym_madibaz.sql` (the Madibaz clubs and how to join)
+8. `supabase/migrations/20260919150000_shuttle_times_2026.sql` (the 2026 Gqeberha shuttle schedule)
+9. `supabase/mentor_groups.sql` (mentor groups, join requests and QR codes)
+
 Login routing uses the signed-in user's Supabase Auth metadata. Set a user's
-role to `admin` or `student` in `app_metadata.role` (preferred) or
+role to `admin`, `coordinator`, `hod`, `mentor`, or `student` in `app_metadata.role` (preferred) or
 `user_metadata.role` for existing test users. Accounts without a valid role
 cannot enter either dashboard.
 

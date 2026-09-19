@@ -13,6 +13,9 @@ export default function MentorLayout() {
   return (
     <AuthGate requiredRole="mentor">
       <Tabs
+        // Back returns to the screen you were just on. The default jumps to the first tab (Home) from every
+        // screen that is not in the tab bar, such as the mentor groups.
+        backBehavior="history"
         screenOptions={{
           tabBarActiveTintColor: colors.accent,
           tabBarInactiveTintColor: colors.textSecondary,
@@ -69,6 +72,15 @@ export default function MentorLayout() {
         <Tabs.Screen name="map" options={{ href: null, title: 'Campus map' }} />
         <Tabs.Screen name="search" options={{ href: null, title: 'Search' }} />
         <Tabs.Screen name="guide" options={{ href: null, title: 'Buddy guide' }} />
+        <Tabs.Screen name="mentorGroup/index" options={{ href: null, title: 'Tribe' }} />
+        <Tabs.Screen name="mentorGroup/create" options={{ href: null, title: 'Tribe' }} />
+        <Tabs.Screen name="mentorGroup/group" options={{ href: null, title: 'Tribe' }} />
+        <Tabs.Screen name="mentorGroup/[id]/index" options={{ href: null, title: 'Tribe' }} />
+        <Tabs.Screen name="mentorGroup/[id]/edit" options={{ href: null, title: 'Tribe' }} />
+        <Tabs.Screen name="mentorGroup/[id]/members" options={{ href: null, title: 'Tribe' }} />
+        <Tabs.Screen name="mentorGroup/[id]/qr" options={{ href: null, title: 'Tribe' }} />
+        <Tabs.Screen name="mentorGroup/[id]/request" options={{ href: null, title: 'Tribe' }} />
+        <Tabs.Screen name="mentorGroup/[id]/broadcast" options={{ href: null, title: 'Tribe' }} />
       </Tabs>
     </AuthGate>
   );

@@ -11,6 +11,7 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
+import { PageHeader } from '../../components/PageHeader';
 import { ScaledText as Text } from '../../components/ScaledText';
 import { fetchWithOfflineFallback } from '../../lib/offlineData';
 import { useTheme } from '../../theme/ThemeContext';
@@ -84,10 +85,12 @@ export default function VenueGuide() {
         keyboardShouldPersistTaps="handled"
         ListHeaderComponent={
           <View>
-            <Text style={[styles.title, { color: colors.text }]}>Venue guide</Text>
-            <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-              Not sure where something is? Many students are not. Give clear, kind directions and offer to walk with them if you can.
-            </Text>
+            <PageHeader
+              eyebrow="FYS BUDDY"
+              title="Venue guide"
+              subtitle="Not sure where something is? Many students are not. Give clear, kind directions and offer to walk with them if you can."
+              showSearch={false}
+            />
             <TextInput
               style={[styles.search, { backgroundColor: colors.card, borderColor: colors.border, color: colors.text }]}
               placeholder="Search venues, buildings or rooms"
@@ -101,7 +104,7 @@ export default function VenueGuide() {
           loading ? (
             <ActivityIndicator color={colors.accent} style={styles.loading} />
           ) : (
-            <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
+            <Text style={[styles.empty, { color: colors.textSecondary }]}>
               {venues.length ? 'No venue matches that yet. Try another word.' : 'No venues have been added yet.'}
             </Text>
           )
@@ -164,9 +167,8 @@ export default function VenueGuide() {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   list: { padding: 16, paddingBottom: 40 },
-  title: { fontSize: 24, fontWeight: '800' },
-  subtitle: { fontSize: 14, lineHeight: 20, marginTop: 6, marginBottom: 14 },
   search: { borderWidth: 1, borderRadius: 10, padding: 12, marginBottom: 14, fontSize: 15 },
+  empty: { fontSize: 14, lineHeight: 20, marginTop: 6, marginBottom: 14 },
   loading: { marginTop: 24 },
   card: { borderWidth: 1, borderRadius: 14, marginBottom: 10, overflow: 'hidden' },
   cardHeader: { flexDirection: 'row', alignItems: 'center', gap: 12, padding: 14 },

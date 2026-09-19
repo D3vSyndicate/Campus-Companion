@@ -5,6 +5,8 @@ import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 're
 import { ActivityIndicator, Linking, Platform, Pressable, ScrollView, StyleSheet, Text as NativeText, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { fetchWithOfflineFallback } from '../../lib/offlineData';
+import { fetchShuttleRows } from '../../lib/shuttle';
+import { fetchSportRows } from '../../lib/sport';
 import { highlight, prepare, search, snippet, type PreparedDoc, type SearchDoc, type SearchHit, type SearchKind } from '../../lib/search';
 import { buildSearchDocs, type SearchSources } from '../../lib/searchDocs';
 import { SEARCH_SCOPES, type SearchScopeId } from '../../lib/searchScopes';
@@ -220,7 +222,12 @@ export function SearchScreen({ area, initialQuery = '', scope = 'all' }: { area:
     void (async () => {
       // Only the tables this search needs are loaded.
       const needed = SOURCES.filter((source) => source.kinds.some((kind) => allowedKinds.includes(kind)));
-      const results = await Promise.all(needed.map((source) => fetchWithOfflineFallback(source.table)));
+      // Sport & gym and the shuttle schedule have information built into the app, so they never come back empty.
+      const results = await Promise.all(
+        needed.map((source) =>
+          source.key === 'sport' ? fetchSportRows() : source.key === 'shuttle' ? fetchShuttleRows() : fetchWithOfflineFallback(source.table),
+        ),
+      );
       if (!active) return;
 
       const sources: SearchSources = { today: localIsoDate(new Date()) };
@@ -383,7 +390,7 @@ export function SearchScreen({ area, initialQuery = '', scope = 'all' }: { area:
     else router.replace(routes.home as never);
   };
 
-  const useSuggestion = (text: string) => {
+  const applySuggestion = (text: string) => {
     setQuery(text);
     setKindFilter('all');
     remember(text);
@@ -411,7 +418,7 @@ export function SearchScreen({ area, initialQuery = '', scope = 'all' }: { area:
             <Text style={[styles.label, { color: colors.textSecondary }]}>{scoped ? 'Try' : 'Popular searches'}</Text>
             <View style={styles.chipRow}>
               {scopeInfo.suggestions.map((text) => (
-                <Chip key={text} label={text} active={false} onPress={() => useSuggestion(text)} />
+                <Chip key={text} label={text} active={false} onPress={() => applySuggestion(text)} />
               ))}
             </View>
           </>
@@ -426,7 +433,7 @@ export function SearchScreen({ area, initialQuery = '', scope = 'all' }: { area:
               </Pressable>
             </View>
             {recent.map((text) => (
-              <Pressable key={text} accessibilityRole="button" onPress={() => useSuggestion(text)} style={[styles.recent, { borderColor: colors.border }]}>
+              <Pressable key={text} accessibilityRole="button" onPress={() => applySuggestion(text)} style={[styles.recent, { borderColor: colors.border }]}>
                 <Ionicons name="time-outline" size={18} color={colors.textSecondary} />
                 <Text style={[styles.recentText, { color: colors.text }]}>{text}</Text>
               </Pressable>
@@ -447,7 +454,7 @@ export function SearchScreen({ area, initialQuery = '', scope = 'all' }: { area:
         {scopeInfo.suggestions.length ? (
           <View style={styles.chipRow}>
             {scopeInfo.suggestions.slice(0, 5).map((text) => (
-              <Chip key={text} label={text} active={false} onPress={() => useSuggestion(text)} />
+              <Chip key={text} label={text} active={false} onPress={() => applySuggestion(text)} />
             ))}
           </View>
         ) : null}

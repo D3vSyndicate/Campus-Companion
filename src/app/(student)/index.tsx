@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Haptics from 'expo-haptics';
+import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -27,6 +27,7 @@ import { ShameResilientBanner } from '../../components/ShameResilientBanner';
 import { ShuttleCard } from '../../components/ShuttleCard';
 import { useAppearance } from '../../context/AppearanceContext';
 import { useAuth } from '../../context/AuthContext';
+import { isRecent, newestFirst, postedAtOf, postedLabel, useSeenAnnouncements } from '../../lib/announcements';
 import { hasSeenReadinessIntro, markReadinessIntroSeen, useReadiness } from '../../lib/readiness';
 import { supabase } from '../../lib/superbase';
 import { useTheme } from '../../theme/ThemeContext';
@@ -60,8 +61,6 @@ const COLORS = {
   white: '#FFFFFF',
 };
 
-const LAST_SEEN_KEY = 'announcements:lastSeenId';
-
 // The hero carries white text, so it stays dark in both themes rather than following the theme's
 // own background and text colours.
 const HERO_GRADIENT = ['#123152', '#0B2239', '#05101F'] as const;
@@ -75,6 +74,7 @@ interface Announcement {
   title: string;
   message: string;
   priority?: string;
+  postedAt: Date | null;
 }
 
 interface ActionItem {
@@ -201,6 +201,15 @@ const ACTIONS: ActionItem[] = [
     subtitle: 'What each programme covers, careers, and who to ask for advice.',
   },
   {
+    key: 'department',
+    route: '/(student)/programme',
+    icon: 'reader-outline',
+    iconBg: '#FFF8D9',
+    iconColor: '#0B1F3A',
+    title: 'From your department',
+    subtitle: 'Expectations, assignments and contacts from your head of department.',
+  },
+  {
     key: 'faqs',
     route: '/(student)/faqs',
     icon: 'help-circle-outline',
@@ -318,11 +327,13 @@ function AnnouncementCard({
   expanded,
   onToggle,
   isNew,
+  posted,
 }: {
   item: Announcement;
   expanded: boolean;
   onToggle: () => void;
   isNew: boolean;
+  posted: string;
 }) {
   const { colors } = useTheme();
 
@@ -385,6 +396,8 @@ function AnnouncementCard({
           />
         </View>
       </View>
+
+      {posted ? <Text style={[styles.postedText, { color: colors.textSecondary }]}>{posted}</Text> : null}
 
       <Text
         style={[
@@ -528,9 +541,8 @@ export default function HomeScreen() {
     null,
   );
 
-  const [lastSeenId, setLastSeenId] = useState<string | null>(
-    null,
-  );
+  // Which announcements this student has already opened, so only unread recent ones say NEW.
+  const { seen, markSeen } = useSeenAnnouncements(user?.id);
 
   const greeting = t(`common.${getGreeting()}`);
   const userMetadata = user?.user_metadata ?? {};
@@ -570,28 +582,15 @@ export default function HomeScreen() {
   }, [userId, readiness.loading, readiness.totalSteps, router]);
 
   // ---------------------------------------------------------------------------
-  // Load last-seen announcement
-  // ---------------------------------------------------------------------------
-
-  useEffect(() => {
-    (async () => {
-      const stored =
-        await AsyncStorage.getItem(LAST_SEEN_KEY);
-
-      if (stored) {
-        setLastSeenId(stored);
-      }
-    })();
-  }, []);
-
-  // ---------------------------------------------------------------------------
   // Fetch announcements
   // ---------------------------------------------------------------------------
 
   const fetchAnnouncements = useCallback(async () => {
+    // Newest first, so the latest announcement is really at the top.
     const { data, error } = await supabase
       .from('Announcement')
-      .select('*');
+      .select('*')
+      .order('posted_by', { ascending: false, nullsFirst: false });
 
     if (error) {
       console.error('Failed to load announcements:', error);
@@ -602,7 +601,7 @@ export default function HomeScreen() {
       return [];
     }
 
-    return data.map((row, index) => {
+    return newestFirst(data.map((row, index): Announcement => {
       const item = row as Record<string, unknown>;
 
       return {
@@ -630,8 +629,10 @@ export default function HomeScreen() {
         priority: (item['Priority level'] ?? item.priority_level ?? item.Priority ?? item.priority)
           ? String(item['Priority level'] ?? item.priority_level ?? item.Priority ?? item.priority)
           : undefined,
+
+        postedAt: postedAtOf(item),
       };
-    });
+    }));
   }, []);
 
   // ---------------------------------------------------------------------------
@@ -740,9 +741,10 @@ export default function HomeScreen() {
   // Unread state
   // ---------------------------------------------------------------------------
 
-  const hasUnread =
-    announcements.length > 0 &&
-    announcements[0].id !== lastSeenId;
+  // New means posted within the last week and not opened yet.
+  const isNewAnnouncement = (announcement: Announcement) => isRecent(announcement.postedAt) && !seen.has(announcement.id);
+  const newCount = announcements.filter(isNewAnnouncement).length;
+  const hasUnread = newCount > 0;
 
   // ---------------------------------------------------------------------------
   // Theme
@@ -791,7 +793,7 @@ export default function HomeScreen() {
   // Announcement interaction
   // ---------------------------------------------------------------------------
 
-  const toggleAnnouncement = async (id: string) => {
+  const toggleAnnouncement = (id: string) => {
     tap();
 
     LayoutAnimation.configureNext(
@@ -802,18 +804,8 @@ export default function HomeScreen() {
       current === id ? null : id,
     );
 
-    // Mark latest announcement as seen
-    if (
-      announcements[0]?.id === id &&
-      id !== lastSeenId
-    ) {
-      setLastSeenId(id);
-
-      await AsyncStorage.setItem(
-        LAST_SEEN_KEY,
-        id,
-      );
-    }
+    // Opening an announcement marks it as read, so its NEW tag goes away.
+    markSeen(id);
   };
 
   // ---------------------------------------------------------------------------
@@ -860,6 +852,12 @@ export default function HomeScreen() {
           end={{ x: 1, y: 1 }}
           style={styles.hero}
         >
+          <Image
+            source={require('../../../assets/images/coordinator-hero.png')}
+            style={styles.heroBackgroundImage}
+            contentFit="fill"
+          />
+          <View style={styles.heroImageOverlay} />
           {/* Decorative glow */}
 
           <View style={styles.heroGlowOne} />
@@ -1118,7 +1116,7 @@ export default function HomeScreen() {
                           },
                         ]}
                       >
-                        {t('common.new')}
+                        {newCount > 1 ? `${newCount} ` : ''}{t('common.new')}
                       </Text>
                     </View>
                   )}
@@ -1142,7 +1140,7 @@ export default function HomeScreen() {
                   <SkeletonCard key={item} />
                 ))
               : announcements.map(
-                  (announcement, index) => (
+                  (announcement) => (
                     <AnnouncementCard
                       key={announcement.id}
                       item={announcement}
@@ -1155,10 +1153,8 @@ export default function HomeScreen() {
                           announcement.id,
                         )
                       }
-                      isNew={
-                        index === 0 &&
-                        hasUnread
-                      }
+                      isNew={isNewAnnouncement(announcement)}
+                      posted={postedLabel(announcement.postedAt)}
                     />
                   ),
                 )}
@@ -1383,6 +1379,13 @@ const styles = StyleSheet.create({
     },
 
     elevation: 8,
+  },
+  heroBackgroundImage: {
+    ...StyleSheet.absoluteFill,
+  },
+  heroImageOverlay: {
+    ...StyleSheet.absoluteFill,
+    backgroundColor: 'rgba(4, 19, 29, 0.28)',
   },
 
   heroGlowOne: {
@@ -1798,6 +1801,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
+  postedText: { fontSize: 11, marginTop: 2, marginBottom: 2 },
   newBadge: {
     flexDirection: 'row',
     alignItems: 'center',

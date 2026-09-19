@@ -55,7 +55,7 @@ export function SuggestFaq({ initialQuestion = '', onDone }: Props) {
     <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.accent }]}>
       <Text style={[styles.title, { color: colors.text }]}>Suggest a question</Text>
       <Text style={[styles.hint, { color: colors.textSecondary }]}>
-        Heard a question that is not answered here? Tell the coordinators so it can be added. Please do not include any student's personal details.
+        Heard a question that is not answered here? Tell the coordinators so it can be added. Please do not include any student&apos;s personal details.
       </Text>
 
       <TextInput

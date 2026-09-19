@@ -13,6 +13,9 @@ export default function StudentLayout() {
   return (
     <AuthGate requiredRole="student">
       <Tabs
+        // Back returns to the screen you were just on. The default jumps to the first tab (Home) from every
+        // screen that is not in the tab bar, such as the mentor groups.
+        backBehavior="history"
         screenOptions={{
           tabBarActiveTintColor: colors.accent,
           tabBarInactiveTintColor: colors.textSecondary,
@@ -52,6 +55,12 @@ export default function StudentLayout() {
         <Tabs.Screen name="chatbot" options={{ href: null, title: 'Support chat' }} />
         <Tabs.Screen name="it-programmes" options={{ href: null, title: 'Programmes' }} />
         <Tabs.Screen name="it-programme-detail" options={{ href: null, title: 'Programme' }} />
+        <Tabs.Screen name="tribe-feature" options={{ href: null, title: 'Mentor groups' }} />
+        <Tabs.Screen name="mentorGroups/index" options={{ href: null, title: 'Mentor groups' }} />
+        <Tabs.Screen name="mentorGroups/groups" options={{ href: null, title: 'Mentor groups' }} />
+        <Tabs.Screen name="mentorGroups/[id]" options={{ href: null, title: 'Mentor groups' }} />
+        <Tabs.Screen name="mentorGroups/request-status" options={{ href: null, title: 'Mentor groups' }} />
+        <Tabs.Screen name="mentorGroups/scan" options={{ href: null, title: 'Mentor groups' }} />
         <Tabs.Screen
           name="map"
           options={{

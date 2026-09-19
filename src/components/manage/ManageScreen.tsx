@@ -1,4 +1,3 @@
-import { useSegments } from 'expo-router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
@@ -23,11 +22,20 @@ import { PageHeader } from '../PageHeader';
 import { ScaledText as Text } from '../ScaledText';
 import type { FieldConfig, LookupLabels, ManageConfig, Row } from './types';
 
-const NO_PERMISSION =
-  'You do not have permission to do that. Check that your account has the coordinator or admin role.';
+// Which roles may change content depends on the area the screen belongs to. The database refusing a
+// change usually means its access rules have not been set up yet, not that the person did something wrong,
+// so say how to fix both possible causes.
+function noPermissionMessage(role: string | null, setupFile = 'supabase/campus_features.sql') {
+  const allowed = role === 'hod' ? 'head of department or admin' : 'coordinator or admin';
+  return `You do not have permission to do that. Check that your account has the ${allowed} role and that ${setupFile} has been run in the Supabase SQL editor, then sign out and back in.`;
+}
 
 // Turns a Supabase/PostgREST error into something a coordinator can act on.
-function friendlyError(error: { code?: string; message: string }, setupFile = 'supabase/campus_features.sql'): string {
+function friendlyError(
+  error: { code?: string; message: string },
+  setupFile = 'supabase/campus_features.sql',
+  role: string | null = null,
+): string {
   if (error.code === '42P01' || error.code === 'PGRST205') {
     return `This section is not set up in the database yet. Run ${setupFile} in the Supabase SQL editor.`;
   }
@@ -44,7 +52,7 @@ function friendlyError(error: { code?: string; message: string }, setupFile = 's
     return `${error.message}. Check the format of what you typed.`;
   }
 
-  if (error.code === '42501' || error.code === 'PGRST301') return NO_PERMISSION;
+  if (error.code === '42501' || error.code === 'PGRST301') return noPermissionMessage(role, setupFile);
 
   return error.message;
 }
@@ -98,11 +106,8 @@ function toFormValues(
 
 export function ManageScreen({ config }: { config: ManageConfig }) {
   const { colors } = useTheme();
-  const segments = useSegments();
-  // Back goes to the dashboard of whichever staff area this screen was opened from.
-  const dashboard = `/${segments[0] ?? '(coordinator)'}`;
   const { showToast } = useToast();
-  const { user } = useAuth();
+  const { user, role } = useAuth();
 
   const [rows, setRows] = useState<Row[]>([]);
   const [lookups, setLookups] = useState<
@@ -120,9 +125,14 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
 
     let query = supabase.from(config.table).select('*');
 
+    if (config.filter) {
+      query = query.eq(config.filter.column, config.filter.value);
+    }
+
     for (const order of config.orderBy ?? []) {
       query = query.order(order.column, {
         ascending: order.ascending ?? true,
+        nullsFirst: order.nullsFirst,
       });
     }
 
@@ -139,7 +149,7 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
     ]);
 
     if (rowsResult.error) {
-      setLoadError(friendlyError(rowsResult.error, config.setupFile));
+      setLoadError(friendlyError(rowsResult.error, config.setupFile, role));
       setRows([]);
     } else {
       setRows((rowsResult.data ?? []) as Row[]);
@@ -160,7 +170,7 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
     });
 
     setLookups(nextLookups);
-  }, [config]);
+  }, [config, role]);
 
   useEffect(() => {
     void (async () => {
@@ -284,48 +294,39 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
             email: user?.email ?? '',
           }) ?? {};
 
-        const { data, error } = await supabase
+        const { error } = await supabase
           .from(config.table)
           .insert({
             ...payload,
             ...extras,
-          })
-          .select()
-          .single();
+          });
 
         if (error) {
-          showToast(friendlyError(error, config.setupFile), 'error');
+          showToast(friendlyError(error, config.setupFile, role), 'error');
           return;
         }
 
-        setRows((current) => [...current, data as Row]);
+        await load();
 
         showToast(`${config.itemNoun} added`);
       } else if (editing) {
-        const { data, error } = await supabase
+        const { error, count } = await supabase
           .from(config.table)
-          .update(payload)
-          .eq(config.pk, idOf(editing))
-          .select();
+          .update(payload, { count: 'exact' })
+          .eq(config.pk, idOf(editing));
 
         if (error) {
-          showToast(friendlyError(error, config.setupFile), 'error');
+          showToast(friendlyError(error, config.setupFile, role), 'error');
           return;
         }
 
-        // Row-level security silently filters out rows you may not change.
-        if (!data?.length) {
-          showToast(NO_PERMISSION, 'error');
+        // Row-level security silently skips rows you may not change, so nothing was saved.
+        if (count === 0) {
+          showToast(noPermissionMessage(role, config.setupFile), 'error');
           return;
         }
 
-        setRows((current) =>
-          current.map((row) =>
-            idOf(row) === idOf(editing)
-              ? (data[0] as Row)
-              : row,
-          ),
-        );
+        await load();
 
         showToast(`${config.itemNoun} updated`);
       }
@@ -352,27 +353,22 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
           style: 'destructive',
           onPress: () => {
             void (async () => {
-              const { data, error } = await supabase
+              const { error, count } = await supabase
                 .from(config.table)
-                .delete()
-                .eq(config.pk, idOf(row))
-                .select();
+                .delete({ count: 'exact' })
+                .eq(config.pk, idOf(row));
 
               if (error) {
-                showToast(friendlyError(error, config.setupFile), 'error');
+                showToast(friendlyError(error, config.setupFile, role), 'error');
                 return;
               }
 
-              if (!data?.length) {
-                showToast(NO_PERMISSION, 'error');
+              if (count === 0) {
+                showToast(noPermissionMessage(role, config.setupFile), 'error');
                 return;
               }
 
-              setRows((current) =>
-                current.filter(
-                  (entry) => idOf(entry) !== idOf(row),
-                ),
-              );
+              await load();
 
               setEditing(null);
 
@@ -396,23 +392,18 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
     }
 
     // Also offer values already used in the table (trimmed) so categories stay consistent.
-    const known = new Set(
-      base.map((option) => option.value.toLowerCase()),
-    );
-
+    const used = new Map<string, string>();
     for (const row of rows) {
-      const used = String(row[field.key] ?? '').trim();
-
-      if (used && !known.has(used.toLowerCase())) {
-        known.add(used.toLowerCase());
-        base.push({
-          value: used,
-          label: used,
-        });
-      }
+      const value = String(row[field.key] ?? '').trim();
+      if (value && !used.has(value.toLowerCase())) used.set(value.toLowerCase(), value);
     }
 
-    return base;
+    const known = new Set(base.map((option) => option.value.toLowerCase()));
+    const extra = [...used]
+      .filter(([key]) => !known.has(key))
+      .map(([, value]) => ({ value, label: value }));
+
+    return [...base, ...extra];
   };
 
   const inputStyle = {
@@ -629,8 +620,6 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
               title={config.title}
               subtitle={config.description}
               showSearch={false}
-              showBack
-              backFallback={dashboard}
             />
 
             {loadError ? (

@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Linking, Pressable, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
-import { fetchWithOfflineFallback } from '../lib/offlineData';
+import { fetchSportRows } from '../lib/sport';
 import { useTheme } from '../theme/ThemeContext';
 import { PageHeader } from './PageHeader';
 import { CampusActionButton as LinkButton } from './CampusActionButton';
@@ -88,7 +88,7 @@ export function SportGym({ initialTab = 'sport', focusId = '' }: { initialTab?: 
   }, [focusId]);
 
   const load = useCallback(async () => {
-    const sportResult = await fetchWithOfflineFallback('sport_recreation');
+    const sportResult = await fetchSportRows();
     const rows = (result: { data: unknown }) => (Array.isArray(result.data) ? (result.data as Record<string, unknown>[]) : []);
 
     setSport(
@@ -269,8 +269,6 @@ export function SportGym({ initialTab = 'sport', focusId = '' }: { initialTab?: 
         eyebrow="SPORT & RECREATION"
         title="Sport & gym"
         subtitle="Find a sport or club, and learn how to sign up for the gym."
-        showBack
-        backFallback="/(student)"
       />
 
       {offline ? <ShameResilientBanner message="You are offline, so this may be out of date. It will refresh when you are back online." type="info" /> : null}

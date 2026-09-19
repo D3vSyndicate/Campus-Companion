@@ -1,6 +1,5 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useTheme } from '../theme/ThemeContext';
 
 const LANGUAGES = [
   { code: 'en', label: 'English' },

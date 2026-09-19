@@ -1,5 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { Image } from 'expo-image';
 import { useEffect, useState } from 'react';
 import { Pressable, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
 import { ScaledText as Text } from '../../components/ScaledText';
@@ -11,8 +12,8 @@ import { useTheme } from '../../theme/ThemeContext';
 type Action = { route: string; icon: keyof typeof Ionicons.glyphMap; title: string; text: string };
 
 const ACTIONS: Action[] = [
+  { route: '/(mentor)/mentorGroup/index', icon: 'chatbubbles-outline', title: 'My Tribe', text: 'Chat with the first-years in your group.' },
   { route: '/(mentor)/search', icon: 'search-outline', title: 'Search', text: 'Find answers, sessions, contacts and venues fast.' },
-  { route: '/(mentor)/tribe', icon: 'chatbubbles-outline', title: 'My Tribe', text: 'Chat with the first-years in your group.' },
   { route: '/(mentor)/faqs', icon: 'help-circle-outline', title: 'Quick answers', text: 'Find and share answers to common questions.' },
   { route: '/(mentor)/announcements', icon: 'megaphone-outline', title: 'Announcements', text: 'Know what students are being told.' },
   { route: '/(mentor)/schedule', icon: 'calendar-outline', title: 'Orientation schedule', text: 'Where students need to be, and when.' },
@@ -91,6 +92,12 @@ export default function BuddyHome() {
       }
     >
       <View style={[styles.hero, { backgroundColor: colors.text }]}>
+        <Image
+          source={require('../../../assets/images/coordinator-hero.png')}
+          style={styles.heroBackground}
+          contentFit="fill"
+        />
+        <View style={styles.heroOverlay} />
         <Text style={[styles.eyebrow, { color: colors.accent }]}>FYS BUDDY</Text>
         <Text style={[styles.heroTitle, { color: colors.surface }]}>{name ? `Hi ${name}` : 'Hi there'}, thank you for being a buddy</Text>
         <Text style={[styles.heroText, { color: colors.surface }]}>
@@ -143,7 +150,9 @@ export default function BuddyHome() {
 
 const styles = StyleSheet.create({
   content: { padding: 16, paddingBottom: 40 },
-  hero: { borderRadius: 24, padding: 22, marginBottom: 6 },
+  hero: { position: 'relative', overflow: 'hidden', borderRadius: 24, padding: 22, marginBottom: 6 },
+  heroBackground: { ...StyleSheet.absoluteFill },
+  heroOverlay: { ...StyleSheet.absoluteFill, backgroundColor: 'rgba(4, 19, 29, 0.28)' },
   eyebrow: { fontSize: 11, fontWeight: '800', letterSpacing: 1.4, marginBottom: 8 },
   heroTitle: { fontSize: 24, fontWeight: '800', lineHeight: 30 },
   heroText: { fontSize: 14, lineHeight: 21, opacity: 0.85, marginTop: 10 },

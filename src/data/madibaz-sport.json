@@ -1,0 +1,211 @@
+[
+  {
+    "kind": "gym",
+    "name": "Madibaz Fitness & Aquatics Centre",
+    "description": "Promotes health and wellness for staff and students, and supports elite athletes' strength and fitness training.",
+    "cost": "Sport clubs are free for students, but the Fitness & Aquatics Centre charges a membership fee. Ask the Sport office for the current amount.",
+    "how_to_join": null,
+    "contact_name": "Madibaz Sport office. Gqeberha campus: 041 504 2165. George campus: 044 801 5037.",
+    "contact_phone": "041 504 2165",
+    "link_url": null,
+    "sort_order": 1
+  },
+  {
+    "kind": "facility",
+    "name": "Using university sport facilities",
+    "description": "Only registered members may use university sport facilities. Facilities must be booked in advance through the Facility Bookings Consultant. The university switchboard is +27 41 504 1111.",
+    "cost": null,
+    "how_to_join": "Register as a Madibaz Sport member.\nBook the facility in advance through the Facility Bookings Consultant.",
+    "contact_name": "Madibaz Sport office. Gqeberha campus: 041 504 2165. George campus: 044 801 5037.",
+    "contact_phone": "041 504 2165",
+    "link_url": "https://sport.mandela.ac.za/Registration-Form",
+    "sort_order": 2
+  },
+  {
+    "kind": "club",
+    "name": "Athletics",
+    "description": "Madibaz Athletics club. Registered Nelson Mandela University students join free of charge. Community members apply to the club and pay a membership fee that varies per club (non-refundable).",
+    "cost": "Free for registered students",
+    "how_to_join": "Complete the Madibaz Sport registration form. You can find it on sport.mandela.ac.za, under Registration Form.\nHand the completed form to the relevant Sport Manager.\nIf you need a membership card, the Sport Manager can issue one.\nRenew your membership every year. It is only valid for the year you register.",
+    "contact_name": "Madibaz Sport office. Gqeberha campus: 041 504 2165. George campus: 044 801 5037.",
+    "contact_phone": "041 504 2165",
+    "link_url": "https://athletics.mandela.ac.za/",
+    "sort_order": 10
+  },
+  {
+    "kind": "club",
+    "name": "Basketball",
+    "description": "Madibaz Basketball club. Registered Nelson Mandela University students join free of charge. Community members apply to the club and pay a membership fee that varies per club (non-refundable).",
+    "cost": "Free for registered students",
+    "how_to_join": "Complete the Madibaz Sport registration form. You can find it on sport.mandela.ac.za, under Registration Form.\nHand the completed form to the relevant Sport Manager.\nIf you need a membership card, the Sport Manager can issue one.\nRenew your membership every year. It is only valid for the year you register.",
+    "contact_name": "Madibaz Sport office. Gqeberha campus: 041 504 2165. George campus: 044 801 5037.",
+    "contact_phone": "041 504 2165",
+    "link_url": "https://basketball.mandela.ac.za/",
+    "sort_order": 10
+  },
+  {
+    "kind": "club",
+    "name": "Chess",
+    "description": "Madibaz Chess club. Registered Nelson Mandela University students join free of charge. Community members apply to the club and pay a membership fee that varies per club (non-refundable).",
+    "cost": "Free for registered students",
+    "how_to_join": "Complete the Madibaz Sport registration form. You can find it on sport.mandela.ac.za, under Registration Form.\nHand the completed form to the relevant Sport Manager.\nIf you need a membership card, the Sport Manager can issue one.\nRenew your membership every year. It is only valid for the year you register.",
+    "contact_name": "Madibaz Sport office. Gqeberha campus: 041 504 2165. George campus: 044 801 5037.",
+    "contact_phone": "041 504 2165",
+    "link_url": "https://chess.mandela.ac.za/",
+    "sort_order": 10
+  },
+  {
+    "kind": "club",
+    "name": "Cricket",
+    "description": "Madibaz Cricket club. Registered Nelson Mandela University students join free of charge. Community members apply to the club and pay a membership fee that varies per club (non-refundable).",
+    "cost": "Free for registered students",
+    "how_to_join": "Complete the Madibaz Sport registration form. You can find it on sport.mandela.ac.za, under Registration Form.\nHand the completed form to the relevant Sport Manager.\nIf you need a membership card, the Sport Manager can issue one.\nRenew your membership every year. It is only valid for the year you register.",
+    "contact_name": "Madibaz Sport office. Gqeberha campus: 041 504 2165. George campus: 044 801 5037.",
+    "contact_phone": "041 504 2165",
+    "link_url": "https://cricket.mandela.ac.za/",
+    "sort_order": 10
+  },
+  {
+    "kind": "club",
+    "name": "Football",
+    "description": "Madibaz Football club. Registered Nelson Mandela University students join free of charge. Community members apply to the club and pay a membership fee that varies per club (non-refundable).",
+    "cost": "Free for registered students",
+    "how_to_join": "Complete the Madibaz Sport registration form. You can find it on sport.mandela.ac.za, under Registration Form.\nHand the completed form to the relevant Sport Manager.\nIf you need a membership card, the Sport Manager can issue one.\nRenew your membership every year. It is only valid for the year you register.",
+    "contact_name": "Madibaz Sport office. Gqeberha campus: 041 504 2165. George campus: 044 801 5037.",
+    "contact_phone": "041 504 2165",
+    "link_url": "https://football.mandela.ac.za/",
+    "sort_order": 10
+  },
+  {
+    "kind": "club",
+    "name": "Golf",
+    "description": "Madibaz Golf club. Registered Nelson Mandela University students join free of charge. Community members apply to the club and pay a membership fee that varies per club (non-refundable).",
+    "cost": "Free for registered students",
+    "how_to_join": "Complete the Madibaz Sport registration form. You can find it on sport.mandela.ac.za, under Registration Form.\nHand the completed form to the relevant Sport Manager.\nIf you need a membership card, the Sport Manager can issue one.\nRenew your membership every year. It is only valid for the year you register.",
+    "contact_name": "Madibaz Sport office. Gqeberha campus: 041 504 2165. George campus: 044 801 5037.",
+    "contact_phone": "041 504 2165",
+    "link_url": "https://golf.mandela.ac.za/",
+    "sort_order": 10
+  },
+  {
+    "kind": "club",
+    "name": "Hockey",
+    "description": "Madibaz Hockey club. Registered Nelson Mandela University students join free of charge. Community members apply to the club and pay a membership fee that varies per club (non-refundable).",
+    "cost": "Free for registered students",
+    "how_to_join": "Complete the Madibaz Sport registration form. You can find it on sport.mandela.ac.za, under Registration Form.\nHand the completed form to the relevant Sport Manager.\nIf you need a membership card, the Sport Manager can issue one.\nRenew your membership every year. It is only valid for the year you register.",
+    "contact_name": "Madibaz Sport office. Gqeberha campus: 041 504 2165. George campus: 044 801 5037.",
+    "contact_phone": "041 504 2165",
+    "link_url": "https://hockey.mandela.ac.za/",
+    "sort_order": 10
+  },
+  {
+    "kind": "club",
+    "name": "Judo",
+    "description": "Madibaz Judo club. Registered Nelson Mandela University students join free of charge. Community members apply to the club and pay a membership fee that varies per club (non-refundable).",
+    "cost": "Free for registered students",
+    "how_to_join": "Complete the Madibaz Sport registration form. You can find it on sport.mandela.ac.za, under Registration Form.\nHand the completed form to the relevant Sport Manager.\nIf you need a membership card, the Sport Manager can issue one.\nRenew your membership every year. It is only valid for the year you register.",
+    "contact_name": "Madibaz Sport office. Gqeberha campus: 041 504 2165. George campus: 044 801 5037.",
+    "contact_phone": "041 504 2165",
+    "link_url": "https://judo.mandela.ac.za/",
+    "sort_order": 10
+  },
+  {
+    "kind": "club",
+    "name": "Karate",
+    "description": "Madibaz Karate club. Registered Nelson Mandela University students join free of charge. Community members apply to the club and pay a membership fee that varies per club (non-refundable).",
+    "cost": "Free for registered students",
+    "how_to_join": "Complete the Madibaz Sport registration form. You can find it on sport.mandela.ac.za, under Registration Form.\nHand the completed form to the relevant Sport Manager.\nIf you need a membership card, the Sport Manager can issue one.\nRenew your membership every year. It is only valid for the year you register.",
+    "contact_name": "Madibaz Sport office. Gqeberha campus: 041 504 2165. George campus: 044 801 5037.",
+    "contact_phone": "041 504 2165",
+    "link_url": "https://karate.mandela.ac.za/",
+    "sort_order": 10
+  },
+  {
+    "kind": "club",
+    "name": "Netball",
+    "description": "Madibaz Netball club. Registered Nelson Mandela University students join free of charge. Community members apply to the club and pay a membership fee that varies per club (non-refundable).",
+    "cost": "Free for registered students",
+    "how_to_join": "Complete the Madibaz Sport registration form. You can find it on sport.mandela.ac.za, under Registration Form.\nHand the completed form to the relevant Sport Manager.\nIf you need a membership card, the Sport Manager can issue one.\nRenew your membership every year. It is only valid for the year you register.",
+    "contact_name": "Madibaz Sport office. Gqeberha campus: 041 504 2165. George campus: 044 801 5037.",
+    "contact_phone": "041 504 2165",
+    "link_url": "https://netball.mandela.ac.za/",
+    "sort_order": 10
+  },
+  {
+    "kind": "club",
+    "name": "Rowing",
+    "description": "Madibaz Rowing club. Registered Nelson Mandela University students join free of charge. Community members apply to the club and pay a membership fee that varies per club (non-refundable).",
+    "cost": "Free for registered students",
+    "how_to_join": "Complete the Madibaz Sport registration form. You can find it on sport.mandela.ac.za, under Registration Form.\nHand the completed form to the relevant Sport Manager.\nIf you need a membership card, the Sport Manager can issue one.\nRenew your membership every year. It is only valid for the year you register.",
+    "contact_name": "Madibaz Sport office. Gqeberha campus: 041 504 2165. George campus: 044 801 5037.",
+    "contact_phone": "041 504 2165",
+    "link_url": "https://rowing.mandela.ac.za/",
+    "sort_order": 10
+  },
+  {
+    "kind": "club",
+    "name": "Rugby",
+    "description": "Madibaz Rugby club. Registered Nelson Mandela University students join free of charge. Community members apply to the club and pay a membership fee that varies per club (non-refundable).",
+    "cost": "Free for registered students",
+    "how_to_join": "Complete the Madibaz Sport registration form. You can find it on sport.mandela.ac.za, under Registration Form.\nHand the completed form to the relevant Sport Manager.\nIf you need a membership card, the Sport Manager can issue one.\nRenew your membership every year. It is only valid for the year you register.",
+    "contact_name": "Madibaz Sport office. Gqeberha campus: 041 504 2165. George campus: 044 801 5037.",
+    "contact_phone": "041 504 2165",
+    "link_url": "https://rugby.mandela.ac.za/",
+    "sort_order": 10
+  },
+  {
+    "kind": "club",
+    "name": "Squash",
+    "description": "Madibaz Squash club. Registered Nelson Mandela University students join free of charge. Community members apply to the club and pay a membership fee that varies per club (non-refundable).",
+    "cost": "Free for registered students",
+    "how_to_join": "Complete the Madibaz Sport registration form. You can find it on sport.mandela.ac.za, under Registration Form.\nHand the completed form to the relevant Sport Manager.\nIf you need a membership card, the Sport Manager can issue one.\nRenew your membership every year. It is only valid for the year you register.",
+    "contact_name": "Madibaz Sport office. Gqeberha campus: 041 504 2165. George campus: 044 801 5037.",
+    "contact_phone": "041 504 2165",
+    "link_url": "https://squash.mandela.ac.za/",
+    "sort_order": 10
+  },
+  {
+    "kind": "club",
+    "name": "Swimming",
+    "description": "Madibaz Swimming club. Registered Nelson Mandela University students join free of charge. Community members apply to the club and pay a membership fee that varies per club (non-refundable).",
+    "cost": "Free for registered students",
+    "how_to_join": "Complete the Madibaz Sport registration form. You can find it on sport.mandela.ac.za, under Registration Form.\nHand the completed form to the relevant Sport Manager.\nIf you need a membership card, the Sport Manager can issue one.\nRenew your membership every year. It is only valid for the year you register.",
+    "contact_name": "Madibaz Sport office. Gqeberha campus: 041 504 2165. George campus: 044 801 5037.",
+    "contact_phone": "041 504 2165",
+    "link_url": "https://swimming.mandela.ac.za/",
+    "sort_order": 10
+  },
+  {
+    "kind": "club",
+    "name": "Tennis",
+    "description": "Madibaz Tennis club. Registered Nelson Mandela University students join free of charge. Community members apply to the club and pay a membership fee that varies per club (non-refundable).",
+    "cost": "Free for registered students",
+    "how_to_join": "Complete the Madibaz Sport registration form. You can find it on sport.mandela.ac.za, under Registration Form.\nHand the completed form to the relevant Sport Manager.\nIf you need a membership card, the Sport Manager can issue one.\nRenew your membership every year. It is only valid for the year you register.",
+    "contact_name": "Madibaz Sport office. Gqeberha campus: 041 504 2165. George campus: 044 801 5037.",
+    "contact_phone": "041 504 2165",
+    "link_url": "https://tennis.mandela.ac.za/",
+    "sort_order": 10
+  },
+  {
+    "kind": "club",
+    "name": "Volleyball",
+    "description": "Madibaz Volleyball club. Registered Nelson Mandela University students join free of charge. Community members apply to the club and pay a membership fee that varies per club (non-refundable).",
+    "cost": "Free for registered students",
+    "how_to_join": "Complete the Madibaz Sport registration form. You can find it on sport.mandela.ac.za, under Registration Form.\nHand the completed form to the relevant Sport Manager.\nIf you need a membership card, the Sport Manager can issue one.\nRenew your membership every year. It is only valid for the year you register.",
+    "contact_name": "Madibaz Sport office. Gqeberha campus: 041 504 2165. George campus: 044 801 5037.",
+    "contact_phone": "041 504 2165",
+    "link_url": null,
+    "sort_order": 10
+  },
+  {
+    "kind": "club",
+    "name": "Waterpolo",
+    "description": "Madibaz Waterpolo club. Registered Nelson Mandela University students join free of charge. Community members apply to the club and pay a membership fee that varies per club (non-refundable).",
+    "cost": "Free for registered students",
+    "how_to_join": "Complete the Madibaz Sport registration form. You can find it on sport.mandela.ac.za, under Registration Form.\nHand the completed form to the relevant Sport Manager.\nIf you need a membership card, the Sport Manager can issue one.\nRenew your membership every year. It is only valid for the year you register.",
+    "contact_name": "Madibaz Sport office. Gqeberha campus: 041 504 2165. George campus: 044 801 5037.",
+    "contact_phone": "041 504 2165",
+    "link_url": "https://waterpolo.mandela.ac.za/",
+    "sort_order": 10
+  }
+]
