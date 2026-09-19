@@ -2,7 +2,7 @@ import type { ChipOption } from '../ChipSelect';
 
 export type Row = Record<string, unknown>;
 
-export type FieldType = 'text' | 'multiline' | 'select' | 'boolean' | 'number' | 'time';
+export type FieldType = 'text' | 'multiline' | 'select' | 'boolean' | 'number' | 'decimal' | 'time';
 
 export type FieldConfig = {
   key: string; // column name

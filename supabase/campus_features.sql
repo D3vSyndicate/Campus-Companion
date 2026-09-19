@@ -62,6 +62,10 @@ begin
 end
 $$;
 
+-- Venues can be pinned on the campus map (set from the coordinator and admin Venue screens).
+alter table public."Venue" add column if not exists latitude  double precision;
+alter table public."Venue" add column if not exists longitude double precision;
+
 -- The student checklist currently stores "done" on the shared row, so signed-in
 -- students must be able to update it. (Known limitation: one shared tick for
 -- everyone. Per-student progress would need its own table.)

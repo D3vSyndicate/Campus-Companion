@@ -66,6 +66,7 @@ export default function MentorLayout() {
         <Tabs.Screen name="announcements" options={{ href: null, title: 'Announcements' }} />
         <Tabs.Screen name="schedule" options={{ href: null, title: 'Schedule' }} />
         <Tabs.Screen name="venues" options={{ href: null, title: 'Venues' }} />
+        <Tabs.Screen name="map" options={{ href: null, title: 'Campus map' }} />
         <Tabs.Screen name="guide" options={{ href: null, title: 'Buddy guide' }} />
       </Tabs>
     </AuthGate>

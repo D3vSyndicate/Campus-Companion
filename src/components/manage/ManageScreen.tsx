@@ -144,6 +144,10 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
         const parsed = Number.parseInt(text, 10);
         if (Number.isNaN(parsed)) return `${field.label} should be a number.`;
         payload[field.key] = parsed;
+      } else if (field.type === 'decimal') {
+        const parsed = Number.parseFloat(text);
+        if (Number.isNaN(parsed)) return `${field.label} should be a number, like -34.0091.`;
+        payload[field.key] = parsed;
       } else if (field.type === 'time') {
         if (!/^\d{1,2}:\d{2}$/.test(text)) return `${field.label} should look like 09:00.`;
         payload[field.key] = text;
@@ -294,7 +298,7 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
                       placeholder={field.type === 'select' ? 'Or type your own' : field.placeholder}
                       placeholderTextColor={colors.textSecondary}
                       multiline={field.type === 'multiline'}
-                      keyboardType={field.type === 'number' ? 'number-pad' : 'default'}
+                      keyboardType={field.type === 'number' ? 'number-pad' : field.type === 'decimal' ? 'numbers-and-punctuation' : 'default'}
                       autoCapitalize={/url|link|email/.test(field.key) || field.type === 'time' ? 'none' : 'sentences'}
                     />
                   ) : null}

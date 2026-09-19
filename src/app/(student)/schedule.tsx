@@ -1,3 +1,4 @@
+import { useRouter, useSegments } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Alert, FlatList, Linking, StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -17,6 +18,10 @@ const normalizeBoolean = (value: unknown): boolean => {
 export default function ScheduleScreen() {
   const { colors } = useTheme();
   const { t } = useTranslation();
+  const router = useRouter();
+  const segments = useSegments();
+  // This screen is shared with the buddy (mentor) app, so stay inside the caller's own area.
+  const mapRoute = segments[0] === '(mentor)' ? '/(mentor)/map' : '/(student)/map';
   const palette = {
     screenBg: colors.background,
     cardBg: colors.surface,
@@ -117,13 +122,14 @@ export default function ScheduleScreen() {
             const guidance =
               item.directions ||
               `Start at the main entrance and follow the signs to ${item.venue || 'your venue'}. You can also ask a How2buddy for help.`;
-            Alert.alert(
-              t('common.notSureWhereTitle'),
-              guidance,
-              item.mapLink
-                ? [{ text: t('common.openMap'), onPress: () => void Linking.openURL(item.mapLink!) }, { text: 'OK' }]
-                : [{ text: 'OK' }],
-            );
+            const buttons = [
+              ...(item.venue
+                ? [{ text: t('common.showOnCampusMap'), onPress: () => router.push({ pathname: mapRoute, params: { q: item.venue } } as never) }]
+                : []),
+              ...(item.mapLink ? [{ text: t('common.openMap'), onPress: () => void Linking.openURL(item.mapLink!) }] : []),
+              { text: 'OK' },
+            ];
+            Alert.alert(t('common.notSureWhereTitle'), guidance, buttons);
           }}
         >
           <Text style={[styles.directionText, { color: colors.text }]}>{t('common.directions')}</Text>
