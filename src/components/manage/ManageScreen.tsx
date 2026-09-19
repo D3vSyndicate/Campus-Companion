@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useSegments } from 'expo-router';
 import {
   ActivityIndicator,
   Alert,
@@ -108,6 +109,7 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
   const { colors } = useTheme();
   const { showToast } = useToast();
   const { user, role } = useAuth();
+  const segments = useSegments();
 
   const [rows, setRows] = useState<Row[]>([]);
   const [lookups, setLookups] = useState<
@@ -119,6 +121,7 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
   const [editing, setEditing] = useState<Row | 'new' | null>(null);
   const [values, setValues] = useState<Record<string, string | boolean>>({});
   const [saving, setSaving] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setLoadError('');
@@ -339,6 +342,7 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
 
   const remove = (row: Row) => {
     const name = config.listTitle(row, lookupLabels);
+    const rowId = idOf(row);
 
     Alert.alert(
       `Delete ${config.itemNoun}`,
@@ -353,26 +357,34 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
           style: 'destructive',
           onPress: () => {
             void (async () => {
-              const { error, count } = await supabase
-                .from(config.table)
-                .delete({ count: 'exact' })
-                .eq(config.pk, idOf(row));
+              setDeletingId(rowId);
 
-              if (error) {
-                showToast(friendlyError(error, config.setupFile, role), 'error');
-                return;
+              try {
+                const { data, error } = await supabase
+                  .from(config.table)
+                  .delete()
+                  .eq(config.pk, rowId)
+                  .select(config.pk);
+
+                if (error) {
+                  showToast(friendlyError(error, config.setupFile, role), 'error');
+                  return;
+                }
+
+                if (!data?.length) {
+                  showToast(noPermissionMessage(role, config.setupFile), 'error');
+                  return;
+                }
+
+                await load();
+                setEditing(null);
+                showToast(`${config.itemNoun} deleted`);
+              } catch (error) {
+                const message = error instanceof Error ? error.message : 'The item could not be deleted.';
+                showToast(message, 'error');
+              } finally {
+                setDeletingId(null);
               }
-
-              if (count === 0) {
-                showToast(noPermissionMessage(role, config.setupFile), 'error');
-                return;
-              }
-
-              await load();
-
-              setEditing(null);
-
-              showToast(`${config.itemNoun} deleted`);
             })();
           },
         },
@@ -620,6 +632,7 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
               title={config.title}
               subtitle={config.description}
               showSearch={false}
+              backHref={segments[0] === '(admin)' ? '/(admin)' : undefined}
             />
 
             {loadError ? (
@@ -725,8 +738,10 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
               {/* Delete button is now a sibling, NOT inside another button */}
               <TouchableOpacity
                 onPress={() => remove(item)}
+                disabled={deletingId === idOf(item)}
                 accessibilityRole="button"
                 accessibilityLabel="Delete"
+                style={deletingId === idOf(item) && styles.disabled}
               >
                 <Text
                   style={[

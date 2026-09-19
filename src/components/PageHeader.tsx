@@ -28,6 +28,8 @@ interface PageHeaderProps {
   subtitle?: string;
   // A screen that already has its own search box can turn this off.
   showSearch?: boolean;
+  // Staff management screens can provide their dashboard route for a consistent way home.
+  backHref?: string;
 }
 
 // Opens a search limited to the screen it sits on, so it only finds what that screen shows. The search
@@ -59,9 +61,10 @@ function HeaderSearch() {
   );
 }
 
-export function PageHeader({ eyebrow, title, subtitle, showSearch = true }: PageHeaderProps) {
+export function PageHeader({ eyebrow, title, subtitle, showSearch = true, backHref }: PageHeaderProps) {
   const { colors, isDark } = useTheme();
   const { user, role } = useAuth();
+  const router = useRouter();
   const insets = useSafeAreaInsets();
 
   const metadata = user?.user_metadata ?? {};
@@ -87,6 +90,20 @@ export function PageHeader({ eyebrow, title, subtitle, showSearch = true }: Page
     >
       <View style={styles.topRow}>
         <View style={styles.leftGroup}>
+          {backHref ? (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Back to admin dashboard"
+              onPress={() => router.replace(backHref as never)}
+              style={({ pressed }) => [
+                styles.backButton,
+                { backgroundColor: 'rgba(255,255,255,0.10)' },
+                pressed && { opacity: 0.75 },
+              ]}
+            >
+              <Ionicons name="arrow-back" size={20} color={ON_INK} />
+            </Pressable>
+          ) : null}
           <View style={[styles.eyebrowPill, { backgroundColor: colors.accent }]}>
             <View style={styles.eyebrowDot} />
             <Text style={styles.eyebrow} numberOfLines={1}>{eyebrow}</Text>
@@ -132,6 +149,13 @@ const styles = StyleSheet.create({
     marginBottom: 18,
   },
   leftGroup: { flexDirection: 'row', alignItems: 'center', flexShrink: 1, gap: 8 },
+  backButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   eyebrowPill: {
     flexDirection: 'row',
     alignItems: 'center',
