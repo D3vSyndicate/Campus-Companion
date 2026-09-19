@@ -28,6 +28,11 @@ interface PageHeaderProps {
   subtitle?: string;
   // A screen that already has its own search box can turn this off.
   showSearch?: boolean;
+  // Screens reached by tapping a card (rather than a tab) need a way back. Optional and off by
+  // default, so tab screens are unaffected.
+  showBack?: boolean;
+  // Where "back" goes when there is no history, for example after a deep link.
+  backFallback?: string;
   // Staff management screens can provide their dashboard route for a consistent way home.
   backHref?: string;
 }
@@ -61,7 +66,14 @@ function HeaderSearch() {
   );
 }
 
-export function PageHeader({ eyebrow, title, subtitle, showSearch = true, backHref }: PageHeaderProps) {
+export function PageHeader({
+  eyebrow,
+  title,
+  subtitle,
+  showSearch = true,
+  showBack = false,
+  backFallback,
+}: PageHeaderProps) {
   const { colors, isDark } = useTheme();
   const { user, role } = useAuth();
   const router = useRouter();
@@ -79,6 +91,11 @@ export function PageHeader({ eyebrow, title, subtitle, showSearch = true, backHr
     .join('') || 'S';
   const roleLabel = ROLE_LABELS[role ?? ''] ?? 'Student';
 
+  const goBack = () => {
+    if (router.canGoBack()) router.back();
+    else if (backFallback) router.replace(backFallback as never);
+  };
+
   return (
     <View
       style={[
@@ -90,16 +107,13 @@ export function PageHeader({ eyebrow, title, subtitle, showSearch = true, backHr
     >
       <View style={styles.topRow}>
         <View style={styles.leftGroup}>
-          {backHref ? (
+          {showBack ? (
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Back to admin dashboard"
-              onPress={() => router.replace(backHref as never)}
-              style={({ pressed }) => [
-                styles.backButton,
-                { backgroundColor: 'rgba(255,255,255,0.10)' },
-                pressed && { opacity: 0.75 },
-              ]}
+              accessibilityLabel="Go back"
+              onPress={goBack}
+              hitSlop={10}
+              style={({ pressed }) => [styles.back, pressed && { opacity: 0.6 }]}
             >
               <Ionicons name="arrow-back" size={20} color={ON_INK} />
             </Pressable>
@@ -149,13 +163,7 @@ const styles = StyleSheet.create({
     marginBottom: 18,
   },
   leftGroup: { flexDirection: 'row', alignItems: 'center', flexShrink: 1, gap: 8 },
-  backButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  back: { width: 32, height: 32, alignItems: 'center', justifyContent: 'center', marginLeft: -4 },
   eyebrowPill: {
     flexDirection: 'row',
     alignItems: 'center',
