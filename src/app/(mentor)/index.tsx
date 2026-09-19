@@ -11,7 +11,7 @@ import { useTheme } from '../../theme/ThemeContext';
 type Action = { route: string; icon: keyof typeof Ionicons.glyphMap; title: string; text: string };
 
 const ACTIONS: Action[] = [
-  { route: '/(mentor)/tribe', icon: 'chatbubbles-outline', title: 'My Tribe', text: 'Chat with the first-years in your group.' },
+  { route: '/(mentor)/mentorGroup/index', icon: 'chatbubbles-outline', title: 'My Tribe', text: 'Chat with the first-years in your group.' },
   { route: '/(mentor)/faqs', icon: 'help-circle-outline', title: 'Quick answers', text: 'Find and share answers to common questions.' },
   { route: '/(mentor)/announcements', icon: 'megaphone-outline', title: 'Announcements', text: 'Know what students are being told.' },
   { route: '/(mentor)/schedule', icon: 'calendar-outline', title: 'Orientation schedule', text: 'Where students need to be, and when.' },

@@ -1,14 +1,15 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import {
-    ActivityIndicator,
-    FlatList,
-    KeyboardAvoidingView,
-    Platform,
-    Pressable,
-    StyleSheet,
-    TextInput,
-    View,
+  ActivityIndicator,
+  FlatList,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  StyleSheet,
+  TextInput,
+  View,
 } from 'react-native';
 import { supabase } from '../lib/superbase';
 import { useTheme } from '../theme/ThemeContext';
@@ -47,6 +48,7 @@ function getErrorMessage(error: unknown, fallback: string) {
 }
 
 export function TribeChat({ groupId, setupMessage = '' }: TribeChatProps) {
+  const router = useRouter();
   const { colors } = useTheme();
   const [group, setGroup] = useState<Group | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -248,7 +250,16 @@ export function TribeChat({ groupId, setupMessage = '' }: TribeChatProps) {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 88 : 0}
     >
-      <View style={[styles.groupCard, { backgroundColor: colors.text }]}>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel="Open mentor groups"
+        onPress={() => router.push('/mentorGroups/index' as never)}
+        style={({ pressed }) => [
+          styles.groupCard,
+          { backgroundColor: colors.text },
+          pressed && styles.pressed,
+        ]}
+      >
         <View style={[styles.groupIcon, { backgroundColor: colors.accent }]}>
           <Ionicons name="people" size={22} color={colors.text} />
         </View>
@@ -259,7 +270,7 @@ export function TribeChat({ groupId, setupMessage = '' }: TribeChatProps) {
             {group.mentor_name || 'Mentor group'}{group.member_count ? ` · ${group.member_count} members` : ''}
           </Text>
         </View>
-      </View>
+      </Pressable>
 
       {!profile || editingUsername ? (
         <View style={[styles.usernameCard, { backgroundColor: colors.surface, borderColor: colors.border }]}>
@@ -384,4 +395,5 @@ const styles = StyleSheet.create({
   messageInput: { flex: 1, maxHeight: 100, minHeight: 44, borderWidth: 1, borderRadius: 13, paddingHorizontal: 12, paddingTop: 11, paddingBottom: 10, fontSize: 13 },
   sendButton: { width: 44, height: 44, borderRadius: 13, alignItems: 'center', justifyContent: 'center', marginLeft: 8 },
   disabled: { opacity: 0.45 },
+  pressed: { opacity: 0.82 },
 });
