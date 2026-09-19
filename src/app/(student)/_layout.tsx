@@ -80,8 +80,15 @@ export default function StudentLayout() {
         <Tabs.Screen
           name="contacts"
           options={{
-            title: t('common.support'),
+            title: t('common.contacts'),
             tabBarIcon: ({ color }) => <Ionicons name="people-outline" size={TAB_ICON_SIZE} color={color} />,
+          }}
+        />
+        <Tabs.Screen
+          name="support"
+          options={{
+            title: t('common.support'),
+            tabBarIcon: ({ color }) => <Ionicons name="help-buoy-outline" size={TAB_ICON_SIZE} color={color} />,
           }}
         />
         <Tabs.Screen
