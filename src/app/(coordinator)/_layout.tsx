@@ -18,15 +18,7 @@ export default function CoordinatorLayout() {
           <Stack.Screen name="venue" />
           <Stack.Screen name="checklist" />
           <Stack.Screen name="support" />
-          <Stack.Screen name="shuttle" />
-          <Stack.Screen name="events" />
-          <Stack.Screen name="sport" />
-          <Stack.Screen name="programmes" />
           <Stack.Screen name="digital" />
-          <Stack.Screen name="tribes" />
-          <Stack.Screen name="buddies" />
-          <Stack.Screen name="faq-suggestions" />
-          <Stack.Screen name="activity-log" />
         </Stack>
       </ThemeProvider>
     </AuthGate>

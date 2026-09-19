@@ -284,48 +284,33 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
             email: user?.email ?? '',
           }) ?? {};
 
-        const { data, error } = await supabase
+        const { error } = await supabase
           .from(config.table)
           .insert({
             ...payload,
             ...extras,
-          })
-          .select()
-          .single();
+          });
 
         if (error) {
           showToast(friendlyError(error, config.setupFile), 'error');
           return;
         }
 
-        setRows((current) => [...current, data as Row]);
+        await load();
 
         showToast(`${config.itemNoun} added`);
       } else if (editing) {
-        const { data, error } = await supabase
+        const { error } = await supabase
           .from(config.table)
           .update(payload)
-          .eq(config.pk, idOf(editing))
-          .select();
+          .eq(config.pk, idOf(editing));
 
         if (error) {
           showToast(friendlyError(error, config.setupFile), 'error');
           return;
         }
 
-        // Row-level security silently filters out rows you may not change.
-        if (!data?.length) {
-          showToast(NO_PERMISSION, 'error');
-          return;
-        }
-
-        setRows((current) =>
-          current.map((row) =>
-            idOf(row) === idOf(editing)
-              ? (data[0] as Row)
-              : row,
-          ),
-        );
+        await load();
 
         showToast(`${config.itemNoun} updated`);
       }
@@ -352,27 +337,17 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
           style: 'destructive',
           onPress: () => {
             void (async () => {
-              const { data, error } = await supabase
+              const { error } = await supabase
                 .from(config.table)
                 .delete()
-                .eq(config.pk, idOf(row))
-                .select();
+                .eq(config.pk, idOf(row));
 
               if (error) {
                 showToast(friendlyError(error, config.setupFile), 'error');
                 return;
               }
 
-              if (!data?.length) {
-                showToast(NO_PERMISSION, 'error');
-                return;
-              }
-
-              setRows((current) =>
-                current.filter(
-                  (entry) => idOf(entry) !== idOf(row),
-                ),
-              );
+              await load();
 
               setEditing(null);
 
