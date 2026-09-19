@@ -165,21 +165,48 @@ export const shuttleConfig: ManageConfig = {
 };
 
 export const readinessModuleConfig: ManageConfig = {
-  table: 'readiness_modules',
-  pk: 'module_id',
+  table: 'digital_readiness',
+  pk: 'id',
   title: 'Digital readiness modules',
-  description: 'Topics in the new-student tutorial, such as basic computer skills, Funda, printing and Wi-Fi. Add the steps under Digital readiness steps.',
+  description:
+    'Topics in the new-student tutorial, such as basic computer skills, Funda, printing and Wi-Fi.',
   itemNoun: 'Module',
   orderBy: [{ column: 'sort_order' }],
   fields: [
-    { key: 'title', label: 'Title', type: 'text', required: true, placeholder: 'Printing on campus' },
-    { key: 'description', label: 'Short description', type: 'multiline' },
-    { key: 'icon', label: 'Icon name', type: 'text', default: 'laptop-outline', help: 'Any Ionicons name, for example print-outline or wifi-outline.' },
-    { key: 'sort_order', label: 'Order (1 shows first)', type: 'number', default: 0 },
-    { key: 'is_published', label: 'Visible to students', type: 'boolean', default: true },
+    {
+      key: 'name',
+      label: 'Module name',
+      type: 'text',
+      required: true,
+      placeholder: 'Printing on campus',
+    },
+    {
+      key: 'description',
+      label: 'Short description',
+      type: 'multiline',
+      placeholder: 'Learn how to print your assignments on campus.',
+    },
+    {
+      key: 'sort_order',
+      label: 'Order (1 shows first)',
+      type: 'number',
+      default: 0,
+    },
+    {
+      key: 'reference_url',
+      label: 'Reference link',
+      type: 'text',
+      placeholder: 'https://...',
+    },
+    {
+      key: 'video_url',
+      label: 'Video link',
+      type: 'text',
+      placeholder: 'https://...',
+    },
   ],
-  listTitle: (row) => text(row, 'title'),
-  listSubtitle: (row) => (row.is_published === false ? 'Hidden from students' : text(row, 'description')),
+  listTitle: (row) => text(row, 'name'),
+  listSubtitle: (row) => text(row, 'description'),
 };
 
 export const readinessStepConfig: ManageConfig = {
@@ -189,7 +216,7 @@ export const readinessStepConfig: ManageConfig = {
   description: 'One screen of the tutorial: a short explanation with an optional image or video.',
   itemNoun: 'Step',
   orderBy: [{ column: 'module_id' }, { column: 'sort_order' }],
-  lookups: [{ fieldKey: 'module_id', table: 'readiness_modules', valueColumn: 'module_id', labelColumn: 'title' }],
+  lookups: [{ fieldKey: 'module_id', table: 'digital_readiness', valueColumn: 'id', labelColumn: 'name' }],
   fields: [
     { key: 'module_id', label: 'Module', type: 'select', required: true, lookupOptions: true },
     { key: 'sort_order', label: 'Step number (1 shows first)', type: 'number', default: 1 },
