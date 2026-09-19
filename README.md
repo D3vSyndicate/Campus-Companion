@@ -1,65 +1,124 @@
-# Welcome to your Expo app 👋
+<div align="center">
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+# 🎓 School of IT Student Orientation App
 
-## Get started
+### *Helping first-year students move from uncertainty to confidence.*
 
-1. Install dependencies
+![Status](https://img.shields.io/badge/status-hackathon%20prototype-orange)
+![Institution](https://img.shields.io/badge/Nelson%20Mandela%20University-School%20of%20IT-002b5c)
+![Made with](https://img.shields.io/badge/made%20with-React%20Native%20%26%20Supabase-3ecf8e)
+![License](https://img.shields.io/badge/license-All%20Rights%20Reserved-red)
 
-   ```bash
-   npm install
-   ```
+<sub>Built for the Hackathon Theme: *Improving the First-Year Student Orientation Experience through Technology*</sub>
 
-2. Start the app
+</div>
 
-   ```bash
-   npx expo start
-   ```
+---
 
-Before starting the app, copy `.env.example` to `.env` and set
-`EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_ANON_KEY` to the URL and
-publishable (or legacy anon) key from the Supabase project settings.
+## 👋 Welcome
 
-Login routing uses the signed-in user's Supabase Auth metadata. Set a user's
-role to `admin` or `student` in `app_metadata.role` (preferred) or
-`user_metadata.role` for existing test users. Accounts without a valid role
-cannot enter either dashboard.
+<details open>
+<summary><b>What is this?</b></summary>
+<br>
 
-In the output, you'll find options to open the app in a
+First-year students get *a lot* thrown at them during orientation — emails, printed programmes, Telegram messages, verbal announcements, half-remembered directions to a venue nobody can find. This app is one calm place instead.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+It doesn't just show information. It's built to help students feel **welcomed, supported, and a little less afraid to ask for help** — because asking for help early is a smart academic habit, not a weakness.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+</details>
 
-## Get a fresh project
+<details>
+<summary><b>Who is it for? 🙋</b></summary>
+<br>
 
-When you're ready, run:
+| User | What they need |
+|---|---|
+| 🆕 First-year student | Where to be, who to ask, how the tech works |
+| 🧑‍🏫 Senior student mentor | Quick access to FAQs and announcements to help others |
+| 📋 Orientation coordinator | A way to post updates and manage content |
+| 🎓 Lecturer / HOD | A way to share programme and department expectations |
 
-```bash
-npm run reset-project
-```
+</details>
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+---
 
-### Other setup steps
+## ✨ Features
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+<details open>
+<summary><b>Tap to see what's inside</b> 📦</summary>
+<br>
 
-## Learn more
+- 🏠 **Home** — welcome message, today's activities, quick navigation
+- 🗓️ **Orientation Schedule** — filterable by day and category, with gentle "you can still catch up" guidance if a session's passed
+- 📍 **Find My Venue** — directions written for someone who's never set foot on campus before
+- 🎒 **New Student Checklist** — track progress one step at a time, no shame if it's not all done yet
+- 💻 **Digital Readiness** — email, Funda, Wi-Fi, printing, the student portal — explained simply, with real screenshots and short videos
+- 📚 **Programme Information** — what to expect academically, without the intimidation
+- ❓ **FAQs** — because *"many new students ask this"*
+- 📇 **Contacts** — know exactly who to reach out to
+- 🧭 **Support Pathways** — "tell me what's going on" → matched to the right person, not a wall of paragraphs
+- 📢 **Announcements** — clear and calm, even the urgent ones
+- 💬 **Tribe** — a small peer group chat so no one navigates this alone
 
-To learn more about developing your project with Expo, look at the following resources:
+</details>
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+<details>
+<summary><b>The human bit 💛 — courage, empathy, vulnerability, shame resilience</b></summary>
+<br>
 
-## Join the community
+This app was designed around one idea: **nobody should feel stupid for not knowing something yet.**
 
-Join our community of developers creating universal apps.
+| Instead of… | We say… |
+|---|---|
+| "Invalid input." | "That doesn't look right yet — check and try again." |
+| "You missed this session." | "This session has passed. Here's what you can do next." |
+| "Login failed." | "Let's check a few things: username, password, connection." |
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Small wording, real difference.
+
+</details>
+
+---
+
+## 🛠️ Built with
+
+<details>
+<summary>Tech stack</summary>
+<br>
+
+- **React Native (Expo)** — mobile-first, cross-platform
+- **Supabase** — Postgres database, Row Level Security, Auth, Storage, Realtime chat
+- **react-i18next** — multilingual support (English & isiXhosa)
+- Plain-language, human-centred UI copy throughout 🫶
+
+</details>
+
+---
+
+## 🔒 Ownership & Usage
+
+> **This project is the intellectual property of Nelson Mandela University (School of Information Technology), developed as a hackathon submission.**
+>
+> **All rights reserved.**
+>
+> This repository, its source code, design, content, and assets **may not be copied, reproduced, redistributed, or reused**, in whole or in part, without the express written permission of Nelson Mandela University and/or the original student developer(s).
+>
+> This project uses **sample/dummy data only** and is a prototype, not a production system. It is not affiliated with, nor does it replace, official Nelson Mandela University systems, and it does not collect real student personal information beyond what is required for the hackathon demonstration.
+
+<details>
+<summary>🕊️ Why we're strict about this</summary>
+<br>
+
+This app was made with care, by students, for students — including real emotional-support design thinking (see: courage, empathy, vulnerability, shame resilience above). We'd rather it be respected as it is than copy-pasted into something that loses the *why* behind it. If you're genuinely interested in the approach, reach out instead. 🙂
+
+</details>
+
+---
+
+<div align="center">
+
+*"The best app will help students feel that they belong, that asking for help is normal, and that they can take the next step with courage."*
+
+**Made for first-years, by people who remember what that first year felt like. 🌱**
+
+</div>
