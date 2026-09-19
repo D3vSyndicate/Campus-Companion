@@ -214,3 +214,46 @@ export const readinessStepConfig: ManageConfig = {
       text(row, 'media_type') && text(row, 'media_type') !== 'none' ? ` · ${text(row, 'media_type')}` : ''
     }`,
 };
+
+export const tribeConfig: ManageConfig = {
+  table: 'community_groups',
+  pk: 'id',
+  title: 'Tribes',
+  description: 'Mentor groups that first-years chat in. Students are placed in the tribe with the fewest members. Place buddies under Buddies.',
+  itemNoun: 'Tribe',
+  orderBy: [{ column: 'name' }],
+  fields: [
+    { key: 'name', label: 'Tribe name', type: 'text', required: true, placeholder: 'Tribe 1' },
+    { key: 'mentor_name', label: 'Buddy or mentor name (shown to the tribe)', type: 'text', placeholder: 'Sipho' },
+  ],
+  listTitle: (row) => text(row, 'name'),
+  listSubtitle: (row) =>
+    [text(row, 'mentor_name'), `${text(row, 'member_count') || '0'} members`].filter(Boolean).join(' · '),
+};
+
+export const faqSuggestionConfig: ManageConfig = {
+  table: 'faq_suggestions',
+  pk: 'suggestion_id',
+  title: 'FAQ suggestions',
+  description: 'Questions buddies keep hearing. Add the real answer under FAQs, then mark the suggestion as added, or dismiss it.',
+  itemNoun: 'Suggestion',
+  orderBy: [{ column: 'created_at', ascending: false }],
+  fields: [
+    { key: 'question', label: 'Question', type: 'multiline', required: true },
+    { key: 'note', label: 'Note from the buddy', type: 'multiline' },
+    {
+      key: 'status',
+      label: 'Status',
+      type: 'select',
+      required: true,
+      default: 'new',
+      options: [
+        { value: 'new', label: 'New' },
+        { value: 'added', label: 'Added to FAQs' },
+        { value: 'dismissed', label: 'Dismissed' },
+      ],
+    },
+  ],
+  listTitle: (row) => text(row, 'question'),
+  listSubtitle: (row) => text(row, 'status') || 'new',
+};

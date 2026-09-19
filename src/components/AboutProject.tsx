@@ -7,8 +7,8 @@ import { useTheme } from '../theme/ThemeContext';
 import { ScaledText as Text } from './ScaledText';
 
 type Props = {
-  // Students also get a shortcut to the Support tab.
-  variant?: 'student' | 'staff';
+  // Students and mentors also get a shortcut to their support screen.
+  variant?: 'student' | 'mentor' | 'staff';
 };
 
 // Edit these to update what the About section says.
@@ -174,13 +174,13 @@ export function AboutProject({ variant = 'student' }: Props) {
           the university counselling and wellness services or campus protection services straight away. Asking for help early is a smart,
           responsible thing to do.
         </Text>
-        {variant === 'student' ? (
+        {variant !== 'staff' ? (
           <Pressable
             accessibilityRole="button"
-            onPress={() => router.push('/(student)/contacts' as never)}
+            onPress={() => router.push((variant === 'mentor' ? '/(mentor)/refer' : '/(student)/contacts') as never)}
             style={[styles.button, { backgroundColor: colors.accent }]}
           >
-            <Text style={styles.buttonText}>Open the Support tab</Text>
+            <Text style={styles.buttonText}>{variant === 'mentor' ? 'Open Refer a student' : 'Open the Support tab'}</Text>
             <Ionicons name="arrow-forward" size={16} color="#071B2C" />
           </Pressable>
         ) : null}

@@ -19,8 +19,13 @@ type Pathway = {
 const str = (value: unknown) => String(value ?? '').trim();
 const IS_LINK = /^https?:\/\//i;
 
+type Props = {
+  // Which FAQ screen the "related questions" shortcut opens. Each role has its own.
+  faqRoute?: string;
+};
+
 // "I need help with..." — starts from what the student is feeling or facing, then points to a next step.
-export function SupportPathways() {
+export function SupportPathways({ faqRoute = '/(student)/faqs' }: Props) {
   const { colors } = useTheme();
   const { t } = useTranslation();
   const router = useRouter();
@@ -108,7 +113,7 @@ export function SupportPathways() {
                     <TouchableOpacity
                       style={[styles.button, styles.outlined, { borderColor: colors.border }]}
                       onPress={() =>
-                        router.push({ pathname: '/(student)/faqs', params: { category: pathway.relatedFaq } } as never)
+                        router.push({ pathname: faqRoute, params: { category: pathway.relatedFaq } } as never)
                       }
                     >
                       <Text style={[styles.buttonText, { color: colors.text }]}>{t('common.seeRelatedFaqs')}</Text>

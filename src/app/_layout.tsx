@@ -22,6 +22,7 @@ function AppThemeShell() {
         <Stack.Screen name="(admin)" options={{ headerShown: false }} />
         <Stack.Screen name="(coordinator)" options={{ headerShown: false }} />
         <Stack.Screen name="(hod)" options={{ headerShown: false }} />
+        <Stack.Screen name="(mentor)" options={{ headerShown: false }} />
       </Stack>
     </ThemeProvider>
   );

@@ -58,6 +58,9 @@ function AdminStack() {
       <Stack.Screen name="checklist" options={{ title: 'Checklist' }} />
       <Stack.Screen name="support" options={{ title: 'Support Pathways' }} />
       <Stack.Screen name="shuttle" options={{ title: 'Shuttle Times' }} />
+      <Stack.Screen name="tribes" options={{ title: 'Tribes' }} />
+      <Stack.Screen name="buddies" options={{ title: 'Buddies' }} />
+      <Stack.Screen name="faq-suggestions" options={{ title: 'FAQ Suggestions' }} />
       <Stack.Screen name="digital" options={{ title: 'Digital Readiness Modules' }} />
       <Stack.Screen name="digital-steps" options={{ title: 'Digital Readiness Steps' }} />
 

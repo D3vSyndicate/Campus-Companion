@@ -74,6 +74,24 @@ const SECTIONS: CoordinatorSection[] = [
     icon: 'film-outline',
   },
   {
+    href: '/(coordinator)/tribes',
+    label: 'Tribes',
+    desc: 'Create mentor groups for first-years',
+    icon: 'people-circle-outline',
+  },
+  {
+    href: '/(coordinator)/buddies',
+    label: 'Buddies',
+    desc: 'Place FYS buddies in tribes',
+    icon: 'ribbon-outline',
+  },
+  {
+    href: '/(coordinator)/faq-suggestions',
+    label: 'FAQ Suggestions',
+    desc: 'Questions buddies keep hearing',
+    icon: 'chatbox-ellipses-outline',
+  },
+  {
     href: '/(coordinator)/activity-log',
     label: 'Activity Log',
     desc: 'Review recent changes',

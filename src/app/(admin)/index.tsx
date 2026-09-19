@@ -15,6 +15,9 @@ const SECTIONS: { href: string; label: string; desc: string }[] = [
   { href: '/(admin)/shuttle', label: 'Shuttle Times', desc: 'Morning, afternoon and night departures' },
   { href: '/(admin)/digital', label: 'Digital Readiness Modules', desc: 'Tutorial topics: computer skills, Funda, printing, Wi-Fi' },
   { href: '/(admin)/digital-steps', label: 'Digital Readiness Steps', desc: 'Step-by-step guides with images and videos' },
+  { href: '/(admin)/tribes', label: 'Tribes', desc: 'Create mentor groups for first-years' },
+  { href: '/(admin)/buddies', label: 'Buddies', desc: 'Place FYS buddies in tribes' },
+  { href: '/(admin)/faq-suggestions', label: 'FAQ Suggestions', desc: 'Questions buddies keep hearing' },
   { href: '/(admin)/profile', label: 'Profile & Settings', desc: 'Manage your account and preferences' },
 ];
 

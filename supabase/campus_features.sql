@@ -7,6 +7,8 @@
 -- Roles are read from the JWT *app_metadata* claim (`role`), which users cannot
 -- edit themselves. Set it per user in Authentication -> Users, or with
 --   update auth.users set raw_app_meta_data = raw_app_meta_data || '{"role":"coordinator"}' where email = '...';
+-- Roles used by the app: student (default), mentor (FYS buddy), coordinator, hod, admin.
+-- For a buddy use '{"role":"mentor"}', then place them in a tribe with assign_mentor_to_tribe (below).
 
 -- ---------------------------------------------------------------------------
 -- 0. Role helpers
@@ -23,6 +25,14 @@ returns boolean
 language sql
 stable
 as $$ select public.app_role() in ('coordinator', 'admin') $$;
+
+-- FYS buddies (senior student mentors). They read everything students read and chat in their
+-- tribe as a mentor, but they cannot edit content.
+create or replace function public.is_mentor()
+returns boolean
+language sql
+stable
+as $$ select public.app_role() = 'mentor' $$;
 
 -- ---------------------------------------------------------------------------
 -- 1. Existing content tables: everyone can read, only staff can write.
@@ -239,10 +249,10 @@ begin
     raise exception 'You need to be signed in to send a message.';
   end if;
 
-  new.role := case when public.is_staff() then 'mentor' else 'student' end;
+  new.role := case when public.is_staff() or public.is_mentor() then 'mentor' else 'student' end;
 
   select username into uname from public.community_profiles where auth_id = new.auth_id;
-  new.display_name := coalesce(uname, case when public.is_staff() then 'Mentor' end);
+  new.display_name := coalesce(uname, case when public.is_staff() or public.is_mentor() then 'Mentor' end);
   if new.display_name is null then
     raise exception 'Choose a chat name before sending a message.';
   end if;
@@ -281,6 +291,11 @@ begin
     return gid;
   end if;
 
+  -- Buddies are placed by a coordinator (see assign_mentor_to_tribe), never auto-assigned like students.
+  if public.is_mentor() then
+    return null;
+  end if;
+
   select g.id into gid
   from public.community_groups g
   left join public.community_members m on m.group_id = g.id
@@ -305,6 +320,94 @@ $$;
 
 revoke all on function public.join_my_tribe() from public, anon;
 grant execute on function public.join_my_tribe() to authenticated;
+
+-- Coordinators and admins place a buddy in a tribe by the buddy's email address:
+--   select public.assign_mentor_to_tribe('buddy@mandela.ac.za', '<group id from community_groups>');
+-- Running it again with a different group moves the buddy.
+create or replace function public.assign_mentor_to_tribe(mentor_email text, target_group uuid)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  mentor_id uuid;
+begin
+  if not public.is_staff() then
+    raise exception 'Only coordinators and admins can place a buddy in a tribe.';
+  end if;
+
+  select id into mentor_id from auth.users where lower(email) = lower(btrim(mentor_email));
+  if mentor_id is null then
+    raise exception 'No account was found for that email address.';
+  end if;
+
+  insert into public.community_members (auth_id, group_id) values (mentor_id, target_group)
+  on conflict (auth_id) do update set group_id = excluded.group_id;
+
+  update public.community_groups g
+  set member_count = (select count(*) from public.community_members m where m.group_id = g.id);
+end
+$$;
+
+revoke all on function public.assign_mentor_to_tribe(text, uuid) from public, anon;
+grant execute on function public.assign_mentor_to_tribe(text, uuid) to authenticated;
+
+-- Who is placed where. The app cannot read auth.users, so staff get emails through this function.
+create or replace function public.list_tribe_buddies()
+returns table (email text, group_id uuid, group_name text)
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if not public.is_staff() then
+    raise exception 'Only coordinators and admins can see who is placed in which tribe.';
+  end if;
+
+  return query
+    select u.email::text, m.group_id, g.name
+    from public.community_members m
+    join auth.users u on u.id = m.auth_id
+    join public.community_groups g on g.id = m.group_id
+    where u.raw_app_meta_data ->> 'role' = 'mentor'
+    order by g.name, u.email;
+end
+$$;
+
+revoke all on function public.list_tribe_buddies() from public, anon;
+grant execute on function public.list_tribe_buddies() to authenticated;
+
+-- Takes a buddy out of their tribe. Only works on buddy accounts, so a student is never removed by mistake.
+create or replace function public.remove_mentor_from_tribe(mentor_email text)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  mentor_id uuid;
+begin
+  if not public.is_staff() then
+    raise exception 'Only coordinators and admins can remove a buddy from a tribe.';
+  end if;
+
+  select id into mentor_id
+  from auth.users
+  where lower(email) = lower(btrim(mentor_email)) and raw_app_meta_data ->> 'role' = 'mentor';
+  if mentor_id is null then
+    raise exception 'No buddy account was found for that email address.';
+  end if;
+
+  delete from public.community_members where auth_id = mentor_id;
+
+  update public.community_groups g
+  set member_count = (select count(*) from public.community_members m where m.group_id = g.id);
+end
+$$;
+
+revoke all on function public.remove_mentor_from_tribe(text) from public, anon;
+grant execute on function public.remove_mentor_from_tribe(text) to authenticated;
 
 -- Replace any older community_* policies with a single, membership-based set.
 do $$
@@ -366,6 +469,43 @@ exception
   when undefined_object then null;
 end
 $$;
+
+-- ---------------------------------------------------------------------------
+-- 6b. FAQ suggestions: buddies send in questions students keep asking, coordinators review them.
+--     Contains no student information.
+-- ---------------------------------------------------------------------------
+
+create table if not exists public.faq_suggestions (
+  suggestion_id uuid primary key default gen_random_uuid(),
+  question      text not null,
+  note          text,
+  suggested_by  uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  status        text not null default 'new' check (status in ('new', 'added', 'dismissed')),
+  created_at    timestamptz not null default now()
+);
+
+do $$
+declare
+  r record;
+begin
+  alter table public.faq_suggestions enable row level security;
+  for r in select policyname from pg_policies where schemaname = 'public' and tablename = 'faq_suggestions'
+  loop
+    execute format('drop policy %I on public.faq_suggestions', r.policyname);
+  end loop;
+end
+$$;
+
+-- Buddies (and staff) can send one in, always as "new". Buddies only ever see their own.
+create policy cc_suggest_insert on public.faq_suggestions
+  for insert to authenticated
+  with check (suggested_by = auth.uid() and status = 'new' and (public.is_mentor() or public.is_staff()));
+create policy cc_suggest_select on public.faq_suggestions
+  for select to authenticated using (public.is_staff() or suggested_by = auth.uid());
+create policy cc_staff_update on public.faq_suggestions
+  for update to authenticated using (public.is_staff()) with check (public.is_staff());
+create policy cc_staff_delete on public.faq_suggestions
+  for delete to authenticated using (public.is_staff());
 
 -- ---------------------------------------------------------------------------
 -- 7. Starter content. Edit or delete from the coordinator screens afterwards.
