@@ -239,12 +239,18 @@ export default function DigitalReadinessScreen() {
                   {imageErrors[image.url] ? (
                     <Text style={[styles.mediaMessage, { color: colors.textSecondary }]}>This picture did not load, but you can still read the steps above.</Text>
                   ) : (
-                    <Image
-                      source={{ uri: image.url }}
-                      style={styles.image}
-                      resizeMode="cover"
-                      onError={() => setImageErrors((current) => ({ ...current, [image.url]: true }))}
-                    />
+                    <Pressable
+                      accessibilityRole="link"
+                      accessibilityLabel={image.caption ? `Open image: ${image.caption}` : 'Open image'}
+                      onPress={() => void WebBrowser.openBrowserAsync(image.url)}
+                    >
+                      <Image
+                        source={{ uri: image.url }}
+                        style={styles.image}
+                        resizeMode="cover"
+                        onError={() => setImageErrors((current) => ({ ...current, [image.url]: true }))}
+                      />
+                    </Pressable>
                   )}
                   {image.caption ? <Text style={[styles.imageCaption, { color: colors.textSecondary }]}>{image.caption}</Text> : null}
                 </View>

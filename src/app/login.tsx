@@ -20,7 +20,7 @@ import { useToast } from '../context/ToastContext';
 import { useTheme } from '../theme/ThemeContext';
 export default function LoginScreen() {
   const router = useRouter();
-  const { signIn, resetPassword } = useAuth();
+  const { signIn, resetPassword, signOut } = useAuth();
   const { showToast } = useToast();
   const { colors } = useTheme();
   const { t } = useTranslation();
@@ -53,10 +53,24 @@ export default function LoginScreen() {
       return;
     }
 
+    // The password was right but the account has no usable role. Say so, instead of sending the
+    // person to a screen that silently sends them back here.
+    if (!result.role) {
+      await signOut();
+      setError(
+        'You are signed in, but this account has not been given a role yet, so the app does not know where to take you. Please ask an administrator to set your role.',
+      );
+      return;
+    }
+
     showToast('Login successful', 'success');
     const destination =
       result.role === 'coordinator'
         ? '/(coordinator)'
+        : result.role === 'hod'
+          ? '/(hod)'
+        : result.role === 'mentor'
+          ? '/(mentor)'
         : result.role === 'admin'
           ? '/(admin)'
           : '/(student)';

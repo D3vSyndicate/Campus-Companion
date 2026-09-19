@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, Alert, FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, Linking, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { PageHeader } from '../../components/PageHeader';
 import { ScaledText as Text } from '../../components/ScaledText';
 import { ShameResilientBanner } from '../../components/ShameResilientBanner';
@@ -35,7 +35,18 @@ export default function ScheduleScreen() {
 
   useEffect(() => {
     const loadSchedule = async () => {
-      const { data, fromCache, error } = await fetchWithOfflineFallback('schedule_items');
+      const [{ data, fromCache, error }, venueResult] = await Promise.all([
+        fetchWithOfflineFallback('schedule_items'),
+        fetchWithOfflineFallback('Venue'),
+      ]);
+
+      // schedule_items only stores venue_id, so look the venue up.
+      const venues = new Map(
+        (Array.isArray(venueResult.data) ? venueResult.data : []).map((venue: Record<string, unknown>) => [
+          String(venue.venue_id),
+          venue,
+        ]),
+      );
 
       if (fromCache) {
         setShowOfflineBanner(true);
@@ -46,20 +57,31 @@ export default function ScheduleScreen() {
 
       if (Array.isArray(data) && data.length > 0) {
         setSchedule(
-          data.map((row: Record<string, unknown>, index: number) => {
+          data
+            .map((row: Record<string, unknown>, index: number) => {
             const item = row as Record<string, unknown>;
+            const venue = venues.get(String(item.venue_id)) as Record<string, unknown> | undefined;
+            const startTime = String(item.start_time ?? item.startTime ?? '').slice(0, 5);
+            const endTime = String(item.end_time ?? item.endTime ?? '').slice(0, 5);
+            const date = String(item.date ?? '');
+            // Once a session's end time (or start time) has gone by, offer the catch-up guidance.
+            const endsAt = new Date(`${date}T${endTime || startTime || '23:59'}:00`);
+            const hasPassed = !Number.isNaN(endsAt.getTime()) && endsAt.getTime() < Date.now();
             return {
               id: String(item.id ?? item.schedule_id ?? index + 1),
               title: String(item.title ?? ''),
-              date: String(item.date ?? ''),
-              startTime: String(item.start_time ?? item.startTime ?? ''),
-              endTime: String(item.end_time ?? item.endTime ?? ''),
-              venue: String(item.venue ?? item.location ?? item.venue_name ?? ''),
+              date,
+              startTime,
+              endTime,
+              venue: [venue?.venue_name, venue?.room_number].filter(Boolean).join(' · ') || String(item.venue ?? item.location ?? ''),
+              directions: String(venue?.directions ?? ''),
+              mapLink: String(venue?.map_link ?? ''),
               description: String(item.description ?? ''),
               category: (item.category ?? 'academic') as ScheduleItem['category'],
-              isPast: normalizeBoolean(item.is_past ?? item.isPast),
+              isPast: normalizeBoolean(item.is_past ?? item.isPast) || hasPassed,
             };
-          }),
+          })
+            .sort((a, b) => `${a.date} ${a.startTime}`.localeCompare(`${b.date} ${b.startTime}`)),
         );
       } else {
         setSchedule([]);
@@ -77,7 +99,9 @@ export default function ScheduleScreen() {
         <Text style={[styles.timeText, { color: palette.badgeText }]}>{item.startTime} - {item.endTime}</Text>
       </View>
       <Text style={[styles.title, { color: palette.title }]}>{item.title}</Text>
-      <Text style={[styles.venue, { color: palette.secondary }]}>📍 Venue: {item.venue}</Text>
+      <Text style={[styles.venue, { color: palette.secondary }]}>
+        {item.date} · 📍 {item.venue || t('common.venueToBeConfirmed')}
+      </Text>
       <Text style={[styles.desc, { color: palette.body }]}>{item.description}</Text>
 
       {item.isPast ? (
@@ -89,7 +113,18 @@ export default function ScheduleScreen() {
       ) : (
           <TouchableOpacity
           style={[styles.directionBtn, { backgroundColor: colors.accent }]}
-          onPress={() => Alert.alert('Directions', `Start at main entrance and follow signs to ${item.venue}.`)}
+          onPress={() => {
+            const guidance =
+              item.directions ||
+              `Start at the main entrance and follow the signs to ${item.venue || 'your venue'}. You can also ask a How2buddy for help.`;
+            Alert.alert(
+              t('common.notSureWhereTitle'),
+              guidance,
+              item.mapLink
+                ? [{ text: t('common.openMap'), onPress: () => void Linking.openURL(item.mapLink!) }, { text: 'OK' }]
+                : [{ text: 'OK' }],
+            );
+          }}
         >
           <Text style={[styles.directionText, { color: colors.text }]}>{t('common.directions')}</Text>
         </TouchableOpacity>

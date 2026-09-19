@@ -23,7 +23,7 @@ export function PageHeader({ eyebrow, title, subtitle }: PageHeaderProps) {
     .slice(0, 2)
     .map((part) => part.charAt(0).toUpperCase())
     .join('') || 'S';
-  const roleLabel = role === 'student' ? 'Student' : role ?? 'Student';
+  const roleLabel = role === 'student' ? 'Student' : role === 'mentor' ? 'FYS Buddy' : role ?? 'Student';
 
   return (
     <View style={[styles.container, { backgroundColor: colors.text }]}>

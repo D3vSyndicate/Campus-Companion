@@ -4,11 +4,13 @@ import { Alert, FlatList, StyleSheet, TouchableOpacity, View } from 'react-nativ
 import ListItemCard from '../../../components/ListItemCard';
 import { ScaledText as Text } from '../../../components/ScaledText';
 import { useContacts } from '../../../context/ContactsContext';
+import { useToast } from '../../../context/ToastContext';
 import { useTheme } from '../../../theme/ThemeContext';
 
 export default function ContactsListScreen() {
   const { items, deleteItem } = useContacts();
   const { colors } = useTheme();
+  const { showToast } = useToast();
   const router = useRouter();
   const navigation = useNavigation();
 
@@ -25,7 +27,7 @@ export default function ContactsListScreen() {
   const confirmDelete = (id: string, fullName: string) => {
     Alert.alert('Delete contact', `Delete "${fullName}"? This can't be undone.`, [
       { text: 'Cancel', style: 'cancel' },
-      { text: 'Delete', style: 'destructive', onPress: () => deleteItem(id) },
+      { text: 'Delete', style: 'destructive', onPress: () => void deleteItem(id).then((failure) => failure && showToast(failure, 'error')) },
     ]);
   };
 

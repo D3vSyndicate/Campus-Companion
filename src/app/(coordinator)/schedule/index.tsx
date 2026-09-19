@@ -3,11 +3,13 @@ import { useLayoutEffect } from 'react';
 import { Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import ListItemCard from '../../../components/ListItemCard';
 import { useSchedule } from '../../../context/ScheduleContext';
+import { useToast } from '../../../context/ToastContext';
 import { useTheme } from '../../../theme/ThemeContext';
 
 export default function ScheduleListScreen() {
   const { items, deleteItem } = useSchedule();
   const { colors } = useTheme();
+  const { showToast } = useToast();
   const router = useRouter();
   const navigation = useNavigation();
 
@@ -24,7 +26,7 @@ export default function ScheduleListScreen() {
   const confirmDelete = (id: string, title: string) => {
     Alert.alert('Delete item', `Delete "${title}"? This can't be undone.`, [
       { text: 'Cancel', style: 'cancel' },
-      { text: 'Delete', style: 'destructive', onPress: () => deleteItem(id) },
+      { text: 'Delete', style: 'destructive', onPress: () => void deleteItem(id).then((failure) => failure && showToast(failure, 'error')) },
     ]);
   };
 

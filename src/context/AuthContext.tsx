@@ -17,11 +17,16 @@ type AuthContextValue = {
   signOut: () => Promise<void>;
 };
 
-export type UserRole = 'admin' | 'coordinator' | 'student';
+export type UserRole = 'admin' | 'coordinator' | 'hod' | 'mentor' | 'student';
 
 export function getUserRole(user: User | null): UserRole | null {
-  const role = user?.app_metadata?.role ?? user?.user_metadata?.role;
-  return role === 'admin' || role === 'coordinator' || role === 'student' ? role : null;
+  // app_metadata can only be set by the server. user_metadata is editable by the
+  // user (signUp accepts it), so it may only ever grant the student role.
+  // Tolerate "Coordinator" or a trailing space: a typo in the dashboard should not lock someone out.
+  const normalise = (value: unknown) => String(value ?? '').trim().toLowerCase();
+  const trusted = normalise(user?.app_metadata?.role);
+  if (trusted === 'admin' || trusted === 'coordinator' || trusted === 'hod' || trusted === 'mentor' || trusted === 'student') return trusted;
+  return normalise(user?.user_metadata?.role) === 'student' ? 'student' : null;
 }
 
 function getLoginErrorMessage(message: string) {

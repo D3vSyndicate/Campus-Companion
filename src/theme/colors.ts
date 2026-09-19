@@ -6,6 +6,7 @@ export type ThemeColors = {
   background: string;
   surface: string;
   card: string;
+  surfaceMuted: string;
   text: string;
   textSecondary: string;
   border: string;
@@ -19,6 +20,7 @@ export const lightColors: ThemeColors = {
   background: '#FFFFFF',
   surface: '#FFFFFF',
   card: '#F6F7F8',
+  surfaceMuted: '#EEF3F9',
   text: '#071B2C',
   textSecondary: '#5B6B76',
   border: '#E4E7EA',
@@ -32,6 +34,7 @@ export const darkColors: ThemeColors = {
   background: '#071B2C',
   surface: '#0E2A40',
   card: '#0E2A40',
+  surfaceMuted: '#16374D',
   text: '#FFFFFF',
   textSecondary: '#9FB3C1',
   border: '#16374D',

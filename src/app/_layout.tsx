@@ -5,8 +5,8 @@ import SplashScreen from '../components/splash-scrren';
 import { AppearanceProvider, useAppearance } from '../context/AppearanceContext';
 import { AuthProvider } from '../context/AuthContext';
 import { ToastProvider } from '../context/ToastContext';
-import { ThemeProvider as AppThemeProvider } from '../theme/ThemeContext';
 import '../i18n';
+import { ThemeProvider as AppThemeProvider } from '../theme/ThemeContext';
 
 void NativeSplashScreen.preventAutoHideAsync();
 
@@ -21,6 +21,8 @@ function AppThemeShell() {
         <Stack.Screen name="(student)" options={{ headerShown: false }} />
         <Stack.Screen name="(admin)" options={{ headerShown: false }} />
         <Stack.Screen name="(coordinator)" options={{ headerShown: false }} />
+        <Stack.Screen name="(hod)" options={{ headerShown: false }} />
+        <Stack.Screen name="(mentor)" options={{ headerShown: false }} />
       </Stack>
     </ThemeProvider>
   );

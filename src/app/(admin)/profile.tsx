@@ -1,5 +1,6 @@
 import { useRouter } from 'expo-router';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { AboutProject } from '../../components/AboutProject';
 import { ScaledText as Text } from '../../components/ScaledText';
 import { useAuth } from '../../context/AuthContext';
 import { ThemeMode, useTheme } from '../../theme/ThemeContext';
@@ -63,6 +64,10 @@ export default function ProfileScreen() {
             })}
           </View>
         </View>
+      </View>
+
+      <View style={styles.section}>
+        <AboutProject variant="staff" />
       </View>
 
       <TouchableOpacity

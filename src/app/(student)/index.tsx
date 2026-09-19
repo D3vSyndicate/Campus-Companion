@@ -6,23 +6,26 @@ import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-    Animated,
-    Easing,
-    LayoutAnimation,
-    Text as NativeText,
-    Platform,
-    Pressable,
-    RefreshControl,
-    ScrollView,
-    StyleSheet,
-    TextProps,
-    UIManager,
-    View,
+  Animated,
+  Easing,
+  LayoutAnimation,
+  Text as NativeText,
+  Platform,
+  Pressable,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  TextProps,
+  UIManager,
+  View,
 } from 'react-native';
 
+import { ReadinessCard } from '../../components/ReadinessCard';
 import { ShameResilientBanner } from '../../components/ShameResilientBanner';
+import { ShuttleCard } from '../../components/ShuttleCard';
 import { useAppearance } from '../../context/AppearanceContext';
 import { useAuth } from '../../context/AuthContext';
+import { hasSeenReadinessIntro, markReadinessIntroSeen, useReadiness } from '../../lib/readiness';
 import { supabase } from '../../lib/superbase';
 import { useTheme } from '../../theme/ThemeContext';
 
@@ -412,6 +415,7 @@ export default function HomeScreen() {
   const { t } = useTranslation();
   const { colors } = useTheme();
   const { user } = useAuth();
+  const readiness = useReadiness();
 
   const {
     darkMode,
@@ -421,14 +425,19 @@ export default function HomeScreen() {
     changeFontScale,
   } = useAppearance();
 
-  const [announcements, setAnnouncements] = useState<
-    Announcement[]
-  >([]);
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
 
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [checklistItems, setChecklistItems] = useState<
-    Array<{ id: string; databaseId: string; databaseKey: 'checklist_item_id' | 'id'; task_description: string; category: string; completion_status: boolean }>
+    Array<{
+      id: string;
+      databaseId: string;
+      databaseKey: 'checklist_item_id' | 'id';
+      task_description: string;
+      category: string;
+      completion_status: boolean;
+    }>
   >([]);
   const [checklistSummary, setChecklistSummary] = useState({
     total: 0,
@@ -464,6 +473,22 @@ export default function HomeScreen() {
     .slice(0, 2)
     .map((part) => part.charAt(0).toUpperCase())
     .join('');
+
+  // ---------------------------------------------------------------------------
+  // First login: take new students to the digital readiness tutorial once
+  // ---------------------------------------------------------------------------
+
+  const userId = user?.id;
+
+  useEffect(() => {
+    if (!userId || readiness.loading || readiness.totalSteps === 0) return;
+
+    void (async () => {
+      if (await hasSeenReadinessIntro(userId)) return;
+      await markReadinessIntroSeen(userId);
+      router.push({ pathname: '/(student)/digital', params: { welcome: '1' } } as never);
+    })();
+  }, [userId, readiness.loading, readiness.totalSteps, router]);
 
   // ---------------------------------------------------------------------------
   // Load last-seen announcement
@@ -727,289 +752,361 @@ export default function HomeScreen() {
   // ---------------------------------------------------------------------------
 
   return (
-    <ScrollView
-      style={[
-        styles.container,
-        {
-          backgroundColor: colors.background,
-        },
-      ]}
-      contentContainerStyle={styles.content}
-      showsVerticalScrollIndicator={false}
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={onRefresh}
-          tintColor={colors.accent}
-          colors={[colors.accent]}
-        />
-      }
-    >
-      {/* ================================================================= */}
-      {/* HERO */}
-      {/* ================================================================= */}
-
-      <LinearGradient
-        colors={[
-          colors.headerBackground,
-          colors.text,
-          colors.background,
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
+      <ScrollView
+        style={[
+          styles.container,
+          {
+            backgroundColor: colors.background,
+          },
         ]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={styles.hero}
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor={colors.accent}
+            colors={[colors.accent]}
+          />
+        }
       >
-        {/* Decorative glow */}
+        {/* ================================================================= */}
+        {/* HERO */}
+        {/* ================================================================= */}
 
-        <View style={styles.heroGlowOne} />
+        <LinearGradient
+          colors={[
+            colors.headerBackground,
+            colors.text,
+            colors.background,
+          ]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.hero}
+        >
+          {/* Decorative glow */}
 
-        <View style={styles.heroGlowTwo} />
+          <View style={styles.heroGlowOne} />
 
-        <View style={styles.heroTopRow}>
-          <View>
-            <Text style={styles.eyebrow}>
-              {t('common.schoolOfIt')}
-            </Text>
+          <View style={styles.heroGlowTwo} />
 
-            <Text style={styles.heroMiniText}>
-              {t('common.campusCompanion')}
-            </Text>
-          </View>
-
-          <View style={styles.appearanceControls}>
-            <View
-              style={styles.fontSizeControls}
-              accessibilityLabel="Text size"
-            >
-              <Pressable
-                style={[
-                  styles.fontSizeButton,
-                  fontScale <= 0.7 &&
-                    styles.fontSizeButtonDisabled,
-                ]}
-                onPress={() =>
-                  adjustFontScale(-0.1)
-                }
-                disabled={fontScale <= 0.7}
-                accessibilityRole="button"
-                accessibilityLabel="Decrease text size"
-              >
-                <Text style={styles.fontSizeButtonText}>
-                  A-
-                </Text>
-              </Pressable>
-
-              <Text style={styles.fontSizeValue}>
-                {Math.round(fontScale * 100)}%
+          <View style={styles.heroTopRow}>
+            <View>
+              <Text style={styles.eyebrow}>
+                {t('common.schoolOfIt')}
               </Text>
 
-              <Pressable
-                style={[
-                  styles.fontSizeButton,
-                  fontScale >= 1.3 &&
-                    styles.fontSizeButtonDisabled,
-                ]}
-                onPress={() =>
-                  adjustFontScale(0.1)
-                }
-                disabled={fontScale >= 1.3}
-                accessibilityRole="button"
-                accessibilityLabel="Increase text size"
+              <Text style={styles.heroMiniText}>
+                {t('common.campusCompanion')}
+              </Text>
+            </View>
+
+            <View style={styles.appearanceControls}>
+              <View
+                style={styles.fontSizeControls}
+                accessibilityLabel="Text size"
               >
-                <Text style={styles.fontSizeButtonText}>
-                  A+
+                <Pressable
+                  style={[
+                    styles.fontSizeButton,
+                    fontScale <= 0.7 &&
+                      styles.fontSizeButtonDisabled,
+                  ]}
+                  onPress={() =>
+                    adjustFontScale(-0.1)
+                  }
+                  disabled={fontScale <= 0.7}
+                  accessibilityRole="button"
+                  accessibilityLabel="Decrease text size"
+                >
+                  <Text style={styles.fontSizeButtonText}>
+                    A-
+                  </Text>
+                </Pressable>
+
+                <Text style={styles.fontSizeValue}>
+                  {Math.round(fontScale * 100)}%
+                </Text>
+
+                <Pressable
+                  style={[
+                    styles.fontSizeButton,
+                    fontScale >= 1.3 &&
+                      styles.fontSizeButtonDisabled,
+                  ]}
+                  onPress={() =>
+                    adjustFontScale(0.1)
+                  }
+                  disabled={fontScale >= 1.3}
+                  accessibilityRole="button"
+                  accessibilityLabel="Increase text size"
+                >
+                  <Text style={styles.fontSizeButtonText}>
+                    A+
+                  </Text>
+                </Pressable>
+              </View>
+
+              <Pressable
+                style={styles.themeToggle}
+                onPress={handleThemeToggle}
+                accessibilityRole="button"
+                accessibilityLabel={`Theme: ${themeLabel}`}
+              >
+                <Text style={styles.themeToggleText}>
+                  Theme: {themeLabel}
                 </Text>
               </Pressable>
             </View>
+          </View>
 
+          <View style={styles.heroContent}>
+            <Text style={styles.greeting}>
+              {greeting}
+            </Text>
+
+            <View style={styles.studentIdentity}>
+              <View style={styles.studentAvatar}>
+                <Text style={styles.studentAvatarText}>{studentInitials || 'S'}</Text>
+              </View>
+
+              <View style={styles.studentIdentityCopy}>
+                <Text style={styles.studentName}>{studentName}</Text>
+                <Text style={styles.studentEmail} numberOfLines={1}>
+                  {user?.email ?? 'Student account'}
+                </Text>
+              </View>
+
+              {studentNumber ? (
+                <View style={styles.studentNumberBadge}>
+                  <Text style={styles.studentNumberText}>{studentNumber}</Text>
+                </View>
+              ) : null}
+            </View>
+
+            <Text style={styles.welcomeTitle}>
+              {t('common.startStrong')}
+            </Text>
+
+            <Text style={styles.welcomeTitleAccent}>
+              {t('common.stayConnected')}
+            </Text>
+
+            <Text style={styles.subtitle}>
+              {t('common.weekSubtitle')}
+            </Text>
+          </View>
+
+          <View style={styles.heroBottom}>
+            <View style={styles.statusIndicator} />
+
+            <Text style={styles.heroStatus}>
+              {t('common.campusStatus')}
+            </Text>
+
+            <Ionicons
+              name="arrow-forward"
+              size={15}
+              color={colors.accent}
+            />
+          </View>
+        </LinearGradient>
+
+        {/* ================================================================= */}
+        {/* SUPPORT BANNER */}
+        {/* ================================================================= */}
+
+        <ShameResilientBanner
+          message={t('common.supportBanner')}
+          type="encouragement"
+        />
+
+        {!checklistSummary.loading && checklistSummary.total > 0 && (
+          <View style={styles.section}>
             <Pressable
-              style={styles.themeToggle}
-              onPress={handleThemeToggle}
-              accessibilityRole="button"
-              accessibilityLabel={`Theme: ${themeLabel}`}
+              onPress={() => handleNavigate('/(student)/checklist')}
+              style={({ pressed }) => [
+                styles.checklistSummaryCard,
+                { backgroundColor: colors.surface, borderColor: colors.border },
+                pressed && styles.actionCardPressed,
+              ]}
             >
-              <Text style={styles.themeToggleText}>
-                Theme: {themeLabel}
+              <View style={styles.checklistSummaryHeader}>
+                <Text style={[styles.sectionEyebrow, { color: colors.accent }]}>Checklist</Text>
+                <Text style={[styles.checklistSummaryBadge, { color: colors.accent }]}>
+                  {checklistSummary.completed}/{checklistSummary.total}
+                </Text>
+              </View>
+
+              <Text style={[styles.sectionHeader, { color: colors.text }]}>Your orientation checklist</Text>
+
+              <View style={[styles.progressTrack, { backgroundColor: colors.card }]}>
+                <View
+                  style={[
+                    styles.progressFill,
+                    {
+                      width: `${checklistSummary.total ? (checklistSummary.completed / checklistSummary.total) * 100 : 0}%`,
+                      backgroundColor: colors.accent,
+                    },
+                  ]}
+                />
+              </View>
+
+              {checklistItems.slice(0, 3).map((task) => (
+                <Pressable
+                  key={task.id}
+                  onPress={() => void toggleChecklistTask(task.id, task.completion_status)}
+                  style={styles.checklistMiniRow}
+                >
+                  <View
+                    style={[
+                      styles.checklistMiniBox,
+                      {
+                        borderColor: colors.border,
+                        backgroundColor: task.completion_status ? colors.accent : 'transparent',
+                      },
+                    ]}
+                  >
+                    {task.completion_status && <Ionicons name="checkmark" size={12} color={colors.background} />}
+                  </View>
+
+                  <Text
+                    style={[
+                      styles.checklistMiniText,
+                      { color: colors.text },
+                      task.completion_status && styles.checklistMiniTextDone,
+                    ]}
+                    numberOfLines={1}
+                  >
+                    {task.task_description}
+                  </Text>
+                </Pressable>
+              ))}
+
+              <Text style={[styles.checklistSummaryText, { color: colors.textSecondary }]}>
+                {checklistSummary.completed === checklistSummary.total
+                  ? 'Nice work — you finished everything. Keep going!'
+                  : 'Tap a task to update it, or open the full checklist.'}
               </Text>
             </Pressable>
           </View>
-        </View>
+        )}
 
-        <View style={styles.heroContent}>
-          <Text style={styles.greeting}>
-            {greeting}
-          </Text>
+        {/* ================================================================= */}
+        {/* ANNOUNCEMENTS */}
+        {/* ================================================================= */}
 
-          <View style={styles.studentIdentity}>
-            <View style={styles.studentAvatar}>
-              <Text style={styles.studentAvatarText}>{studentInitials || 'S'}</Text>
-            </View>
-
-            <View style={styles.studentIdentityCopy}>
-              <Text style={styles.studentName}>{studentName}</Text>
-              <Text style={styles.studentEmail} numberOfLines={1}>
-                {user?.email ?? 'Student account'}
-              </Text>
-            </View>
-
-            {studentNumber ? (
-              <View style={styles.studentNumberBadge}>
-                <Text style={styles.studentNumberText}>{studentNumber}</Text>
-              </View>
-            ) : null}
-          </View>
-
-          <Text style={styles.welcomeTitle}>
-            {t('common.startStrong')}
-          </Text>
-
-          <Text style={styles.welcomeTitleAccent}>
-            {t('common.stayConnected')}
-          </Text>
-
-          <Text style={styles.subtitle}>
-            {t('common.weekSubtitle')}
-          </Text>
-        </View>
-
-        <View style={styles.heroBottom}>
-          <View style={styles.statusIndicator} />
-
-          <Text style={styles.heroStatus}>
-            {t('common.campusStatus')}
-          </Text>
-
-          <Ionicons
-            name="arrow-forward"
-            size={15}
-            color={colors.accent}
+        {readiness.totalSteps > 0 && (
+          <ReadinessCard
+            done={readiness.doneSteps}
+            total={readiness.totalSteps}
+            onPress={() => handleNavigate('/(student)/digital')}
           />
-        </View>
-      </LinearGradient>
+        )}
 
-      {/* ================================================================= */}
-      {/* SUPPORT BANNER */}
-      {/* ================================================================= */}
+        <ShuttleCard />
 
-      <ShameResilientBanner
-        message={t('common.supportBanner')}
-        type="encouragement"
-      />
+        {(loading || announcements.length > 0) && (
+          <View style={styles.section}>
+            <View
+              style={styles.sectionHeaderContainer}
+            >
+              <View style={styles.sectionHeading}>
+                <View style={styles.sectionTitleRow}>
+                  <Text
+                    style={[
+                      styles.sectionEyebrow,
+                      {
+                        color: colors.accent,
+                      },
+                    ]}
+                  >
+                    {t('common.latest')}
+                  </Text>
 
-      {!checklistSummary.loading && checklistSummary.total > 0 && (
-        <View style={styles.section}>
-          <Pressable
-            onPress={() => handleNavigate('/(student)/checklist')}
-            style={({ pressed }) => [
-              styles.checklistSummaryCard,
-              { backgroundColor: colors.surface, borderColor: colors.border },
-              pressed && styles.actionCardPressed,
-            ]}
-          >
-            <View style={styles.checklistSummaryHeader}>
-              <Text style={[styles.sectionEyebrow, { color: colors.accent }]}>Checklist</Text>
-              <Text style={[styles.checklistSummaryBadge, { color: colors.accent }]}>
-                {checklistSummary.completed}/{checklistSummary.total}
-              </Text>
-            </View>
+                  {hasUnread && !loading && (
+                    <View
+                      style={styles.unreadIndicator}
+                    >
+                      <View
+                        style={styles.unreadDot}
+                      />
 
-            <Text style={[styles.sectionHeader, { color: colors.text }]}>Your orientation checklist</Text>
-
-            <View style={[styles.progressTrack, { backgroundColor: colors.card }]}>
-              <View
-                style={[
-                  styles.progressFill,
-                  {
-                    width: `${checklistSummary.total ? (checklistSummary.completed / checklistSummary.total) * 100 : 0}%`,
-                    backgroundColor: colors.accent,
-                  },
-                ]}
-              />
-            </View>
-
-            {checklistItems.slice(0, 3).map((task) => (
-              <Pressable
-                key={task.id}
-                onPress={() => void toggleChecklistTask(task.id, task.completion_status)}
-                style={styles.checklistMiniRow}
-              >
-                <View
-                  style={[
-                    styles.checklistMiniBox,
-                    {
-                      borderColor: colors.border,
-                      backgroundColor: task.completion_status ? colors.accent : 'transparent',
-                    },
-                  ]}
-                >
-                  {task.completion_status && <Ionicons name="checkmark" size={12} color={colors.background} />}
+                      <Text
+                        style={[
+                          styles.unreadText,
+                          {
+                            color: colors.accent,
+                          },
+                        ]}
+                      >
+                        {t('common.new')}
+                      </Text>
+                    </View>
+                  )}
                 </View>
 
                 <Text
                   style={[
-                    styles.checklistMiniText,
-                    { color: colors.text },
-                    task.completion_status && styles.checklistMiniTextDone,
+                    styles.sectionHeader,
+                    {
+                      color: colors.text,
+                    },
                   ]}
-                  numberOfLines={1}
                 >
-                  {task.task_description}
+                  {t('common.latestFromSchool')}
                 </Text>
-              </Pressable>
-            ))}
+              </View>
+            </View>
 
-            <Text style={[styles.checklistSummaryText, { color: colors.textSecondary }]}>
-              {checklistSummary.completed === checklistSummary.total
-                ? 'Nice work — you finished everything. Keep going!'
-                : 'Tap a task to update it, or open the full checklist.'}
-            </Text>
-          </Pressable>
-        </View>
-      )}
+            {loading
+              ? [0, 1].map((item) => (
+                  <SkeletonCard key={item} />
+                ))
+              : announcements.map(
+                  (announcement, index) => (
+                    <AnnouncementCard
+                      key={announcement.id}
+                      item={announcement}
+                      expanded={
+                        expandedId ===
+                        announcement.id
+                      }
+                      onToggle={() =>
+                        toggleAnnouncement(
+                          announcement.id,
+                        )
+                      }
+                      isNew={
+                        index === 0 &&
+                        hasUnread
+                      }
+                    />
+                  ),
+                )}
+          </View>
+        )}
 
-      {/* ================================================================= */}
-      {/* ANNOUNCEMENTS */}
-      {/* ================================================================= */}
+        {/* ================================================================= */}
+        {/* QUICK ACCESS */}
+        {/* ================================================================= */}
 
-      {(loading || announcements.length > 0) && (
         <View style={styles.section}>
           <View
             style={styles.sectionHeaderContainer}
           >
-            <View style={styles.sectionHeading}>
-              <View style={styles.sectionTitleRow}>
-                <Text
-                  style={[
-                    styles.sectionEyebrow,
-                    {
-                      color: colors.accent,
-                    },
-                  ]}
-                >
-                  {t('common.latest')}
-                </Text>
-
-                {hasUnread && !loading && (
-                  <View
-                    style={styles.unreadIndicator}
-                  >
-                    <View
-                      style={styles.unreadDot}
-                    />
-
-                    <Text
-                      style={[
-                        styles.unreadText,
-                        {
-                          color: colors.accent,
-                        },
-                      ]}
-                    >
-                      {t('common.new')}
-                    </Text>
-                  </View>
-                )}
-              </View>
+            <View>
+              <Text
+                style={[
+                  styles.sectionEyebrow,
+                  {
+                    color: colors.accent,
+                  },
+                ]}
+              >
+                {t('common.quickAccess')}
+              </Text>
 
               <Text
                 style={[
@@ -1019,107 +1116,63 @@ export default function HomeScreen() {
                   },
                 ]}
               >
-                {t('common.latestFromSchool')}
+                {t('common.whatNeed')}
               </Text>
             </View>
           </View>
 
-          {loading
-            ? [0, 1].map((item) => (
-                <SkeletonCard key={item} />
-              ))
-            : announcements.map(
-                (announcement, index) => (
-                  <AnnouncementCard
-                    key={announcement.id}
-                    item={announcement}
-                    expanded={
-                      expandedId ===
-                      announcement.id
-                    }
-                    onToggle={() =>
-                      toggleAnnouncement(
-                        announcement.id,
-                      )
-                    }
-                    isNew={
-                      index === 0 &&
-                      hasUnread
-                    }
-                  />
+          {ACTIONS.map((action) => (
+            <ActionCard
+              key={action.key}
+              action={{
+                ...action,
+                title: t(
+                  `common.${action.key}Title`,
                 ),
-              )}
-        </View>
-      )}
-
-      {/* ================================================================= */}
-      {/* QUICK ACCESS */}
-      {/* ================================================================= */}
-
-      <View style={styles.section}>
-        <View
-          style={styles.sectionHeaderContainer}
-        >
-          <View>
-            <Text
-              style={[
-                styles.sectionEyebrow,
-                {
-                  color: colors.accent,
-                },
-              ]}
-            >
-              {t('common.quickAccess')}
-            </Text>
-
-            <Text
-              style={[
-                styles.sectionHeader,
-                {
-                  color: colors.text,
-                },
-              ]}
-            >
-              {t('common.whatNeed')}
-            </Text>
-          </View>
+                subtitle: t(
+                  `common.${action.key}Subtitle`,
+                ),
+              }}
+              onPress={() =>
+                handleNavigate(action.route)
+              }
+            />
+          ))}
         </View>
 
-        {ACTIONS.map((action) => (
-          <ActionCard
-            key={action.key}
-            action={{
-              ...action,
-              title: t(
-                `common.${action.key}Title`,
-              ),
-              subtitle: t(
-                `common.${action.key}Subtitle`,
-              ),
-            }}
-            onPress={() =>
-              handleNavigate(action.route)
-            }
-          />
-        ))}
-      </View>
+        {/* ================================================================= */}
+        {/* FOOTER */}
+        {/* ================================================================= */}
+
+        <View style={styles.footer}>
+          <View style={styles.footerLine} />
+
+          <Text style={styles.footerText}>
+            {t('common.schoolOfIt')}
+          </Text>
+
+          <Text style={styles.footerSubtext}>
+            {t('common.footerSubtitle')}
+          </Text>
+        </View>
+      </ScrollView>
 
       {/* ================================================================= */}
-      {/* FOOTER */}
+      {/* FLOATING CHAT BUTTON (outside the ScrollView so it stays fixed) */}
       {/* ================================================================= */}
 
-      <View style={styles.footer}>
-        <View style={styles.footerLine} />
-
-        <Text style={styles.footerText}>
-          {t('common.schoolOfIt')}
-        </Text>
-
-        <Text style={styles.footerSubtext}>
-          {t('common.footerSubtitle')}
-        </Text>
-      </View>
-    </ScrollView>
+      <Pressable
+        onPress={() => {
+          tap();
+          router.push('/chatbot');
+        }}
+        accessibilityRole="button"
+        accessibilityLabel="Open chat assistant"
+        style={styles.chatFab}
+      >
+        <Ionicons name="chatbubble-ellipses" size={26} color="#fff" />
+      </Pressable>
+    </View>
   );
 }
 
@@ -1145,6 +1198,28 @@ const styles = StyleSheet.create({
 
   section: {
     marginTop: 4,
+  },
+
+  // ===========================================================================
+  // Floating chat button
+  // ===========================================================================
+
+  chatFab: {
+    position: 'absolute',
+    right: 20,
+    bottom: 24,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#2563eb',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 10,
+    elevation: 6,
+    shadowColor: '#000',
+    shadowOpacity: 0.25,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 3 },
   },
 
   checklistSummaryCard: {

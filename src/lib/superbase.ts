@@ -5,7 +5,7 @@ import 'react-native-url-polyfill/auto';
 
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
-const isBrowser = typeof window !== 'undefined';
+const isWeb = Platform.OS === 'web';
 
 if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error(
@@ -14,15 +14,20 @@ if (!supabaseUrl || !supabaseAnonKey) {
 }
 
 const webStorage = {
-  getItem: async (key: string) =>
-    typeof window === 'undefined' ? null : window.localStorage.getItem(key),
+  getItem: async (key: string) => {
+    if (typeof window === 'undefined' || !('localStorage' in window)) {
+      return null;
+    }
+
+    return window.localStorage.getItem(key);
+  },
   setItem: async (key: string, value: string) => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && 'localStorage' in window) {
       window.localStorage.setItem(key, value);
     }
   },
   removeItem: async (key: string) => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && 'localStorage' in window) {
       window.localStorage.removeItem(key);
     }
   },
@@ -30,13 +35,9 @@ const webStorage = {
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
-    storage: isBrowser
-      ? webStorage
-      : Platform.OS === 'web'
-        ? undefined
-        : AsyncStorage,
-    autoRefreshToken: isBrowser,
-    persistSession: isBrowser,
+    storage: isWeb ? webStorage : AsyncStorage,
+    autoRefreshToken: true,
+    persistSession: true,
     detectSessionInUrl: false,
   },
 });

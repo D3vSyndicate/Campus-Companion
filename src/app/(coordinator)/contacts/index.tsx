@@ -1,21 +1,43 @@
 import { useNavigation, useRouter } from 'expo-router';
 import { useLayoutEffect } from 'react';
-import { Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Alert,
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+
 import ListItemCard from '../../../components/ListItemCard';
 import { useContacts } from '../../../context/ContactsContext';
+import { useToast } from '../../../context/ToastContext';
 import { useTheme } from '../../../theme/ThemeContext';
 
 export default function ContactsListScreen() {
   const { items, deleteItem } = useContacts();
   const { colors } = useTheme();
+  const { showToast } = useToast();
   const router = useRouter();
   const navigation = useNavigation();
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity onPress={() => router.push('/(coordinator)/contacts/new' as any)} style={styles.addButton}>
-          <Text style={[styles.addButtonText, { color: colors.accent }]}>+ Add</Text>
+        <TouchableOpacity
+          onPress={() =>
+            router.push('/(coordinator)/contacts/new' as any)
+          }
+          style={styles.addButton}
+        >
+          <Text
+            style={[
+              styles.addButtonText,
+              { color: colors.accent },
+            ]}
+          >
+            + Add
+          </Text>
         </TouchableOpacity>
       ),
     });
@@ -24,20 +46,38 @@ export default function ContactsListScreen() {
   const confirmDelete = (id: string, name: string) => {
     Alert.alert('Delete contact', `Delete "${name}"? This can't be undone.`, [
       { text: 'Cancel', style: 'cancel' },
-      { text: 'Delete', style: 'destructive', onPress: () => deleteItem(id) },
+      { text: 'Delete', style: 'destructive', onPress: () => void deleteItem(id).then((failure) => failure && showToast(failure, 'error')) },
     ]);
   };
 
-  const sorted = [...items].sort((a, b) => a.name.localeCompare(b.name));
+  const sorted = [...items].sort((a, b) =>
+    a.name.localeCompare(b.name),
+  );
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: colors.background,
+        },
+      ]}
+    >
       <FlatList
         data={sorted}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item, index) =>
+          `${item.id ?? 'contact'}-${index}`
+        }
         contentContainerStyle={styles.list}
         ListEmptyComponent={
-          <Text style={[styles.empty, { color: colors.textSecondary }]}>
+          <Text
+            style={[
+              styles.empty,
+              {
+                color: colors.textSecondary,
+              },
+            ]}
+          >
             No contacts yet. Tap + Add to create one.
           </Text>
         }
@@ -45,10 +85,27 @@ export default function ContactsListScreen() {
           <ListItemCard
             title={item.name}
             subtitle={`${item.role} · ${item.email}`}
-            onPress={() => router.push(`/(coordinator)/contacts/${item.id}` as any)}
+            onPress={() =>
+              router.push(
+                `/(coordinator)/contacts/${item.id}` as any,
+              )
+            }
             right={
-              <TouchableOpacity onPress={() => confirmDelete(item.id, item.name)}>
-                <Text style={[styles.deleteText, { color: colors.danger }]}>Delete</Text>
+              <TouchableOpacity
+                onPress={() =>
+                  confirmDelete(item.id, item.name)
+                }
+              >
+                <Text
+                  style={[
+                    styles.deleteText,
+                    {
+                      color: colors.danger,
+                    },
+                  ]}
+                >
+                  Delete
+                </Text>
               </TouchableOpacity>
             }
           />
@@ -59,10 +116,32 @@ export default function ContactsListScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
-  list: { paddingVertical: 12 },
-  empty: { textAlign: 'center', marginTop: 40, paddingHorizontal: 32 },
-  addButton: { paddingHorizontal: 8, paddingVertical: 4 },
-  addButtonText: { fontSize: 16, fontWeight: '600' },
-  deleteText: { fontSize: 13, fontWeight: '600' },
+  container: {
+    flex: 1,
+  },
+
+  list: {
+    paddingVertical: 12,
+  },
+
+  empty: {
+    textAlign: 'center',
+    marginTop: 40,
+    paddingHorizontal: 32,
+  },
+
+  addButton: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+
+  addButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+
+  deleteText: {
+    fontSize: 13,
+    fontWeight: '600',
+  },
 });
