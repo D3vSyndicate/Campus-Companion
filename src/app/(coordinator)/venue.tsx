@@ -1,2 +1,6 @@
-import CoordinatorContentScreen from '../../components/CoordinatorContentScreen';
-export default function VenueScreen() { return <CoordinatorContentScreen storageKey="venue" title="Venue Information" description="Publish rooms, directions, maps, and accessibility information." placeholder="Add a venue or direction" />; }
+import { venueConfig } from '../../components/manage/configs';
+import { ManageScreen } from '../../components/manage/ManageScreen';
+
+export default function VenueScreen() {
+  return <ManageScreen config={venueConfig} />;
+}

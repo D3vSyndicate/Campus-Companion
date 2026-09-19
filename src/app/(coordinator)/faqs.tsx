@@ -1,2 +1,6 @@
-import CoordinatorContentScreen from '../../components/CoordinatorContentScreen';
-export default function FaqsScreen() { return <CoordinatorContentScreen storageKey="faqs" title="FAQs" description="Maintain answers to common orientation questions." placeholder="Add a frequently asked question" />; }
+import { faqConfig } from '../../components/manage/configs';
+import { ManageScreen } from '../../components/manage/ManageScreen';
+
+export default function FaqsScreen() {
+  return <ManageScreen config={faqConfig} />;
+}

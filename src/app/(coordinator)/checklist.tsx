@@ -1,2 +1,6 @@
-import CoordinatorContentScreen from '../../components/CoordinatorContentScreen';
-export default function ChecklistScreen() { return <CoordinatorContentScreen storageKey="checklist" title="Checklist" description="Organise tasks students need to complete during orientation." placeholder="Add a checklist task" />; }
+import { checklistConfig } from '../../components/manage/configs';
+import { ManageScreen } from '../../components/manage/ManageScreen';
+
+export default function ChecklistScreen() {
+  return <ManageScreen config={checklistConfig} />;
+}

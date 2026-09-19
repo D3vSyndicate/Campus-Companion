@@ -51,6 +51,15 @@ function AdminStack() {
         name="contacts/[id]"
         options={{ title: 'Edit Contact' }}
       />
+
+      <Stack.Screen name="announcements" options={{ title: 'Announcements' }} />
+      <Stack.Screen name="faqs" options={{ title: 'FAQs' }} />
+      <Stack.Screen name="venue" options={{ title: 'Venue Information' }} />
+      <Stack.Screen name="checklist" options={{ title: 'Checklist' }} />
+      <Stack.Screen name="support" options={{ title: 'Support Pathways' }} />
+      <Stack.Screen name="shuttle" options={{ title: 'Shuttle Times' }} />
+      <Stack.Screen name="digital" options={{ title: 'Digital Readiness Modules' }} />
+      <Stack.Screen name="digital-steps" options={{ title: 'Digital Readiness Steps' }} />
     </Stack>
   );
 }

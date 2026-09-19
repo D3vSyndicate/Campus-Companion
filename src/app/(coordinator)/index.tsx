@@ -7,12 +7,14 @@ import { useTheme } from '../../theme/ThemeContext';
 const SECTIONS: { href: string; label: string; desc: string }[] = [
   { href: '/(coordinator)/schedule', label: 'Schedule Items', desc: 'Add, edit and remove schedule entries' },
   { href: '/(coordinator)/announcements', label: 'Announcements', desc: 'Manage posted announcements' },
-  { href: '/(coordinator)/faqs', label: 'FAQs', desc: 'Control which FAQs are visible' },
+  { href: '/(coordinator)/faqs', label: 'FAQs', desc: 'Answers grouped by category' },
   { href: '/(coordinator)/contacts', label: 'Contacts', desc: 'Manage contact directory' },
   { href: '/(coordinator)/venue', label: 'Venue Information', desc: 'Edit venue details' },
   { href: '/(coordinator)/checklist', label: 'Checklist', desc: 'Organise tasks students need to complete' },
-  { href: '/(coordinator)/support', label: 'Support Information', desc: 'Update student support pathways' },
-  { href: '/(coordinator)/digital', label: 'Digital Readiness', desc: 'Manage email, Wi-Fi and portal guidance' },
+  { href: '/(coordinator)/support', label: 'Support Pathways', desc: 'Update the "I need help with..." options' },
+  { href: '/(coordinator)/shuttle', label: 'Shuttle Times', desc: 'Morning, afternoon and night departures' },
+  { href: '/(coordinator)/digital', label: 'Digital Readiness Modules', desc: 'Tutorial topics: computer skills, Funda, printing, Wi-Fi' },
+  { href: '/(coordinator)/digital-steps', label: 'Digital Readiness Steps', desc: 'Step-by-step guides with images and videos' },
   { href: '/(coordinator)/activity-log', label: 'Activity Log', desc: 'Review recent coordinator changes' },
 ];
 

@@ -20,9 +20,12 @@ import {
     View,
 } from 'react-native';
 
+import { ReadinessCard } from '../../components/ReadinessCard';
 import { ShameResilientBanner } from '../../components/ShameResilientBanner';
+import { ShuttleCard } from '../../components/ShuttleCard';
 import { useAppearance } from '../../context/AppearanceContext';
 import { useAuth } from '../../context/AuthContext';
+import { hasSeenReadinessIntro, markReadinessIntroSeen, useReadiness } from '../../lib/readiness';
 import { supabase } from '../../lib/superbase';
 import { useTheme } from '../../theme/ThemeContext';
 
@@ -412,6 +415,7 @@ export default function HomeScreen() {
   const { t } = useTranslation();
   const { colors } = useTheme();
   const { user } = useAuth();
+  const readiness = useReadiness();
 
   const {
     darkMode,
@@ -464,6 +468,22 @@ export default function HomeScreen() {
     .slice(0, 2)
     .map((part) => part.charAt(0).toUpperCase())
     .join('');
+
+  // ---------------------------------------------------------------------------
+  // First login: take new students to the digital readiness tutorial once
+  // ---------------------------------------------------------------------------
+
+  const userId = user?.id;
+
+  useEffect(() => {
+    if (!userId || readiness.loading || readiness.totalSteps === 0) return;
+
+    void (async () => {
+      if (await hasSeenReadinessIntro(userId)) return;
+      await markReadinessIntroSeen(userId);
+      router.push({ pathname: '/(student)/digital', params: { welcome: '1' } } as never);
+    })();
+  }, [userId, readiness.loading, readiness.totalSteps, router]);
 
   // ---------------------------------------------------------------------------
   // Load last-seen announcement
@@ -970,6 +990,16 @@ export default function HomeScreen() {
       {/* ================================================================= */}
       {/* ANNOUNCEMENTS */}
       {/* ================================================================= */}
+
+      {readiness.totalSteps > 0 && (
+        <ReadinessCard
+          done={readiness.doneSteps}
+          total={readiness.totalSteps}
+          onPress={() => handleNavigate('/(student)/digital')}
+        />
+      )}
+
+      <ShuttleCard />
 
       {(loading || announcements.length > 0) && (
         <View style={styles.section}>

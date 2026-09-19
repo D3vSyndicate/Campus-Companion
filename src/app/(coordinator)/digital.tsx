@@ -1,2 +1,6 @@
-import CoordinatorContentScreen from '../../components/CoordinatorContentScreen';
-export default function DigitalScreen() { return <CoordinatorContentScreen storageKey="digital" title="Digital Readiness" description="Manage guidance for Funda, email, Wi-Fi, labs, and student portals." placeholder="Add digital readiness guidance" />; }
+import { readinessModuleConfig } from '../../components/manage/configs';
+import { ManageScreen } from '../../components/manage/ManageScreen';
+
+export default function DigitalModulesScreen() {
+  return <ManageScreen config={readinessModuleConfig} />;
+}

@@ -20,8 +20,11 @@ type AuthContextValue = {
 export type UserRole = 'admin' | 'coordinator' | 'student';
 
 export function getUserRole(user: User | null): UserRole | null {
-  const role = user?.app_metadata?.role ?? user?.user_metadata?.role;
-  return role === 'admin' || role === 'coordinator' || role === 'student' ? role : null;
+  // app_metadata can only be set by the server. user_metadata is editable by the
+  // user (signUp accepts it), so it may only ever grant the student role.
+  const trusted = user?.app_metadata?.role;
+  if (trusted === 'admin' || trusted === 'coordinator' || trusted === 'student') return trusted;
+  return user?.user_metadata?.role === 'student' ? 'student' : null;
 }
 
 function getLoginErrorMessage(message: string) {

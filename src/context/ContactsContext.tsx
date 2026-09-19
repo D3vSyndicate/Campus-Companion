@@ -10,12 +10,24 @@ export type Contact = {
   support_category: string;
 };
 
+// The Contact table's primary key is contact_id; the app works with `id`.
+function fromRow(row: Record<string, unknown>): Contact {
+  return {
+    id: String(row.contact_id ?? row.id ?? ''),
+    name: String(row.name ?? ''),
+    surname: String(row.surname ?? ''),
+    role: String(row.role ?? ''),
+    email: String(row.email ?? ''),
+    support_category: String(row.support_category ?? ''),
+  };
+}
+
 type ContactsContextValue = {
   items: Contact[];
   loading: boolean;
-  addItem: (item: Omit<Contact, 'id'>) => Promise<void>;
-  updateItem: (id: string, updates: Partial<Omit<Contact, 'id'>>) => Promise<void>;
-  deleteItem: (id: string) => Promise<void>;
+  addItem: (item: Omit<Contact, 'id'>) => Promise<string | null>;
+  updateItem: (id: string, updates: Partial<Omit<Contact, 'id'>>) => Promise<string | null>;
+  deleteItem: (id: string) => Promise<string | null>;
   getItem: (id: string) => Contact | undefined;
 };
 
@@ -31,60 +43,63 @@ export function ContactsProvider({ children }: { children: ReactNode }) {
     if (error) {
       console.error('Error fetching contacts:', error.message);
     } else if (data) {
-      setItems(data as Contact[]);
+      setItems(data.map((row) => fromRow(row as Record<string, unknown>)));
     }
     setLoading(false);
   };
 
   useEffect(() => {
-    fetchContacts();
+    void fetchContacts();
   }, []);
 
+  // Each mutation resolves to null on success or a readable error message, so screens can tell
+  // the user when a save did not go through (for example when they do not have permission).
   const addItem: ContactsContextValue['addItem'] = async (item) => {
-    const { data, error } = await supabase
-      .from('Contact')
-      .insert([item])
-      .select();
+    const { data, error } = await supabase.from('Contact').insert([item]).select();
 
     if (error) {
       console.error('Error adding contact:', error.message);
-      return;
+      return error.message;
     }
-    if (data) setItems((prev) => [...prev, data[0] as Contact]);
+    if (data?.[0]) setItems((prev) => [...prev, fromRow(data[0] as Record<string, unknown>)]);
+    return null;
   };
 
   const updateItem: ContactsContextValue['updateItem'] = async (id, updates) => {
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('Contact')
       .update(updates)
-      .eq('id', id);
+      .eq('contact_id', id)
+      .select();
 
     if (error) {
       console.error('Error updating contact:', error.message);
-      return;
+      return error.message;
     }
-    setItems((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, ...updates } : item))
-    );
+    // Row-level security filters out rows you may not change instead of raising an error.
+    if (!data?.length) return 'You do not have permission to change this contact.';
+
+    setItems((prev) => prev.map((item) => (item.id === id ? { ...item, ...updates } : item)));
+    return null;
   };
 
   const deleteItem: ContactsContextValue['deleteItem'] = async (id) => {
-    const { error } = await supabase.from('Contact').delete().eq('id', id);
+    const { data, error } = await supabase.from('Contact').delete().eq('contact_id', id).select();
 
     if (error) {
       console.error('Error deleting contact:', error.message);
-      return;
+      return error.message;
     }
+    if (!data?.length) return 'You do not have permission to delete this contact.';
+
     setItems((prev) => prev.filter((item) => item.id !== id));
+    return null;
   };
 
-  const getItem: ContactsContextValue['getItem'] = (id) =>
-    items.find((item) => item.id === id);
+  const getItem: ContactsContextValue['getItem'] = (id) => items.find((item) => item.id === id);
 
   return (
-    <ContactsContext.Provider
-      value={{ items, loading, addItem, updateItem, deleteItem, getItem }}
-    >
+    <ContactsContext.Provider value={{ items, loading, addItem, updateItem, deleteItem, getItem }}>
       {children}
     </ContactsContext.Provider>
   );

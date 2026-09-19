@@ -11,6 +11,7 @@ import {
     View,
 } from 'react-native';
 import { Contact, useContacts } from '../context/ContactsContext';
+import { useToast } from '../context/ToastContext';
 import { useTheme } from '../theme/ThemeContext';
 import { ScaledText as Text } from './ScaledText';
 
@@ -20,6 +21,7 @@ type Props = {
 
 export default function ContactForm({ existing }: Props) {
   const { addItem, updateItem, deleteItem } = useContacts();
+  const { showToast } = useToast();
   const { colors } = useTheme();
   const router = useRouter();
   const navigation = useNavigation();
@@ -38,12 +40,19 @@ export default function ContactForm({ existing }: Props) {
         text: 'Delete',
         style: 'destructive',
         onPress: () => {
-          deleteItem(existing.id);
-          router.back();
+          void (async () => {
+            const failure = await deleteItem(existing.id);
+            if (failure) {
+              showToast(failure, 'error');
+              return;
+            }
+            showToast('Contact deleted');
+            router.back();
+          })();
         },
       },
     ]);
-  }, [existing, name, surname, deleteItem, router]);
+  }, [existing, name, surname, deleteItem, router, showToast]);
 
   useLayoutEffect(() => {
     if (existing) {
@@ -57,17 +66,24 @@ export default function ContactForm({ existing }: Props) {
     }
   }, [existing, colors.danger, navigation, handleDelete]);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!name.trim()) {
       Alert.alert('Missing info', 'Name is required.');
       return;
     }
-    const payload = { name, surname, role, email, support_category: supportCategory };
-    if (existing) {
-      updateItem(existing.id, payload);
-    } else {
-      addItem(payload);
+    const payload = {
+      name: name.trim(),
+      surname: surname.trim(),
+      role: role.trim(),
+      email: email.trim(),
+      support_category: supportCategory.trim(),
+    };
+    const failure = existing ? await updateItem(existing.id, payload) : await addItem(payload);
+    if (failure) {
+      showToast(failure, 'error');
+      return;
     }
+    showToast(existing ? 'Contact updated' : 'Contact added');
     router.back();
   };
 

@@ -56,8 +56,10 @@ function CoordinatorStack() {
       <Stack.Screen name="faqs" options={{ title: 'FAQs' }} />
       <Stack.Screen name="venue" options={{ title: 'Venue Information' }} />
       <Stack.Screen name="checklist" options={{ title: 'Checklist' }} />
-      <Stack.Screen name="support" options={{ title: 'Support Information' }} />
-      <Stack.Screen name="digital" options={{ title: 'Digital Readiness' }} />
+      <Stack.Screen name="support" options={{ title: 'Support Pathways' }} />
+      <Stack.Screen name="digital" options={{ title: 'Digital Readiness Modules' }} />
+      <Stack.Screen name="digital-steps" options={{ title: 'Digital Readiness Steps' }} />
+      <Stack.Screen name="shuttle" options={{ title: 'Shuttle Times' }} />
       <Stack.Screen name="activity-log" options={{ title: 'Activity Log' }} />
     </Stack>
   );

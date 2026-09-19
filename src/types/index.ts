@@ -5,6 +5,8 @@ export interface ScheduleItem {
   startTime: string;
   endTime: string;
   venue: string;
+  directions?: string;
+  mapLink?: string;
   description: string;
   category: 'academic' | 'support' | 'social' | 'digital' | 'admin';
   isPast?: boolean;

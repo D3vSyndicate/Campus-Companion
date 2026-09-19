@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
     ActivityIndicator,
     FlatList,
@@ -16,6 +16,8 @@ import { ScaledText as Text } from './ScaledText';
 
 type TribeChatProps = {
   groupId: string;
+  // Shown instead of the default text when no tribe could be loaded.
+  setupMessage?: string;
 };
 
 type Group = {
@@ -33,6 +35,7 @@ type Profile = {
 type Message = {
   id: string;
   group_id: string;
+  auth_id?: string | null;
   role: string;
   display_name: string;
   message_text: string;
@@ -43,7 +46,7 @@ function getErrorMessage(error: unknown, fallback: string) {
   return error instanceof Error ? error.message : fallback;
 }
 
-export function TribeChat({ groupId }: TribeChatProps) {
+export function TribeChat({ groupId, setupMessage = '' }: TribeChatProps) {
   const { colors } = useTheme();
   const [group, setGroup] = useState<Group | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -55,6 +58,8 @@ export function TribeChat({ groupId }: TribeChatProps) {
   const [sending, setSending] = useState(false);
   const [savingUsername, setSavingUsername] = useState(false);
   const [error, setError] = useState('');
+  const [myId, setMyId] = useState('');
+  const listRef = useRef<FlatList<Message>>(null);
 
   useEffect(() => {
     let active = true;
@@ -66,7 +71,7 @@ export function TribeChat({ groupId }: TribeChatProps) {
 
       try {
         if (!groupId) {
-          throw new Error('Your mentor group has not been linked yet.');
+          throw new Error(setupMessage || 'Your mentor group has not been assigned yet. Check again soon.');
         }
 
         const {
@@ -76,13 +81,14 @@ export function TribeChat({ groupId }: TribeChatProps) {
 
         if (userError) throw userError;
         if (!user) throw new Error('You must be logged in to use Tribe.');
+        if (active) setMyId(user.id);
 
         const [{ data: groupData, error: groupError }, { data: profileData, error: profileError }, { data: messageData, error: messageError }] = await Promise.all([
           supabase.from('community_groups').select('*').eq('id', groupId).single(),
           supabase.from('community_profiles').select('id, username').eq('auth_id', user.id).maybeSingle(),
           supabase
             .from('community_messages')
-            .select('id, group_id, role, display_name, message_text, created_at')
+            .select('id, group_id, auth_id, role, display_name, message_text, created_at')
             .eq('group_id', groupId)
             .order('created_at', { ascending: true }),
         ]);
@@ -132,7 +138,7 @@ export function TribeChat({ groupId }: TribeChatProps) {
       active = false;
       if (channel) void supabase.removeChannel(channel);
     };
-  }, [groupId]);
+  }, [groupId, setupMessage]);
 
   const saveUsername = async () => {
     const cleanedUsername = username.trim();
@@ -295,17 +301,20 @@ export function TribeChat({ groupId }: TribeChatProps) {
       {error ? <Text style={[styles.error, { color: colors.danger }]}>{error}</Text> : null}
 
       <FlatList
+        ref={listRef}
         style={styles.messageList}
         contentContainerStyle={styles.messageContent}
+        onContentSizeChange={() => listRef.current?.scrollToEnd({ animated: true })}
         data={messages}
         keyExtractor={(item) => item.id}
         ListEmptyComponent={<Text style={[styles.emptyText, { color: colors.textSecondary }]}>No messages yet. Start the conversation.</Text>}
         renderItem={({ item }) => {
           const isMentor = item.role === 'mentor';
+          const isMine = Boolean(myId) && item.auth_id === myId;
           return (
-            <View style={[styles.messageBubble, { backgroundColor: isMentor ? colors.text : colors.surface, borderColor: colors.border }, isMentor ? styles.mentorBubble : styles.studentBubble]}>
+            <View style={[styles.messageBubble, { backgroundColor: isMentor ? colors.text : isMine ? colors.card : colors.surface, borderColor: isMine ? colors.accent : colors.border }, isMine ? styles.studentBubble : styles.mentorBubble]}>
               <View style={styles.messageHeader}>
-                <Text style={[styles.messageName, { color: isMentor ? colors.accent : colors.text }]}>{item.display_name}</Text>
+                <Text style={[styles.messageName, { color: isMentor ? colors.accent : colors.text }]}>{isMine ? `${item.display_name} (you)` : item.display_name}</Text>
                 <Text style={[styles.messageTime, { color: isMentor ? colors.surface : colors.textSecondary }]}>{new Date(item.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
               </View>
               <Text style={[styles.messageText, { color: isMentor ? colors.surface : colors.text }]}>{item.message_text}</Text>

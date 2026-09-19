@@ -1,2 +1,6 @@
-import CoordinatorContentScreen from '../../components/CoordinatorContentScreen';
-export default function SupportScreen() { return <CoordinatorContentScreen storageKey="support" title="Support Information" description="Update student support services and recommended help pathways." placeholder="Add a support pathway" />; }
+import { supportConfig } from '../../components/manage/configs';
+import { ManageScreen } from '../../components/manage/ManageScreen';
+
+export default function SupportScreen() {
+  return <ManageScreen config={supportConfig} />;
+}

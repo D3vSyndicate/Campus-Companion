@@ -4,6 +4,7 @@ import { ActivityIndicator, Linking, ScrollView, StyleSheet, TouchableOpacity, V
 import { PageHeader } from '../../components/PageHeader';
 import { ScaledText as Text } from '../../components/ScaledText';
 import { ShameResilientBanner } from '../../components/ShameResilientBanner';
+import { SupportPathways } from '../../components/SupportPathways';
 import { fetchWithOfflineFallback } from '../../lib/offlineData';
 import { useTheme } from '../../theme/ThemeContext';
 import { ContactItem } from '../../types';
@@ -40,12 +41,12 @@ export default function ContactsScreen() {
         ? data.map((row, index) => {
             const item = row as Record<string, unknown>;
             return {
-              id: String(item.id ?? item.contact_id ?? index + 1),
+              id: String(item.contact_id ?? item.id ?? index + 1),
               name: String(item.name ?? item.title ?? ''),
               surname: String(item.surname ?? ''),
               role: String(item.role ?? ''),
               email: String(item.email ?? ''),
-              support_category: String(item.support_type ?? item.supportType ?? item.description ?? ''),
+              support_category: String(item.support_category ?? item.support_type ?? item.supportType ?? item.description ?? ''),
             };
           })
         : [];
@@ -83,6 +84,10 @@ export default function ContactsScreen() {
           type="info"
         />
       )}
+
+      <SupportPathways />
+
+      <Text style={[styles.peopleHeading, { color: palette.heading }]}>{t('common.peopleWhoCanHelp')}</Text>
 
       {loading ? (
         <ActivityIndicator size="large" color={colors.accent} />
@@ -135,6 +140,7 @@ export default function ContactsScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   content: { padding: 16, paddingBottom: 32 },
+  peopleHeading: { fontSize: 20, fontWeight: '800', marginBottom: 10 },
   card: { borderWidth: 1, borderRadius: 14, padding: 16, marginBottom: 12 },
   cardTop: { flexDirection: 'row', alignItems: 'center' },
   avatar: { width: 42, height: 42, borderRadius: 21, alignItems: 'center', justifyContent: 'center', marginRight: 12 },

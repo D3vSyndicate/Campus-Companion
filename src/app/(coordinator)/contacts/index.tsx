@@ -3,11 +3,13 @@ import { useLayoutEffect } from 'react';
 import { Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import ListItemCard from '../../../components/ListItemCard';
 import { useContacts } from '../../../context/ContactsContext';
+import { useToast } from '../../../context/ToastContext';
 import { useTheme } from '../../../theme/ThemeContext';
 
 export default function ContactsListScreen() {
   const { items, deleteItem } = useContacts();
   const { colors } = useTheme();
+  const { showToast } = useToast();
   const router = useRouter();
   const navigation = useNavigation();
 
@@ -24,7 +26,7 @@ export default function ContactsListScreen() {
   const confirmDelete = (id: string, name: string) => {
     Alert.alert('Delete contact', `Delete "${name}"? This can't be undone.`, [
       { text: 'Cancel', style: 'cancel' },
-      { text: 'Delete', style: 'destructive', onPress: () => deleteItem(id) },
+      { text: 'Delete', style: 'destructive', onPress: () => void deleteItem(id).then((failure) => failure && showToast(failure, 'error')) },
     ]);
   };
 

@@ -7,7 +7,15 @@ import { useTheme } from '../../theme/ThemeContext';
 
 const SECTIONS: { href: string; label: string; desc: string }[] = [
   { href: '/(admin)/schedule', label: 'Schedule Items', desc: 'Add, edit and remove schedule entries' },
+  { href: '/(admin)/announcements', label: 'Announcements', desc: 'Manage posted announcements' },
+  { href: '/(admin)/faqs', label: 'FAQs', desc: 'Answers grouped by category' },
   { href: '/(admin)/contacts', label: 'Contacts', desc: 'Manage the student support directory' },
+  { href: '/(admin)/venue', label: 'Venue Information', desc: 'Edit venue details' },
+  { href: '/(admin)/checklist', label: 'Checklist', desc: 'Organise tasks students need to complete' },
+  { href: '/(admin)/support', label: 'Support Pathways', desc: 'Update the "I need help with..." options' },
+  { href: '/(admin)/shuttle', label: 'Shuttle Times', desc: 'Morning, afternoon and night departures' },
+  { href: '/(admin)/digital', label: 'Digital Readiness Modules', desc: 'Tutorial topics: computer skills, Funda, printing, Wi-Fi' },
+  { href: '/(admin)/digital-steps', label: 'Digital Readiness Steps', desc: 'Step-by-step guides with images and videos' },
   { href: '/(admin)/profile', label: 'Profile & Settings', desc: 'Manage your account and preferences' },
 ];
 
