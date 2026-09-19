@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useSegments } from 'expo-router';
 import {
     ActivityIndicator,
     Alert,
@@ -35,6 +36,7 @@ function friendlyError(error: { code?: string; message: string }) {
 export function BuddyPlacement() {
   const { colors } = useTheme();
   const { showToast } = useToast();
+  const segments = useSegments();
 
   const [groups, setGroups] = useState<Group[]>([]);
   const [placements, setPlacements] = useState<Placement[]>([]);
@@ -154,6 +156,7 @@ export function BuddyPlacement() {
           title="Buddies"
           subtitle="Place FYS buddies in a tribe so they can chat with their first-years."
           showSearch={false}
+          backHref={segments[0] === '(admin)' ? '/(admin)' : undefined}
         />
         <Text style={[styles.description, { color: colors.textSecondary }]}>
           Place an FYS buddy in a tribe so they can chat with their first-years. The buddy needs an account with the mentor role first.
