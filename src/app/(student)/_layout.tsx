@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { AuthGate } from '../../components/AuthGate';
+import { TourProvider } from '../../context/TourContext';
 import { useTheme } from '../../theme/ThemeContext';
 
 const TAB_ICON_SIZE = 22;
@@ -12,6 +13,7 @@ export default function StudentLayout() {
 
   return (
     <AuthGate requiredRole="student">
+      <TourProvider>
       <Tabs
         // Back returns to the screen you were just on. The default jumps to the first tab (Home) from every
         // screen that is not in the tab bar, such as the mentor groups.
@@ -120,6 +122,7 @@ export default function StudentLayout() {
           }}
         />
       </Tabs>
+      </TourProvider>
     </AuthGate>
   );
 }

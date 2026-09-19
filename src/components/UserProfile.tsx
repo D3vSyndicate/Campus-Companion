@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { useTour } from '../context/TourContext';
 import { AboutProject } from './AboutProject';
 import { LogOutButton } from './LogOutButton';
 import { SearchEntry } from './search/SearchEntry';
@@ -88,6 +89,9 @@ export function UserProfile({ variant = 'student' }: Props) {
   const { i18n } = useTranslation();
   const { colors, mode, setMode } = useTheme();
   const { fontScale, changeFontScale } = useAppearance();
+  // Only students have the tour, so the row only appears inside the student area.
+  const tour = useTour();
+  const showTour = variant === 'student' && tour !== null;
   const { user, role } = useAuth();
 
   const adjustFontScale = (change: number) => {
@@ -142,7 +146,7 @@ export function UserProfile({ variant = 'student' }: Props) {
             <Segmented options={MODES} value={mode} onChange={setMode} />
           </PreferenceRow>
 
-          <PreferenceRow icon="text-outline" label="Text size" last>
+          <PreferenceRow icon="text-outline" label="Text size" last={!showTour}>
             <View style={styles.stepperRow}>
               <TouchableOpacity
                 accessibilityRole="button"
@@ -165,6 +169,20 @@ export function UserProfile({ variant = 'student' }: Props) {
               </TouchableOpacity>
             </View>
           </PreferenceRow>
+
+          {showTour ? (
+            <PreferenceRow icon="compass-outline" label="App tour" last>
+              <TouchableOpacity
+                accessibilityRole="button"
+                accessibilityLabel="Replay the app tour"
+                onPress={() => tour?.openTour()}
+                style={[styles.tourButton, { backgroundColor: colors.accent }]}
+              >
+                <Ionicons name="play" size={14} color="#071B2C" />
+                <Text style={styles.tourButtonText}>Replay</Text>
+              </TouchableOpacity>
+            </PreferenceRow>
+          ) : null}
         </View>
       </View>
 
@@ -178,6 +196,8 @@ export function UserProfile({ variant = 'student' }: Props) {
 }
 
 const styles = StyleSheet.create({
+  tourButton: { flexDirection: 'row', alignItems: 'center', gap: 6, alignSelf: 'flex-start', borderRadius: 999, paddingHorizontal: 16, paddingVertical: 9 },
+  tourButtonText: { color: '#071B2C', fontSize: 13, fontWeight: '800' },
   container: { flex: 1 },
   content: { padding: 16, paddingBottom: 40 },
   title: { fontSize: 28, fontWeight: '800', marginBottom: 4 },

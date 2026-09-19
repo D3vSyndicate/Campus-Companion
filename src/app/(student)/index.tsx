@@ -28,7 +28,7 @@ import { ShuttleCard } from '../../components/ShuttleCard';
 import { useAppearance } from '../../context/AppearanceContext';
 import { useAuth } from '../../context/AuthContext';
 import { isRecent, newestFirst, postedAtOf, postedLabel, useSeenAnnouncements } from '../../lib/announcements';
-import { hasSeenReadinessIntro, markReadinessIntroSeen, useReadiness } from '../../lib/readiness';
+import { useReadiness } from '../../lib/readiness';
 import { supabase } from '../../lib/superbase';
 import { useTheme } from '../../theme/ThemeContext';
 
@@ -519,22 +519,6 @@ export default function HomeScreen() {
     .slice(0, 2)
     .map((part) => part.charAt(0).toUpperCase())
     .join('');
-
-  // ---------------------------------------------------------------------------
-  // First login: take new students to the digital readiness tutorial once
-  // ---------------------------------------------------------------------------
-
-  const userId = user?.id;
-
-  useEffect(() => {
-    if (!userId || readiness.loading || readiness.totalSteps === 0) return;
-
-    void (async () => {
-      if (await hasSeenReadinessIntro(userId)) return;
-      await markReadinessIntroSeen(userId);
-      router.push({ pathname: '/(student)/digital', params: { welcome: '1' } } as never);
-    })();
-  }, [userId, readiness.loading, readiness.totalSteps, router]);
 
   // ---------------------------------------------------------------------------
   // Fetch announcements
