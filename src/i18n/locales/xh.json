@@ -6,6 +6,7 @@
     "digital": "Idijithali",
     "faqs": "Imibuzo",
     "support": "Inkxaso",
+    "contacts": "Abafowunelwa",
     "tribe": "Iqela",
     "email": "I-imeyile",
     "password": "Igama lokugqitha",
@@ -36,7 +37,8 @@
     "office": "Iofisi",
     "emailTeam": "Thumela i-imeyile kweli qela",
     "searchFaqs": "Khangela imibuzo (umz. Funda, iindawo, ishedyuli)...",
-    "openFunda": "Vula iFunda",
+    "openLink": "Vula",
+    "digitalUnavailable": "Ulwazi lwedijithali alukafumaneki. Nceda uzame kwakhona kamva.",
     "digitalBanner": "Wonke umntu uqala engumqali ngetekhnoloji yaseyunivesithi."
     ,"orientation": "UKUQHELANA",
     "firstSteps": "AMANYATHELO AKHO OKUQALA",

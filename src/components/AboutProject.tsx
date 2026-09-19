@@ -46,6 +46,7 @@ const PRINCIPLES: { icon: keyof typeof Ionicons.glyphMap; title: string; text: s
 const FEATURES = [
   'Home with announcements, shuttle times and your progress',
   'Orientation schedule with venue directions',
+  'Campus map for South and North campus: building numbers, search, walking routes',
   'New student checklist',
   'Digital readiness guides: computer skills, Funda, printing and Wi-Fi',
   'FAQs grouped by category',
@@ -71,6 +72,10 @@ const PRIVACY: { label: string; text: string }[] = [
   {
     label: 'On your device',
     text: 'Your language, text size and theme, plus a saved copy of the schedule, FAQs and contacts so they work offline.',
+  },
+  {
+    label: 'The campus map',
+    text: 'The map loads its pictures and walking routes from free OpenStreetMap-based services. They only receive which part of the map you are viewing and the start and end points of a route. The app does not use GPS and never tracks where you are. Your name and account are never sent.',
   },
   {
     label: 'Our approach',

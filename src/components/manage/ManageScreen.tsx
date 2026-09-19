@@ -189,6 +189,10 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
         }
 
         payload[field.key] = parsed;
+      } else if (field.type === 'decimal') {
+        const parsed = Number.parseFloat(text);
+        if (Number.isNaN(parsed)) return `${field.label} should be a number, like -34.0091.`;
+        payload[field.key] = parsed;
       } else if (field.type === 'time') {
         if (!/^\d{1,2}:\d{2}$/.test(text)) {
           return `${field.label} should look like 09:00.`;
@@ -453,6 +457,7 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
                         colors.textSecondary
                       }
                       multiline={field.type === 'multiline'}
+<<<<<<< HEAD
                       keyboardType={
                         field.type === 'number'
                           ? 'number-pad'
@@ -464,6 +469,10 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
                           ? 'none'
                           : 'sentences'
                       }
+=======
+                      keyboardType={field.type === 'number' ? 'number-pad' : field.type === 'decimal' ? 'numbers-and-punctuation' : 'default'}
+                      autoCapitalize={/url|link|email/.test(field.key) || field.type === 'time' ? 'none' : 'sentences'}
+>>>>>>> bb7fc8fa76ed6fffff3ccd33d4723df4e0d3f021
                     />
                   ) : null}
                 </>
