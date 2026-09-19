@@ -253,7 +253,7 @@ export function TribeChat({ groupId, setupMessage = '' }: TribeChatProps) {
       <Pressable
         accessibilityRole="button"
         accessibilityLabel="Open mentor groups"
-        onPress={() => router.push('/mentorGroups/index' as never)}
+        onPress={() => router.push('/(student)/mentorGroups/groups' as never)}
         style={({ pressed }) => [
           styles.groupCard,
           { backgroundColor: colors.text },
