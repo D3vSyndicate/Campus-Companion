@@ -39,6 +39,7 @@ export default function StudentLayout() {
             tabBarIcon: ({ color }) => <Ionicons name="calendar-outline" size={TAB_ICON_SIZE} color={color} />,
           }}
         />
+        <Tabs.Screen name="search" options={{ href: null, title: 'Search' }} />
         <Tabs.Screen
           name="map"
           options={{

@@ -45,6 +45,7 @@ const PRINCIPLES: { icon: keyof typeof Ionicons.glyphMap; title: string; text: s
 
 const FEATURES = [
   'Home with announcements, shuttle times and your progress',
+  'Search across the schedule, FAQs, contacts, venues and help options',
   'Orientation schedule with venue directions',
   'Campus map for South and North campus: building numbers, search, walking routes',
   'New student checklist',
@@ -71,7 +72,7 @@ const PRIVACY: { label: string; text: string }[] = [
   },
   {
     label: 'On your device',
-    text: 'Your language, text size and theme, plus a saved copy of the schedule, FAQs and contacts so they work offline.',
+    text: 'Your language, text size and theme, your last few searches, plus a saved copy of the schedule, FAQs and contacts so they work offline.',
   },
   {
     label: 'The campus map',

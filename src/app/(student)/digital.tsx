@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useLocalSearchParams } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Image, Linking, Modal, Pressable, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { PageHeader } from '../../components/PageHeader';
@@ -81,6 +82,20 @@ export default function DigitalReadinessScreen() {
   const [guides, setGuides] = useState<DigitalGuide[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
+
+  // Search results link straight to a guide: /digital?guide=<id or title>.
+  const params = useLocalSearchParams<{ guide?: string | string[] }>();
+  const guideParam = Array.isArray(params.guide) ? params.guide[0] : params.guide;
+  const openedFromLink = useRef<string | undefined>(undefined);
+  useEffect(() => {
+    if (!guideParam || guideParam === openedFromLink.current || !guides.length) return;
+    const wanted = guideParam.trim().toLowerCase();
+    const match = guides.find((guide) => guide.id.toLowerCase() === wanted || guide.title.toLowerCase() === wanted);
+    if (match) {
+      openedFromLink.current = guideParam;
+      setSelectedGuide(match);
+    }
+  }, [guideParam, guides]);
   const tileWidth = useMemo(() => {
     const horizontalPadding = 32;
     const columnGap = 16;

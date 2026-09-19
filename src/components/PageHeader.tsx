@@ -1,5 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
-import { StyleSheet, View } from 'react-native';
+import { useRouter, useSegments } from 'expo-router';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../theme/ThemeContext';
 import { ScaledText as Text } from './ScaledText';
@@ -8,9 +9,37 @@ interface PageHeaderProps {
   eyebrow: string;
   title: string;
   subtitle: string;
+  // A screen that already has its own search box can turn this off.
+  showSearch?: boolean;
 }
 
-export function PageHeader({ eyebrow, title, subtitle }: PageHeaderProps) {
+// Opens the app-wide search. Students and buddies each have their own search screen.
+function HeaderSearch() {
+  const { colors } = useTheme();
+  const router = useRouter();
+  const segments = useSegments();
+  const href = segments[0] === '(mentor)' ? '/(mentor)/search' : '/(student)/search';
+
+  return (
+    <Pressable
+      accessibilityRole="search"
+      accessibilityLabel="Search the app"
+      onPress={() => router.push(href as never)}
+      style={({ pressed }) => [
+        styles.search,
+        { backgroundColor: `${colors.surface}1F`, borderColor: `${colors.surface}38` },
+        pressed && { opacity: 0.8 },
+      ]}
+    >
+      <Ionicons name="search" size={18} color={colors.accent} />
+      <Text style={[styles.searchText, { color: colors.surface }]} numberOfLines={1}>
+        Search schedule, FAQs, contacts, venues...
+      </Text>
+    </Pressable>
+  );
+}
+
+export function PageHeader({ eyebrow, title, subtitle, showSearch = true }: PageHeaderProps) {
   const { colors } = useTheme();
   const { user, role } = useAuth();
   const metadata = user?.user_metadata ?? {};
@@ -44,6 +73,7 @@ export function PageHeader({ eyebrow, title, subtitle }: PageHeaderProps) {
       </View>
       <Text style={[styles.title, { color: colors.surface }]}>{title}</Text>
       <Text style={[styles.subtitle, { color: colors.surface }]}>{subtitle}</Text>
+      {showSearch ? <HeaderSearch /> : null}
     </View>
   );
 }
@@ -110,4 +140,15 @@ const styles = StyleSheet.create({
     opacity: 0.72,
     marginTop: 10,
   },
+  search: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    borderWidth: 1,
+    borderRadius: 14,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    marginTop: 18,
+  },
+  searchText: { flex: 1, fontSize: 14, opacity: 0.85 },
 });

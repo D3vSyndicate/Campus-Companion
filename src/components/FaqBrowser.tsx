@@ -133,6 +133,7 @@ export function FaqBrowser({ canShare = false, canSuggest = false }: Props) {
         eyebrow={t('common.quickAnswer')}
         title={t('common.faqsTitle')}
         subtitle={t('common.faqsSubtitle')}
+        showSearch={false}
       />
 
       <TextInput

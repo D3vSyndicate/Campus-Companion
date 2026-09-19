@@ -21,6 +21,7 @@ import {
 } from 'react-native';
 
 import { ReadinessCard } from '../../components/ReadinessCard';
+import { SearchEntry } from '../../components/search/SearchEntry';
 import { ShameResilientBanner } from '../../components/ShameResilientBanner';
 import { ShuttleCard } from '../../components/ShuttleCard';
 import { useAppearance } from '../../context/AppearanceContext';
@@ -912,6 +913,8 @@ export default function HomeScreen() {
             />
           </View>
         </LinearGradient>
+
+        <SearchEntry href="/(student)/search" />
 
         {/* ================================================================= */}
         {/* SUPPORT BANNER */}

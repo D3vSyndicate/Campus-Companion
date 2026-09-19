@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { AboutProject } from './AboutProject';
+import { SearchEntry } from './search/SearchEntry';
 import { ScaledText as Text } from './ScaledText';
 import { useAppearance } from '../context/AppearanceContext';
 import { useAuth } from '../context/AuthContext';
@@ -125,6 +126,8 @@ export function UserProfile({ variant = 'student' }: Props) {
     <ScrollView style={[styles.container, { backgroundColor: colors.background }]} contentContainerStyle={styles.content}>
       <Text style={[styles.title, { color: colors.text }]}>Profile & Settings</Text>
 
+      <SearchEntry href={variant === 'mentor' ? '/(mentor)/search' : '/(student)/search'} style={styles.searchEntry} />
+
       <View style={styles.section}>
         <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>MY ACCOUNT</Text>
         <View style={[styles.card, styles.accountCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
@@ -197,6 +200,7 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   content: { padding: 16, paddingBottom: 40 },
   title: { fontSize: 28, fontWeight: '800', marginBottom: 4 },
+  searchEntry: { marginTop: 12, marginBottom: 0 },
   section: { marginTop: 20 },
   sectionLabel: { fontSize: 12, fontWeight: '700', letterSpacing: 0.8, marginBottom: 8 },
   card: { borderRadius: 12, borderWidth: StyleSheet.hairlineWidth, padding: 16 },
