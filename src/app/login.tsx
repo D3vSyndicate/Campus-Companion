@@ -100,16 +100,6 @@ export default function LoginScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}> 
-
-      {/* Background Logo */}
-      <View style={styles.backgroundLogoContainer}>
-        <Image
-          source={require('@/assets/images/globe-hands.png')}
-          style={styles.backgroundLogo}
-          resizeMode="contain"
-        />
-      </View>
-
       <KeyboardAvoidingView
         style={styles.keyboardView}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -118,30 +108,33 @@ export default function LoginScreen() {
           contentContainerStyle={styles.scrollContent}
           keyboardShouldPersistTaps="handled"
         >
+          <View style={styles.heroImageContainer}>
+            <Image
+              source={require('@/assets/images/login-hero.png')}
+              style={styles.heroImage}
+              resizeMode="contain"
+            />
+          </View>
 
-          {/* Login Card */}
           <View style={[styles.card, { backgroundColor: colors.surface, shadowColor: colors.text }]}> 
-
-
             <Text style={[styles.title, { color: colors.text }]}>{t('common.welcomeBack')}</Text>
 
             <Text style={[styles.subtitle, { color: colors.textSecondary }]}> 
-              {t('common.loginSubtitle')}
+              Sign in to your Campus Companion account
             </Text>
 
-             <LanguageSwitcher />
+            <LanguageSwitcher />
 
-            {/* Email */}
             <View style={styles.inputContainer}>
               <Text style={[styles.label, { color: colors.text }]}>{t('common.email')}</Text>
 
               <TextInput
-                  style={[
-                    styles.input,
-                    { backgroundColor: colors.card, borderColor: colors.border, color: colors.text },
-                  ]}
-                  placeholder={t('common.email')}
-                  placeholderTextColor={colors.textSecondary}
+                style={[
+                  styles.input,
+                  { backgroundColor: '#dfeaf3', borderColor: '#dfeaf3', color: '#071B2C' },
+                ]}
+                placeholder={t('common.email')}
+                placeholderTextColor="#5B6B76"
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
@@ -150,17 +143,16 @@ export default function LoginScreen() {
               />
             </View>
 
-            {/* Password */}
             <View style={styles.inputContainer}>
-                <Text style={[styles.label, { color: colors.text }]}>{t('common.password')}</Text>
+              <Text style={[styles.label, { color: colors.text }]}>{t('common.password')}</Text>
 
               <TextInput
-                  style={[
-                    styles.input,
-                    { backgroundColor: colors.card, borderColor: colors.border, color: colors.text },
-                  ]}
-                  placeholder={t('common.password')}
-                  placeholderTextColor={colors.textSecondary}
+                style={[
+                  styles.input,
+                  { backgroundColor: '#dfeaf3', borderColor: '#dfeaf3', color: '#071B2C' },
+                ]}
+                placeholder={t('common.password')}
+                placeholderTextColor="#5B6B76"
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
@@ -168,18 +160,16 @@ export default function LoginScreen() {
               />
             </View>
 
-            {/* Forgot Password */}
             <TouchableOpacity
               style={styles.forgotButton}
               onPress={() => void handleForgotPassword()}
               disabled={loading}
             >
               <Text style={[styles.forgotText, { color: colors.text }]}> 
-                {t('common.forgotPassword')}
+                Forgot password?
               </Text>
             </TouchableOpacity>
 
-            {/* Login Button */}
             <TouchableOpacity
               style={[styles.loginButton, { backgroundColor: colors.accent }]}
               activeOpacity={0.8}
@@ -197,9 +187,7 @@ export default function LoginScreen() {
 
             {error && <Text style={[styles.errorText, { color: colors.danger }]}>{error}</Text>}
             {message && <Text style={[styles.messageText, { color: colors.accent }]}>{message}</Text>}
-
           </View>
-
         </ScrollView>
       </KeyboardAvoidingView>
     </View>
@@ -218,114 +206,89 @@ const styles = StyleSheet.create({
   scrollContent: {
     flexGrow: 1,
     justifyContent: 'center',
-    paddingVertical: 40,
-    paddingHorizontal: 20,
-  },
-
-  /* Background Logo */
-
-  backgroundLogoContainer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: 'center',
     alignItems: 'center',
+    paddingVertical: 24,
+    paddingHorizontal: 22,
   },
 
-  backgroundLogo: {
-    width: 320,
-    height: 320,
-    opacity: 0.08,
+  heroImageContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 20,
+    marginTop: 8,
   },
 
-  /* Login Card */
+  heroImage: {
+    width: 360,
+    height: 220,
+  },
 
   card: {
-    borderRadius: 28,
+    width: '100%',
+    maxWidth: 980,
+    borderRadius: 26,
     paddingHorizontal: 28,
-    paddingVertical: 32,
-    minHeight: 430,
-
-    justifyContent: 'center',
-
+    paddingVertical: 26,
     shadowOffset: {
       width: 0,
       height: 8,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 15,
-    elevation: 10,
+    shadowOpacity: 0.22,
+    shadowRadius: 18,
+    elevation: 8,
   },
-
-  /* Logo */
-
-  logo: {
-    width: 110,
-    height: 110,
-    alignSelf: 'center',
-    marginBottom: 12,
-  },
-
-  /* Text */
 
   title: {
-    fontSize: 28,
+    fontSize: 34,
     fontWeight: '700',
     textAlign: 'center',
     marginBottom: 6,
   },
 
   subtitle: {
-    fontSize: 14,
+    fontSize: 16,
     textAlign: 'center',
-    marginBottom: 28,
+    marginBottom: 20,
   },
-
-  /* Inputs */
 
   inputContainer: {
     marginBottom: 18,
   },
 
   label: {
-    fontSize: 14,
+    fontSize: 18,
     fontWeight: '600',
-    marginBottom: 7,
+    marginBottom: 8,
   },
 
   input: {
     height: 52,
     borderWidth: 1,
     borderRadius: 12,
-    paddingHorizontal: 15,
-    fontSize: 15,
+    paddingHorizontal: 16,
+    fontSize: 18,
   },
-
-  /* Forgot Password */
 
   forgotButton: {
     alignSelf: 'flex-end',
+    marginTop: 2,
     marginBottom: 22,
   },
 
   forgotText: {
-    fontSize: 13,
+    fontSize: 15,
     fontWeight: '600',
   },
 
-  /* Login */
-
   loginButton: {
-    height: 52,
+    height: 54,
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
   },
 
   loginButtonText: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '700',
   },
 
