@@ -1,13 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import {
-  SHIFTS,
-  SHUTTLE_SOURCE_NOTE,
-  routesFor,
-  type Shift,
-} from '../../data/shuttle-data';
+import { fetchShuttleRows, SHUTTLE_LABEL, SHUTTLE_RULES } from '../../lib/shuttle';
 import { useTheme } from '../../theme/ThemeContext';
 import { PageHeader } from '../PageHeader';
 import { ScaledText as Text } from '../ScaledText';
@@ -15,8 +10,71 @@ import { ScaledText as Text } from '../ScaledText';
 // Learn Your Shuttles — the times, plus the things nobody tells a first-year until they have
 // already been turned away at the door.
 //
-// Times are mock data that ships with the app (src/data/shuttle-data.ts), so the screen works with
-// no network and no database behind it.
+// Times and rules come from lib/shuttle, the same source the Home shuttle card and the search
+// screen use: staff-maintained rows from shuttle_times when the database has a real timetable,
+// otherwise the published schedule that ships inside the app. Keeping all three screens on one
+// source is the point — a student who sees 07:45 on Home must not see 06:45 here.
+
+type Shift = 'morning' | 'afternoon' | 'night';
+
+interface RouteGroup {
+  name: string;
+  detail: string;
+  times: string[];
+}
+
+// Written to sound like a person, not a noticeboard. A first-year reading this is often anxious
+// about getting somewhere on time, and a timetable that speaks kindly costs nothing.
+const SHIFTS: { key: Shift; label: string; hint: string; icon: keyof typeof Ionicons.glyphMap }[] = [
+  {
+    key: 'morning',
+    label: 'Getting to campus',
+    hint: 'Morning runs. If you have an 07:45, the 06:45 gets you there calmly.',
+    icon: 'sunny-outline',
+  },
+  {
+    key: 'afternoon',
+    label: 'Heading home',
+    hint: 'Afternoon runs. Aim for the one before the one you need.',
+    icon: 'partly-sunny-outline',
+  },
+  {
+    key: 'night',
+    label: 'Late nights on campus',
+    hint: 'If you are studying late, these are your way back.',
+    icon: 'moon-outline',
+  },
+];
+
+// Advice that is not already covered by the official rules below, so nothing is said twice.
+const ADVICE: { icon: keyof typeof Ionicons.glyphMap; title: string; body: string }[] = [
+  {
+    icon: 'navigate-outline',
+    title: 'Lost, and need to find a stop',
+    body: 'Open the campus map and find the building nearest you, then walk to the stop it lists. If you are off campus and unsure, head for the nearest landmark stop — Feather Market Hall, Kings Beach and Central are all easy to find and easy to ask directions to.',
+  },
+  {
+    icon: 'time-outline',
+    title: 'The last shuttle is the last one',
+    body: 'Decide before the last departure rather than five minutes after it. If you miss it you are arranging your own way home, late, and probably paying for it.',
+  },
+];
+
+const str = (value: unknown) => String(value ?? '').trim();
+
+// "Korsten (PSA 163 Durban Rd)" -> name "Korsten", landmark "PSA 163 Durban Rd".
+// "Kalinga House - Richmond Hill" -> name "Kalinga House", landmark "Richmond Hill".
+// The landmark is what actually tells a student where to stand, so it gets its own line rather
+// than being buried in a long single-line route name.
+function splitRouteName(route: string): { name: string; detail: string } {
+  const parens = route.match(/^(.*?)\s*\((.+)\)\s*$/);
+  if (parens) return { name: parens[1].trim(), detail: parens[2].trim() };
+
+  const dashed = route.split(' - ');
+  if (dashed.length === 2) return { name: dashed[0].trim(), detail: dashed[1].trim() };
+
+  return { name: route, detail: '' };
+}
 
 const currentShift = (now: Date): Shift => {
   const hour = now.getHours();
@@ -25,41 +83,48 @@ const currentShift = (now: Date): Shift => {
   return 'night';
 };
 
-// The things that actually go wrong, written as advice rather than regulations.
-const ADVICE: { icon: keyof typeof Ionicons.glyphMap; title: string; body: string }[] = [
-  {
-    icon: 'card-outline',
-    title: 'Carry your student card every single day',
-    body: 'You must show a valid student ID card to board, along with your proof of acceptance or registration letter. No card, no ride — so put it in the bag you always take, not the one you sometimes take.',
-  },
-  {
-    icon: 'alarm-outline',
-    title: 'Want to be early? Take the first one',
-    body: 'If you need to be on campus early, take the first scheduled shuttle of the day rather than cutting it fine with a later one.',
-  },
-  {
-    icon: 'help-buoy-outline',
-    title: 'If you are not sure, ask a marshal',
-    body: 'Shuttle marshals are there to help. If you do not know which shuttle is yours, ask one — that is the job. It is faster than guessing and ending up on the wrong side of the city.',
-  },
-  {
-    icon: 'navigate-outline',
-    title: 'Lost, and need to find a stop',
-    body: 'Open the campus map and find the building nearest you, then walk to the stop it lists. If you are off campus and unsure, go to the nearest listed landmark stop — Feather Market Hall, Kings Beach and Central are all easy to find and ask directions to.',
-  },
-  {
-    icon: 'people-outline',
-    title: 'The last shuttle is the last one',
-    body: 'Night shuttles run at 18:30, 20:30 and 22:00. Miss the 22:00 and you are arranging your own way home, so decide before 22:00 rather than at 22:05.',
-  },
-];
-
 export function LearnYourShuttles() {
   const { colors } = useTheme();
   const router = useRouter();
+
+  const [rows, setRows] = useState<Record<string, unknown>[]>([]);
+  const [loading, setLoading] = useState(true);
   const [shift, setShift] = useState<Shift>(() => currentShift(new Date()));
 
-  const routes = routesFor(shift);
+  useEffect(() => {
+    let active = true;
+    void (async () => {
+      const { data } = await fetchShuttleRows();
+      if (!active) return;
+      setRows(Array.isArray(data) ? data : []);
+      setLoading(false);
+    })();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  // One card per route with its times gathered onto it — a student thinks "when does my stop go?",
+  // not "what leaves at 07:45?".
+  const routes = useMemo(() => {
+    const grouped = new Map<string, RouteGroup>();
+
+    for (const row of rows) {
+      if (str(row.shift) !== shift) continue;
+      const route = str(row.route_name);
+      const time = str(row.departure_time).slice(0, 5);
+      if (!route || !time) continue;
+
+      const existing = grouped.get(route);
+      if (existing) existing.times.push(time);
+      else grouped.set(route, { ...splitRouteName(route), times: [time] });
+    }
+
+    return [...grouped.values()]
+      .map((entry) => ({ ...entry, times: [...new Set(entry.times)].sort() }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }, [rows, shift]);
+
   const activeShift = SHIFTS.find((option) => option.key === shift);
 
   return (
@@ -114,25 +179,37 @@ export function LearnYourShuttles() {
 
         <Text style={[styles.shiftHint, { color: colors.textSecondary }]}>{activeShift?.hint}</Text>
 
-        {routes.map((route) => (
-          <View
-            key={route.id}
-            style={[styles.route, { backgroundColor: colors.card, borderColor: colors.border }]}
-          >
-            {/* Stop name large, the landmark under it — that second line is what actually tells a
-                student where to stand. */}
-            <Text style={[styles.routeName, { color: colors.text }]}>{route.name}</Text>
-            <Text style={[styles.routeLeg, { color: colors.textSecondary }]}>{route.detail}</Text>
-            <View style={[styles.routeRule, { backgroundColor: colors.border }]} />
-            <View style={styles.times}>
-              {route[shift].map((time) => (
-                <View key={time} style={[styles.timePill, { backgroundColor: colors.surfaceMuted }]}>
-                  <Text style={[styles.timeText, { color: colors.text }]}>{time}</Text>
-                </View>
-              ))}
-            </View>
+        {loading ? (
+          <Text style={[styles.empty, { color: colors.textSecondary }]}>Loading shuttle times…</Text>
+        ) : routes.length === 0 ? (
+          <View style={[styles.notice, { backgroundColor: colors.card, borderColor: colors.border }]}>
+            <Text style={[styles.noticeTitle, { color: colors.text }]}>Nothing listed</Text>
+            <Text style={[styles.noticeBody, { color: colors.textSecondary }]}>
+              There are no shuttles listed for this time of day. Check the printed schedule at your
+              stop, or ask a shuttle marshal.
+            </Text>
           </View>
-        ))}
+        ) : (
+          routes.map((route) => (
+            <View
+              key={route.name + route.detail}
+              style={[styles.route, { backgroundColor: colors.card, borderColor: colors.border }]}
+            >
+              <Text style={[styles.routeName, { color: colors.text }]}>{route.name}</Text>
+              {route.detail ? (
+                <Text style={[styles.routeLeg, { color: colors.textSecondary }]}>{route.detail}</Text>
+              ) : null}
+              <View style={[styles.routeRule, { backgroundColor: colors.border }]} />
+              <View style={styles.times}>
+                {route.times.map((time) => (
+                  <View key={time} style={[styles.timePill, { backgroundColor: colors.surfaceMuted }]}>
+                    <Text style={[styles.timeText, { color: colors.text }]}>{time}</Text>
+                  </View>
+                ))}
+              </View>
+            </View>
+          ))
+        )}
 
         <Pressable
           accessibilityRole="button"
@@ -158,6 +235,20 @@ export function LearnYourShuttles() {
 
         <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>Before you board</Text>
 
+        {/* The official rules, straight from the published schedule. */}
+        {SHUTTLE_RULES.map((rule) => (
+          <View
+            key={rule.title}
+            style={[styles.advice, { backgroundColor: colors.card, borderColor: colors.border }]}
+          >
+            <Ionicons name="shield-checkmark-outline" size={20} color={colors.accent} />
+            <View style={styles.adviceCopy}>
+              <Text style={[styles.adviceTitle, { color: colors.text }]}>{rule.title}</Text>
+              <Text style={[styles.adviceBody, { color: colors.textSecondary }]}>{rule.text}</Text>
+            </View>
+          </View>
+        ))}
+
         {ADVICE.map((item) => (
           <View
             key={item.title}
@@ -172,7 +263,8 @@ export function LearnYourShuttles() {
         ))}
 
         <Text style={[styles.footnote, { color: colors.textSecondary }]}>
-          {SHUTTLE_SOURCE_NOTE}
+          {SHUTTLE_LABEL}. Times can change — the printed schedule at your stop is always the final
+          word.
         </Text>
       </ScrollView>
     </View>
@@ -194,8 +286,9 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     borderWidth: 1,
     minHeight: 42,
+    paddingHorizontal: 6,
   },
-  shiftLabel: { fontSize: 13, fontWeight: '800' },
+  shiftLabel: { flexShrink: 1, fontSize: 12, fontWeight: '800' },
   shiftHint: { fontSize: 12, fontWeight: '600', textAlign: 'center' },
   empty: { fontSize: 13, textAlign: 'center', paddingVertical: 20 },
   notice: { borderRadius: 16, borderWidth: 1, padding: 18, gap: 6 },
@@ -208,7 +301,15 @@ const styles = StyleSheet.create({
   times: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 12 },
   timePill: { borderRadius: 8, paddingHorizontal: 12, paddingVertical: 7 },
   timeText: { fontSize: 13, fontWeight: '800' },
-  mapLink: { flexDirection: 'row', alignItems: 'center', gap: 14, borderRadius: 18, borderWidth: 1, padding: 16, marginTop: 6 },
+  mapLink: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+    borderRadius: 18,
+    borderWidth: 1,
+    padding: 16,
+    marginTop: 6,
+  },
   mapIcon: { width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center' },
   mapCopy: { flex: 1 },
   mapTitle: { fontSize: 14, fontWeight: '800' },
