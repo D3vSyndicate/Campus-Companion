@@ -33,6 +33,8 @@ interface PageHeaderProps {
   showBack?: boolean;
   // Where "back" goes when there is no history, for example after a deep link.
   backFallback?: string;
+  // Staff management screens can provide their dashboard route for a consistent way home.
+  backHref?: string;
 }
 
 // Opens a search limited to the screen it sits on, so it only finds what that screen shows. The search

@@ -99,8 +99,8 @@ export default function BuddyHome() {
         />
         <View style={styles.heroOverlay} />
         <Text style={[styles.eyebrow, { color: colors.accent }]}>FYS BUDDY</Text>
-        <Text style={[styles.heroTitle, { color: colors.surface }]}>{name ? `Hi ${name}` : 'Hi there'}, thank you for being a buddy</Text>
-        <Text style={[styles.heroText, { color: colors.surface }]}>
+        <Text style={[styles.heroTitle, { color: '#FFFFFF' }]}>{name ? `Hi ${name}` : 'Hi there'}, thank you for being a buddy</Text>
+        <Text style={[styles.heroText, { color: '#FFFFFF' }]}>
           You are the friendly face that makes a first-year feel they belong. You do not need to know everything. You just need to know where to point.
         </Text>
       </View>
@@ -150,12 +150,12 @@ export default function BuddyHome() {
 
 const styles = StyleSheet.create({
   content: { padding: 16, paddingBottom: 40 },
-  hero: { position: 'relative', overflow: 'hidden', borderRadius: 24, padding: 22, marginBottom: 6 },
+  hero: { position: 'relative', overflow: 'hidden', borderRadius: 24, padding: 22, marginBottom: 6, minHeight: 348 },
   heroBackground: { ...StyleSheet.absoluteFill },
   heroOverlay: { ...StyleSheet.absoluteFill, backgroundColor: 'rgba(4, 19, 29, 0.28)' },
   eyebrow: { fontSize: 11, fontWeight: '800', letterSpacing: 1.4, marginBottom: 8 },
   heroTitle: { fontSize: 24, fontWeight: '800', lineHeight: 30 },
-  heroText: { fontSize: 14, lineHeight: 21, opacity: 0.85, marginTop: 10 },
+  heroText: { fontSize: 14, lineHeight: 21, marginTop: 10 },
   sectionTitle: { fontSize: 18, fontWeight: '800', marginTop: 18, marginBottom: 10 },
   muted: { fontSize: 13, lineHeight: 19 },
   session: { flexDirection: 'row', alignItems: 'center', gap: 14, borderWidth: 1, borderRadius: 14, padding: 14, marginBottom: 8 },
