@@ -62,7 +62,7 @@ export default function RequestStatusScreen() {
 
   const handlePrimaryAction = () => {
     if (status === 'approved') {
-      router.push(`/(student)/mentorGroups/${group.id}`);
+      router.push(`/(student)/mentorGroups/${group.id}` as never);
       return;
     }
 

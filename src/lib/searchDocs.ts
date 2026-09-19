@@ -293,21 +293,31 @@ export function buildSearchDocs(sources: SearchSources): SearchDoc[] {
   }
 
   // Shuttle times (shown on the Home screen)
+  // One result per stop, listing its times, so a search for "shuttle" is not buried in a hundred departures.
+  const stops = new Map<string, Map<string, string[]>>();
   for (const row of sources.shuttle ?? []) {
     const time = str(row.departure_time).slice(0, 5);
     const route = str(row.route_name);
     if (!time || !route || row.is_active === false) continue;
-    const shift = str(row.shift);
-    const pickup = str(row.pickup_point);
-    const dropoff = str(row.dropoff_point);
+    const shift = str(row.shift) || 'other';
+    const byShift = stops.get(route) ?? new Map<string, string[]>();
+    byShift.set(shift, [...(byShift.get(shift) ?? []), time].sort());
+    stops.set(route, byShift);
+  }
+
+  for (const [route, byShift] of stops) {
+    const summary = ['morning', 'afternoon', 'night', 'other']
+      .filter((shift) => byShift.has(shift))
+      .map((shift) => `${shift.charAt(0).toUpperCase()}${shift.slice(1)}: ${byShift.get(shift)!.join(', ')}`)
+      .join(' · ');
     docs.push({
-      id: `shuttle:${str(row.shuttle_id ?? `${route}-${time}`)}`,
+      id: `shuttle:${route}`,
       kind: 'shuttle',
-      title: `${time} · ${route}`,
-      subtitle: [shift ? `${shift.charAt(0).toUpperCase()}${shift.slice(1)} shuttle` : 'Shuttle', str(row.days)].filter(Boolean).join(' · '),
-      body: [pickup && dropoff ? `${pickup} to ${dropoff}.` : pickup || dropoff, str(row.notes)].filter(Boolean).join(' '),
-      keywords: ['shuttle bus transport residence ride', shift],
-      data: { time, route },
+      title: route,
+      subtitle: summary,
+      body: `Shuttle times. ${summary}.`,
+      keywords: ['shuttle bus transport residence ride stop departure', ...byShift.keys()],
+      data: { route },
     });
   }
 

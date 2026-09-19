@@ -7,10 +7,12 @@ import {
   KeyboardAvoidingView,
   Platform,
   Pressable,
+  ScrollView,
   StyleSheet,
   TextInput,
   View,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { supabase } from '../lib/superbase';
 import { useTheme } from '../theme/ThemeContext';
 import { ScaledText as Text } from './ScaledText';
@@ -43,13 +45,23 @@ type Message = {
   created_at: string;
 };
 
+// What a new member agrees to before they can choose a chat name.
+const CONDUCT_POINTS: { icon: keyof typeof Ionicons.glyphMap; text: string }[] = [
+  { icon: 'heart-outline', text: 'I will treat everyone in Tribe with respect: my mentor, the coordinators and every other student.' },
+  { icon: 'hand-left-outline', text: 'I will not bully, harass, threaten, shame or exclude anyone.' },
+  { icon: 'chatbubble-ellipses-outline', text: 'I will not swear or use offensive, hateful or discriminatory language.' },
+  { icon: 'lock-closed-outline', text: 'I will keep my own private details, and other people\'s, private.' },
+  { icon: 'eye-outline', text: 'I understand that mentors and coordinators can read Tribe messages, and that messages that break these rules can be removed.' },
+];
+
 function getErrorMessage(error: unknown, fallback: string) {
   return error instanceof Error ? error.message : fallback;
 }
 
 export function TribeChat({ groupId, setupMessage = '' }: TribeChatProps) {
   const router = useRouter();
-  const { colors } = useTheme();
+  const { colors, isDark } = useTheme();
+  const insets = useSafeAreaInsets();
   const [group, setGroup] = useState<Group | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -61,6 +73,9 @@ export function TribeChat({ groupId, setupMessage = '' }: TribeChatProps) {
   const [savingUsername, setSavingUsername] = useState(false);
   const [error, setError] = useState('');
   const [myId, setMyId] = useState('');
+  // A new member has to accept the code of conduct before they can choose a chat name.
+  const [conductAccepted, setConductAccepted] = useState(false);
+  const [agreed, setAgreed] = useState(false);
   const listRef = useRef<FlatList<Message>>(null);
 
   useEffect(() => {
@@ -160,20 +175,33 @@ export function TribeChat({ groupId, setupMessage = '' }: TribeChatProps) {
 
       if (!user) throw new Error('You must be logged in to save a username.');
 
-      const query = profile
-        ? supabase
+      const createProfile = (withConduct: boolean) =>
+        supabase
+          .from('community_profiles')
+          .insert(
+            withConduct
+              ? { auth_id: user.id, username: cleanedUsername, conduct_accepted_at: new Date().toISOString() }
+              : { auth_id: user.id, username: cleanedUsername },
+          )
+          .select('id, username')
+          .single();
+
+      let result = profile
+        ? await supabase
             .from('community_profiles')
             .update({ username: cleanedUsername })
             .eq('auth_id', user.id)
             .select('id, username')
             .single()
-        : supabase
-            .from('community_profiles')
-            .insert({ auth_id: user.id, username: cleanedUsername })
-            .select('id, username')
-            .single();
+        : await createProfile(true);
 
-      const { data, error: profileError } = await query;
+      // The database records that the code of conduct was accepted. If it has not been set up to do that yet
+      // (supabase/setup_all.sql not run), the app has still asked for the promise, so do not stop the chat name.
+      if (!profile && result.error && /conduct_accepted_at/.test(result.error.message)) {
+        result = await createProfile(false);
+      }
+
+      const { data, error: profileError } = result;
       if (profileError) {
         if (profileError.code === '23505') {
           throw new Error('That username is already taken. Try another one.');
@@ -244,35 +272,105 @@ export function TribeChat({ groupId, setupMessage = '' }: TribeChatProps) {
     );
   }
 
+  const needsConduct = !profile && !conductAccepted;
+  const ink = isDark ? '#0E2A40' : '#071B2C';
+
+  // Tapping the accent button (or anywhere on it) opens the mentor groups: find one, or scan its QR code.
+  const header = (
+    <View style={[styles.hero, { backgroundColor: ink, marginTop: insets.top }]}>
+      <View style={styles.heroTop}>
+        <View style={[styles.groupIcon, { backgroundColor: colors.accent }]}>
+          <Ionicons name="people" size={22} color="#071B2C" />
+        </View>
+        <View style={styles.groupCopy}>
+          <Text style={[styles.groupLabel, { color: colors.accent }]}>YOUR TRIBE</Text>
+          <Text style={styles.heroName} numberOfLines={1}>{group.name}</Text>
+          <Text style={styles.heroMeta}>
+            {group.mentor_name || 'Mentor group'}{group.member_count ? ` · ${group.member_count} members` : ''}
+          </Text>
+        </View>
+      </View>
+
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel="Find groups or scan a QR code"
+        onPress={() => router.push('/(student)/mentorGroups/groups' as never)}
+        style={({ pressed }) => [styles.findGroups, { backgroundColor: colors.accent }, pressed && styles.pressed]}
+      >
+        <Ionicons name="search" size={18} color="#071B2C" />
+        <View style={styles.findCopy}>
+          <Text style={styles.findTitle}>Find groups</Text>
+          <Text style={styles.findSub}>Browse mentor groups or scan a QR code</Text>
+        </View>
+        <Ionicons name="chevron-forward" size={18} color="#071B2C" />
+      </Pressable>
+    </View>
+  );
+
+  if (needsConduct) {
+    return (
+      <View style={styles.container}>
+        {header}
+        <ScrollView contentContainerStyle={styles.conductScroll} showsVerticalScrollIndicator={false}>
+          <View style={[styles.conductCard, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+            <View style={styles.conductHead}>
+              <View style={[styles.conductIcon, { backgroundColor: colors.card }]}>
+                <Ionicons name="shield-checkmark" size={22} color={colors.accent} />
+              </View>
+              <Text style={[styles.conductTitle, { color: colors.text }]} accessibilityRole="header">
+                Before you join the conversation
+              </Text>
+            </View>
+
+            <Text style={[styles.conductIntro, { color: colors.textSecondary }]}>
+              Tribe is part of Nelson Mandela University&apos;s public communication platforms. What you write here
+              represents you and the University, so we keep it respectful and safe for everyone.
+            </Text>
+
+            {CONDUCT_POINTS.map((point) => (
+              <View key={point.text} style={styles.conductRow}>
+                <Ionicons name={point.icon} size={19} color={colors.accent} style={styles.conductRowIcon} />
+                <Text style={[styles.conductText, { color: colors.text }]}>{point.text}</Text>
+              </View>
+            ))}
+
+            <Pressable
+              accessibilityRole="checkbox"
+              accessibilityState={{ checked: agreed }}
+              accessibilityLabel="I have read this and I agree to follow it"
+              onPress={() => setAgreed((current) => !current)}
+              style={[styles.agreeRow, { borderColor: agreed ? colors.accent : colors.border, backgroundColor: colors.card }]}
+            >
+              <Ionicons name={agreed ? 'checkbox' : 'square-outline'} size={24} color={agreed ? colors.accent : colors.textSecondary} />
+              <Text style={[styles.agreeText, { color: colors.text }]}>I have read this and I agree to follow it.</Text>
+            </Pressable>
+
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Agree and continue"
+              accessibilityState={{ disabled: !agreed }}
+              disabled={!agreed}
+              onPress={() => setConductAccepted(true)}
+              style={[styles.continueButton, { backgroundColor: colors.accent }, !agreed && styles.disabled]}
+            >
+              <Text style={styles.continueText}>Agree and continue</Text>
+              <Ionicons name="arrow-forward" size={18} color="#071B2C" />
+            </Pressable>
+          </View>
+        </ScrollView>
+      </View>
+    );
+  }
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 88 : 0}
     >
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel="Open mentor groups"
-        onPress={() => router.push('/(student)/mentorGroups/groups' as never)}
-        style={({ pressed }) => [
-          styles.groupCard,
-          { backgroundColor: colors.text },
-          pressed && styles.pressed,
-        ]}
-      >
-        <View style={[styles.groupIcon, { backgroundColor: colors.accent }]}>
-          <Ionicons name="people" size={22} color={colors.text} />
-        </View>
-        <View style={styles.groupCopy}>
-          <Text style={[styles.groupLabel, { color: colors.accent }]}>YOUR TRIBE</Text>
-          <Text style={[styles.groupName, { color: colors.surface }]} numberOfLines={1}>{group.name}</Text>
-          <Text style={[styles.groupMeta, { color: colors.surface }]}>
-            {group.mentor_name || 'Mentor group'}{group.member_count ? ` · ${group.member_count} members` : ''}
-          </Text>
-        </View>
-      </Pressable>
+      {header}
 
-      {!profile || editingUsername ? (
+      {(profile ? editingUsername : conductAccepted) ? (
         <View style={[styles.usernameCard, { backgroundColor: colors.surface, borderColor: colors.border }]}>
           <Text style={[styles.sectionTitle, { color: colors.text }]}>{profile ? 'Update your chat name' : 'Choose your chat name'}</Text>
           <Text style={[styles.sectionText, { color: colors.textSecondary }]}>Keep your real name, student number, and email private in the community.</Text>
@@ -365,12 +463,30 @@ const styles = StyleSheet.create({
   stateIcon: { width: 58, height: 58, borderRadius: 20, alignItems: 'center', justifyContent: 'center', marginBottom: 14 },
   stateTitle: { fontSize: 18, fontWeight: '800', textAlign: 'center' },
   stateText: { fontSize: 13, lineHeight: 19, textAlign: 'center', marginTop: 8 },
-  groupCard: { flexDirection: 'row', alignItems: 'center', borderRadius: 20, padding: 16, marginBottom: 12 },
+  hero: { borderRadius: 24, padding: 16, marginBottom: 12 },
+  heroTop: { flexDirection: 'row', alignItems: 'center' },
   groupIcon: { width: 44, height: 44, borderRadius: 14, alignItems: 'center', justifyContent: 'center', marginRight: 12 },
   groupCopy: { flex: 1 },
   groupLabel: { fontSize: 10, fontWeight: '800', letterSpacing: 1.2 },
-  groupName: { fontSize: 18, fontWeight: '800', marginTop: 3 },
-  groupMeta: { fontSize: 12, opacity: 0.68, marginTop: 3 },
+  heroName: { color: '#FFFFFF', fontSize: 20, fontWeight: '800', marginTop: 3 },
+  heroMeta: { color: '#FFFFFF', fontSize: 12, opacity: 0.7, marginTop: 3 },
+  findGroups: { flexDirection: 'row', alignItems: 'center', gap: 10, minHeight: 52, borderRadius: 16, paddingHorizontal: 14, paddingVertical: 10, marginTop: 14 },
+  findCopy: { flex: 1 },
+  findTitle: { color: '#071B2C', fontSize: 14, fontWeight: '800' },
+  findSub: { color: '#071B2C', fontSize: 11, opacity: 0.75, marginTop: 1 },
+  conductScroll: { paddingBottom: 24 },
+  conductCard: { borderWidth: 1, borderRadius: 20, padding: 18 },
+  conductHead: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  conductIcon: { width: 44, height: 44, borderRadius: 14, alignItems: 'center', justifyContent: 'center' },
+  conductTitle: { flex: 1, fontSize: 18, lineHeight: 24, fontWeight: '800' },
+  conductIntro: { fontSize: 13, lineHeight: 20, marginTop: 12, marginBottom: 6 },
+  conductRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 10, marginTop: 10 },
+  conductRowIcon: { marginTop: 1 },
+  conductText: { flex: 1, fontSize: 13, lineHeight: 19 },
+  agreeRow: { flexDirection: 'row', alignItems: 'center', gap: 10, borderWidth: 1, borderRadius: 14, padding: 12, marginTop: 18 },
+  agreeText: { flex: 1, fontSize: 13, fontWeight: '700' },
+  continueButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, minHeight: 50, borderRadius: 14, marginTop: 12 },
+  continueText: { color: '#071B2C', fontSize: 14, fontWeight: '800' },
   usernameCard: { borderWidth: 1, borderRadius: 16, padding: 15, marginBottom: 10 },
   sectionTitle: { fontSize: 15, fontWeight: '800' },
   sectionText: { fontSize: 12, lineHeight: 18, marginTop: 5 },

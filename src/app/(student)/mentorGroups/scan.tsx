@@ -227,7 +227,7 @@ export default function ScanMentorQRScreen() {
         {/* Scanner */}
         <View style={styles.scannerArea}>
           <Text style={styles.instructionTitle}>
-            Scan your mentor's QR code
+            Scan your mentor&apos;s QR code
           </Text>
 
           <Text style={styles.instructionText}>

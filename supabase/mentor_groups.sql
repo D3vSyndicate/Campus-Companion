@@ -1,19 +1,32 @@
 -- Mentor groups: mentors create groups, students request membership, mentors approve.
 -- Run this file in the Supabase SQL editor. It is safe to run by itself.
 
--- Role helpers are included here so this migration does not depend on another
--- migration having been run first.
-create or replace function public.app_role()
-returns text
-language sql
-stable
-as $$ select coalesce(auth.jwt() -> 'app_metadata' ->> 'role', 'student') $$;
+-- Role helpers are included here so this file also works on its own. They are only created when they
+-- are missing: supabase/campus_features.sql has the fuller versions (it reads the role from the
+-- database and ignores capitals and spaces), and running this file must never replace them.
+do $$
+begin
+  if to_regprocedure('public.app_role()') is null then
+    execute $fn$
+      create function public.app_role()
+      returns text
+      language sql
+      stable
+      as $body$ select coalesce(auth.jwt() -> 'app_metadata' ->> 'role', 'student') $body$
+    $fn$;
+  end if;
 
-create or replace function public.is_mentor()
-returns boolean
-language sql
-stable
-as $$ select public.app_role() = 'mentor' $$;
+  if to_regprocedure('public.is_mentor()') is null then
+    execute $fn$
+      create function public.is_mentor()
+      returns boolean
+      language sql
+      stable
+      as $body$ select public.app_role() = 'mentor' $body$
+    $fn$;
+  end if;
+end
+$$;
 
 create table if not exists public.mentor_groups (
   id uuid primary key default gen_random_uuid(),

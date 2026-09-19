@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { PageHeader } from '../../components/PageHeader';
 import { ScaledText as Text } from '../../components/ScaledText';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../theme/ThemeContext';
@@ -86,10 +87,11 @@ export default function BuddyGuide() {
 
   return (
     <ScrollView style={{ backgroundColor: colors.background }} contentContainerStyle={styles.content}>
-      <Text style={[styles.title, { color: colors.text }]}>Buddy guide</Text>
-      <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-        As a first-year student buddy you help new students find their feet during orientation and the first weeks. You share information, point to help, and make it feel normal to ask.
-      </Text>
+      <PageHeader
+        eyebrow="FYS BUDDY"
+        title="Buddy guide"
+        subtitle="As a first-year student buddy you help new students find their feet during orientation and the first weeks. You share information, point to help, and make it feel normal to ask."
+      />
 
       <Text style={[styles.heading, { color: colors.text }]}>Your first-week checklist</Text>
       <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}>
@@ -154,8 +156,6 @@ export default function BuddyGuide() {
 
 const styles = StyleSheet.create({
   content: { padding: 16, paddingBottom: 48 },
-  title: { fontSize: 24, fontWeight: '800' },
-  subtitle: { fontSize: 14, lineHeight: 21, marginTop: 6 },
   heading: { fontSize: 18, fontWeight: '800', marginTop: 22, marginBottom: 10 },
   card: { borderWidth: 1, borderRadius: 14, padding: 14, marginBottom: 10 },
   checkRow: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 8 },

@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
 import {
   Alert,
   Pressable,
@@ -19,13 +19,50 @@ export default function CreateMentorGroup() {
   const { colors } = useTheme();
   const { user } = useAuth();
 
+  // The same form edits a group when it is opened from that group's edit button, which passes an id.
+  const { id: groupId } = useLocalSearchParams<{ id?: string }>();
+  const editing = Boolean(groupId);
+
   const [groupName, setGroupName] = useState('');
   const [programme, setProgramme] = useState('');
   const [description, setDescription] = useState('');
   const [capacity, setCapacity] = useState('25');
   const [saving, setSaving] = useState(false);
+  const [loadingGroup, setLoadingGroup] = useState(Boolean(groupId));
 
-  const handleCreate = async () => {
+  useEffect(() => {
+    if (!groupId) return;
+    let active = true;
+
+    void (async () => {
+      const { data, error } = await supabase
+        .from('mentor_groups')
+        .select('name, programme, description, max_capacity')
+        .eq('id', groupId)
+        .maybeSingle();
+
+      if (!active) return;
+
+      if (error || !data) {
+        Alert.alert('Could not load group', error?.message ?? 'This group could not be found.', [
+          { text: 'OK', onPress: () => router.back() },
+        ]);
+        return;
+      }
+
+      setGroupName(String(data.name ?? ''));
+      setProgramme(String(data.programme ?? ''));
+      setDescription(String(data.description ?? ''));
+      setCapacity(String(data.max_capacity ?? '25'));
+      setLoadingGroup(false);
+    })();
+
+    return () => {
+      active = false;
+    };
+  }, [groupId, router]);
+
+  const handleSave = async () => {
     if (!groupName.trim()) {
       Alert.alert('Missing information', 'Please enter a group name.');
       return;
@@ -52,6 +89,35 @@ export default function CreateMentorGroup() {
     }
 
     setSaving(true);
+
+    if (groupId) {
+      const { data, error } = await supabase
+        .from('mentor_groups')
+        .update({
+          name: groupName.trim(),
+          programme: programme.trim(),
+          description: description.trim(),
+          max_capacity: capacityNumber,
+        })
+        .eq('id', groupId)
+        .select('id');
+      setSaving(false);
+
+      if (error) {
+        Alert.alert('Could not save changes', error.message);
+        return;
+      }
+
+      // Row-level security skips groups that belong to someone else, so nothing comes back.
+      if (!data?.length) {
+        Alert.alert('Could not save changes', 'Only the mentor who created this group can change it.');
+        return;
+      }
+
+      Alert.alert('Group updated', 'Your changes have been saved.', [{ text: 'OK', onPress: () => router.back() }]);
+      return;
+    }
+
     const { error } = await supabase.from('mentor_groups').insert({
       mentor_id: user.id,
       name: groupName.trim(),
@@ -113,7 +179,7 @@ export default function CreateMentorGroup() {
               { color: colors.text },
             ]}
           >
-            Create Mentor Group
+            {editing ? 'Edit Mentor Group' : 'Create Mentor Group'}
           </Text>
 
           <Text
@@ -122,7 +188,7 @@ export default function CreateMentorGroup() {
               { color: colors.textSecondary },
             ]}
           >
-            Create a group for your students.
+            {editing ? 'Change the details of your group.' : 'Create a group for your students.'}
           </Text>
         </View>
       </View>
@@ -257,8 +323,8 @@ export default function CreateMentorGroup() {
           styles.createButton,
           { backgroundColor: colors.accent },
         ]}
-        onPress={handleCreate}
-        disabled={saving}
+        onPress={handleSave}
+        disabled={saving || loadingGroup}
       >
         <Ionicons
           name="add-circle-outline"
@@ -267,7 +333,7 @@ export default function CreateMentorGroup() {
         />
 
         <Text style={styles.createButtonText}>
-          {saving ? 'Creating...' : 'Create Group'}
+          {saving ? (editing ? 'Saving...' : 'Creating...') : editing ? 'Save Changes' : 'Create Group'}
         </Text>
       </Pressable>
     </ScrollView>

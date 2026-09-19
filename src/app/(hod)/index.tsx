@@ -1,41 +1,48 @@
-import { useRouter } from 'expo-router';
-import { Image } from 'expo-image';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Header from '../../components/Header';
-import { useTheme } from '../../theme/ThemeContext';
+import { StaffDashboard, type StaffSection } from '../../components/StaffDashboard';
 
-const SECTIONS = [
-  { route: '/(hod)/programme', title: 'Programme information', description: 'Publish programme details and departmental expectations.' },
-  { route: '/(hod)/assignments', title: 'Assignments', description: 'Track departmental assignments and deadlines.' },
-  { route: '/(hod)/contacts', title: 'Department contacts', description: 'Keep academic and support contacts current.' },
-  { route: '/(hod)/profile', title: 'Profile & settings', description: 'Your account, appearance and log out.' },
+const SECTIONS: StaffSection[] = [
+  {
+    href: '/(hod)/programme',
+    label: 'Programme Information',
+    desc: 'What students should know about the programme',
+    icon: 'school-outline',
+  },
+  {
+    href: '/(hod)/expectations',
+    label: 'Departmental Expectations',
+    desc: 'Attendance, conduct and submissions',
+    icon: 'clipboard-outline',
+  },
+  {
+    href: '/(hod)/resources',
+    label: 'Support Resources',
+    desc: 'Guides, forms and helpful links',
+    icon: 'help-buoy-outline',
+  },
+  {
+    href: '/(hod)/assignments',
+    label: 'Assignments',
+    desc: 'Departmental tasks and deadlines',
+    icon: 'document-text-outline',
+  },
+  {
+    href: '/(hod)/contacts',
+    label: 'Department Contacts',
+    desc: 'Academic and support contacts',
+    icon: 'people-outline',
+  },
 ];
 
 export default function HodDashboard() {
-  const { colors } = useTheme();
-  const router = useRouter();
-  return <View style={[styles.container, { backgroundColor: colors.background }]}>
-    <Header title="HOD Dashboard" />
-    <ScrollView contentContainerStyle={styles.content}>
-      <View style={[styles.welcome, { backgroundColor: colors.headerBackground }]}>
-        <Image
-          source={require('../../../assets/images/coordinator-hero.png')}
-          style={styles.welcomeBackground}
-          contentFit="fill"
-        />
-        <View style={styles.welcomeOverlay} />
-        <Text style={[styles.eyebrow, { color: colors.accent }]}>HEAD OF DEPARTMENT</Text>
-        <Text style={[styles.title, { color: colors.headerText }]}>Support your department</Text>
-        <Text style={[styles.description, { color: colors.headerText }]}>Give students one dependable place for programme guidance, expectations, assignments, and support.</Text>
-      </View>
-      {SECTIONS.map((section) => <TouchableOpacity key={section.route} style={[styles.card, { backgroundColor: colors.card, borderColor: colors.border }]} onPress={() => router.push(section.route as any)}>
-        <Text style={[styles.cardTitle, { color: colors.text }]}>{section.title}</Text>
-        <Text style={[styles.cardDescription, { color: colors.textSecondary }]}>{section.description}</Text>
-      </TouchableOpacity>)}
-    </ScrollView>
-  </View>;
+  return (
+    <StaffDashboard
+      sections={SECTIONS}
+      roleTitle="Head of Department"
+      description="Give students one dependable place for programme guidance, expectations, assignments and support."
+      statusText="Department content is ready"
+      sectionTitle="Support your department"
+      footerText="Department management for the School of IT"
+      profileHref="/(hod)/profile"
+    />
+  );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1 }, content: { padding: 16, paddingBottom: 32 }, welcome: { position: 'relative', overflow: 'hidden', borderRadius: 18, padding: 22, marginBottom: 18 }, welcomeBackground: { ...StyleSheet.absoluteFill }, welcomeOverlay: { ...StyleSheet.absoluteFill, backgroundColor: 'rgba(4, 19, 29, 0.28)' }, eyebrow: { fontSize: 11, fontWeight: '800', letterSpacing: 1, marginBottom: 8 }, title: { fontSize: 25, fontWeight: '800', marginBottom: 8 }, description: { fontSize: 14, lineHeight: 21, opacity: 0.88 }, card: { borderWidth: 1, borderRadius: 14, padding: 18, marginBottom: 12 }, cardTitle: { fontSize: 17, fontWeight: '700' }, cardDescription: { fontSize: 13, lineHeight: 19, marginTop: 5 },
-});

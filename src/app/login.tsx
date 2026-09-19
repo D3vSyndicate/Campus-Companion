@@ -1,5 +1,5 @@
 
-import { useRouter } from 'expo-router';
+import { Redirect, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -17,10 +17,11 @@ import { LanguageSwitcher } from '../components/LanguageSwitcher';
 import { ScaledText as Text } from '../components/ScaledText';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
+import { homeRouteFor } from '../lib/roleHome';
 import { useTheme } from '../theme/ThemeContext';
 export default function LoginScreen() {
   const router = useRouter();
-  const { signIn, resetPassword, signOut } = useAuth();
+  const { signIn, resetPassword, signOut, user, role, loading: authLoading } = useAuth();
   const { showToast } = useToast();
   const { colors } = useTheme();
   const { t } = useTranslation();
@@ -64,17 +65,8 @@ export default function LoginScreen() {
     }
 
     showToast('Login successful', 'success');
-    const destination =
-      result.role === 'coordinator'
-        ? '/(coordinator)'
-        : result.role === 'hod'
-          ? '/(hod)'
-        : result.role === 'mentor'
-          ? '/(mentor)'
-        : result.role === 'admin'
-          ? '/(admin)'
-          : '/(student)';
-    router.replace(destination as any);
+    // Always the home screen for this account, never wherever the last person was.
+    router.replace(homeRouteFor(result.role) as never);
   };
 
   const handleForgotPassword = async () => {
@@ -97,6 +89,10 @@ export default function LoginScreen() {
 
     setMessage('Password reset instructions have been sent to your email.');
   };
+
+  if (!authLoading && user && role) {
+    return <Redirect href={homeRouteFor(role) as never} />;
+  }
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}> 

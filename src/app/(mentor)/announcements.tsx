@@ -1,11 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useFocusEffect } from 'expo-router';
+import { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, RefreshControl, StyleSheet, View } from 'react-native';
+import { PageHeader } from '../../components/PageHeader';
 import { ScaledText as Text } from '../../components/ScaledText';
 import { ShameResilientBanner } from '../../components/ShameResilientBanner';
+import { useAuth } from '../../context/AuthContext';
+import { isRecent, newestFirst, postedAtOf, postedLabel, useSeenAnnouncements } from '../../lib/announcements';
 import { fetchWithOfflineFallback } from '../../lib/offlineData';
 import { useTheme } from '../../theme/ThemeContext';
 
-type Announcement = { id: string; title: string; message: string; priority: string; postedBy: string };
+type Announcement = { id: string; title: string; message: string; priority: string; postedAt: Date | null };
 
 const str = (value: unknown) => String(value ?? '').trim();
 const isUrgent = (priority: string) => ['urgent', 'high'].includes(priority.toLowerCase());
@@ -13,6 +17,8 @@ const isUrgent = (priority: string) => ['urgent', 'high'].includes(priority.toLo
 // Read-only: buddies see what students are being told, so their answers match.
 export default function BuddyAnnouncements() {
   const { colors } = useTheme();
+  const { user } = useAuth();
+  const { seen, markSeen } = useSeenAnnouncements(user?.id);
   const [items, setItems] = useState<Announcement[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -22,13 +28,13 @@ export default function BuddyAnnouncements() {
     const { data, fromCache, error } = await fetchWithOfflineFallback('Announcement');
     setOffline(fromCache && Boolean(error));
     setItems(
-      (Array.isArray(data) ? data : []).map((row: Record<string, unknown>, index: number) => ({
+      newestFirst((Array.isArray(data) ? data : []).map((row: Record<string, unknown>, index: number): Announcement => ({
         id: str(row.announcement_id) || String(index),
         title: str(row.title),
         message: str(row.message),
         priority: str(row.priority_level) || 'Normal',
-        postedBy: str(row.posted_by),
-      })),
+        postedAt: postedAtOf(row),
+      }))),
     );
     setLoading(false);
   };
@@ -36,6 +42,13 @@ export default function BuddyAnnouncements() {
   useEffect(() => {
     void load();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      const ids = items.map((item) => item.id);
+      return () => markSeen(ids);
+    }, [items, markSeen]),
+  );
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
@@ -56,10 +69,11 @@ export default function BuddyAnnouncements() {
         }
         ListHeaderComponent={
           <View>
-            <Text style={[styles.title, { color: colors.text }]}>Announcements</Text>
-            <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-              What first-years are being told. If a message is urgent, share it calmly and point students to the next step.
-            </Text>
+            <PageHeader
+              eyebrow="FYS BUDDY"
+              title="Announcements"
+              subtitle="What first-years are being told. If a message is urgent, share it calmly and point students to the next step."
+            />
             {offline ? <ShameResilientBanner message="You are viewing saved announcements while your connection is unavailable." type="info" /> : null}
           </View>
         }
@@ -67,11 +81,12 @@ export default function BuddyAnnouncements() {
           loading ? (
             <ActivityIndicator color={colors.accent} style={styles.loading} />
           ) : (
-            <Text style={[styles.subtitle, { color: colors.textSecondary }]}>No announcements have been posted yet.</Text>
+            <Text style={[styles.empty, { color: colors.textSecondary }]}>No announcements have been posted yet.</Text>
           )
         }
         renderItem={({ item }) => {
           const urgent = isUrgent(item.priority);
+          const isNew = isRecent(item.postedAt) && !seen.has(item.id);
           return (
             <View
               style={[
@@ -81,12 +96,17 @@ export default function BuddyAnnouncements() {
             >
               <View style={styles.cardHeader}>
                 <Text style={[styles.cardTitle, { color: colors.text }]}>{item.title}</Text>
+                {isNew ? (
+                  <View style={[styles.newBadge, { backgroundColor: colors.accent }]}>
+                    <Text style={styles.newBadgeText}>NEW</Text>
+                  </View>
+                ) : null}
                 <View style={[styles.badge, { backgroundColor: urgent ? colors.accent : colors.card }]}>
                   <Text style={[styles.badgeText, { color: urgent ? '#071B2C' : colors.textSecondary }]}>{item.priority}</Text>
                 </View>
               </View>
               <Text style={[styles.message, { color: colors.textSecondary }]}>{item.message}</Text>
-              {item.postedBy ? <Text style={[styles.meta, { color: colors.textSecondary }]}>Posted by {item.postedBy}</Text> : null}
+              {item.postedAt ? <Text style={[styles.meta, { color: colors.textSecondary }]}>Posted {postedLabel(item.postedAt)}</Text> : null}
             </View>
           );
         }}
@@ -98,12 +118,13 @@ export default function BuddyAnnouncements() {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   list: { padding: 16, paddingBottom: 40 },
-  title: { fontSize: 24, fontWeight: '800' },
-  subtitle: { fontSize: 14, lineHeight: 20, marginTop: 6, marginBottom: 14 },
+  empty: { fontSize: 14, lineHeight: 20, marginTop: 6, marginBottom: 14 },
   loading: { marginTop: 24 },
   card: { borderWidth: 1, borderRadius: 14, padding: 14, marginBottom: 10 },
   cardHeader: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 6 },
   cardTitle: { flex: 1, fontSize: 15, fontWeight: '800' },
+  newBadge: { borderRadius: 999, paddingHorizontal: 9, paddingVertical: 3 },
+  newBadgeText: { color: '#071B2C', fontSize: 10, fontWeight: '800', letterSpacing: 0.6 },
   badge: { borderRadius: 999, paddingHorizontal: 10, paddingVertical: 4 },
   badgeText: { fontSize: 11, fontWeight: '800' },
   message: { fontSize: 14, lineHeight: 20 },
