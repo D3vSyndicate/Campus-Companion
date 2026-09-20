@@ -132,7 +132,10 @@
     "share": "Deel",
     "ok": "Goed",
     "vs": "teen",
-    "and": "en"
+    "and": "en",
+    "saving": "Stoor tans...",
+    "creating": "Skep tans...",
+    "sending": "Stuur tans..."
   },
   "home": {
     "brand": "Campus Companion",
@@ -644,7 +647,15 @@
     "broadcasts": "Mentor-uitsendings",
     "broadcastsSub": "Belangrike opdaterings van jou mentor",
     "readOnly": "Slegs mentors kan boodskappe aan hierdie groep stuur. Studente kan uitsendings lees maar nie antwoord nie.",
-    "confirmJoin": "Stuur 'n versoek om by {{name}} aan te sluit?"
+    "confirmJoin": "Stuur 'n versoek om by {{name}} aan te sluit?",
+    "groupGone": "Hierdie mentorgroep is nie beskikbaar nie",
+    "groupGoneText": "Dit is dalk gesluit, of jy het nie toegang daartoe nie.",
+    "membersOf": "{{count}} van {{max}} lede",
+    "noBroadcasts": "Nog geen aankondigings van jou mentor nie.",
+    "removedTitle": "Jy is uit die groep verwyder",
+    "removedText": "Jou mentor het jou uit hierdie groep verwyder. Jy kan versoek om by 'n ander aan te sluit.",
+    "notAsked": "Jy het nog nie gevra om by 'n groep aan te sluit nie",
+    "notAskedText": "Vind 'n groep vir jou program, of skandeer die QR-kode wat jou mentor vir jou gegee het."
   },
   "buddy": {
     "actions": {
@@ -904,7 +915,8 @@
     "confirmApprove": "Voeg {{name}} by hierdie mentorgroep?",
     "added": "{{name}} is by die groep gevoeg.",
     "confirmReject": "Verwerp {{name}} se versoek?",
-    "rejectedNamed": "{{name}} se versoek is verwerp."
+    "rejectedNamed": "{{name}} se versoek is verwerp.",
+    "notSetUp": "Mentorgroepe het die nuutste databasisskrip nodig. Vra 'n administrateur om setup_all.sql te laat loop."
   },
   "schedule": {
     "tabOrientation": "Oriëntering",
@@ -1043,7 +1055,14 @@
     "blurb": "Geel beteken jy is uitgenooi, nie verplig nie. As jy iets moet mis, is dit oorleefbaar: sê vir 'n dosent of jou FYS-maat vroeg en hulle sal help om by te bly.",
     "addedByYou": "Deur jou bygevoeg",
     "removeText": "\"{{title}}\" sal van jou kalender verwyder word.",
-    "tapRemove": "{{title}}. Tik om te verwyder."
+    "tapRemove": "{{title}}. Tik om te verwyder.",
+    "upNext": "Volgende",
+    "upNextNone": "Niks kom op nie. Speld 'n kampusgeleentheid vas, of voeg jou eie plan by.",
+    "countOne": "1 ding op hierdie dag",
+    "countMany": "{{count}} dinge op hierdie dag",
+    "alsoOn": "Ook op kampus",
+    "alsoOnHint": "Kampusgeleenthede wat jy nie vasgespeld het nie. Speld een vas om dit op jou kalender te hou.",
+    "toggleKind": "Wys of versteek {{kind}}"
   },
   "search": {
     "showLess": "Wys minder",
@@ -1649,5 +1668,13 @@
       },
       "tip": "Jy is verantwoordelik vir alles wat jy inhandig, insluitend enige foute wat 'n KI-instrument vir jou gemaak het."
     }
+  },
+  "pin": {
+    "pin": "Speld vas op my kalender",
+    "pinned": "Vasgespeld op jou kalender",
+    "added": "Vasgespeld. Jy sal dit op jou kalender vind.",
+    "removed": "Van jou kalender verwyder.",
+    "pinLabel": "Speld {{title}} vas op jou kalender",
+    "unpinLabel": "Ontspeld {{title}} van jou kalender"
   }
 }

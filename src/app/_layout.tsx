@@ -2,13 +2,18 @@ import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as NativeSplashScreen from 'expo-splash-screen';
 import { useState } from 'react';
 import SplashScreen from '../components/splash-scrren';
+import { WebAlertHost } from '../components/WebAlertHost';
 import { AppearanceProvider, useAppearance } from '../context/AppearanceContext';
 import { AuthProvider } from '../context/AuthContext';
 import { ToastProvider } from '../context/ToastContext';
 import '../i18n';
+import { installWebAlert } from '../lib/webAlert';
 import { ThemeProvider as AppThemeProvider } from '../theme/ThemeContext';
 
 void NativeSplashScreen.preventAutoHideAsync();
+
+// On the web, Alert.alert does nothing until this is installed.
+installWebAlert();
 
 function AppThemeShell() {
   const { darkMode } = useAppearance();
@@ -35,6 +40,7 @@ export default function RootLayout() {
         <AppThemeProvider>
           <ToastProvider>
             <AppThemeShell />
+            <WebAlertHost />
           </ToastProvider>
         </AppThemeProvider>
       </AppearanceProvider>

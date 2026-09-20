@@ -9,8 +9,8 @@
 //   - a translation that lost or changed a {{placeholder}} (the screen would show a gap or the wrong word)
 //   - a translation that is identical to the English (possibly forgotten)
 //
-// Some isiXhosa texts are left in English on purpose, for example the conduct promise and the shuttle rules,
-// until a fluent speaker or the University translates them. Those show up as "missing in isiXhosa".
+// isiXhosa and Afrikaans are written to be useful, but they should be reviewed by a fluent speaker or the
+// University, especially the Tribe rules, the emergency numbers and the privacy notice.
 
 const fs = require('node:fs');
 const path = require('node:path');

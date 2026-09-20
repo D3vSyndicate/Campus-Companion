@@ -272,6 +272,20 @@ export function TribeChat({ groupId, setupMessage = '' }: TribeChatProps) {
         </View>
         <Text style={[styles.stateTitle, { color: colors.text }]}>{t('tribe.almostReady')}</Text>
         <Text style={[styles.stateText, { color: colors.textSecondary }]}>{error || t('tribe.almostReadyText')}</Text>
+        {/* A student with no tribe yet can still find a mentor group, or check on a request they made. */}
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={t('tribe.findGroupsLabel')}
+          onPress={() => router.push('/(student)/mentorGroups' as never)}
+          style={({ pressed }) => [styles.findGroups, { backgroundColor: colors.accent, alignSelf: 'stretch' }, pressed && styles.pressed]}
+        >
+          <Ionicons name="search" size={18} color="#071B2C" />
+          <View style={styles.findCopy}>
+            <Text style={styles.findTitle}>{t('tribe.findGroups')}</Text>
+            <Text style={styles.findSub}>{t('tribe.findGroupsSub')}</Text>
+          </View>
+          <Ionicons name="chevron-forward" size={18} color="#071B2C" />
+        </Pressable>
       </View>
     );
   }
@@ -298,7 +312,7 @@ export function TribeChat({ groupId, setupMessage = '' }: TribeChatProps) {
       <Pressable
         accessibilityRole="button"
         accessibilityLabel={t('tribe.findGroupsLabel')}
-        onPress={() => router.push('/(student)/mentorGroups/groups' as never)}
+        onPress={() => router.push('/(student)/mentorGroups' as never)}
         style={({ pressed }) => [styles.findGroups, { backgroundColor: colors.accent }, pressed && styles.pressed]}
       >
         <Ionicons name="search" size={18} color="#071B2C" />

@@ -14,7 +14,7 @@ import { useTheme } from '../../theme/ThemeContext';
 type Action = { id: string; route: string; icon: keyof typeof Ionicons.glyphMap };
 
 const ACTIONS: Action[] = [
-  { id: 'myTribe', route: '/(mentor)/mentorGroup/index', icon: 'chatbubbles-outline' },
+  { id: 'myTribe', route: '/(mentor)/mentorGroup', icon: 'chatbubbles-outline' },
   { id: 'search', route: '/(mentor)/search', icon: 'search-outline' },
   { id: 'answers', route: '/(mentor)/faqs', icon: 'help-circle-outline' },
   { id: 'announcements', route: '/(mentor)/announcements', icon: 'megaphone-outline' },

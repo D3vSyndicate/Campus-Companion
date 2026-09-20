@@ -1,459 +1,116 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useState } from 'react';
-import {
-    Alert,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native';
-import { useTheme } from '../../../../theme/ThemeContext';
+import { useFocusEffect, useLocalSearchParams } from 'expo-router';
+import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Alert, Pressable, StyleSheet, View } from 'react-native';
+import { PageHeader } from '../../../../components/PageHeader';
+import { ScaledText as Text } from '../../../../components/ScaledText';
+import { EmptyState, Loading, MgScreen, Panel } from '../../../../components/mentorgroups/parts';
+import { useToast } from '../../../../context/ToastContext';
+import { shortDate } from '../../../../lib/dates';
+import { fetchMembers, isMissingSetup, removeMember, type GroupMember } from '../../../../lib/mentorGroups';
+import { useTheme } from '../../../../theme/ThemeContext';
 
-type Member = {
-  id: string;
-  name: string;
-  studentNumber: string;
-  programme: string;
-  joinedAt: string;
-};
-
+// The students in a mentor's group, from the database. Removing one asks first.
 export default function MentorGroupMembers() {
   const { t } = useTranslation();
-  const router = useRouter();
-  const { id } = useLocalSearchParams<{ id: string }>();
   const { colors } = useTheme();
+  const { showToast } = useToast();
+  const { id } = useLocalSearchParams<{ id: string }>();
 
-  const [members, setMembers] = useState<Member[]>([
-    {
-      id: '1',
-      name: 'Thabo Mokoena',
-      studentNumber: '223456789',
-      programme: 'Software Development',
-      joinedAt: '18 Sep 2026',
-    },
-    {
-      id: '2',
-      name: 'Lerato Nkosi',
-      studentNumber: '223456790',
-      programme: 'Software Development',
-      joinedAt: '18 Sep 2026',
-    },
-    {
-      id: '3',
-      name: 'Sipho Dlamini',
-      studentNumber: '223456791',
-      programme: 'Software Development',
-      joinedAt: '17 Sep 2026',
-    },
-  ]);
+  const [members, setMembers] = useState<GroupMember[] | undefined>(undefined);
+  const [problem, setProblem] = useState<string | null>(null);
+  const [busyId, setBusyId] = useState<string | null>(null);
 
-  const handleRemove = (member: Member) => {
-    Alert.alert(
-      t('mgm.removeMember'),
-      t('mgm.confirmRemove', { name: member.name }),
-      [
-        {
-          text: t('common.cancel'),
-          style: 'cancel',
+  const load = useCallback(async () => {
+    if (!id) return setMembers([]);
+    const { members: list, error } = await fetchMembers(id);
+    if (error) {
+      setProblem(isMissingSetup(error) ? t('mgm.notSetUp') : t('common.tryAgain'));
+      return setMembers([]);
+    }
+    setProblem(null);
+    setMembers(list);
+  }, [id, t]);
+
+  useFocusEffect(
+    useCallback(() => {
+      void load();
+    }, [load]),
+  );
+
+  const confirmRemove = (member: GroupMember) => {
+    Alert.alert(t('mgm.removeMember'), t('mgm.confirmRemove', { name: member.name }), [
+      { text: t('common.cancel'), style: 'cancel' },
+      {
+        text: t('mgm.remove'),
+        style: 'destructive',
+        onPress: () => {
+          void (async () => {
+            if (!id) return;
+            setBusyId(member.studentId);
+            const { error } = await removeMember(id, member.studentId);
+            setBusyId(null);
+            if (error) {
+              showToast(error.message, 'error');
+              return;
+            }
+            showToast(t('mgm.removed', { name: member.name }), 'success');
+            await load();
+          })();
         },
-        {
-          text: t('mgm.remove'),
-          style: 'destructive',
-          onPress: () => {
-            setMembers((current) =>
-              current.filter((item) => item.id !== member.id)
-            );
-
-            Alert.alert(
-              t('mgm.memberRemoved'),
-              t('mgm.removed', { name: member.name })
-            );
-          },
-        },
-      ]
-    );
+      },
+    ]);
   };
 
   return (
-    <ScrollView
-      style={[
-        styles.container,
-        { backgroundColor: colors.background },
-      ]}
-      contentContainerStyle={styles.content}
-    >
-      {/* Header */}
-      <View style={styles.header}>
-        <Pressable
-          onPress={() => router.back()}
-          style={[
-            styles.backButton,
-            {
-              backgroundColor: colors.surface,
-              borderColor: colors.border,
-            },
-          ]}
-        >
-          <Ionicons
-            name="arrow-back"
-            size={22}
-            color={colors.text}
-          />
-        </Pressable>
+    <MgScreen>
+      <PageHeader eyebrow={t('mgm.groupMembers')} title={t('mg.members')} subtitle={t('mgm.membersSub')} showSearch={false} />
 
-        <View style={styles.headerText}>
-          <Text
-            style={[
-              styles.title,
-              { color: colors.text },
-            ]}
-          >
-            {t('mg.members')}
-          </Text>
-
-          <Text
-            style={[
-              styles.subtitle,
-              { color: colors.textSecondary },
-            ]}
-          >
-            {t('mgm.membersSub')}
-          </Text>
-        </View>
-      </View>
-
-      {/* Member count */}
-      <View
-        style={[
-          styles.summaryCard,
-          {
-            backgroundColor: colors.surface,
-            borderColor: colors.border,
-          },
-        ]}
-      >
-        <View
-          style={[
-            styles.summaryIcon,
-            { backgroundColor: colors.background },
-          ]}
-        >
-          <Ionicons
-            name="people-outline"
-            size={25}
-            color={colors.accent}
-          />
-        </View>
-
-        <View>
-          <Text
-            style={[
-              styles.summaryNumber,
-              { color: colors.text },
-            ]}
-          >
-            {members.length}
-          </Text>
-
-          <Text
-            style={[
-              styles.summaryLabel,
-              { color: colors.textSecondary },
-            ]}
-          >
-            {t('mgm.activeMembers')}
-          </Text>
-        </View>
-      </View>
-
-      {/* Members */}
-      {members.length === 0 ? (
-        <View
-          style={[
-            styles.emptyCard,
-            {
-              backgroundColor: colors.surface,
-              borderColor: colors.border,
-            },
-          ]}
-        >
-          <Ionicons
-            name="people-outline"
-            size={48}
-            color={colors.textSecondary}
-          />
-
-          <Text
-            style={[
-              styles.emptyTitle,
-              { color: colors.text },
-            ]}
-          >
-            {t('mgm.noMembers')}
-          </Text>
-
-          <Text
-            style={[
-              styles.emptyText,
-              { color: colors.textSecondary },
-            ]}
-          >
-            {t('mgm.noMembersText')}
-          </Text>
-        </View>
+      {members === undefined ? (
+        <Loading />
+      ) : members.length === 0 ? (
+        <EmptyState icon="people-outline" title={problem ? t('mgm.loadFail') : t('mgm.noMembers')} text={problem ?? t('mgm.noMembersText')} />
       ) : (
-        <View>
-          <Text
-            style={[
-              styles.sectionTitle,
-              { color: colors.text },
-            ]}
-          >
-            {t('mgm.groupMembers')}
+        <>
+          <Text style={[styles.count, { color: colors.textSecondary }]}>
+            {t('mgm.activeMembers')}: {members.length}
           </Text>
-
           {members.map((member) => (
-            <View
-              key={member.id}
-              style={[
-                styles.memberCard,
-                {
-                  backgroundColor: colors.surface,
-                  borderColor: colors.border,
-                },
-              ]}
-            >
-              {/* Avatar */}
-              <View
-                style={[
-                  styles.avatar,
-                  { backgroundColor: colors.background },
-                ]}
-              >
-                <Text
-                  style={[
-                    styles.avatarText,
-                    { color: colors.accent },
-                  ]}
-                >
-                  {member.name.charAt(0)}
+            <Panel key={member.studentId} style={styles.row}>
+              <View style={[styles.avatar, { backgroundColor: colors.accent }]}>
+                <Text style={styles.avatarText}>{member.name.charAt(0).toUpperCase()}</Text>
+              </View>
+              <View style={styles.flex}>
+                <Text style={[styles.name, { color: colors.text }]} numberOfLines={1}>{member.name}</Text>
+                <Text style={[styles.meta, { color: colors.textSecondary }]} numberOfLines={1}>
+                  {[member.studentNumber, `${t('mgm.joined')} ${shortDate(member.joinedAt)}`].filter(Boolean).join(' · ')}
                 </Text>
               </View>
-
-              {/* Information */}
-              <View style={styles.memberInfo}>
-                <Text
-                  style={[
-                    styles.memberName,
-                    { color: colors.text },
-                  ]}
-                >
-                  {member.name}
-                </Text>
-
-                <Text
-                  style={[
-                    styles.studentNumber,
-                    { color: colors.textSecondary },
-                  ]}
-                >
-                  {member.studentNumber}
-                </Text>
-
-                <Text
-                  style={[
-                    styles.programme,
-                    { color: colors.textSecondary },
-                  ]}
-                >
-                  {member.programme}
-                </Text>
-
-                <Text
-                  style={[
-                    styles.joined,
-                    { color: colors.textSecondary },
-                  ]}
-                >
-                  {t('mgm.joined')} {member.joinedAt}
-                </Text>
-              </View>
-
-              {/* Remove */}
               <Pressable
-                style={[
-                  styles.removeButton,
-                  {
-                    backgroundColor: colors.background,
-                    borderColor: colors.border,
-                  },
-                ]}
-                onPress={() => handleRemove(member)}
+                accessibilityRole="button"
+                accessibilityLabel={`${t('mgm.remove')} ${member.name}`}
+                disabled={busyId === member.studentId}
+                onPress={() => confirmRemove(member)}
+                style={({ pressed }) => [styles.remove, (pressed || busyId === member.studentId) && { opacity: 0.5 }]}
               >
-                <Ionicons
-                  name="person-remove-outline"
-                  size={20}
-                  color={colors.text}
-                />
+                <Ionicons name="person-remove-outline" size={20} color="#C62828" />
               </Pressable>
-            </View>
+            </Panel>
           ))}
-        </View>
+        </>
       )}
-    </ScrollView>
+    </MgScreen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-
-  content: {
-    padding: 20,
-    paddingBottom: 40,
-  },
-
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 24,
-  },
-
-  backButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 13,
-    borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 13,
-  },
-
-  headerText: {
-    flex: 1,
-  },
-
-  title: {
-    fontSize: 25,
-    fontWeight: '800',
-  },
-
-  subtitle: {
-    fontSize: 13,
-    marginTop: 3,
-  },
-
-  summaryCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: 17,
-    borderWidth: 1,
-    padding: 16,
-    marginBottom: 28,
-  },
-
-  summaryIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 15,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 14,
-  },
-
-  summaryNumber: {
-    fontSize: 23,
-    fontWeight: '800',
-  },
-
-  summaryLabel: {
-    fontSize: 12,
-    marginTop: 2,
-  },
-
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '800',
-    marginBottom: 12,
-  },
-
-  memberCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: 18,
-    borderWidth: 1,
-    padding: 14,
-    marginBottom: 12,
-  },
-
-  avatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 12,
-  },
-
-  avatarText: {
-    fontSize: 20,
-    fontWeight: '800',
-  },
-
-  memberInfo: {
-    flex: 1,
-  },
-
-  memberName: {
-    fontSize: 15,
-    fontWeight: '800',
-    marginBottom: 3,
-  },
-
-  studentNumber: {
-    fontSize: 11,
-    marginBottom: 2,
-  },
-
-  programme: {
-    fontSize: 11,
-    marginBottom: 2,
-  },
-
-  joined: {
-    fontSize: 10,
-  },
-
-  removeButton: {
-    width: 42,
-    height: 42,
-    borderRadius: 12,
-    borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginLeft: 8,
-  },
-
-  emptyCard: {
-    borderRadius: 18,
-    borderWidth: 1,
-    padding: 35,
-    alignItems: 'center',
-  },
-
-  emptyTitle: {
-    fontSize: 18,
-    fontWeight: '800',
-    marginTop: 14,
-  },
-
-  emptyText: {
-    fontSize: 13,
-    textAlign: 'center',
-    marginTop: 6,
-  },
+  flex: { flex: 1, minWidth: 0 },
+  count: { fontSize: 12, fontWeight: '700' },
+  row: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 12 },
+  avatar: { width: 42, height: 42, borderRadius: 21, alignItems: 'center', justifyContent: 'center' },
+  avatarText: { color: '#071B2C', fontSize: 16, fontWeight: '800' },
+  name: { fontSize: 15, fontWeight: '800' },
+  meta: { fontSize: 12, marginTop: 2 },
+  remove: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
 });

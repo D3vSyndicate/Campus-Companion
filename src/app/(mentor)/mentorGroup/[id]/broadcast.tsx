@@ -1,571 +1,172 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useState } from 'react';
-import {
-    Alert,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    View,
-} from 'react-native';
-import { useTheme } from '../../../../theme/ThemeContext';
+import { useFocusEffect, useLocalSearchParams } from 'expo-router';
+import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Alert, Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { PageHeader } from '../../../../components/PageHeader';
+import { ScaledText as Text } from '../../../../components/ScaledText';
+import { Loading, MgButton, MgScreen, Panel, PriorityBadge, SectionLabel } from '../../../../components/mentorgroups/parts';
+import { useToast } from '../../../../context/ToastContext';
+import { postedLabel } from '../../../../lib/announcements';
+import { deleteNote, fetchNotes, isMissingSetup, postNote, type GroupNote, type Priority } from '../../../../lib/mentorGroups';
+import { useTheme } from '../../../../theme/ThemeContext';
 
-type Priority = 'normal' | 'important' | 'urgent';
+const PRIORITIES: { value: Priority; key: string; icon: keyof typeof Ionicons.glyphMap }[] = [
+  { value: 'normal', key: 'mgm.priorityNormal', icon: 'chatbubble-outline' },
+  { value: 'important', key: 'mgm.priorityImportant', icon: 'alert-circle-outline' },
+  { value: 'urgent', key: 'mgm.priorityUrgent', icon: 'warning-outline' },
+];
 
-export default function BroadcastScreen() {
+// A mentor's announcements to their group. Students in the group read them; they cannot reply.
+export default function MentorGroupBroadcast() {
   const { t } = useTranslation();
-  const router = useRouter();
-  const { id } = useLocalSearchParams<{ id: string }>();
   const { colors } = useTheme();
+  const { showToast } = useToast();
+  const { id } = useLocalSearchParams<{ id: string }>();
 
   const [title, setTitle] = useState('');
   const [message, setMessage] = useState('');
   const [priority, setPriority] = useState<Priority>('normal');
   const [sending, setSending] = useState(false);
+  const [notes, setNotes] = useState<GroupNote[] | undefined>(undefined);
 
-  const sendBroadcast = () => {
-    if (!title.trim()) {
-      Alert.alert(t('mgm.missingTitle'), t('mgm.enterTitle'));
-      return;
-    }
+  const load = useCallback(async () => {
+    if (!id) return setNotes([]);
+    const { notes: list } = await fetchNotes(id);
+    setNotes(list);
+  }, [id]);
 
-    if (!message.trim()) {
-      Alert.alert(t('mgm.missingMessage'), t('mgm.enterMessage'));
-      return;
-    }
+  useFocusEffect(
+    useCallback(() => {
+      void load();
+    }, [load]),
+  );
+
+  const send = async () => {
+    if (!id) return;
+    if (!title.trim()) return void Alert.alert(t('mgm.missingTitle'), t('mgm.enterTitle'));
+    if (!message.trim()) return void Alert.alert(t('mgm.missingMessage'), t('mgm.enterMessage'));
 
     setSending(true);
+    const { error } = await postNote(id, title.trim(), message.trim(), priority);
+    setSending(false);
 
-    // Temporary - Supabase will be connected later
-    setTimeout(() => {
-      setSending(false);
-
-      Alert.alert(
-        t('mgm.broadcastSent'),
-        t('mgm.broadcastSentText'),
-        [
-          {
-            text: t('common.ok'),
-            onPress: () => {
-              setTitle('');
-              setMessage('');
-              setPriority('normal');
-            },
-          },
-        ]
-      );
-    }, 500);
+    if (error) {
+      Alert.alert(t('mgm.saveFail'), isMissingSetup(error) ? t('mgm.notSetUp') : error.message);
+      return;
+    }
+    setTitle('');
+    setMessage('');
+    setPriority('normal');
+    showToast(t('mgm.broadcastSentText'), 'success');
+    await load();
   };
 
-  const priorityOptions: {
-    value: Priority;
-    label: string;
-    icon: keyof typeof Ionicons.glyphMap;
-  }[] = [
-    {
-      value: 'normal',
-      label: t('mgm.priorityNormal'),
-      icon: 'chatbubble-outline',
-    },
-    {
-      value: 'important',
-      label: t('mgm.priorityImportant'),
-      icon: 'alert-circle-outline',
-    },
-    {
-      value: 'urgent',
-      label: t('mgm.priorityUrgent'),
-      icon: 'warning-outline',
-    },
-  ];
+  const remove = (note: GroupNote) => {
+    Alert.alert(t('cal.removeTitle'), t('cal.removeText', { title: note.title }), [
+      { text: t('cal.keep'), style: 'cancel' },
+      {
+        text: t('mgm.remove'),
+        style: 'destructive',
+        onPress: () => {
+          void (async () => {
+            const { error } = await deleteNote(note.id);
+            if (error) showToast(error.message, 'error');
+            await load();
+          })();
+        },
+      },
+    ]);
+  };
+
+  const inputStyle = [styles.input, { backgroundColor: colors.background, borderColor: colors.border, color: colors.text }];
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
-      
-      {/* Header */}
-      <View
-        style={[
-          styles.header,
-          {
-            backgroundColor: colors.surface,
-            borderBottomColor: colors.border,
-          },
-        ]}
-      >
-        <Pressable
-          onPress={() => router.back()}
-          style={styles.backButton}
-        >
-          <Ionicons
-            name="arrow-back"
-            size={24}
-            color={colors.text}
-          />
-        </Pressable>
+    <MgScreen>
+      <PageHeader eyebrow={t('mgm.broadcast')} title={t('mgm.groupBroadcast')} subtitle={t('mgm.broadcastIntro')} showSearch={false} />
 
-        <View>
-          <Text style={[styles.headerTitle, { color: colors.text }]}>
-            {t('mgm.broadcast')}
-          </Text>
-
-          <Text
-            style={[
-              styles.headerSubtitle,
-              { color: colors.textSecondary },
-            ]}
-          >
-            {t('mgm.broadcastSub')}
-          </Text>
-        </View>
-      </View>
-
-      <ScrollView
-        contentContainerStyle={styles.content}
-        showsVerticalScrollIndicator={false}
-      >
-        {/* Info Card */}
-        <View
-          style={[
-            styles.infoCard,
-            {
-              backgroundColor: colors.surface,
-              borderColor: colors.border,
-            },
-          ]}
-        >
-          <Ionicons
-            name="megaphone-outline"
-            size={24}
-            color={colors.accent}
-          />
-
-          <View style={styles.infoText}>
-            <Text style={[styles.infoTitle, { color: colors.text }]}>
-              {t('mgm.groupBroadcast')}
-            </Text>
-
-            <Text
-              style={[
-                styles.infoDescription,
-                { color: colors.textSecondary },
-              ]}
-            >
-              {t('mgm.broadcastIntro')}
-            </Text>
-          </View>
+      <Panel style={styles.form}>
+        <View style={styles.field}>
+          <SectionLabel>{t('mgm.title')}</SectionLabel>
+          <TextInput value={title} onChangeText={setTitle} placeholder={t('mgm.titleEg')} placeholderTextColor={colors.textSecondary} style={inputStyle} maxLength={120} />
         </View>
 
-        {/* Title */}
-        <Text style={[styles.label, { color: colors.text }]}>
-          {t('mgm.title')}
-        </Text>
+        <View style={styles.field}>
+          <SectionLabel>{t('mgm.message')}</SectionLabel>
+          <TextInput
+            value={message}
+            onChangeText={setMessage}
+            placeholder={t('mgm.messageEg')}
+            placeholderTextColor={colors.textSecondary}
+            style={[inputStyle, styles.multiline]}
+            multiline
+            textAlignVertical="top"
+            maxLength={1000}
+          />
+        </View>
 
-        <TextInput
-          value={title}
-          onChangeText={setTitle}
-          placeholder={t('mgm.titleEg')}
-          placeholderTextColor={colors.textSecondary}
-          style={[
-            styles.input,
-            {
-              backgroundColor: colors.surface,
-              borderColor: colors.border,
-              color: colors.text,
-            },
-          ]}
-        />
-
-        {/* Message */}
-        <Text style={[styles.label, { color: colors.text }]}>
-          {t('mgm.message')}
-        </Text>
-
-        <TextInput
-          value={message}
-          onChangeText={setMessage}
-          placeholder={t('mgm.messageEg')}
-          placeholderTextColor={colors.textSecondary}
-          multiline
-          textAlignVertical="top"
-          style={[
-            styles.messageInput,
-            {
-              backgroundColor: colors.surface,
-              borderColor: colors.border,
-              color: colors.text,
-            },
-          ]}
-        />
-
-        {/* Priority */}
-        <Text style={[styles.label, { color: colors.text }]}>
-          {t('mgm.priority')}
-        </Text>
-
-        <View style={styles.priorityContainer}>
-          {priorityOptions.map((option) => {
-            const selected = priority === option.value;
-
-            return (
-              <Pressable
-                key={option.value}
-                onPress={() => setPriority(option.value)}
-                style={[
-                  styles.priorityButton,
-                  {
-                    backgroundColor: selected
-                      ? colors.accent
-                      : colors.surface,
-                    borderColor: selected
-                      ? colors.accent
-                      : colors.border,
-                  },
-                ]}
-              >
-                <Ionicons
-                  name={option.icon}
-                  size={20}
-                  color={
-                    selected
-                      ? colors.background
-                      : colors.textSecondary
-                  }
-                />
-
-                <Text
-                  style={[
-                    styles.priorityText,
-                    {
-                      color: selected
-                        ? colors.background
-                        : colors.text,
-                    },
-                  ]}
+        <View style={styles.field}>
+          <SectionLabel>{t('mgm.priority')}</SectionLabel>
+          <View style={styles.chips}>
+            {PRIORITIES.map((option) => {
+              const active = priority === option.value;
+              return (
+                <Pressable
+                  key={option.value}
+                  accessibilityRole="button"
+                  accessibilityState={{ selected: active }}
+                  onPress={() => setPriority(option.value)}
+                  style={[styles.chip, { borderColor: active ? colors.accent : colors.border, backgroundColor: active ? colors.accent : 'transparent' }]}
                 >
-                  {option.label}
-                </Text>
+                  <Ionicons name={option.icon} size={15} color={active ? '#071B2C' : colors.textSecondary} />
+                  <Text style={[styles.chipText, { color: active ? '#071B2C' : colors.text }]}>{t(option.key)}</Text>
+                </Pressable>
+              );
+            })}
+          </View>
+        </View>
+
+        <MgButton label={t('mgm.sendBroadcast')} icon="send-outline" busy={sending} onPress={() => void send()} />
+        <Text style={[styles.foot, { color: colors.textSecondary }]}>{t('mgm.readOnlyNote')}</Text>
+      </Panel>
+
+      <SectionLabel>{t('mgm.previous')}</SectionLabel>
+      {notes === undefined ? (
+        <Loading />
+      ) : notes.length === 0 ? (
+        <Text style={[styles.foot, { color: colors.textSecondary }]}>{t('mg.noBroadcasts')}</Text>
+      ) : (
+        notes.map((note) => (
+          <Panel key={note.id} style={styles.note}>
+            <View style={styles.noteHead}>
+              <Text style={[styles.noteTitle, { color: colors.text }]}>{note.title}</Text>
+              <PriorityBadge priority={note.priority} />
+              <Pressable accessibilityRole="button" accessibilityLabel={t('mgm.remove')} onPress={() => remove(note)} style={styles.trash}>
+                <Ionicons name="trash-outline" size={18} color={colors.textSecondary} />
               </Pressable>
-            );
-          })}
-        </View>
-
-        {/* Send Button */}
-        <Pressable
-          onPress={sendBroadcast}
-          disabled={sending}
-          style={[
-            styles.sendButton,
-            {
-              backgroundColor: colors.accent,
-              opacity: sending ? 0.6 : 1,
-            },
-          ]}
-        >
-          <Ionicons
-            name="send-outline"
-            size={20}
-            color={colors.background}
-          />
-
-          <Text
-            style={[
-              styles.sendButtonText,
-              { color: colors.background },
-            ]}
-          >
-            {sending ? 'Sending...' : t('mgm.sendBroadcast')}
-          </Text>
-        </Pressable>
-
-        {/* Previous Broadcasts */}
-        <Text style={[styles.sectionTitle, { color: colors.text }]}>
-          {t('mgm.previous')}
-        </Text>
-
-        <View
-          style={[
-            styles.broadcastCard,
-            {
-              backgroundColor: colors.surface,
-              borderColor: colors.border,
-            },
-          ]}
-        >
-          <View style={styles.broadcastHeader}>
-            <View style={styles.broadcastTitleRow}>
-              <Ionicons
-                name="megaphone-outline"
-                size={20}
-                color={colors.accent}
-              />
-
-              <Text
-                style={[
-                  styles.broadcastTitle,
-                  { color: colors.text },
-                ]}
-              >
-                Welcome to the group
-              </Text>
             </View>
-
-            <Text
-              style={[
-                styles.broadcastDate,
-                { color: colors.textSecondary },
-              ]}
-            >
-              Today
-            </Text>
-          </View>
-
-          <Text
-            style={[
-              styles.broadcastMessage,
-              { color: colors.textSecondary },
-            ]}
-          >
-            Welcome everyone! We are excited to have you in the
-            mentor group.
-          </Text>
-
-          <View
-            style={[
-              styles.priorityBadge,
-              { borderColor: colors.border },
-            ]}
-          >
-            <Text
-              style={[
-                styles.priorityBadgeText,
-                { color: colors.textSecondary },
-              ]}
-            >
-              {t('mgm.priorityNormal')}
-            </Text>
-          </View>
-        </View>
-
-        {/* Student restriction */}
-        <View
-          style={[
-            styles.noteCard,
-            {
-              backgroundColor: colors.surface,
-              borderColor: colors.border,
-            },
-          ]}
-        >
-          <Ionicons
-            name="lock-closed-outline"
-            size={20}
-            color={colors.textSecondary}
-          />
-
-          <Text
-            style={[
-              styles.noteText,
-              { color: colors.textSecondary },
-            ]}
-          >
-            {t('mgm.readOnlyNote')}
-          </Text>
-        </View>
-      </ScrollView>
-    </View>
+            <Text style={[styles.small, { color: colors.textSecondary }]}>{postedLabel(note.createdAt)}</Text>
+            <Text style={[styles.body, { color: colors.textSecondary }]}>{note.message}</Text>
+          </Panel>
+        ))
+      )}
+    </MgScreen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingTop: 55,
-    paddingBottom: 16,
-    borderBottomWidth: 1,
-  },
-
-  backButton: {
-    marginRight: 14,
-  },
-
-  headerTitle: {
-    fontSize: 22,
-    fontWeight: '700',
-  },
-
-  headerSubtitle: {
-    fontSize: 13,
-    marginTop: 3,
-  },
-
-  content: {
-    padding: 20,
-    paddingBottom: 40,
-  },
-
-  infoCard: {
-    flexDirection: 'row',
-    padding: 16,
-    borderRadius: 14,
-    borderWidth: 1,
-    marginBottom: 24,
-  },
-
-  infoText: {
-    flex: 1,
-    marginLeft: 12,
-  },
-
-  infoTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    marginBottom: 5,
-  },
-
-  infoDescription: {
-    fontSize: 13,
-    lineHeight: 19,
-  },
-
-  label: {
-    fontSize: 14,
-    fontWeight: '700',
-    marginBottom: 8,
-    marginTop: 4,
-  },
-
-  input: {
-    height: 50,
-    borderRadius: 12,
-    borderWidth: 1,
-    paddingHorizontal: 14,
-    fontSize: 14,
-    marginBottom: 18,
-  },
-
-  messageInput: {
-    minHeight: 130,
-    borderRadius: 12,
-    borderWidth: 1,
-    paddingHorizontal: 14,
-    paddingTop: 14,
-    fontSize: 14,
-    marginBottom: 18,
-  },
-
-  priorityContainer: {
-    gap: 10,
-    marginBottom: 24,
-  },
-
-  priorityButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    height: 48,
-    borderRadius: 12,
-    borderWidth: 1,
-    paddingHorizontal: 15,
-  },
-
-  priorityText: {
-    marginLeft: 10,
-    fontSize: 14,
-    fontWeight: '600',
-  },
-
-  sendButton: {
-    height: 52,
-    borderRadius: 14,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 30,
-  },
-
-  sendButtonText: {
-    fontSize: 15,
-    fontWeight: '700',
-    marginLeft: 8,
-  },
-
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    marginBottom: 12,
-  },
-
-  broadcastCard: {
-    padding: 16,
-    borderRadius: 14,
-    borderWidth: 1,
-    marginBottom: 16,
-  },
-
-  broadcastHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 10,
-  },
-
-  broadcastTitleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-  },
-
-  broadcastTitle: {
-    fontSize: 15,
-    fontWeight: '700',
-    marginLeft: 8,
-  },
-
-  broadcastDate: {
-    fontSize: 12,
-    marginLeft: 8,
-  },
-
-  broadcastMessage: {
-    fontSize: 14,
-    lineHeight: 20,
-    marginBottom: 12,
-  },
-
-  priorityBadge: {
-    alignSelf: 'flex-start',
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 8,
-    borderWidth: 1,
-  },
-
-  priorityBadgeText: {
-    fontSize: 11,
-    fontWeight: '600',
-  },
-
-  noteCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 14,
-    borderRadius: 12,
-    borderWidth: 1,
-    marginTop: 8,
-  },
-
-  noteText: {
-    flex: 1,
-    fontSize: 12,
-    lineHeight: 18,
-    marginLeft: 10,
-  },
+  form: { gap: 16 },
+  field: { gap: 8 },
+  input: { borderWidth: 1, borderRadius: 14, paddingHorizontal: 14, paddingVertical: 12, fontSize: 15, minHeight: 48 },
+  multiline: { minHeight: 120 },
+  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  chip: { flexDirection: 'row', alignItems: 'center', gap: 6, borderWidth: 1, borderRadius: 999, paddingHorizontal: 14, minHeight: 40 },
+  chipText: { fontSize: 13, fontWeight: '700' },
+  foot: { fontSize: 12, lineHeight: 18, textAlign: 'center' },
+  note: { gap: 6 },
+  noteHead: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  noteTitle: { flex: 1, fontSize: 15, fontWeight: '800' },
+  trash: { width: 36, height: 36, alignItems: 'center', justifyContent: 'center' },
+  small: { fontSize: 12 },
+  body: { fontSize: 14, lineHeight: 21 },
 });

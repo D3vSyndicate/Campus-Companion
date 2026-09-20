@@ -1,475 +1,150 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useFocusEffect } from 'expo-router';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
-import { useTheme } from '../../../../theme/ThemeContext';
+import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { PageHeader } from '../../../../components/PageHeader';
+import { ScaledText as Text } from '../../../../components/ScaledText';
+import { EmptyState, Loading, MgButton, MgScreen, Panel } from '../../../../components/mentorgroups/parts';
+import { fetchOverview, isMissingSetup, type GroupOverview } from '../../../../lib/mentorGroups';
+import { useTheme } from '../../../../theme/ThemeContext';
 
+// A mentor's own group: how full it is, and the four things a mentor does with it.
 export default function MentorGroupDetails() {
   const { t } = useTranslation();
   const router = useRouter();
-  const { id } = useLocalSearchParams<{ id: string }>();
   const { colors } = useTheme();
+  const { id } = useLocalSearchParams<{ id: string }>();
 
-  // Temporary data.
-  // We will replace this with Supabase data.
-  const group = {
-    id,
-    name: 'Software Development Mentors',
-    programme: 'Software Development',
-    description:
-      'A mentor group for students interested in software development.',
-    members: 18,
-    capacity: 25,
-  };
+  const [group, setGroup] = useState<GroupOverview | null | undefined>(undefined);
+  const [problem, setProblem] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
 
-  const remaining = group.capacity - group.members;
+  const load = useCallback(async () => {
+    if (!id) return setGroup(null);
+    const { group: found, error } = await fetchOverview(id);
+    if (error) {
+      setProblem(isMissingSetup(error) ? t('mgm.notSetUp') : t('common.tryAgain'));
+      return setGroup(null);
+    }
+    setProblem(null);
+    setGroup(found);
+  }, [id, t]);
 
-  return (
-    <ScrollView
-      style={[
-        styles.container,
-        { backgroundColor: colors.background },
-      ]}
-      contentContainerStyle={styles.content}
-    >
-      {/* Header */}
-      <View style={styles.header}>
-        <Pressable
-          onPress={() => router.back()}
-          style={[
-            styles.backButton,
-            {
-              backgroundColor: colors.surface,
-              borderColor: colors.border,
-            },
-          ]}
-        >
-          <Ionicons
-            name="arrow-back"
-            size={22}
-            color={colors.text}
-          />
-        </Pressable>
-
-        <View style={styles.headerText}>
-          <Text
-            style={[
-              styles.title,
-              { color: colors.text },
-            ]}
-          >
-            {group.name}
-          </Text>
-
-          <Text
-            style={[
-              styles.programme,
-              { color: colors.textSecondary },
-            ]}
-          >
-            {group.programme}
-          </Text>
-        </View>
-
-        <Pressable
-          onPress={() =>
-            router.push(
-              `/mentorGroup/${id}/edit` as never
-            )
-          }
-          style={[
-            styles.editButton,
-            {
-              backgroundColor: colors.surface,
-              borderColor: colors.border,
-            },
-          ]}
-        >
-          <Ionicons
-            name="create-outline"
-            size={21}
-            color={colors.text}
-          />
-        </Pressable>
-      </View>
-
-      {/* Group description */}
-      <View
-        style={[
-          styles.descriptionCard,
-          {
-            backgroundColor: colors.surface,
-            borderColor: colors.border,
-          },
-        ]}
-      >
-        <Text
-          style={[
-            styles.description,
-            { color: colors.textSecondary },
-          ]}
-        >
-          {group.description}
-        </Text>
-      </View>
-
-      {/* Capacity */}
-      <View
-        style={[
-          styles.capacityCard,
-          {
-            backgroundColor: colors.surface,
-            borderColor: colors.border,
-          },
-        ]}
-      >
-        <View style={styles.capacityHeader}>
-          <View>
-            <Text
-              style={[
-                styles.sectionLabel,
-                { color: colors.textSecondary },
-              ]}
-            >
-              {t('mgm.capacityUpper')}
-            </Text>
-
-            <Text
-              style={[
-                styles.memberCount,
-                { color: colors.text },
-              ]}
-            >
-              {group.members}/{group.capacity}
-            </Text>
-
-            <Text
-              style={[
-                styles.remaining,
-                { color: colors.textSecondary },
-              ]}
-            >
-              {remaining} {t('mgm.spacesLeft')}
-            </Text>
-          </View>
-
-          <View
-            style={[
-              styles.peopleIcon,
-              { backgroundColor: colors.background },
-            ]}
-          >
-            <Ionicons
-              name="people-outline"
-              size={30}
-              color={colors.accent}
-            />
-          </View>
-        </View>
-
-        {/* Progress bar */}
-        <View
-          style={[
-            styles.progressBackground,
-            { backgroundColor: colors.border },
-          ]}
-        >
-          <View
-            style={[
-              styles.progress,
-              {
-                backgroundColor: colors.accent,
-                width: `${Math.min(
-                  (group.members / group.capacity) * 100,
-                  100
-                )}%`,
-              },
-            ]}
-          />
-        </View>
-      </View>
-
-      {/* Management options */}
-      <Text
-        style={[
-          styles.sectionTitle,
-          { color: colors.text },
-        ]}
-      >
-        {t('mgm.manageGroup')}
-      </Text>
-
-      <ManagementCard
-        icon="person-add-outline"
-        title={t('mgm.joinRequests')}
-        description={t('mgm.joinRequestsText')}
-        colors={colors}
-        onPress={() =>
-          router.push(
-            `/mentorGroup/${id}/request` as never
-          )
-        }
-      />
-
-      <ManagementCard
-        icon="people-outline"
-        title={t('mg.members')}
-        description={t('mgm.membersText')}
-        colors={colors}
-        onPress={() =>
-          router.push(
-            `/mentorGroup/${id}/members` as never
-          )
-        }
-      />
-
-      <ManagementCard
-        icon="qr-code-outline"
-        title={t('mgm.qrTitle')}
-        description={t('mgm.qrText')}
-        colors={colors}
-        onPress={() =>
-          router.push(
-            `/mentorGroup/${id}/qr` as never
-          )
-        }
-      />
-
-      <ManagementCard
-        icon="megaphone-outline"
-        title={t('mgm.broadcast')}
-        description={t('mgm.broadcastText')}
-        colors={colors}
-        onPress={() =>
-          router.push(
-            `/mentorGroup/${id}/broadcast` as never
-          )
-        }
-      />
-    </ScrollView>
+  // Reload whenever the mentor comes back from approving requests, removing members and so on.
+  useFocusEffect(
+    useCallback(() => {
+      void load();
+    }, [load]),
   );
-}
 
-function ManagementCard({
-  icon,
-  title,
-  description,
-  colors,
-  onPress,
-}: {
-  icon: keyof typeof Ionicons.glyphMap;
-  title: string;
-  description: string;
-  colors: any;
-  onPress: () => void;
-}) {
+  const go = (path: string) => router.push(`/mentorGroup/${id}/${path}` as never);
+
+  if (group === undefined) {
+    return (
+      <MgScreen>
+        <PageHeader eyebrow={t('mgm.manageGroup')} title={t('mg.title')} showSearch={false} />
+        <Loading />
+      </MgScreen>
+    );
+  }
+
+  if (group === null) {
+    return (
+      <MgScreen>
+        <PageHeader eyebrow={t('mgm.manageGroup')} title={t('mg.title')} showSearch={false} />
+        <EmptyState icon="people-outline" title={t('mgm.loadFail')} text={problem ?? t('mgm.notFound')}>
+          <MgButton label={t('mg.title')} onPress={() => router.push('/mentorGroup/group' as never)} />
+        </EmptyState>
+      </MgScreen>
+    );
+  }
+
+  const remaining = Math.max(group.maxCapacity - group.memberCount, 0);
+  const fill = group.maxCapacity > 0 ? Math.min(group.memberCount / group.maxCapacity, 1) : 0;
+
+  const tiles: { key: string; icon: keyof typeof Ionicons.glyphMap; title: string; text: string; badge?: number; path: string }[] = [
+    { key: 'requests', icon: 'person-add-outline', title: t('mgm.joinRequests'), text: t('mgm.joinRequestsText'), badge: group.pendingCount, path: 'request' },
+    { key: 'members', icon: 'people-outline', title: t('mg.members'), text: t('mgm.membersText'), path: 'members' },
+    { key: 'qr', icon: 'qr-code-outline', title: t('mgm.qrTitle'), text: t('mgm.qrText'), path: 'qr' },
+    { key: 'broadcast', icon: 'megaphone-outline', title: t('mgm.broadcast'), text: t('mgm.broadcastText'), path: 'broadcast' },
+  ];
+
   return (
-    <Pressable
-      style={[
-        styles.managementCard,
-        {
-          backgroundColor: colors.surface,
-          borderColor: colors.border,
-        },
-      ]}
-      onPress={onPress}
+    <MgScreen
+      refreshing={refreshing}
+      onRefresh={() => {
+        setRefreshing(true);
+        void load().finally(() => setRefreshing(false));
+      }}
     >
-      <View
-        style={[
-          styles.managementIcon,
-          { backgroundColor: colors.background },
-        ]}
-      >
-        <Ionicons
-          name={icon}
-          size={23}
-          color={colors.accent}
-        />
-      </View>
+      <PageHeader eyebrow={t('mgm.manageGroup')} title={group.name} subtitle={group.programme} showSearch={false} />
 
-      <View style={styles.managementContent}>
-        <Text
-          style={[
-            styles.managementTitle,
-            { color: colors.text },
-          ]}
-        >
-          {title}
+      {group.description ? (
+        <Panel>
+          <Text style={[styles.body, { color: colors.textSecondary }]}>{group.description}</Text>
+        </Panel>
+      ) : null}
+
+      <Panel style={styles.capacity}>
+        <View style={styles.capacityHead}>
+          <Text style={[styles.label, { color: colors.textSecondary }]}>{t('mgm.capacityUpper')}</Text>
+          <Text style={[styles.count, { color: colors.text }]}>
+            {group.memberCount} / {group.maxCapacity}
+          </Text>
+        </View>
+        <View style={[styles.track, { backgroundColor: colors.border }]}>
+          <View style={[styles.fill, { width: `${fill * 100}%`, backgroundColor: remaining === 0 ? '#C62828' : colors.accent }]} />
+        </View>
+        <Text style={[styles.small, { color: colors.textSecondary }]}>
+          {remaining} {t('mgm.spacesLeft')}
         </Text>
+      </Panel>
 
-        <Text
-          style={[
-            styles.managementDescription,
-            { color: colors.textSecondary },
-          ]}
+      <Text style={[styles.label, { color: colors.textSecondary }]}>{t('mgm.manageGroup')}</Text>
+      {tiles.map((tile) => (
+        <Pressable
+          key={tile.key}
+          accessibilityRole="button"
+          accessibilityLabel={tile.badge ? `${tile.title}, ${tile.badge}` : tile.title}
+          onPress={() => go(tile.path)}
+          style={({ pressed }) => [styles.tile, { backgroundColor: colors.card, borderColor: colors.border }, pressed && { opacity: 0.85 }]}
         >
-          {description}
-        </Text>
-      </View>
+          <View style={[styles.tileIcon, { backgroundColor: colors.background }]}>
+            <Ionicons name={tile.icon} size={22} color={colors.accent} />
+          </View>
+          <View style={styles.flex}>
+            <Text style={[styles.tileTitle, { color: colors.text }]}>{tile.title}</Text>
+            <Text style={[styles.small, { color: colors.textSecondary }]}>{tile.text}</Text>
+          </View>
+          {tile.badge ? (
+            <View style={[styles.badge, { backgroundColor: colors.accent }]}>
+              <Text style={styles.badgeText}>{tile.badge}</Text>
+            </View>
+          ) : null}
+          <Ionicons name="chevron-forward" size={18} color={colors.textSecondary} />
+        </Pressable>
+      ))}
 
-      <Ionicons
-        name="chevron-forward"
-        size={20}
-        color={colors.textSecondary}
-      />
-    </Pressable>
+      <MgButton label={t('mgm.editTitle')} icon="create-outline" tone="quiet" onPress={() => go('edit')} />
+    </MgScreen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-
-  content: {
-    padding: 20,
-    paddingBottom: 40,
-  },
-
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-
-  backButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 13,
-    borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 12,
-  },
-
-  headerText: {
-    flex: 1,
-  },
-
-  title: {
-    fontSize: 21,
-    fontWeight: '800',
-  },
-
-  programme: {
-    fontSize: 13,
-    marginTop: 3,
-  },
-
-  editButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 13,
-    borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  descriptionCard: {
-    borderRadius: 17,
-    borderWidth: 1,
-    padding: 17,
-    marginBottom: 16,
-  },
-
-  description: {
-    fontSize: 14,
-    lineHeight: 21,
-  },
-
-  capacityCard: {
-    borderRadius: 18,
-    borderWidth: 1,
-    padding: 18,
-    marginBottom: 28,
-  },
-
-  capacityHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-
-  sectionLabel: {
-    fontSize: 11,
-    fontWeight: '800',
-    letterSpacing: 0.8,
-  },
-
-  memberCount: {
-    fontSize: 28,
-    fontWeight: '800',
-    marginTop: 4,
-  },
-
-  remaining: {
-    fontSize: 12,
-    marginTop: 2,
-  },
-
-  peopleIcon: {
-    width: 58,
-    height: 58,
-    borderRadius: 18,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  progressBackground: {
-    height: 8,
-    borderRadius: 10,
-    overflow: 'hidden',
-    marginTop: 18,
-  },
-
-  progress: {
-    height: '100%',
-    borderRadius: 10,
-  },
-
-  sectionTitle: {
-    fontSize: 19,
-    fontWeight: '800',
-    marginBottom: 12,
-  },
-
-  managementCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: 17,
-    borderWidth: 1,
-    padding: 15,
-    marginBottom: 12,
-  },
-
-  managementIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 15,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 13,
-  },
-
-  managementContent: {
-    flex: 1,
-    marginRight: 8,
-  },
-
-  managementTitle: {
-    fontSize: 15,
-    fontWeight: '800',
-    marginBottom: 4,
-  },
-
-  managementDescription: {
-    fontSize: 12,
-    lineHeight: 18,
-  },
+  flex: { flex: 1, minWidth: 0 },
+  body: { fontSize: 14, lineHeight: 21 },
+  capacity: { gap: 10 },
+  capacityHead: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  label: { fontSize: 11, fontWeight: '800', letterSpacing: 1, textTransform: 'uppercase' },
+  count: { fontSize: 20, fontWeight: '800' },
+  track: { height: 10, borderRadius: 999, overflow: 'hidden' },
+  fill: { height: '100%', borderRadius: 999 },
+  small: { fontSize: 12, lineHeight: 17 },
+  tile: { flexDirection: 'row', alignItems: 'center', gap: 12, borderWidth: 1, borderRadius: 18, padding: 14, minHeight: 72 },
+  tileIcon: { width: 46, height: 46, borderRadius: 14, alignItems: 'center', justifyContent: 'center' },
+  tileTitle: { fontSize: 15, fontWeight: '800' },
+  badge: { minWidth: 26, height: 26, borderRadius: 13, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 6 },
+  badgeText: { color: '#071B2C', fontSize: 12, fontWeight: '800' },
 });

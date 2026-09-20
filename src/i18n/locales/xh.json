@@ -132,7 +132,10 @@
     "share": "Yabelana",
     "ok": "Kulungile",
     "vs": "vs",
-    "and": "kunye"
+    "and": "kunye",
+    "saving": "Iyagcina...",
+    "creating": "Iyenza...",
+    "sending": "Iyathumela..."
   },
   "home": {
     "brand": "Campus Companion",
@@ -644,7 +647,15 @@
     "broadcasts": "Izaziso zomkhokeli",
     "broadcastsSub": "Iindaba ezibalulekileyo ezivela kumkhokeli wakho",
     "readOnly": "Abakhokeli kuphela abanokuthumela imiyalezo kweli qela. Abafundi bangafunda izaziso kodwa abanakuphendula.",
-    "confirmJoin": "Thumela isicelo sokujoyina u-{{name}}?"
+    "confirmJoin": "Thumela isicelo sokujoyina u-{{name}}?",
+    "groupGone": "Eli qela lomkhokeli alikho",
+    "groupGoneText": "Kusenokwenzeka ukuba livaliwe, okanye awunako ukufikelela kulo.",
+    "membersOf": "Amalungu angama-{{count}} kwangama-{{max}}",
+    "noBroadcasts": "Akukabikho zaziso ezivela kumkhokeli wakho okwangoku.",
+    "removedTitle": "Ususiwe kwiqela",
+    "removedText": "Umkhokeli wakho ukususile kweli qela. Ungacela ukujoyina elinye.",
+    "notAsked": "Awukacelanga ukujoyina iqela",
+    "notAskedText": "Fumana iqela lenkqubo yakho, okanye uskeneye ikhowudi ye-QR oyinikwe ngumkhokeli wakho."
   },
   "buddy": {
     "actions": {
@@ -904,7 +915,8 @@
     "confirmApprove": "Ukongeza u-{{name}} kweli qela lomkhokeli?",
     "added": "U-{{name}} ongeziwe kwiqela.",
     "confirmReject": "Ugatya isicelo sika-{{name}}?",
-    "rejectedNamed": "Isicelo sika-{{name}} sigatyiwe."
+    "rejectedNamed": "Isicelo sika-{{name}} sigatyiwe.",
+    "notSetUp": "Amaqela abakhokeli afuna iskripthi sedathabheyisi sakutshanje. Cela umlawuli aqhube i-setup_all.sql."
   },
   "schedule": {
     "tabOrientation": "Uqhelaniso",
@@ -1043,7 +1055,14 @@
     "blurb": "Okuphuzi kuthetha ukuba umenyiwe, akunyanzelwanga. Ukuba kufuneka uphoswe yinto, oko kunokunyamezelwa: xelela unjingalwazi okanye umhlobo wakho we-FYS kwangoko kwaye baza kukunceda ubambe.",
     "addedByYou": "Longezwe nguwe",
     "removeText": "\"{{title}}\" iya kususwa kwikhalenda yakho.",
-    "tapRemove": "{{title}}. Cofa ukususa."
+    "tapRemove": "{{title}}. Cofa ukususa.",
+    "upNext": "Okulandelayo",
+    "upNextNone": "Akukho nto ilandelayo. Pina isiganeko sekhampasi, okanye yongeza icebo lakho.",
+    "countOne": "Into e-1 ngalo mhla",
+    "countMany": "Izinto ezi-{{count}} ngalo mhla",
+    "alsoOn": "Kukwakho ekhampasini",
+    "alsoOnHint": "Iziganeko zekhampasi ongazipinanga. Pina enye ukuyigcina kwikhalenda yakho.",
+    "toggleKind": "Bonisa okanye fihla i-{{kind}}"
   },
   "search": {
     "showLess": "Bonisa okuncinci",
@@ -1649,5 +1668,13 @@
       },
       "tip": "Unoxanduva lwayo yonke into oyingenisayo, kubandakanywa nawaphi na amaphutha esiwenzele wona isixhobo se-AI."
     }
+  },
+  "pin": {
+    "pin": "Pina kwikhalenda yam",
+    "pinned": "Ipiniwe kwikhalenda yakho",
+    "added": "Ipiniwe. Uya kuyifumana kwikhalenda yakho.",
+    "removed": "Isusiwe kwikhalenda yakho.",
+    "pinLabel": "Pina u-{{title}} kwikhalenda yakho",
+    "unpinLabel": "Susa ipini ye-{{title}} kwikhalenda yakho"
   }
 }

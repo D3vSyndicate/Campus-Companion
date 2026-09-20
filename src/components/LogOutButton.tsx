@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { Alert, Platform, Pressable, StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
+import { Alert, Pressable, StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../theme/ThemeContext';
 import { ScaledText as Text } from './ScaledText';
@@ -16,12 +16,7 @@ export function useLogOut() {
       void signOut();
     };
 
-    // Alert shows no buttons on the web build, so ask with the browser's own dialog there.
-    if (Platform.OS === 'web') {
-      if (typeof window === 'undefined' || window.confirm(t('logout.confirm'))) logOut();
-      return;
-    }
-
+    // On the web, Alert.alert is drawn by WebAlertHost (see lib/webAlert), so one call works everywhere.
     Alert.alert(t('logout.action'), t('logout.confirm'), [
       { text: t('logout.stay'), style: 'cancel' },
       { text: t('logout.action'), style: 'destructive', onPress: logOut },

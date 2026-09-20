@@ -333,7 +333,7 @@ export default function CreateMentorGroup() {
         />
 
         <Text style={styles.createButtonText}>
-          {saving ? (editing ? 'Saving...' : 'Creating...') : editing ? t('mgm.saveChanges') : t('mgm.createGroup')}
+          {saving ? (editing ? t('common.saving') : t('common.creating')) : editing ? t('mgm.saveChanges') : t('mgm.createGroup')}
         </Text>
       </Pressable>
     </ScrollView>

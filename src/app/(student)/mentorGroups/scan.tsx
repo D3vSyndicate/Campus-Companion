@@ -61,7 +61,12 @@ export default function ScanMentorQRScreen() {
         {
           text: t('mg.sendRequest'),
           onPress: () => void (async () => {
-            const { error } = await supabase.rpc('request_to_join_mentor_group', { target_group: groupId });
+            // The code holds the group's secret token. A code made before tokens existed held the group's id,
+            // so if the token is not recognised, try it as an id.
+            let { error } = await supabase.rpc('request_to_join_mentor_group_by_token', { scan_token: groupId });
+            if (error && /not valid|invalid input syntax/i.test(error.message)) {
+              ({ error } = await supabase.rpc('request_to_join_mentor_group', { target_group: groupId }));
+            }
             if (error) {
               Alert.alert(t('mg.notSent'), error.message, [{ text: t('common.ok'), onPress: () => setScanned(false) }]);
               return;

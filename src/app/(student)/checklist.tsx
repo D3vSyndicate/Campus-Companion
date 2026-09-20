@@ -5,6 +5,8 @@ import { ActivityIndicator, FlatList, StyleSheet, TouchableOpacity, View } from 
 import { PageHeader } from '../../components/PageHeader';
 import { ScaledText as Text } from '../../components/ScaledText';
 import { ShameResilientBanner } from '../../components/ShameResilientBanner';
+import { useAuth } from '../../context/AuthContext';
+import { readDone, setDone } from '../../lib/checklistProgress';
 import { supabase } from '../../lib/superbase';
 import { useTheme } from '../../theme/ThemeContext';
 import { ChecklistItem } from '../../types';
@@ -25,6 +27,8 @@ const normalizeBoolean = (value: unknown): boolean => {
 export default function ChecklistScreen() {
   const { colors } = useTheme();
   const { t } = useTranslation();
+  const { user } = useAuth();
+  const userId = user?.id;
 
   const palette = {
     pageBg: colors.background,
@@ -44,10 +48,14 @@ export default function ChecklistScreen() {
   const [loadError, setLoadError] = useState(false);
 
   const fetchChecklist = async () => {
+    // Ticks belong to the student, not to the shared task row.
+    const done = userId ? await readDone(userId) : new Set<string>();
+    const withProgress = (list: ChecklistTask[]) => list.map((task) => ({ ...task, completion_status: done.has(task.id) }));
+
     try {
       const cached = await AsyncStorage.getItem(CHECKLIST_CACHE_KEY);
       if (cached) {
-        setTasks(JSON.parse(cached) as ChecklistTask[]);
+        setTasks(withProgress(JSON.parse(cached) as ChecklistTask[]));
       }
 
       const { data, error } = await supabase
@@ -74,7 +82,7 @@ export default function ChecklistScreen() {
         };
       });
 
-      setTasks(remoteTasks);
+      setTasks(withProgress(remoteTasks));
 
       if (remoteTasks.length) {
         await AsyncStorage.setItem(CHECKLIST_CACHE_KEY, JSON.stringify(remoteTasks));
@@ -85,7 +93,7 @@ export default function ChecklistScreen() {
       const cached = await AsyncStorage.getItem(CHECKLIST_CACHE_KEY);
       if (cached) {
         try {
-          setTasks(JSON.parse(cached) as ChecklistTask[]);
+          setTasks(withProgress(JSON.parse(cached) as ChecklistTask[]));
         } catch (cacheError) {
           console.error('Failed to parse cached checklist data.', cacheError);
         }
@@ -99,7 +107,8 @@ export default function ChecklistScreen() {
 
   useEffect(() => {
     void fetchChecklist();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId]);
 
   const toggleTask = async (taskId: string, currentStatus: boolean) => {
     const nextStatus = !currentStatus;
@@ -110,19 +119,7 @@ export default function ChecklistScreen() {
     setTasks(updatedTasks);
     await AsyncStorage.setItem(CHECKLIST_CACHE_KEY, JSON.stringify(updatedTasks));
 
-    try {
-      const { error } = await supabase
-        .from('checklist_item')
-        .update({ completion_status: nextStatus ? 'true' : 'false' })
-        .eq(
-          tasks.find((task) => task.id === taskId)?.databaseKey ?? 'checklist_item_id',
-          tasks.find((task) => task.id === taskId)?.databaseId ?? taskId,
-        );
-
-      if (error) throw error;
-    } catch (error) {
-      console.error('Failed to sync checklist item to Supabase.', error);
-    }
+    if (userId) await setDone(userId, taskId, nextStatus);
   };
 
   const completedCount = tasks.filter((task) => task.completion_status).length;

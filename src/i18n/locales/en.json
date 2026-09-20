@@ -132,7 +132,10 @@
     "share": "Share",
     "ok": "OK",
     "vs": "vs",
-    "and": "and"
+    "and": "and",
+    "saving": "Saving...",
+    "creating": "Creating...",
+    "sending": "Sending..."
   },
   "home": {
     "brand": "Campus Companion",
@@ -644,7 +647,15 @@
     "broadcasts": "Mentor Broadcasts",
     "broadcastsSub": "Important updates from your mentor",
     "readOnly": "Only mentors can send messages to this group. Students can read broadcasts but cannot reply.",
-    "confirmJoin": "Send a request to join {{name}}?"
+    "confirmJoin": "Send a request to join {{name}}?",
+    "groupGone": "This mentor group is not available.",
+    "groupGoneText": "It may have been closed, or you may not have access to it.",
+    "membersOf": "{{count}} of {{max}} members",
+    "noBroadcasts": "No announcements from your mentor yet.",
+    "removedTitle": "You were removed from the group",
+    "removedText": "Your mentor removed you from this group. You can ask to join another one.",
+    "notAsked": "You have not asked to join a group yet",
+    "notAskedText": "Find a group for your programme, or scan the QR code your mentor gave you."
   },
   "buddy": {
     "actions": {
@@ -904,7 +915,8 @@
     "confirmApprove": "Add {{name}} to this mentor group?",
     "added": "{{name}} has been added to the group.",
     "confirmReject": "Reject {{name}}'s request?",
-    "rejectedNamed": "{{name}}'s request has been rejected."
+    "rejectedNamed": "{{name}}'s request has been rejected.",
+    "notSetUp": "Mentor groups need the latest database script. Ask an administrator to run setup_all.sql."
   },
   "schedule": {
     "tabOrientation": "Orientation",
@@ -1043,7 +1055,14 @@
     "blurb": "Yellow means you are invited, not obliged. If you do have to miss something, that is survivable — tell a lecturer or your FYS buddy early and they will help you catch up.",
     "addedByYou": "Added by you",
     "removeText": "\"{{title}}\" will be taken off your calendar.",
-    "tapRemove": "{{title}}. Tap to remove."
+    "tapRemove": "{{title}}. Tap to remove.",
+    "upNext": "Up next",
+    "upNextNone": "Nothing coming up. Pin a campus event, or add a plan of your own.",
+    "countOne": "1 thing on this day",
+    "countMany": "{{count}} things on this day",
+    "alsoOn": "Also on campus",
+    "alsoOnHint": "Campus events you have not pinned. Pin one to keep it on your calendar.",
+    "toggleKind": "Show or hide {{kind}}"
   },
   "search": {
     "showLess": "Show less",
@@ -1649,5 +1668,13 @@
       },
       "tip": "You are responsible for everything you hand in, including any mistakes an AI tool made for you."
     }
+  },
+  "pin": {
+    "pin": "Pin to my calendar",
+    "pinned": "Pinned to your calendar",
+    "added": "Pinned. You will find it on your calendar.",
+    "removed": "Removed from your calendar.",
+    "pinLabel": "Pin {{title}} to your calendar",
+    "unpinLabel": "Unpin {{title}} from your calendar"
   }
 }

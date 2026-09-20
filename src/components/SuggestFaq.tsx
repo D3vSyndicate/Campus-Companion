@@ -84,7 +84,7 @@ export function SuggestFaq({ initialQuestion = '', onDone }: Props) {
           disabled={sending}
           style={[styles.primary, { backgroundColor: colors.accent }, sending && styles.disabled]}
         >
-          <Text style={styles.primaryText}>{sending ? 'Sending...' : t('suggest.send')}</Text>
+          <Text style={styles.primaryText}>{sending ? t('common.sending') : t('suggest.send')}</Text>
         </TouchableOpacity>
         <TouchableOpacity accessibilityRole="button" onPress={onDone} disabled={sending} style={styles.secondary}>
           <Text style={[styles.secondaryText, { color: colors.text }]}>{t('common.cancel')}</Text>

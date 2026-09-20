@@ -9,7 +9,9 @@ import {
   Text,
   View,
 } from 'react-native';
+import { PageHeader } from '../../../components/PageHeader';
 import { useAuth } from '../../../context/AuthContext';
+import { fetchOpenGroups } from '../../../lib/mentorGroups';
 import { supabase } from '../../../lib/superbase';
 import { useTheme } from '../../../theme/ThemeContext';
 import { useTranslation } from 'react-i18next';
@@ -39,27 +41,15 @@ export default function MentorGroupsListScreen() {
     let active = true;
 
     void (async () => {
-      const [{ data: groupData }, { data: requestData }] = await Promise.all([
-        supabase.from('mentor_groups').select('id, name, programme, description, max_capacity').eq('is_active', true).order('created_at', { ascending: false }),
+      const [{ groups: open }, { data: requestData }] = await Promise.all([
+        fetchOpenGroups(),
         supabase.from('mentor_group_requests').select('group_id').eq('student_id', user.id).eq('status', 'pending'),
       ]);
       if (!active) return;
 
-      const loadedGroups = await Promise.all((groupData ?? []).map(async (group) => {
-        const { count } = await supabase
-          .from('mentor_group_members')
-          .select('student_id', { count: 'exact', head: true })
-          .eq('group_id', group.id);
-        return {
-          id: group.id,
-          name: group.name,
-          programme: group.programme,
-          mentor: 'Student Mentor',
-          description: group.description,
-          members: count ?? 0,
-          capacity: group.max_capacity,
-        };
-      }));
+      // The head count and mentor name come from the database, because a student cannot count the members
+      // of a group they are not in.
+      const loadedGroups: MentorGroup[] = open;
       if (active) {
         setGroups(loadedGroups);
         setRequestedGroups((requestData ?? []).map((request) => request.group_id));
@@ -120,49 +110,12 @@ export default function MentorGroupsListScreen() {
         { backgroundColor: colors.background },
       ]}
     >
-      {/* Header */}
-      <View
-        style={[
-          styles.header,
-          {
-            backgroundColor: colors.surface,
-            borderBottomColor: colors.border,
-          },
-        ]}
-      >
-        <Pressable
-          onPress={() => router.back()}
-          style={styles.backButton}
-        >
-          <Ionicons
-            name="arrow-back"
-            size={24}
-            color={colors.text}
-          />
-        </Pressable>
-
-        <View>
-          <Text
-            style={[styles.headerTitle, { color: colors.text }]}
-          >
-            {t('mg.findTitle')}
-          </Text>
-
-          <Text
-            style={[
-              styles.headerSubtitle,
-              { color: colors.textSecondary },
-            ]}
-          >
-            {t('mg.browse')}
-          </Text>
-        </View>
-      </View>
-
       <ScrollView
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
+        <PageHeader eyebrow={t('mg.title')} title={t('mg.findTitle')} subtitle={t('mg.browse')} showSearch={false} />
+
         {/* Intro */}
         <View style={styles.intro}>
           <Text style={[styles.title, { color: colors.text }]}>

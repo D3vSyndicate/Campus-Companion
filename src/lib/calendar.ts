@@ -30,6 +30,8 @@ export interface CalendarEntry {
   end: string;
   venue: string;
   detail: string;
+  // For a campus event: the event's own id, which is what a pin is stored against.
+  sourceId?: string;
 }
 
 // The wording here is doing real work. A first-year opening a full calendar is often already
@@ -157,10 +159,14 @@ export interface CalendarData {
   // Weekdays (1-7) the timetable has no rows for at all, so the screen can say the data is missing
   // rather than implying the student is free.
   uncoveredWeekdays: number[];
+  // Campus events the student has not pinned, by day. They are offered under the day, not on the grid.
+  otherByDate: Map<string, CalendarEntry[]>;
+  // The next few things coming up, from now on.
+  upNext: CalendarEntry[];
   refreshPersonal: () => Promise<void>;
 }
 
-export function useCalendar(year: number, month: number, stream: string | null): CalendarData {
+export function useCalendar(year: number, month: number, stream: string | null, pinned: ReadonlySet<string>): CalendarData {
   const { user } = useAuth();
   const userId = user?.id;
 
@@ -213,6 +219,7 @@ export function useCalendar(year: number, month: number, stream: string | null):
         .filter((event) => event.date)
         .map((event) => ({
           id: `event-${event.id}`,
+          sourceId: event.id,
           kind: 'event' as const,
           title: event.title,
           date: event.date,
@@ -241,28 +248,50 @@ export function useCalendar(year: number, month: number, stream: string | null):
 
   const streamSlots = slotsForStream(stream);
 
-  const all = [
-    ...fixed,
-    ...expandTimetable(streamSlots, year, month),
-    ...personal.map(personalToEntry),
-  ];
+  // Orientation, lectures and the student's own plans are always on the calendar. A campus event is an
+  // invitation, so it only goes on once they pin it.
+  const isShown = (entry: CalendarEntry) => entry.kind !== 'event' || pinned.has(entry.sourceId ?? '');
+  const shownFixed = fixed.filter(isShown);
+  const personalEntries = personal.map(personalToEntry);
 
-  const byDate = new Map<string, CalendarEntry[]>();
-  for (const entry of all) {
-    const list = byDate.get(entry.date);
-    if (list) list.push(entry);
-    else byDate.set(entry.date, [entry]);
-  }
-  // Untimed entries sort last, so a day reads in the order it will actually happen.
-  for (const list of byDate.values()) {
-    list.sort((a, b) => (a.start || '99:99').localeCompare(b.start || '99:99'));
-  }
+  const all = [...shownFixed, ...expandTimetable(streamSlots, year, month), ...personalEntries];
+
+  const group = (entries: CalendarEntry[]) => {
+    const map = new Map<string, CalendarEntry[]>();
+    for (const entry of entries) {
+      const list = map.get(entry.date);
+      if (list) list.push(entry);
+      else map.set(entry.date, [entry]);
+    }
+    // Untimed entries sort last, so a day reads in the order it will actually happen.
+    for (const list of map.values()) list.sort((x, y) => (x.start || '99:99').localeCompare(y.start || '99:99'));
+    return map;
+  };
+
+  const byDate = group(all);
+  const otherByDate = group(fixed.filter((entry) => !isShown(entry)));
+
+  const now = new Date();
+  const today = toIso(now);
+  const nowHm = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+  const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+  const upNext = [
+    ...shownFixed,
+    ...personalEntries,
+    ...expandTimetable(streamSlots, now.getFullYear(), now.getMonth()),
+    ...expandTimetable(streamSlots, nextMonth.getFullYear(), nextMonth.getMonth()),
+  ]
+    .filter((entry) => entry.date > today || (entry.date === today && (entry.end || entry.start || '99:99') >= nowHm))
+    .sort((x, y) => `${x.date} ${x.start || '99:99'}`.localeCompare(`${y.date} ${y.start || '99:99'}`))
+    .slice(0, 3);
 
   return {
     loading,
     byDate,
     streams: STREAMS,
     uncoveredWeekdays: WEEKDAYS_WITHOUT_DATA,
+    otherByDate,
+    upNext,
     refreshPersonal,
   };
 }

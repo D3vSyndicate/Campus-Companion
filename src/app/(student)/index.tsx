@@ -28,6 +28,7 @@ import { ShuttleCard } from '../../components/ShuttleCard';
 import { useAppearance } from '../../context/AppearanceContext';
 import { useAuth } from '../../context/AuthContext';
 import { isRecent, newestFirst, postedAtOf, postedLabel, useSeenAnnouncements } from '../../lib/announcements';
+import { readDone, setDone } from '../../lib/checklistProgress';
 import { useReadiness } from '../../lib/readiness';
 import { supabase } from '../../lib/superbase';
 import { useTheme } from '../../theme/ThemeContext';
@@ -663,6 +664,9 @@ export default function HomeScreen() {
       return;
     }
 
+    // Ticks belong to the student, not to the shared task row.
+    const done = user?.id ? await readDone(user.id) : new Set<string>();
+
     const tasks = (data ?? []).map((row, index) => {
       const item = row as Record<string, unknown>;
       const databaseKey: 'checklist_item_id' | 'id' = item.checklist_item_id != null ? 'checklist_item_id' : 'id';
@@ -673,7 +677,7 @@ export default function HomeScreen() {
         databaseKey,
         task_description: String(item.task_description ?? ''),
         category: String(item.category ?? item.support_category ?? 'General'),
-        completion_status: item.completion_status === true || item.completion_status === 'true',
+        completion_status: done.has(databaseId),
       };
     });
 
@@ -683,7 +687,7 @@ export default function HomeScreen() {
       completed: tasks.filter((task) => task.completion_status).length,
       loading: false,
     });
-  }, []);
+  }, [user?.id]);
 
   const toggleChecklistTask = useCallback(async (taskId: string, currentStatus: boolean) => {
     const nextStatus = !currentStatus;
@@ -702,18 +706,8 @@ export default function HomeScreen() {
       };
     });
 
-    const { error } = await supabase
-      .from('checklist_item')
-      .update({ completion_status: nextStatus ? 'true' : 'false' })
-      .eq(
-        checklistItems.find((task) => task.id === taskId)?.databaseKey ?? 'checklist_item_id',
-        checklistItems.find((task) => task.id === taskId)?.databaseId ?? taskId,
-      );
-
-    if (error) {
-      console.error('Failed to sync home checklist item to Supabase.', error);
-    }
-  }, [checklistItems]);
+    if (user?.id) await setDone(user.id, taskId, nextStatus);
+  }, [user?.id]);
 
   useEffect(() => {
     void fetchChecklistSummary();

@@ -3,6 +3,8 @@ import { useRouter, useSegments } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import { Image, Linking, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useTheme } from '../theme/ThemeContext';
+import { useToast } from '../context/ToastContext';
+import { usePinnedEvents } from '../lib/pins';
 import { CampusActionButton } from './CampusActionButton';
 import { ScaledText as Text } from './ScaledText';
 import { ShameResilientBanner } from './ShameResilientBanner';
@@ -109,6 +111,8 @@ export function EventsList({ events, focusId = '' }: { events: CampusEvent[]; fo
   // The list is shared with the buddy (mentor) app, so stay inside the caller's own area.
   const mapRoute = segments[0] === '(mentor)' ? '/(mentor)/map' : '/(student)/map';
 
+  const { isPinned, toggle: togglePin } = usePinnedEvents();
+  const { showToast } = useToast();
   const [category, setCategory] = useState('All');
   const [openIds, setOpenIds] = useState<Set<string>>(() => new Set(focusId ? [focusId] : []));
   const [brokenImages, setBrokenImages] = useState<Set<string>>(new Set());
@@ -159,12 +163,19 @@ export function EventsList({ events, focusId = '' }: { events: CampusEvent[]; fo
   const isHappeningNow = (event: CampusEvent) =>
     event.date === toIso(now) && Boolean(event.start) && Boolean(event.end) && event.start <= toHm(now) && toHm(now) <= event.end;
 
+  // Pinning puts the event on the student's calendar. An event with no date yet has no day to go on.
+  const pin = async (event: CampusEvent) => {
+    const nowPinned = await togglePin(event.id);
+    showToast(nowPinned ? t('pin.added') : t('pin.removed'), 'info');
+  };
+
   const renderEvent = (event: CampusEvent) => {
     const date = event.date ? parseDate(event.date) : null;
     const colour = categoryColour(event.category);
     const open = openIds.has(event.id);
     const focused = focusId === event.id;
     const live = isHappeningNow(event);
+    const pinnedNow = isPinned(event.id);
     const place = where(event);
 
     return (
@@ -194,6 +205,11 @@ export function EventsList({ events, focusId = '' }: { events: CampusEvent[]; fo
               <View style={[styles.badge, { backgroundColor: `${colour}22` }]}>
                 <Text style={[styles.badgeText, { color: colour }]}>{event.category}</Text>
               </View>
+              {pinnedNow ? (
+                <View style={[styles.badge, { backgroundColor: `${colour}22` }]} accessibilityLabel={t('pin.pinned')}>
+                  <Ionicons name="pin" size={12} color={colour} />
+                </View>
+              ) : null}
               {live ? (
                 <View style={[styles.badge, { backgroundColor: '#DC262622' }]}>
                   <Text style={[styles.badgeText, { color: '#DC2626' }]}>{t('events.now')}</Text>
@@ -214,6 +230,17 @@ export function EventsList({ events, focusId = '' }: { events: CampusEvent[]; fo
               </View>
             ) : null}
           </View>
+          {event.date ? (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={pinnedNow ? t('pin.unpinLabel', { title: event.title }) : t('pin.pinLabel', { title: event.title })}
+              onPress={() => void pin(event)}
+              hitSlop={6}
+              style={({ pressed }) => [styles.pinButton, pressed && { opacity: 0.6 }]}
+            >
+              <Ionicons name={pinnedNow ? 'pin' : 'pin-outline'} size={20} color={pinnedNow ? colour : colors.textSecondary} />
+            </Pressable>
+          ) : null}
           <Ionicons name={open ? 'chevron-up' : 'chevron-down'} size={18} color={colors.textSecondary} />
         </Pressable>
 
@@ -232,6 +259,9 @@ export function EventsList({ events, focusId = '' }: { events: CampusEvent[]; fo
             {event.organizer ? <Text style={[styles.meta, { color: colors.textSecondary }]}>{t('events.organisedBy')} {event.organizer}</Text> : null}
             {event.cost ? <Text style={[styles.meta, { color: colors.textSecondary }]}>{t('events.cost')} {event.cost}</Text> : null}
             <View style={styles.actions}>
+              {event.date ? (
+                <CampusActionButton icon={pinnedNow ? 'pin' : 'pin-outline'} label={pinnedNow ? t('pin.pinned') : t('pin.pin')} primary={!pinnedNow} onPress={() => void pin(event)} />
+              ) : null}
               {event.venue ? <CampusActionButton icon="location-outline" label={t('events.showWhere')} primary onPress={() => showOnMap(event.venue)} /> : null}
               {event.link ? (
                 <CampusActionButton icon="open-outline" label={t('events.signUp')} onPress={() => Linking.openURL(event.link).catch(() => undefined)} />
@@ -298,6 +328,7 @@ const styles = StyleSheet.create({
   dateDay: { fontSize: 20, fontWeight: '800', lineHeight: 24 },
   dateMonth: { fontSize: 10, fontWeight: '800', letterSpacing: 0.8 },
   copy: { flex: 1, minWidth: 0 },
+  pinButton: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center' },
   badgeRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 4 },
   badge: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: 8 },
   badgeText: { fontSize: 10, fontWeight: '800' },

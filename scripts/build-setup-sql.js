@@ -22,6 +22,9 @@ const parts = [
   ['supabase/migrations/20260919150000_shuttle_times_2026.sql', 'Shuttle times: the real 2026 Gqeberha schedule'],
   ['supabase/migrations/20260920100000_emergency_contacts.sql', 'Emergency contacts: the national help numbers, editable by staff'],
   ['supabase/mentor_groups.sql', 'Mentor groups, join requests and QR codes'],
+  ['supabase/migrations/20260920130000_mentor_groups_live.sql', 'Mentor groups live: names, members, requests, QR codes and announcements'],
+  // Last, so it can remove the old shared-tick rule that the earlier parts create.
+  ['supabase/migrations/20260920120000_checklist_progress.sql', 'Checklist progress: each student keeps their own ticks'],
 ];
 
 const read = (file) => fs.readFileSync(path.join(root, file), 'utf8').replace(/\r\n/g, '\n').trimEnd();
