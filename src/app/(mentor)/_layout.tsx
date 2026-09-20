@@ -72,6 +72,7 @@ export default function MentorLayout() {
         <Tabs.Screen name="map" options={{ href: null, title: 'Campus map' }} />
         <Tabs.Screen name="search" options={{ href: null, title: 'Search' }} />
         <Tabs.Screen name="guide" options={{ href: null, title: 'Buddy guide' }} />
+        <Tabs.Screen name="emergency" options={{ href: null, title: 'Emergency contacts' }} />
         <Tabs.Screen name="mentorGroup/index" options={{ href: null, title: 'Tribe' }} />
         <Tabs.Screen name="mentorGroup/create" options={{ href: null, title: 'Tribe' }} />
         <Tabs.Screen name="mentorGroup/group" options={{ href: null, title: 'Tribe' }} />

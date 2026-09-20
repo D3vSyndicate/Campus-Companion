@@ -24,8 +24,8 @@
     "faqsTitle": "Imibuzo edla ngokubuzwa",
     "faqsSubtitle": "Khangela imibuzo malunga neFunda, iindawo, iishedyuli nenkxaso.",
     "digitalTitle": "Ukulungela idijithali",
-    "digitalSubtitle": "Lungisa izixhobo oza kuzisebenzisa ekufundeni nakubomi baseyunivesithi."
-    ,"savedSchedule": "Ubona idatha egciniweyo yeshedyuli kuba unxibelelwano alukho ngoku.",
+    "digitalSubtitle": "Lungisa izixhobo oza kuzisebenzisa ekufundeni nakubomi baseyunivesithi.",
+    "savedSchedule": "Ubona idatha egciniweyo yeshedyuli kuba unxibelelwano alukho ngoku.",
     "missedSession": "Ukuba uphoswa yiseshoni, ungakhathazeki. Iindlela zokuyifumana zidweliswe ngezantsi.",
     "pastSession": "Le seshoni idlulile. Ungaphonononga izinto kwiFunda okanye ubuze umcebisi.",
     "directions": "Ndibonise apho ndiya khona",
@@ -39,21 +39,17 @@
     "searchFaqs": "Khangela imibuzo (umz. Funda, iindawo, ishedyuli)...",
     "openLink": "Vula",
     "digitalUnavailable": "Ulwazi lwedijithali alukafumaneki. Nceda uzame kwakhona kamva.",
-    "digitalBanner": "Wonke umntu uqala engumqali ngetekhnoloji yaseyunivesithi."
-    ,"orientation": "UKUQHELANA",
+    "digitalBanner": "Wonke umntu uqala engumqali ngetekhnoloji yaseyunivesithi.",
+    "orientation": "UKUQHELANA",
     "firstSteps": "AMANYATHELO AKHO OKUQALA",
-    "notAlone": "AWUKHO wedwa",
+    "notAlone": "AWUWEDWA",
     "quickAnswer": "UFUNA IMPENDULO EKHAWULEZAYO?",
-    "getConnected": "QHAGAMSHELANA"
-    ,"goodMorning": "Molweni kusasa",
+    "getConnected": "QHAGAMSHELANA",
+    "goodMorning": "Molweni kusasa",
     "goodAfternoon": "Molo emini",
     "goodEvening": "Molweni ngokuhlwa",
     "schoolOfIt": "ISIKOLO SE-IT",
-    "campusCompanion": "UMKHAPHI WEKAMPASI",
-    "startStrong": "Qala ngamandla.",
-    "stayConnected": "Hlala unxibelelene.",
-    "weekSubtitle": "Yonke into oyifunayo kwiveki yakho yokuqala, ikwindawo enye.",
-    "campusStatus": "Umkhaphi wakho wekampasi",
+    "campusCompanion": "CAMPUS COMPANION",
     "supportBanner": "Uziva ungaqinisekanga ukuba uyephi okanye ubuze ntoni? Kuxhaphakile oko. Thatha inyathelo elinye ngexesha.",
     "latest": "EZINTSHA",
     "new": "ENTSHA",
@@ -66,10 +62,296 @@
     "checklistTitleShort": "Uluhlu lwabafundi abatsha",
     "checklistSubtitleShort": "Gcina umkhondo wezinto ezibalulekileyo ngesantya sakho.",
     "contactsTitleShort": "Fumana uncedo nenkxaso",
-    "contactsSubtitleShort": "Qhagamshelana nabacebisi nabacebisi.",
+    "contactsSubtitleShort": "Thetha nomkhokeli okanye umcebisi. Akufuneki uyisombulule wedwa.",
     "digitalTitleShort": "Izixhobo zedijithali",
     "digitalSubtitleShort": "Lungisa iFunda, i-eduroam, iilebhu ne-OneDrive.",
     "faqsTitleShort": "Imibuzo eqhelekileyo",
-    "faqsSubtitleShort": "Iimpendulo ezikhawulezayo malunga nekhampasi nenkxaso."
+    "faqsSubtitleShort": "Iimpendulo ezikhawulezayo malunga nekhampasi nenkxaso.",
+    "programmesTitle": "Iinkqubo zeSikolo se-IT",
+    "programmesSubtitle": "Okuqulathwe yinkqubo nganye, imisebenzi, nokuba ubuza bani ngengcebiso.",
+    "eventsTitle": "Iziganeko zekhampasi",
+    "eventsSubtitle": "Jonga okwenzekayo ekhampasini, nini nakuphi.",
+    "sportGymTitle": "Ezemidlalo ne-gym",
+    "sportGymSubtitle": "Fumana umdlalo okanye iklabhu, ubhalisele i-gym.",
+    "allCategories": "Konke",
+    "noMatchingAnswers": "Akukho mpendulo ehambelanayo",
+    "noMatchingHint": "Zama elinye igama, okanye ubuze kwiNkxaso. Yonke imibuzo ilungile.",
+    "noFaqsYet": "Akukabikho mibuzo epapashiweyo",
+    "noFaqsHint": "Iimpendulo eziqhelekileyo zekhampasi ziya kuvela apha xa zikhona.",
+    "manyAsk": "Abafundi abatsha abaninzi babuza lo mbuzo.",
+    "needHelpWith": "Ndifuna uncedo ngo...",
+    "needHelpHint": "Khetha elona lifanelekileyo. Ukucela uncedo kufuna isibindi, kwaye ukucela kwangoko kuhlakaniphile.",
+    "yourNextStep": "Inyathelo lakho elilandelayo",
+    "whoToAsk": "Ukubuza bani",
+    "alsoSee": "Jonga nakwezi",
+    "map": "Imephu",
+    "showOnCampusMap": "Bonisa kwimephu yekhampasi",
+    "seeRelatedFaqs": "Jonga imibuzo enxulumeneyo",
+    "openResource": "Vula isixhobo",
+    "peopleWhoCanHelp": "Abantu abanokukunceda",
+    "shuttleTitle": "Amaxesha e-shuttle",
+    "shuttleNext": "I-shuttle elandelayo ngo-{{time}} - {{route}}",
+    "shuttleTomorrow": "Akusekho zi-shuttle namhlanje. Eyokuqala ngomso ngo-{{time}}.",
+    "shuttleNoneInShift": "Akukho zi-shuttle ezidwelisiweyo kweli xesha okwangoku.",
+    "shift_morning": "Kusasa",
+    "shift_afternoon": "Emini",
+    "shift_night": "Ebusuku",
+    "allGuides": "Zonke izikhokelo",
+    "guideComingSoon": "Isikhokelo siyeza kungekudala",
+    "guideComingSoonHint": "Esi sikhokelo sisalungiselelwa. Okwangoku, buza umkhokeli okanye utyelele ithebhu yeNkxaso.",
+    "stepOf": "Inyathelo {{current}} kwe-{{total}}",
+    "goToStep": "Yiya kwinyathelo {{number}}",
+    "stepDone": "Kugqityiwe - wenze kakuhle",
+    "markStepDone": "Phawula eli nyathelo njengeligqityiweyo",
+    "previous": "Okwangaphambili",
+    "next": "Okulandelayo",
+    "moduleComplete": "Ugqibile \"{{title}}\". Le yinkqubela yokwenene.",
+    "readinessWelcome": "Wamkelekile! Qala apha. Ezi zikhokelo zimfutshane zikunceda uziphathe kakuhle ngetekhnoloji oza kuyisebenzisa yonke imihla. Zithathe ngesantya sakho.",
+    "readinessLoadError": "Izikhokelo azilayishwanga ngoku. Jonga unxibelelwano lwakho uzame kwakhona kwimizuzwana embalwa.",
+    "startHereTitle": "Uyintsha apha? Qala apha",
+    "startHereHint": "Izikhokelo ezimfutshane ngokusebenzisa ikhompyutha, iFunda, ukuprinta ne-Wi-Fi.",
+    "readinessProgress": "Izikhokelo ezivuliweyo ziyi-{{done}} kwezi-{{total}}. Inyathelo elinye ngexesha.",
+    "readinessSoon": "Izikhokelo ziyalungiswa. Buya kungekudala.",
+    "allStepsDone": "Onke amanyathelo agqityiwe",
+    "stepsDoneOf": "Amanyathelo agqityiweyo ayi-{{done}} kwa-{{total}}",
+    "studyTips": "Amacebiso okufunda",
+    "readinessDoneTitle": "Ukulungela idijithali kugqityiwe",
+    "readinessDoneHint": "Ugqibe zonke izikhokelo. Ungabuyela nakweyiphi na.",
+    "venueToBeConfirmed": "Indawo iza kuqinisekiswa",
+    "notSureWhereTitle": "Awuqinisekanga ukuba ikuphi le ndawo?",
+    "openMap": "Vula imephu",
+    "startHereEyebrow": "WAMKELEKILE",
+    "startHereCta": "Qalisa izikhokelo",
+    "startHereContinue": "Qhubeka"
+  },
+  "home": {
+    "brand": "Campus Companion",
+    "heroLine1": "Unendawo apha.",
+    "heroLine2": "Inyathelo elinye ngexesha.",
+    "heroSubtitle": "Yonke into yeveki yakho yokuqala ikule ndawo. Awuqinisekanga ukuba uqala phi? Khangela, okanye vula iNkxaso. Ukubuza kuhlala kulungile.",
+    "smallerText": "Umbhalo omncinci",
+    "largerText": "Umbhalo omkhulu",
+    "themeButton": "Imbonakalo: {{mode}}. Cofa ukuze utshintshe.",
+    "checklistEyebrow": "Uluhlu",
+    "checklistTitle": "Uluhlu lwakho loqhelaniso",
+    "checklistDone": "Ugqibe yonke into. Wenze kakuhle!",
+    "checklistHint": "Cofa umsebenzi ukuze uwuphawule, okanye vula uluhlu olupheleleyo. Akukho kungxama.",
+    "cards": {
+      "department": {
+        "title": "Evela kwisebe lakho",
+        "subtitle": "Okulindelekileyo, imisebenzi neenkcukacha zoqhagamshelwano ezivela kwintloko yesebe lakho."
+      },
+      "calendar": {
+        "title": "Ikhalenda yam",
+        "subtitle": "Iintetho, i-orientation, iziganeko neenkqubo zakho kwimbonakalo yenyanga enye."
+      },
+      "shuttles": {
+        "title": "Funda iishathile zakho",
+        "subtitle": "Amaxesha, into oyifunayo ukuze ukhwele, nokuba wenza ntoni xa udungekile."
+      },
+      "societies": {
+        "title": "Imibutho",
+        "subtitle": "Ukholo, intsimi yakho yezifundo, okanye into eyahlukileyo kwaphela."
+      },
+      "aiGuide": {
+        "title": "Ukusebenzisa i-AI kwizifundo zakho",
+        "subtitle": "Ukuba isixhobo ngasinye silungele ntoni, nokuba yintoni enokubangela ingxaki."
+      },
+      "arcade": {
+        "title": "IMadibaz Arcade",
+        "subtitle": "Dlala umdlalo ongxamisekileyo uvule inyaniso ngeyunivesithi yakho."
+      }
+    },
+    "noteTitle": "Umyalezo wakho",
+    "readMore": "Cofa ukufunda ngakumbi",
+    "openChat": "Vula umncedisi wencoko"
+  },
+  "appearance": {
+    "system": "Ngokwefowuni",
+    "light": "Ukukhanya",
+    "dark": "Ubumnyama"
+  },
+  "emergency": {
+    "eyebrow": "AWUWEDWA",
+    "title": "Iinombolo zongxamiseko",
+    "subtitle": "Ukucela uncedo kufuna isibindi. Nokuba kuyenzeka ntoni, uncedo lukwikholi enye kuphela, kwaye akukho namnye oya kukugweba.",
+    "dangerTitle": "Usemngciphekweni ngoku?",
+    "dangerText": "Yiya kwindawo ekhuselekileyo ukuba unako, uze ufowune. Akufuneki uchaze yonke into.",
+    "call": "Fowunela",
+    "callNumber": "Fowunela {{name}} kwi-{{phone}}",
+    "hours24": "Iiyure ezingama-24",
+    "footer": "Iinombolo zinokutshintsha. Ukuba enye ayisebenzi, byela umkhokeli okanye abaququzeleli ukuze ilungiswe.",
+    "back": "Buyela",
+    "homeTitle": "Ufuna uncedo olungxamisekileyo?",
+    "homeText": "Iinombolo zongxamiseko nezengcebiso. Ukufowuna kufuna isibindi, akukho mntu oya kukugweba.",
+    "loginLink": "Ufuna uncedo olungxamisekileyo? Iinombolo zongxamiseko",
+    "categories": {
+      "emergency-services": "Iinkonzo zongxamiseko",
+      "mental-health": "Impilo yengqondo",
+      "abuse-and-violence": "Ukuxhatshazwa nobundlobongela",
+      "campus": "Ikhampasi"
+    },
+    "tapHint": "Cofa nayiphi na ikhadi ukufowuna. Ifowuni yakho iza kukubuza ukuqinisekisa ngaphambi kokudayela."
+  },
+  "auth": {
+    "enterBoth": "Nceda ufake i-imeyile negama lakho lokugqitha ukuze sikungenise.",
+    "emailFormat": "Le imeyile ayibonakali ichanekile. Kufuneka ibonakale njenge-name@mandela.ac.za.",
+    "credentials": "Le imeyile negama lokugqitha azihambelani. Nceda uzijonge uzame kwakhona.",
+    "confirmEmail": "Nceda uqinisekise i-imeyile yakho kuqala. Sikuthumelele umyalezo onekhonkco.",
+    "notConnected": "I-app ayikwazanga ukufikelela kwinkonzo yayo. Nceda uxelele umlawuli wakho.",
+    "noRole": "I-akhawunti yakho ayikalunganga okwangoku. Awunatyala. Nceda ucele umlawuli ayigqibezele.",
+    "enterEmailFirst": "Nceda ufake idilesi yakho ye-imeyile kuqala.",
+    "resetSent": "Sithumele imiyalelo yokuseta kwakhona igama lokugqitha kwi-imeyile yakho.",
+    "welcome": "Wamkelekile! Ungenile."
+  },
+  "profile": {
+    "tab": "IProfayile",
+    "title": "IProfayile neSetingi",
+    "myAccount": "I-AKHAWUNTI YAM",
+    "notSignedIn": "Awungenanga",
+    "preferences": "IZIKHETHO",
+    "language": "Ulwimi",
+    "appearance": "Imbonakalo",
+    "textSize": "Ubungakanani bombhalo",
+    "decreaseText": "Nciphisa ubungakanani bombhalo",
+    "increaseText": "Khulisa ubungakanani bombhalo",
+    "appTour": "Uhambo lwe-app",
+    "replay": "Dlala kwakhona",
+    "replayLabel": "Dlala kwakhona uhambo lwe-app",
+    "roleStudent": "Umfundi",
+    "roleBuddy": "Umhlobo we-FYS (Umkhokeli)"
+  },
+  "logout": {
+    "action": "Phuma",
+    "confirm": "Uqinisekile ukuba ufuna ukuphuma?",
+    "stay": "Hlala ungene"
+  },
+  "tour": {
+    "skip": "Tsiba",
+    "counter": "INYATHELO {{current}} KWE-{{total}}",
+    "back": "Buyela",
+    "next": "Okulandelayo",
+    "letsGo": "Masiqale",
+    "a11y": {
+      "skip": "Tsiba uhambo",
+      "previous": "Inyathelo langaphambili",
+      "next": "Inyathelo elilandelayo",
+      "finish": "Gqibezela uhambo uqale ukusebenzisa i-app",
+      "progress": "Inyathelo {{current}} kwe-{{total}}",
+      "tabBar": "Kwibha esezantsi kwe-app, khangela ithebhu ye-{{tab}}."
+    },
+    "steps": {
+      "welcome": {
+        "title": "Wamkelekile kwi-Campus Companion",
+        "body": "Iiveki zakho zokuqala eyunivesithi zinokubonakala zininzi, kwaye oko kuqhelekile ngokupheleleyo. Le app ibeka into oyifunayo kwindawo enye. Thatha uhambo lomzuzu omnye. Awunakwenza nto ephosakeleyo.",
+        "hint": "Tsiba nangaliphi na ixesha. Ungayidlala kwakhona le nkqubo kwiProfayile yakho."
+      },
+      "home": {
+        "title": "Isiseko sakho",
+        "body": "IKhaya libonisa izaziso zamva nje, amaxesha e-shuttle esitishini sakho, kunye neencam ezikhawulezayo kuzo zonke ezinye izinto. Uphawu lwe-ENTSHA lubonisa ukuba isaziso sikhutshwe kutshanje kwaye awukasivuli.",
+        "hint": "Rola ezantsi kwiKhaya ukufumana Ezemidlalo ne-gym, iinkqubo nemibuzo."
+      },
+      "search": {
+        "title": "Fumana nantoni na ngokukhawuleza",
+        "body": "Awuqinisekanga ukuba ujonge phi? Sebenzisa ibha yokukhangela. Ikhangela iimpendulo, iindawo, iiseshoni, abantu ofowunela bona neezikhokelo, zonke ngaxeshanye.",
+        "hint": "Khangela ibha yokukhangela phezulu eKhaya."
+      },
+      "schedule": {
+        "title": "Yazi ukuba kufuneka ube phi, nini",
+        "body": "Jonga iiseshoni zakho zoqhelaniso namaxesha neendawo zazo. Tshintshela kwiziganeko zekhampasi ukubona okwenzekayo ekhampasini."
+      },
+      "map": {
+        "title": "Ungalahleki",
+        "body": "Imephu yekhampasi ibonisa izakhiwo neendawo. Fumana indawo ufumane indlela yokuhamba ngeenyawo ukuya kuyo."
+      },
+      "checklist": {
+        "title": "Phawula izinto ezibalulekileyo",
+        "body": "Uluhlu lwabafundi abatsha lubonisa into ekufuneka uyilungiselele kwiiveki zakho zokuqala, njengokubhalisa ne-imeyile yakho yomfundi. Hamba ngesantya sakho uphawule njengoko ugqiba.",
+        "hint": "Uyifumane eKhaya: Uluhlu lwabafundi abatsha."
+      },
+      "digital": {
+        "title": "Zilungiselele idijithali",
+        "body": "Izikhokelo ngenyathelo ngenyathelo zeFunda, i-Wi-Fi nokuprinta, kunye nezifundo ezimfutshane ngolawulo lweefayile, ukhuseleko kwi-intanethi, amagama okugqitha anamandla nokusebenzisa izixhobo ze-AI ngokuzibophelela."
+      },
+      "tribe": {
+        "title": "Hlangana neQela lakho",
+        "body": "IQela lakho yincoko nomkhokeli wakho nabanye abafundi bonyaka wokuqala. Ngaphambi kokuba ukhethe igama lencoko uya kuvuma ukuyigcina inembeko. Cofa Fumana amaqela ukujonga amaqela abakhokeli okanye uskeneye ikhowudi ye-QR."
+      },
+      "help": {
+        "title": "Uncedo lusoloko luseduze",
+        "body": "Awuqinisekanga ukuba ubuza bani? Vula iNkxaso, khetha into ofuna uncedo ngayo, kwaye i-app ikubonisa umntu okanye inkonzo efanelekileyo. Abafowunelwa babonisa abakhokeli nabacebisi onokuqhagamshelana nabo ngqo. Ngoncedo olungxamisekileyo, sebenzisa ikhadi ebomvu leeNombolo zongxamiseko eKhaya."
+      },
+      "profile": {
+        "title": "Yenze eyakho",
+        "body": "KwiProfayile ungatshintshela phakathi kwesiNgesi, isiXhosa nesiAfrikansi, ukhethe imo ekhanyayo okanye emnyama, wenze nombhalo ube mkhulu. Ungayidlala kwakhona le nkqubo apho nanini na."
+      }
+    }
+  },
+  "shuttle": {
+    "yourStop": "ISITISHINI SAKHO",
+    "chooseStop": "Khetha isitishini sakho",
+    "chooseHint": "Khetha isitishini sakho ukubona ukuba i-shuttle yakho isuka nini.",
+    "chooseAbove": "Khetha isitishini sakho ngasentla kwaye amaxesha akho aya kuvela apha.",
+    "changeStop": "Isitishini sakho yi-{{stop}}. Cofa ukuze usitshintshe.",
+    "beforeYouBoard": "Ngaphambi kokuba ukhwele",
+    "closeList": "Vala uluhlu lwezitishini",
+    "close": "Vala",
+    "nextShuttle": "i-shuttle elandelayo",
+    "caption": "Ikhampasi ye-{{campus}} · ishedyuli ye-{{year}}"
+  },
+  "announcements": {
+    "justNow": "Ngoku nje",
+    "minutesAgo": "kudlule imizuzu emi-{{count}}",
+    "hoursAgo": "kudlule iiyure ezi-{{count}}",
+    "yesterday": "Izolo",
+    "daysAgo": "kudlule iintsuku ezi-{{count}}",
+    "posted": "Kupapashwe {{when}}"
+  },
+  "tribe": {
+    "yourTribe": "IQELA LAKHO",
+    "mentorGroup": "Iqela lomkhokeli",
+    "members": "amalungu angama-{{count}}",
+    "findGroups": "Fumana amaqela",
+    "findGroupsSub": "Jonga amaqela abakhokeli okanye uskeneye ikhowudi ye-QR",
+    "findGroupsLabel": "Fumana amaqela okanye uskeneye ikhowudi ye-QR",
+    "loading": "Iyalayisha iQela lakho...",
+    "almostReady": "IQela lakho lisondele ukulunga",
+    "almostReadyText": "Iqela lakho lomkhokeli liya kuvela apha xa lenziwe.",
+    "chooseName": "Khetha igama lakho lencoko",
+    "updateName": "Hlaziya igama lakho lencoko",
+    "keepPrivate": "Igama lakho lokwenene, inombolo yomfundi ne-imeyile zigcine ziyimfihlo kuluntu.",
+    "namePlaceholder": "umz. Thando_23",
+    "saveName": "Gcina igama lencoko",
+    "chattingAs": "Uncokola njenge",
+    "change": "Tshintsha",
+    "you": "wena",
+    "noMessages": "Akukabikho myalezo. Qala incoko.",
+    "messagePlaceholder": "Yabelana ngento neQela lakho...",
+    "chooseFirst": "Khetha igama lencoko kuqala...",
+    "send": "Thumela umyalezo",
+    "errors": {
+      "nameRule": "Sebenzisa oonobumba, amanani okanye imigca engezantsi engama-3 ukuya kwangama-30 kwigama lakho lencoko.",
+      "nameTaken": "Eli gama lencoko selithathiwe. Zama elinye.",
+      "saveFailed": "Asikwazanga ukugcina igama lakho lencoko ngoku. Nceda uzame kwakhona.",
+      "sendFailed": "Umyalezo wakho awuthunyelwanga. Nceda uzame kwakhona.",
+      "tooLong": "Imiyalezo inokufikelela kwiinkcukacha ezingama-1,000.",
+      "loadFailed": "Asikwazanga ukuvula iQela lakho ngoku. Nceda uzame kwakhona kwimizuzwana embalwa."
+    }
+  },
+  "support": {
+    "eyebrow": "INKXASO YABAFUNDI",
+    "title": "Uncedo nenkxaso",
+    "subtitle": "Ukucela uncedo kufuna isibindi, kwaye wonke umntu uyalufuna ngamanye amaxesha. Fumana umntu okanye inkonzo efanelekileyo, kwaye akukho namnye oya kukugweba.",
+    "moreInfo": "Ulwazi olungakumbi ngenkxaso",
+    "unavailableTitle": "Ulwazi lwenkxaso alulayishwanga",
+    "unavailableText": "Nceda uzame kwakhona xa unxibelelwano lubuyile.",
+    "noneTitle": "Akukabikho zinketho zenkxaso ezipapashiweyo",
+    "noneText": "Umququzeleli wakho uza kongeza iinkonzo zenkxaso apha. Okwangoku, sebenzisa iinombolo zongxamiseko okanye ubuze umkhokeli.",
+    "adviceLabel": "Ingcebiso yezemfundo: jonga iinkqubo zeSikolo se-IT",
+    "adviceTitle": "Ufuna ingcebiso yezemfundo?",
+    "adviceText": "Jonga inkqubo yakho nokuba uthetha nabani."
+  },
+  "faq": {
+    "cantFind": "Ayifumaneki? Buza umbuzo. Abanye mhlawumbi bayazibuza nabo."
   }
 }

@@ -24,8 +24,8 @@
     "faqsTitle": "Gereelde vrae",
     "faqsSubtitle": "Soek algemene vrae oor Funda, lokale, roosters en ondersteuning.",
     "digitalTitle": "Digitale gereedheid",
-    "digitalSubtitle": "Stel die gereedskap op wat jy vir leer en kampuslewe sal gebruik."
-    ,"savedSchedule": "Jy sien gestoorde roosterdata omdat jou verbinding tans nie beskikbaar is nie.",
+    "digitalSubtitle": "Stel die gereedskap op wat jy vir leer en kampuslewe sal gebruik.",
+    "savedSchedule": "Jy sien gestoorde roosterdata omdat jou verbinding tans nie beskikbaar is nie.",
     "missedSession": "As jy 'n sessie mis, moenie bekommerd wees nie. Hersieningspaaie is hieronder.",
     "pastSession": "Hierdie sessie is verby. Hersien materiaal op Funda of vra 'n mentor.",
     "directions": "Wys my waarheen om te gaan",
@@ -39,21 +39,17 @@
     "searchFaqs": "Soek vrae (bv. Funda, lokale, rooster)...",
     "openLink": "Maak oop",
     "digitalUnavailable": "Digitale leiding is nog nie beskikbaar nie. Probeer asseblief later weer.",
-    "digitalBanner": "Almal begin as beginners met universiteitstegnologie."
-    ,"orientation": "ORIËNTERING",
+    "digitalBanner": "Almal begin as beginners met universiteitstegnologie.",
+    "orientation": "ORIËNTERING",
     "firstSteps": "JOU EERSTE STAPPE",
     "notAlone": "JY IS NIE ALLEEN NIE",
     "quickAnswer": "HET JY 'N VINNIGE ANTWOORD NODIG?",
-    "getConnected": "VERBINDING"
-    ,"goodMorning": "Goeiemôre",
+    "getConnected": "VERBINDING",
+    "goodMorning": "Goeiemôre",
     "goodAfternoon": "Goeiemiddag",
     "goodEvening": "Goeienaand",
     "schoolOfIt": "SKOOL VIR IT",
-    "campusCompanion": "KAMPUS METGESEL",
-    "startStrong": "Begin sterk.",
-    "stayConnected": "Bly verbind.",
-    "weekSubtitle": "Alles wat jy vir jou eerste week nodig het, op een plek.",
-    "campusStatus": "Jou kampus metgesel",
+    "campusCompanion": "CAMPUS COMPANION",
     "supportBanner": "Onseker waarheen om te gaan of wat om te vra? Dit is heeltemal normaal. Neem dit een stap op 'n slag.",
     "latest": "NUUTSTE",
     "new": "NUUT",
@@ -66,10 +62,363 @@
     "checklistTitleShort": "Nuwe student-kontrolelys",
     "checklistSubtitleShort": "Hou die belangrike dinge op jou eie pas dop.",
     "contactsTitleShort": "Kry hulp en ondersteuning",
-    "contactsSubtitleShort": "Verbind met mentors en adviseurs.",
+    "contactsSubtitleShort": "Praat met 'n mentor of adviseur. Jy hoef dit nie alleen uit te werk nie.",
     "digitalTitleShort": "Digitale gereedskap",
     "digitalSubtitleShort": "Stel Funda, eduroam, laboratoriums en OneDrive op.",
     "faqsTitleShort": "Algemene vrae",
-    "faqsSubtitleShort": "Vinnige antwoorde oor kampus en ondersteuning."
+    "faqsSubtitleShort": "Vinnige antwoorde oor kampus en ondersteuning.",
+    "programmesTitle": "Skool vir IT-programme",
+    "programmesSubtitle": "Wat elke program dek, loopbane, en wie om vir raad te vra.",
+    "eventsTitle": "Kampusgebeure",
+    "eventsSubtitle": "Sien wat op kampus aangaan, wanneer en waar.",
+    "sportGymTitle": "Sport en gimnasium",
+    "sportGymSubtitle": "Vind 'n sport of klub, en skryf in vir die gimnasium.",
+    "allCategories": "Almal",
+    "noMatchingAnswers": "Geen passende antwoorde nie",
+    "noMatchingHint": "Probeer 'n ander woord, of vra in die Ondersteuning-oortjie. Elke vraag is 'n goeie vraag.",
+    "noFaqsYet": "Nog geen algemene vrae gepubliseer nie",
+    "noFaqsHint": "Algemene kampusantwoorde sal hier verskyn wanneer dit beskikbaar is.",
+    "manyAsk": "Baie nuwe studente vra hierdie vraag.",
+    "needHelpWith": "Ek het hulp nodig met...",
+    "needHelpHint": "Kies wat die beste pas. Om hulp te vra verg moed, en om vroeg te vra is wys.",
+    "yourNextStep": "Jou volgende stap",
+    "whoToAsk": "Wie om te vra",
+    "alsoSee": "Sien ook",
+    "map": "Kaart",
+    "showOnCampusMap": "Wys op kampuskaart",
+    "seeRelatedFaqs": "Sien verwante vrae",
+    "openResource": "Maak hulpbron oop",
+    "peopleWhoCanHelp": "Mense wat kan help",
+    "shuttleTitle": "Pendelbus-tye",
+    "shuttleNext": "Volgende pendelbus om {{time}} - {{route}}",
+    "shuttleTomorrow": "Geen pendelbusse meer vandag nie. Die eerste een môre is om {{time}}.",
+    "shuttleNoneInShift": "Nog geen pendelbusse vir hierdie skof gelys nie.",
+    "shift_morning": "Oggend",
+    "shift_afternoon": "Middag",
+    "shift_night": "Nag",
+    "allGuides": "Alle gidse",
+    "guideComingSoon": "Gids kom binnekort",
+    "guideComingSoonHint": "Hierdie gids word nog voorberei. Vra intussen 'n mentor of besoek die Ondersteuning-oortjie.",
+    "stepOf": "Stap {{current}} van {{total}}",
+    "goToStep": "Gaan na stap {{number}}",
+    "stepDone": "Klaar - goeie werk",
+    "markStepDone": "Merk hierdie stap as voltooi",
+    "previous": "Vorige",
+    "next": "Volgende",
+    "moduleComplete": "Jy het \"{{title}}\" voltooi. Dis regte vordering.",
+    "readinessWelcome": "Welkom! Begin hier. Hierdie kort gidse help jou tuis voel met die tegnologie wat jy elke dag sal gebruik. Neem dit teen jou eie pas.",
+    "readinessLoadError": "Die gidse het nie nou gelaai nie. Kontroleer jou verbinding en probeer weer oor 'n oomblik.",
+    "startHereTitle": "Nuut hier? Begin hier",
+    "startHereHint": "Kort gidse oor rekenaarbasiese, Funda, druk en Wi-Fi.",
+    "readinessProgress": "{{done}} van {{total}} gidse oopgemaak. Een stap op 'n slag.",
+    "readinessSoon": "Gidse word voorberei. Kyk gou weer.",
+    "allStepsDone": "Alle stappe voltooi",
+    "stepsDoneOf": "{{done}} van {{total}} stappe voltooi",
+    "studyTips": "Studietips",
+    "readinessDoneTitle": "Digitale gereedheid voltooi",
+    "readinessDoneHint": "Jy het elke gids voltooi. Jy kan enige daarvan weer besoek.",
+    "venueToBeConfirmed": "Lokaal moet nog bevestig word",
+    "notSureWhereTitle": "Onseker waar dit is?",
+    "openMap": "Maak kaart oop",
+    "startHereEyebrow": "WELKOM",
+    "startHereCta": "Begin met die gidse",
+    "startHereContinue": "Gaan voort"
+  },
+  "home": {
+    "brand": "Campus Companion",
+    "heroLine1": "Jy behoort hier.",
+    "heroLine2": "Een stap op 'n slag.",
+    "heroSubtitle": "Alles vir jou eerste week is hier. Onseker waar om te begin? Soek, of maak Ondersteuning oop. Om te vra is altyd reg.",
+    "smallerText": "Kleiner teks",
+    "largerText": "Groter teks",
+    "themeButton": "Voorkoms: {{mode}}. Tik om te verander.",
+    "checklistEyebrow": "Kontrolelys",
+    "checklistTitle": "Jou oriënteringskontrolelys",
+    "checklistDone": "Jy het alles klaargemaak. Goed gedoen!",
+    "checklistHint": "Tik op 'n taak om dit af te merk, of maak die volledige kontrolelys oop. Daar is geen haas nie.",
+    "cards": {
+      "department": {
+        "title": "Van jou departement",
+        "subtitle": "Verwagtinge, opdragte en kontakte van jou hoof van departement."
+      },
+      "calendar": {
+        "title": "My kalender",
+        "subtitle": "Lesings, oriëntering, geleenthede en jou eie planne in een maandaansig."
+      },
+      "shuttles": {
+        "title": "Leer jou skuttelbusse",
+        "subtitle": "Tye, wat jy nodig het om op te klim, en wat om te doen as jy verdwaal het."
+      },
+      "societies": {
+        "title": "Verenigings",
+        "subtitle": "Geloof, jou studieveld, of iets heeltemal anders."
+      },
+      "aiGuide": {
+        "title": "Gebruik van KI vir jou studies",
+        "subtitle": "Waarvoor elke instrument goed is, en wat jou in die moeilikheid kan bring."
+      },
+      "arcade": {
+        "title": "Madibaz-arkade",
+        "subtitle": "Speel 'n vinnige speletjie en ontsluit 'n feit oor jou universiteit."
+      }
+    },
+    "noteTitle": "'n Nota vir jou",
+    "readMore": "Tik om meer te lees",
+    "openChat": "Maak die geselsassistent oop"
+  },
+  "appearance": {
+    "system": "Soos foon",
+    "light": "Lig",
+    "dark": "Donker"
+  },
+  "emergency": {
+    "eyebrow": "JY IS NIE ALLEEN NIE",
+    "title": "Noodkontakte",
+    "subtitle": "Om uit te reik verg moed. Wat ook al gebeur, hulp is 'n oproep weg, en niemand sal jou veroordeel nie.",
+    "dangerTitle": "In gevaar op die oomblik?",
+    "dangerText": "Gaan na 'n veilige plek as jy kan, en bel dan. Jy hoef nie alles te verduidelik nie.",
+    "call": "Bel",
+    "callNumber": "Bel {{name}} by {{phone}}",
+    "hours24": "24 uur",
+    "footer": "Nommers kan verander. As een nie werk nie, sê vir 'n mentor of die koördineerders sodat dit reggemaak kan word.",
+    "back": "Terug",
+    "homeTitle": "Het jy dringende hulp nodig?",
+    "homeText": "Nood- en beradingsnommers. Om te bel verg moed, en niemand sal jou veroordeel nie.",
+    "loginLink": "Het jy dringende hulp nodig? Noodkontakte",
+    "categories": {
+      "emergency-services": "Nooddienste",
+      "mental-health": "Geestesgesondheid",
+      "abuse-and-violence": "Mishandeling en geweld",
+      "campus": "Kampus"
+    },
+    "items": {
+      "112": {
+        "name": "Nooddienste",
+        "description": "Polisie, ambulans of brandweer. Werk vanaf enige selfoon."
+      },
+      "10111": {
+        "name": "Polisie (SAPD)",
+        "description": "Rapporteer 'n misdaad of vra die polisie vir hulp."
+      },
+      "10177": {
+        "name": "Ambulans",
+        "description": "Mediese noodgevalle."
+      },
+      "0800567567": {
+        "name": "Selfmoordkrisislyn (SADAG)",
+        "description": "As jy daaraan dink om jou lewe te beëindig, of jy bekommerd is oor iemand wat so dink. Jy sal nie veroordeel word nie."
+      },
+      "0800212223": {
+        "name": "Geestesgesondheidhulplyn (SADAG)",
+        "description": "Gratis berading en ondersteuning vir stres, angs, 'n lae gemoed en meer."
+      },
+      "0861322322": {
+        "name": "Lifeline-berading",
+        "description": "Vertroulike berading van opgeleide vrywilligers, wanneer jy iemand nodig het om mee te praat."
+      },
+      "0800428428": {
+        "name": "GBV-bevelsentrum",
+        "description": "Gratis, vertroulike hulp as jy of iemand wat jy ken geslagsgebaseerde geweld ervaar."
+      },
+      "27415041111": {
+        "name": "Universiteit se sentrale",
+        "description": "Die universiteit se hoofnommer, as jy nie seker is wie om te bel nie."
+      }
+    },
+    "tapHint": "Tik op enige kaart om te bel. Jou foon vra jou om te bevestig voordat dit bel."
+  },
+  "auth": {
+    "enterBoth": "Voeg asseblief jou e-pos en wagwoord by sodat ons jou kan aanmeld.",
+    "emailFormat": "Daardie e-pos lyk nie heeltemal reg nie. Dit moet lyk soos naam@mandela.ac.za.",
+    "credentials": "Daardie e-pos en wagwoord stem nie ooreen nie. Kontroleer dit asseblief en probeer weer.",
+    "confirmEmail": "Bevestig asseblief eers jou e-pos. Ons het vir jou 'n boodskap met 'n skakel gestuur.",
+    "notConnected": "Die toep kon nie sy diens bereik nie. Sê asseblief vir jou administrateur.",
+    "noRole": "Jou rekening is nog nie gereed nie. Dis nie jou skuld nie. Vra asseblief 'n administrateur om dit klaar op te stel.",
+    "enterEmailFirst": "Voeg asseblief eers jou e-posadres by.",
+    "resetSent": "Ons het instruksies om jou wagwoord terug te stel na jou e-pos gestuur.",
+    "welcome": "Welkom! Jy is aangemeld."
+  },
+  "profile": {
+    "tab": "Profiel",
+    "title": "Profiel en instellings",
+    "myAccount": "MY REKENING",
+    "notSignedIn": "Nie aangemeld nie",
+    "preferences": "VOORKEURE",
+    "language": "Taal",
+    "appearance": "Voorkoms",
+    "textSize": "Teksgrootte",
+    "decreaseText": "Verklein teksgrootte",
+    "increaseText": "Vergroot teksgrootte",
+    "appTour": "Toepstoer",
+    "replay": "Speel weer",
+    "replayLabel": "Speel die toepstoer weer",
+    "roleStudent": "Student",
+    "roleBuddy": "FYS-maat (Mentor)"
+  },
+  "logout": {
+    "action": "Meld af",
+    "confirm": "Is jy seker jy wil afmeld?",
+    "stay": "Bly aangemeld"
+  },
+  "tour": {
+    "skip": "Slaan oor",
+    "counter": "STAP {{current}} VAN {{total}}",
+    "back": "Terug",
+    "next": "Volgende",
+    "letsGo": "Kom ons gaan",
+    "a11y": {
+      "skip": "Slaan die toer oor",
+      "previous": "Vorige stap",
+      "next": "Volgende stap",
+      "finish": "Voltooi die toer en begin die toep gebruik",
+      "progress": "Stap {{current}} van {{total}}",
+      "tabBar": "In die balk onder in die toep, soek die {{tab}}-oortjie."
+    },
+    "steps": {
+      "welcome": {
+        "title": "Welkom by Campus Companion",
+        "body": "Jou eerste weke by die universiteit kan oorweldigend voel, en dit is heeltemal normaal. Hierdie toep sit wat jy nodig het op een plek. Neem 'n een-minuut-toer. Jy kan niks verkeerd doen nie.",
+        "hint": "Slaan enige tyd oor. Jy kan hierdie toer weer speel vanaf jou Profiel."
+      },
+      "home": {
+        "title": "Jou tuisbasis",
+        "body": "Tuis wys die nuutste aankondigings, pendelbus-tye vir jou halte, en vinnige skakels na alles anders. 'n NUUT-merker beteken 'n aankondiging is onlangs uitgestuur en jy het dit nog nie oopgemaak nie.",
+        "hint": "Rol af op Tuis vir Sport en gimnasium, programme en algemene vrae."
+      },
+      "search": {
+        "title": "Vind enigiets, vinnig",
+        "body": "Onseker waar om te kyk? Gebruik die soekbalk. Dit soek antwoorde, lokale, sessies, mense om te kontak en gidse, alles gelyk.",
+        "hint": "Soek die soekbalk bo-aan Tuis."
+      },
+      "schedule": {
+        "title": "Weet waar om te wees, en wanneer",
+        "body": "Sien jou oriënteringsessies met hul tye en lokale. Skakel oor na Kampusgebeure om te sien wat op kampus aangaan."
+      },
+      "map": {
+        "title": "Verdwaal nooit",
+        "body": "Die kampuskaart wys geboue en lokale. Vind 'n plek en kry stapaanwysings daarheen."
+      },
+      "checklist": {
+        "title": "Merk die noodsaaklike dinge af",
+        "body": "Die nuwe student-kontrolelys wys wat jy in jou eerste weke moet uitsorteer, soos registrasie en jou studente-e-pos. Gaan teen jou eie pas en merk dinge af soos jy dit klaarmaak.",
+        "hint": "Vind dit op Tuis: Nuwe student-kontrolelys."
+      },
+      "digital": {
+        "title": "Raak digitaal gereed",
+        "body": "Stap-vir-stap gidse vir Funda, Wi-Fi en druk, plus kort lesse oor lêerbestuur, veilig bly aanlyn, sterk wagwoorde en verantwoordelike gebruik van KI-gereedskap."
+      },
+      "tribe": {
+        "title": "Ontmoet jou Gemeenskap",
+        "body": "Jou Gemeenskap is 'n klets met jou mentor en ander eerstejaars. Voordat jy 'n kletsnaam kies, stem jy in om dit respekvol te hou. Tik Vind groepe om mentorgroepe te deursoek of skandeer 'n QR-kode."
+      },
+      "help": {
+        "title": "Hulp is altyd naby",
+        "body": "Onseker wie om te vra? Maak Ondersteuning oop, kies waarmee jy hulp nodig het, en die toep wys jou na die regte persoon of diens. Kontakte lys mentors en adviseurs wat jy direk kan bereik. Vir dringende hulp, gebruik die rooi Noodkontakte-kaart op Tuis."
+      },
+      "profile": {
+        "title": "Maak dit joune",
+        "body": "In Profiel kan jy tussen Engels, isiXhosa en Afrikaans wissel, ligte of donker modus kies, en die teks groter maak. Jy kan hierdie toer daar weer speel wanneer jy wil."
+      }
+    }
+  },
+  "shuttle": {
+    "yourStop": "JOU HALTE",
+    "chooseStop": "Kies jou halte",
+    "chooseHint": "Kies jou halte om te sien wanneer jou pendelbus vertrek.",
+    "chooseAbove": "Kies jou halte hierbo en jou tye sal hier verskyn.",
+    "changeStop": "Jou halte is {{stop}}. Tik om dit te verander.",
+    "beforeYouBoard": "Voordat jy instap",
+    "closeList": "Maak haltelys toe",
+    "close": "Maak toe",
+    "nextShuttle": "volgende pendelbus",
+    "rules": {
+      "boarding-requirement": {
+        "title": "Vereiste om in te klim",
+        "text": "Om die pendelbus te neem, moet alle studente 'n geldige studentekaart saam met hul bewys van aanvaarding of registrasiebrief toon."
+      },
+      "early-arrival": {
+        "title": "Vroeë aankoms",
+        "text": "Studente wat vroeg op kampus wil aankom, word aangeraai om die eerste geskeduleerde pendelbus van die dag te neem."
+      },
+      "assistance": {
+        "title": "Hulp",
+        "text": "Pendelbusmarshalle is beskikbaar om te help. Studente wat nie seker is oor die regte pendelbus nie, moet 'n marshal om leiding vra."
+      },
+      "code-of-conduct": {
+        "title": "Gedragskode",
+        "text": "Studente moet te alle tye die instruksies van marshalle en bestuurders volg. Oneerbiedige gedrag of weiering om te voldoen sal lei tot die onmiddellike opskorting van pendelbusdienste."
+      },
+      "prohibited-items-and-behaviour": {
+        "title": "Verbode items en gedrag",
+        "text": "Geen eet of drink word binne die pendelbusse toegelaat nie. Alkohol is streng verbode. Enige student wat as dronk beskou word, sal toegang geweier word."
+      }
+    },
+    "caption": "{{campus}}-kampus · {{year}}-rooster"
+  },
+  "announcements": {
+    "justNow": "Sopas",
+    "minutesAgo": "{{count}} min gelede",
+    "hoursAgo": "{{count}} u gelede",
+    "yesterday": "Gister",
+    "daysAgo": "{{count}} dae gelede",
+    "posted": "Geplaas {{when}}"
+  },
+  "tribe": {
+    "yourTribe": "JOU GEMEENSKAP",
+    "mentorGroup": "Mentorgroep",
+    "members": "{{count}} lede",
+    "findGroups": "Vind groepe",
+    "findGroupsSub": "Deursoek mentorgroepe of skandeer 'n QR-kode",
+    "findGroupsLabel": "Vind groepe of skandeer 'n QR-kode",
+    "loading": "Laai tans jou Gemeenskap...",
+    "almostReady": "Jou Gemeenskap is amper gereed",
+    "almostReadyText": "Jou mentorgroep sal hier verskyn sodra dit toegewys is.",
+    "chooseName": "Kies jou kletsnaam",
+    "updateName": "Verander jou kletsnaam",
+    "keepPrivate": "Hou jou regte naam, studentenommer en e-pos privaat in die gemeenskap.",
+    "namePlaceholder": "bv. Thando_23",
+    "saveName": "Stoor kletsnaam",
+    "chattingAs": "Klets as",
+    "change": "Verander",
+    "you": "jy",
+    "noMessages": "Nog geen boodskappe nie. Begin die gesprek.",
+    "messagePlaceholder": "Deel iets met jou Gemeenskap...",
+    "chooseFirst": "Kies eers 'n kletsnaam...",
+    "send": "Stuur boodskap",
+    "errors": {
+      "nameRule": "Gebruik 3-30 letters, syfers of onderstreepte vir jou kletsnaam.",
+      "nameTaken": "Daardie kletsnaam is reeds in gebruik. Probeer 'n ander een.",
+      "saveFailed": "Ons kon nie jou kletsnaam nou stoor nie. Probeer asseblief weer.",
+      "sendFailed": "Jou boodskap is nie gestuur nie. Probeer asseblief weer.",
+      "tooLong": "Boodskappe kan tot 1 000 karakters lank wees.",
+      "loadFailed": "Ons kon nie nou jou Gemeenskap oopmaak nie. Probeer asseblief oor 'n oomblik weer."
+    },
+    "conduct": {
+      "title": "Voordat jy by die gesprek aansluit",
+      "intro": "Gemeenskap is deel van die Nelson Mandela-universiteit se openbare kommunikasieplatforms. Wat jy hier skryf verteenwoordig jou en die Universiteit, so ons hou dit respekvol en veilig vir almal.",
+      "respect": "Ek sal almal in Gemeenskap met respek behandel: my mentor, die koördineerders en elke ander student.",
+      "bully": "Ek sal niemand boelie, teister, dreig, skaam maak of uitsluit nie.",
+      "swear": "Ek sal nie vloek of aanstootlike, haatlike of diskriminerende taal gebruik nie.",
+      "private": "Ek sal my eie private besonderhede, en ander mense s'n, privaat hou.",
+      "watched": "Ek verstaan dat mentors en koördineerders Gemeenskap-boodskappe kan lees, en dat boodskappe wat hierdie reëls breek, verwyder kan word.",
+      "agree": "Ek het dit gelees en stem in om dit na te kom.",
+      "continue": "Stem in en gaan voort"
+    }
+  },
+  "support": {
+    "eyebrow": "STUDENTE-ONDERSTEUNING",
+    "title": "Hulp en ondersteuning",
+    "subtitle": "Om hulp te vra verg moed, en almal het dit soms nodig. Vind die regte persoon of diens, en niemand sal jou veroordeel nie.",
+    "moreInfo": "Meer ondersteuningsinligting",
+    "unavailableTitle": "Ondersteuningsinligting het nie gelaai nie",
+    "unavailableText": "Probeer asseblief weer wanneer jou verbinding terug is.",
+    "noneTitle": "Nog geen ondersteuningsopsies gepubliseer nie",
+    "noneText": "Jou koördineerder sal ondersteuningsdienste hier byvoeg. Gebruik intussen Noodkontakte of vra 'n mentor.",
+    "adviceLabel": "Akademiese advies: sien Skool vir IT-programme",
+    "adviceTitle": "Het jy akademiese advies nodig?",
+    "adviceText": "Sien jou program en met wie om te praat."
+  },
+  "faq": {
+    "cantFind": "Kan jy dit nie vind nie? Vra 'n vraag. Ander wonder waarskynlik ook."
   }
 }

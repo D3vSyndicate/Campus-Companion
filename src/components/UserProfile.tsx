@@ -10,11 +10,8 @@ import { useAppearance } from '../context/AppearanceContext';
 import { useAuth } from '../context/AuthContext';
 import { ThemeMode, useTheme } from '../theme/ThemeContext';
 
-const MODES: { key: ThemeMode; label: string }[] = [
-  { key: 'system', label: 'System' },
-  { key: 'light', label: 'Light' },
-  { key: 'dark', label: 'Dark' },
-];
+// The names come from the translation files: appearance.system, appearance.light and appearance.dark.
+const MODES: ThemeMode[] = ['system', 'light', 'dark'];
 
 const LANGUAGES = [
   { code: 'en', label: 'English' },
@@ -86,7 +83,7 @@ type Props = {
 };
 
 export function UserProfile({ variant = 'student' }: Props) {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { colors, mode, setMode } = useTheme();
   const { fontScale, changeFontScale } = useAppearance();
   // Only students have the tour, so the row only appears inside the student area.
@@ -109,18 +106,19 @@ export function UserProfile({ variant = 'student' }: Props) {
       .map((part) => part.charAt(0).toUpperCase())
       .join('') || 'S';
 
-  const roleLabel = role === 'mentor' ? 'FYS Buddy (Mentor)' : role === 'student' || !role ? 'Student' : role;
+  const roleLabel = role === 'mentor' ? t('profile.roleBuddy') : role === 'student' || !role ? t('profile.roleStudent') : role;
+  const modeOptions = MODES.map((key) => ({ key, label: t(`appearance.${key}`) }));
 
   const currentLanguage = LANGUAGES.find((lang) => i18n.language?.startsWith(lang.code))?.code ?? 'en';
 
   return (
     <ScrollView style={[styles.container, { backgroundColor: colors.background }]} contentContainerStyle={styles.content}>
-      <Text style={[styles.title, { color: colors.text }]}>Profile & Settings</Text>
+      <Text style={[styles.title, { color: colors.text }]}>{t('profile.title')}</Text>
 
       <SearchEntry area={variant === 'mentor' ? 'mentor' : 'student'} scope="profile" style={styles.searchEntry} />
 
       <View style={styles.section}>
-        <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>MY ACCOUNT</Text>
+        <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>{t('profile.myAccount')}</Text>
         <View style={[styles.card, styles.accountCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
           <View style={[styles.avatar, { backgroundColor: colors.accent }]}>
             <Text style={styles.avatarText}>{initials}</Text>
@@ -128,7 +126,7 @@ export function UserProfile({ variant = 'student' }: Props) {
           <View style={styles.accountCopy}>
             {displayName ? <Text style={[styles.name, { color: colors.text }]}>{displayName}</Text> : null}
             <Text style={[styles.email, { color: colors.text }]} numberOfLines={1}>
-              {user?.email ?? 'Not signed in'}
+              {user?.email ?? t('profile.notSignedIn')}
             </Text>
             <Text style={[styles.role, { color: colors.textSecondary }]}>{roleLabel}</Text>
           </View>
@@ -136,21 +134,21 @@ export function UserProfile({ variant = 'student' }: Props) {
       </View>
 
       <View style={styles.section}>
-        <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>PREFERENCES</Text>
+        <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>{t('profile.preferences')}</Text>
         <View style={[styles.card, styles.prefCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
-          <PreferenceRow icon="language-outline" label="Language">
+          <PreferenceRow icon="language-outline" label={t('profile.language')}>
             <Segmented options={LANGUAGES.map((lang) => ({ key: lang.code, label: lang.label }))} value={currentLanguage} onChange={(code) => void i18n.changeLanguage(code)} />
           </PreferenceRow>
 
-          <PreferenceRow icon="contrast-outline" label="Appearance">
-            <Segmented options={MODES} value={mode} onChange={setMode} />
+          <PreferenceRow icon="contrast-outline" label={t('profile.appearance')}>
+            <Segmented options={modeOptions} value={mode} onChange={setMode} />
           </PreferenceRow>
 
-          <PreferenceRow icon="text-outline" label="Text size" last={!showTour}>
+          <PreferenceRow icon="text-outline" label={t('profile.textSize')} last={!showTour}>
             <View style={styles.stepperRow}>
               <TouchableOpacity
                 accessibilityRole="button"
-                accessibilityLabel="Decrease text size"
+                accessibilityLabel={t('profile.decreaseText')}
                 onPress={() => adjustFontScale(-0.1)}
                 disabled={fontScale <= MIN_SCALE}
                 style={[styles.stepButton, { borderColor: colors.border, opacity: fontScale <= MIN_SCALE ? 0.4 : 1 }]}
@@ -160,7 +158,7 @@ export function UserProfile({ variant = 'student' }: Props) {
               <Text style={[styles.scaleText, { color: colors.text }]}>{Math.round(fontScale * 100)}%</Text>
               <TouchableOpacity
                 accessibilityRole="button"
-                accessibilityLabel="Increase text size"
+                accessibilityLabel={t('profile.increaseText')}
                 onPress={() => adjustFontScale(0.1)}
                 disabled={fontScale >= MAX_SCALE}
                 style={[styles.stepButton, { borderColor: colors.border, opacity: fontScale >= MAX_SCALE ? 0.4 : 1 }]}
@@ -171,15 +169,15 @@ export function UserProfile({ variant = 'student' }: Props) {
           </PreferenceRow>
 
           {showTour ? (
-            <PreferenceRow icon="compass-outline" label="App tour" last>
+            <PreferenceRow icon="compass-outline" label={t('profile.appTour')} last>
               <TouchableOpacity
                 accessibilityRole="button"
-                accessibilityLabel="Replay the app tour"
+                accessibilityLabel={t('profile.replayLabel')}
                 onPress={() => tour?.openTour()}
                 style={[styles.tourButton, { backgroundColor: colors.accent }]}
               >
                 <Ionicons name="play" size={14} color="#071B2C" />
-                <Text style={styles.tourButtonText}>Replay</Text>
+                <Text style={styles.tourButtonText}>{t('profile.replay')}</Text>
               </TouchableOpacity>
             </PreferenceRow>
           ) : null}

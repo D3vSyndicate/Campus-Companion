@@ -8,9 +8,9 @@ export default function DashboardScreen() {
     <StaffDashboard
       sections={SECTIONS}
       roleTitle="Administrator"
-      description="Manage campus orientation information, schedules, contacts, announcements and FAQs from one place."
-      statusText="All management tools are available"
-      sectionTitle="Manage everything students see"
+      description="Keep announcements, the schedule, FAQs, contacts and emergency numbers accurate, and look after tribes and buddies."
+      statusText="Students count on this being up to date"
+      sectionTitle="What would you like to update?"
       footerText="Administration for the School of IT"
       profileHref="/(admin)/profile"
     />

@@ -518,3 +518,35 @@ export const hodResourceConfig: ManageConfig = {
   listTitle: (row) => text(row, 'title'),
   listSubtitle: (row) => text(row, 'description') || text(row, 'url'),
 };
+
+// ---- Emergency contacts ------------------------------------------------------------------------
+
+export const emergencyContactConfig: ManageConfig = {
+  table: 'emergency_contacts',
+  setupFile: 'supabase/migrations/20260920100000_emergency_contacts.sql',
+  pk: 'id',
+  title: 'Emergency contacts',
+  description: 'Numbers students call when they need urgent help. Keep them current: someone may be relying on them.',
+  itemNoun: 'Contact',
+  orderBy: [{ column: 'sort_order' }, { column: 'name' }],
+  fields: [
+    {
+      key: 'category',
+      label: 'Group',
+      type: 'select',
+      required: true,
+      default: 'Emergency services',
+      options: asOptions(['Emergency services', 'Mental health', 'Abuse and violence', 'Campus']),
+      allowCustom: true,
+      help: 'Students see contacts listed under these headings.',
+    },
+    { key: 'name', label: 'Name', type: 'text', required: true, placeholder: 'Campus Protection Services' },
+    { key: 'description', label: 'When to call', type: 'multiline', placeholder: 'One short, kind line about what this number helps with.' },
+    { key: 'phone', label: 'Phone number', type: 'text', required: true, placeholder: '041 504 0000' },
+    { key: 'available', label: 'When they answer', type: 'text', placeholder: '24 hours' },
+    { key: 'sort_order', label: 'Order in the list (1 shows first)', type: 'number', default: 100 },
+    { key: 'is_active', label: 'Visible to students', type: 'boolean', default: true },
+  ],
+  listTitle: (row) => text(row, 'name'),
+  listSubtitle: (row) => [text(row, 'phone'), text(row, 'category'), row.is_active === false ? 'Hidden' : ''].filter(Boolean).join(' · '),
+};

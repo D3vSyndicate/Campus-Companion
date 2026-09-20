@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Modal, Pressable, ScrollView, StyleSheet, Text as PlainText, useWindowDimensions, View } from 'react-native';
 import Animated, { FadeInLeft, FadeInRight } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -15,13 +16,14 @@ const INK = '#071B2C';
 // A small picture of the tab bar with one tab lit up, so a student sees where to tap.
 function MiniTabBar({ active, compact }: { active: TourTab; compact: boolean }) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   // On a narrow phone there is no room for eight labels, so only the highlighted tab keeps its label.
   const { width } = useWindowDimensions();
   const narrow = width < 360;
-  const label = TOUR_TABS.find((tab) => tab.key === active)?.label ?? '';
+  const label = t(TOUR_TABS.find((tab) => tab.key === active)?.labelKey ?? 'common.home');
 
   return (
-    <View style={[styles.tabBar, compact && styles.tabBarCompact]} accessible accessibilityLabel={`In the bar at the bottom of the app, look for the ${label} tab.`}>
+    <View style={[styles.tabBar, compact && styles.tabBarCompact]} accessible accessibilityLabel={t('tour.a11y.tabBar', { tab: label })}>
       {TOUR_TABS.map((tab) => {
         const on = tab.key === active;
         return (
@@ -31,7 +33,7 @@ function MiniTabBar({ active, compact }: { active: TourTab; compact: boolean }) 
             </View>
             {/* Plain text on purpose: these labels must not grow with the text-size setting. */}
             <PlainText style={[styles.tabLabel, on && { color: colors.accent, fontWeight: '800' }, narrow && !on && styles.tabLabelHidden]} numberOfLines={1}>
-              {tab.label}
+              {t(tab.labelKey)}
             </PlainText>
           </View>
         );
@@ -42,6 +44,7 @@ function MiniTabBar({ active, compact }: { active: TourTab; compact: boolean }) 
 
 export function AppTour({ visible, onClose }: { visible: boolean; onClose: () => void }) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   // Short phones get a tighter layout so the picture of the tab bar is not pushed under the buttons.
   const { height } = useWindowDimensions();
@@ -81,19 +84,19 @@ export function AppTour({ visible, onClose }: { visible: boolean; onClose: () =>
               style={styles.progress}
               accessible
               accessibilityRole="progressbar"
-              accessibilityLabel={`Step ${index + 1} of ${TOUR_STEPS.length}`}
+              accessibilityLabel={t('tour.a11y.progress', { current: index + 1, total: TOUR_STEPS.length })}
             >
               {TOUR_STEPS.map((item, i) => (
                 <View key={item.id} style={[styles.segment, { backgroundColor: i <= index ? colors.accent : 'rgba(255,255,255,0.22)' }]} />
               ))}
             </View>
             {!isLast ? (
-              <Pressable accessibilityRole="button" accessibilityLabel="Skip the tour" onPress={close} hitSlop={12} style={styles.skip}>
-                <Text style={styles.skipText}>Skip</Text>
+              <Pressable accessibilityRole="button" accessibilityLabel={t('tour.a11y.skip')} onPress={close} hitSlop={12} style={styles.skip}>
+                <Text style={styles.skipText}>{t('tour.skip')}</Text>
               </Pressable>
             ) : null}
           </View>
-          <Text style={styles.counter}>{`STEP ${index + 1} OF ${TOUR_STEPS.length}`}</Text>
+          <Text style={styles.counter}>{t('tour.counter', { current: index + 1, total: TOUR_STEPS.length })}</Text>
         </View>
 
         <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
@@ -107,16 +110,16 @@ export function AppTour({ visible, onClose }: { visible: boolean; onClose: () =>
             </View>
 
             <Text style={[styles.title, compact && styles.titleCompact]} accessibilityRole="header">
-              {step.title}
+              {t(`tour.steps.${step.id}.title`)}
             </Text>
-            <Text style={[styles.body, compact && styles.bodyCompact]}>{step.body}</Text>
+            <Text style={[styles.body, compact && styles.bodyCompact]}>{t(`tour.steps.${step.id}.body`)}</Text>
 
             {step.tab ? <MiniTabBar active={step.tab} compact={compact} /> : null}
 
-            {step.hint ? (
+            {step.hasHint ? (
               <View style={[styles.hint, compact && styles.hintCompact]}>
                 <Ionicons name="bulb-outline" size={16} color={colors.accent} />
-                <Text style={styles.hintText}>{step.hint}</Text>
+                <Text style={styles.hintText}>{t(`tour.steps.${step.id}.hint`)}</Text>
               </View>
             ) : null}
           </Animated.View>
@@ -126,12 +129,12 @@ export function AppTour({ visible, onClose }: { visible: boolean; onClose: () =>
           {index > 0 ? (
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Previous step"
+              accessibilityLabel={t('tour.a11y.previous')}
               onPress={back}
               style={({ pressed }) => [styles.backButton, pressed && styles.pressed]}
             >
               <Ionicons name="chevron-back" size={20} color="#FFFFFF" />
-              <Text style={styles.backText}>Back</Text>
+              <Text style={styles.backText}>{t('tour.back')}</Text>
             </Pressable>
           ) : (
             <View style={styles.backSpacer} />
@@ -139,11 +142,11 @@ export function AppTour({ visible, onClose }: { visible: boolean; onClose: () =>
 
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel={isLast ? "Finish the tour and start using the app" : 'Next step'}
+            accessibilityLabel={isLast ? t('tour.a11y.finish') : t('tour.a11y.next')}
             onPress={next}
             style={({ pressed }) => [styles.nextButton, { backgroundColor: colors.accent }, pressed && styles.pressed]}
           >
-            <Text style={styles.nextText}>{isLast ? "Let's go" : 'Next'}</Text>
+            <Text style={styles.nextText}>{isLast ? t('tour.letsGo') : t('tour.next')}</Text>
             <Ionicons name={isLast ? 'checkmark' : 'arrow-forward'} size={20} color={INK} />
           </Pressable>
         </View>

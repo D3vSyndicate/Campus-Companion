@@ -5,6 +5,8 @@ import { ThemeProvider, useTheme } from '../../theme/ThemeContext';
 
 const TAB_ICON_SIZE = 22;
 
+// The tab bar holds the four things that are handled every day: the schedule, announcements, FAQs and
+// contacts. Everything else is reached from Home and keeps the tab bar in view.
 function CoordinatorTabs() {
   const { colors } = useTheme();
 
@@ -38,10 +40,10 @@ function CoordinatorTabs() {
         }}
       />
       <Tabs.Screen
-        name="contacts"
+        name="announcements"
         options={{
-          title: 'Contacts',
-          tabBarIcon: ({ color }) => <Ionicons name="people-outline" size={TAB_ICON_SIZE} color={color} />,
+          title: 'Announcements',
+          tabBarIcon: ({ color }) => <Ionicons name="megaphone-outline" size={TAB_ICON_SIZE} color={color} />,
         }}
       />
       <Tabs.Screen
@@ -52,17 +54,24 @@ function CoordinatorTabs() {
         }}
       />
       <Tabs.Screen
+        name="contacts"
+        options={{
+          title: 'Contacts',
+          tabBarIcon: ({ color }) => <Ionicons name="people-outline" size={TAB_ICON_SIZE} color={color} />,
+        }}
+      />
+      <Tabs.Screen
         name="profile"
         options={{
           title: 'Profile',
           tabBarIcon: ({ color }) => <Ionicons name="person-outline" size={TAB_ICON_SIZE} color={color} />,
         }}
       />
-      <Tabs.Screen name="announcements" options={{ href: null, title: 'Announcements' }} />
       <Tabs.Screen name="venue" options={{ href: null, title: 'Venues' }} />
       <Tabs.Screen name="checklist" options={{ href: null, title: 'Checklist' }} />
       <Tabs.Screen name="support" options={{ href: null, title: 'Support' }} />
       <Tabs.Screen name="digital" options={{ href: null, title: 'Digital Readiness' }} />
+      <Tabs.Screen name="emergency" options={{ href: null, title: 'Emergency Contacts' }} />
     </Tabs>
   );
 }

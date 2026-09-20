@@ -28,13 +28,11 @@ interface PageHeaderProps {
   subtitle?: string;
   // A screen that already has its own search box can turn this off.
   showSearch?: boolean;
-  // Screens reached by tapping a card (rather than a tab) need a way back. Optional and off by
-  // default, so tab screens are unaffected.
+  // These three are no longer used. The header has no back arrow: every area has a tab bar along the
+  // bottom, and the phone's own back gesture and button return to the previous screen. They are still
+  // accepted so screens that pass them keep compiling.
   showBack?: boolean;
-  // Where "back" goes when there is no history, for example after a deep link.
   backFallback?: string;
-  // Staff management screens pass their dashboard route instead of a boolean. Supplying it shows
-  // the back button too, so those screens do not also have to pass showBack.
   backHref?: string;
 }
 
@@ -72,13 +70,9 @@ export function PageHeader({
   title,
   subtitle,
   showSearch = true,
-  showBack = false,
-  backFallback,
-  backHref,
 }: PageHeaderProps) {
   const { colors, isDark } = useTheme();
   const { user, role } = useAuth();
-  const router = useRouter();
   const insets = useSafeAreaInsets();
 
   const metadata = user?.user_metadata ?? {};
@@ -93,17 +87,6 @@ export function PageHeader({
     .join('') || 'S';
   const roleLabel = ROLE_LABELS[role ?? ''] ?? 'Student';
 
-  // Two call styles reached this component from different branches: showBack + backFallback on the
-  // student screens, backHref on the staff management screens. Both are honoured by one button
-  // rather than two, and either one on its own is enough to show it.
-  const backTarget = backFallback ?? backHref;
-  const canGoBack = showBack || Boolean(backHref);
-
-  const goBack = () => {
-    if (router.canGoBack()) router.back();
-    else if (backTarget) router.replace(backTarget as never);
-  };
-
   return (
     <View
       style={[
@@ -115,17 +98,6 @@ export function PageHeader({
     >
       <View style={styles.topRow}>
         <View style={styles.leftGroup}>
-          {canGoBack ? (
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Go back"
-              onPress={goBack}
-              hitSlop={10}
-              style={({ pressed }) => [styles.backButton, pressed && { opacity: 0.6 }]}
-            >
-              <Ionicons name="arrow-back" size={20} color={ON_INK} />
-            </Pressable>
-          ) : null}
           <View style={[styles.eyebrowPill, { backgroundColor: colors.accent }]}>
             <View style={styles.eyebrowDot} />
             <Text style={styles.eyebrow} numberOfLines={1}>{eyebrow}</Text>
@@ -171,15 +143,6 @@ const styles = StyleSheet.create({
     marginBottom: 18,
   },
   leftGroup: { flexDirection: 'row', alignItems: 'center', flexShrink: 1, gap: 8 },
-  backButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    alignItems: 'center',
-    justifyContent: 'center',
-    // Pulls the icon back to the card's optical edge.
-    marginLeft: -4,
-  },
   eyebrowPill: {
     flexDirection: 'row',
     alignItems: 'center',

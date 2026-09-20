@@ -45,6 +45,7 @@ export default function StudentLayout() {
           }}
         />
         <Tabs.Screen name="search" options={{ href: null, title: 'Search' }} />
+        <Tabs.Screen name="emergency" options={{ href: null, title: 'Emergency contacts' }} />
         <Tabs.Screen name="calendar" options={{ href: null, title: 'Calendar' }} />
         <Tabs.Screen name="societies" options={{ href: null, title: 'Societies' }} />
         <Tabs.Screen name="ai-guide" options={{ href: null, title: 'Using AI' }} />
@@ -125,7 +126,7 @@ export default function StudentLayout() {
         <Tabs.Screen
           name="profile"
           options={{
-            title: 'Profile',
+            title: t('profile.tab'),
             tabBarIcon: ({ color }) => <Ionicons name="person-outline" size={TAB_ICON_SIZE} color={color} />,
           }}
         />

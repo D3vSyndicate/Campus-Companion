@@ -164,7 +164,7 @@ export function FaqBrowser({ canShare = false, canSuggest = false }: Props) {
           <SuggestFaq initialQuestion={search} onDone={() => setSuggesting(false)} />
         ) : (
           <TouchableOpacity accessibilityRole="button" onPress={() => setSuggesting(true)} style={styles.suggestLink}>
-            <Text style={[styles.suggestText, { color: colors.accent }]}>Cannot find it? Suggest a question</Text>
+            <Text style={[styles.suggestText, { color: colors.accent }]}>{t('faq.cantFind')}</Text>
           </TouchableOpacity>
         )
       ) : null}

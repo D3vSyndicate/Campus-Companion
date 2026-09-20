@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCallback, useEffect, useState } from 'react';
+import i18n from '../i18n';
 
 // How long an announcement counts as new. Older ones never show the tag, even if nobody opened them.
 export const NEW_WINDOW_DAYS = 7;
@@ -28,21 +29,22 @@ export function newestFirst<T extends { postedAt: Date | null }>(items: T[]): T[
   return [...items].sort((a, b) => (b.postedAt?.getTime() ?? -Infinity) - (a.postedAt?.getTime() ?? -Infinity));
 }
 
-// "Just now", "3 h ago", "Yesterday", "4 days ago", or the date for anything older than a week.
+// "Just now", "3 h ago", "Yesterday", "4 days ago", or the date for anything older than a week. Worded in
+// the language the student has chosen.
 export function postedLabel(postedAt: Date | null, now: Date = new Date()): string {
   if (!postedAt) return '';
   const minutes = Math.floor((now.getTime() - postedAt.getTime()) / 60000);
-  if (minutes < 1) return 'Just now';
-  if (minutes < 60) return `${minutes} min ago`;
+  if (minutes < 1) return i18n.t('announcements.justNow');
+  if (minutes < 60) return i18n.t('announcements.minutesAgo', { count: minutes });
 
   const startOfDay = (date: Date) => new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
   const days = Math.round((startOfDay(now) - startOfDay(postedAt)) / DAY);
 
-  if (days <= 0) return `${Math.floor(minutes / 60)} h ago`;
-  if (days === 1) return 'Yesterday';
-  if (days < 7) return `${days} days ago`;
+  if (days <= 0) return i18n.t('announcements.hoursAgo', { count: Math.floor(minutes / 60) });
+  if (days === 1) return i18n.t('announcements.yesterday');
+  if (days < 7) return i18n.t('announcements.daysAgo', { count: days });
 
-  return postedAt.toLocaleDateString(undefined, {
+  return postedAt.toLocaleDateString(i18n.language, {
     day: 'numeric',
     month: 'short',
     ...(postedAt.getFullYear() !== now.getFullYear() ? { year: 'numeric' as const } : {}),

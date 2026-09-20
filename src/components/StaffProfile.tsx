@@ -1,5 +1,4 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
 import {
   ScrollView,
   StyleSheet,
@@ -50,7 +49,6 @@ type Props = {
 // The profile and settings page for every staff role. Coordinator and head of department share it so
 // the two areas cannot drift apart.
 export function StaffProfile({ roleTitle, roleBadge }: Props) {
-  const router = useRouter();
   const { colors, mode, setMode } = useTheme();
   const { user } = useAuth();
   const { width } = useWindowDimensions();
@@ -76,23 +74,6 @@ export function StaffProfile({ roleTitle, roleBadge }: Props) {
       >
         {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity
-            onPress={() => router.back()}
-            style={[
-              styles.backButton,
-              {
-                backgroundColor: colors.card,
-                borderColor: colors.border,
-              },
-            ]}
-          >
-            <Ionicons
-              name="arrow-back"
-              size={22}
-              color={colors.text}
-            />
-          </TouchableOpacity>
-
           <View style={styles.headerText}>
             <Text
               style={[
@@ -449,14 +430,6 @@ const styles = StyleSheet.create({
     gap: 14,
   },
 
-  backButton: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
 
   headerText: {
     flex: 1,

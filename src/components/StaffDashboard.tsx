@@ -11,6 +11,8 @@ export type StaffSection = {
   label: string;
   desc: string;
   icon: keyof typeof Ionicons.glyphMap;
+  // Sections with the same group are shown together under that heading.
+  group?: string;
 };
 
 function tap() {
@@ -80,6 +82,14 @@ type Props = {
 export function StaffDashboard({ sections, roleTitle, description, statusText, sectionTitle, footerText, profileHref }: Props) {
   const { colors } = useTheme();
   const router = useRouter();
+
+  // Sections are shown under their group headings, in the order the groups first appear.
+  const groups: { name?: string; items: StaffSection[] }[] = [];
+  for (const section of sections) {
+    const group = groups.find((entry) => entry.name === section.group);
+    if (group) group.items.push(section);
+    else groups.push({ name: section.group, items: [section] });
+  }
 
   const openSection = (href: string) => {
     tap();
@@ -162,16 +172,21 @@ export function StaffDashboard({ sections, roleTitle, description, statusText, s
         </View>
 
         {/* Management grid */}
-        <View style={styles.grid}>
-          {sections.map((section) => (
-            <View key={section.href} style={styles.gridItem}>
-              <ManagementCard
-                section={section}
-                onPress={() => openSection(section.href)}
-              />
+        {groups.map((group) => (
+          <View key={group.name ?? 'all'}>
+            {group.name ? <Text style={[styles.groupLabel, { color: colors.textSecondary }]}>{group.name.toUpperCase()}</Text> : null}
+            <View style={styles.grid}>
+              {group.items.map((section) => (
+                <View key={section.href} style={styles.gridItem}>
+                  <ManagementCard
+                    section={section}
+                    onPress={() => openSection(section.href)}
+                  />
+                </View>
+              ))}
             </View>
-          ))}
-        </View>
+          </View>
+        ))}
 
         {/* Footer */}
         <View style={styles.footer}>
@@ -355,6 +370,13 @@ const styles = StyleSheet.create({
     fontSize: 9,
     fontWeight: '600',
     marginTop: 1,
+  },
+  groupLabel: {
+    fontSize: 11,
+    fontWeight: '800',
+    letterSpacing: 1.3,
+    marginBottom: 10,
+    marginTop: 4,
   },
   grid: {
     flexDirection: 'row',

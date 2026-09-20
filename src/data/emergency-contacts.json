@@ -1,0 +1,66 @@
+[
+  {
+    "category": "Emergency services",
+    "name": "Emergency services",
+    "description": "Police, ambulance or fire brigade. Works from any cell phone.",
+    "phone": "112",
+    "available": "24 hours",
+    "sort_order": 1
+  },
+  {
+    "category": "Emergency services",
+    "name": "Police (SAPS)",
+    "description": "Report a crime or ask the police for help.",
+    "phone": "10111",
+    "available": "24 hours",
+    "sort_order": 2
+  },
+  {
+    "category": "Emergency services",
+    "name": "Ambulance",
+    "description": "Medical emergencies.",
+    "phone": "10177",
+    "available": "24 hours",
+    "sort_order": 3
+  },
+  {
+    "category": "Mental health",
+    "name": "Suicide crisis line (SADAG)",
+    "description": "If you are thinking about ending your life, or you are worried about someone who is. You will not be judged.",
+    "phone": "0800 567 567",
+    "available": "24 hours",
+    "sort_order": 10
+  },
+  {
+    "category": "Mental health",
+    "name": "Mental health helpline (SADAG)",
+    "description": "Free counselling and support for stress, anxiety, low mood and more.",
+    "phone": "0800 21 22 23",
+    "available": null,
+    "sort_order": 11
+  },
+  {
+    "category": "Mental health",
+    "name": "Lifeline counselling",
+    "description": "Confidential counselling from trained volunteers, when you need someone to talk to.",
+    "phone": "0861 322 322",
+    "available": "24 hours",
+    "sort_order": 12
+  },
+  {
+    "category": "Abuse and violence",
+    "name": "GBV Command Centre",
+    "description": "Free, confidential help if you or someone you know is experiencing gender-based violence.",
+    "phone": "0800 428 428",
+    "available": "24 hours",
+    "sort_order": 20
+  },
+  {
+    "category": "Campus",
+    "name": "University switchboard",
+    "description": "The main university number, if you are not sure who to call.",
+    "phone": "+27 41 504 1111",
+    "available": null,
+    "sort_order": 30
+  }
+]

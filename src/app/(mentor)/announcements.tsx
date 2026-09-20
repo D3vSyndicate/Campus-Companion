@@ -5,6 +5,7 @@ import { PageHeader } from '../../components/PageHeader';
 import { ScaledText as Text } from '../../components/ScaledText';
 import { ShameResilientBanner } from '../../components/ShameResilientBanner';
 import { useAuth } from '../../context/AuthContext';
+import i18n from '../../i18n';
 import { isRecent, newestFirst, postedAtOf, postedLabel, useSeenAnnouncements } from '../../lib/announcements';
 import { fetchWithOfflineFallback } from '../../lib/offlineData';
 import { useTheme } from '../../theme/ThemeContext';
@@ -106,7 +107,7 @@ export default function BuddyAnnouncements() {
                 </View>
               </View>
               <Text style={[styles.message, { color: colors.textSecondary }]}>{item.message}</Text>
-              {item.postedAt ? <Text style={[styles.meta, { color: colors.textSecondary }]}>Posted {postedLabel(item.postedAt)}</Text> : null}
+              {item.postedAt ? <Text style={[styles.meta, { color: colors.textSecondary }]}>{i18n.t('announcements.posted', { when: postedLabel(item.postedAt) })}</Text> : null}
             </View>
           );
         }}

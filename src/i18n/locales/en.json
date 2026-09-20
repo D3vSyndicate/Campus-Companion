@@ -24,8 +24,8 @@
     "faqsTitle": "Frequently asked questions",
     "faqsSubtitle": "Search common questions about Funda, venues, timetables, and support.",
     "digitalTitle": "Digital readiness",
-    "digitalSubtitle": "Set up the tools you will use for learning, communication, and campus life."
-    ,"savedSchedule": "You are viewing saved schedule data because your connection is unavailable right now.",
+    "digitalSubtitle": "Set up the tools you will use for learning, communication, and campus life.",
+    "savedSchedule": "You are viewing saved schedule data because your connection is unavailable right now.",
     "missedSession": "If you miss a session, don't worry. Every session has catch-up pathways listed below.",
     "pastSession": "This session has passed. Don't worry—you can review materials on Funda or ask a How2buddy mentor for a quick recap!",
     "directions": "Show me where to go",
@@ -37,23 +37,19 @@
     "office": "Office",
     "emailTeam": "Email this team",
     "searchFaqs": "Search FAQs (e.g., Funda, Venues, Timetable)...",
-    "openLink": "Open",
+    "openLink": "Open link",
     "digitalUnavailable": "Digital guidance is not available yet. Please try again later.",
-    "digitalBanner": "Everyone starts as a beginner with university tech. Don't worry if it takes a few tries to get logged in!"
-    ,"orientation": "ORIENTATION",
+    "digitalBanner": "Everyone starts as a beginner with university tech. Don't worry if it takes a few tries to get logged in!",
+    "orientation": "ORIENTATION",
     "firstSteps": "YOUR FIRST STEPS",
     "notAlone": "YOU ARE NOT ON YOUR OWN",
     "quickAnswer": "NEED A QUICK ANSWER?",
-    "getConnected": "GET CONNECTED"
-    ,"goodMorning": "Good morning",
+    "getConnected": "GET CONNECTED",
+    "goodMorning": "Good morning",
     "goodAfternoon": "Good afternoon",
     "goodEvening": "Good evening",
     "schoolOfIt": "SCHOOL OF IT",
     "campusCompanion": "CAMPUS COMPANION",
-    "startStrong": "Start strong.",
-    "stayConnected": "Stay connected.",
-    "weekSubtitle": "Everything you need for your first week, in one place.",
-    "campusStatus": "Your campus companion",
     "supportBanner": "Feeling unsure about where to go or what to ask? That is completely normal. Take it one step at a time.",
     "latest": "LATEST",
     "new": "NEW",
@@ -66,7 +62,7 @@
     "checklistTitleShort": "New student checklist",
     "checklistSubtitleShort": "Keep track of the essentials at your own pace.",
     "contactsTitleShort": "Get help & support",
-    "contactsSubtitleShort": "Connect with mentors and advisors.",
+    "contactsSubtitleShort": "Talk to a mentor or advisor. You do not have to work it out alone.",
     "digitalTitleShort": "Digital tools",
     "digitalSubtitleShort": "Set up Funda, eduroam, labs and OneDrive.",
     "faqsTitleShort": "Common questions",
@@ -79,12 +75,12 @@
     "sportGymSubtitle": "Find a sport or club, and sign up for the gym.",
     "allCategories": "All",
     "noMatchingAnswers": "No matching answers",
-    "noMatchingHint": "Try a different word. Many new students ask this - you can also ask in the Support tab.",
+    "noMatchingHint": "Try a different word, or ask in the Support tab. Every question is a good question.",
     "noFaqsYet": "No FAQs published yet",
     "noFaqsHint": "Common campus answers will appear here when they are available.",
     "manyAsk": "Many new students ask this question.",
     "needHelpWith": "I need help with...",
-    "needHelpHint": "Pick what fits best. Asking for help early is a smart academic habit.",
+    "needHelpHint": "Pick what fits best. Asking for help takes courage, and asking early is wise.",
     "yourNextStep": "Your next step",
     "whoToAsk": "Who to ask",
     "alsoSee": "Also see",
@@ -102,17 +98,16 @@
     "shift_night": "Night",
     "allGuides": "All guides",
     "guideComingSoon": "Guide coming soon",
-    "guideComingSoonHint": "This guide is still being prepared. In the meantime, ask a How2buddy mentor or visit the Support tab.",
+    "guideComingSoonHint": "This guide is still being prepared. In the meantime, ask a mentor or visit the Support tab.",
     "stepOf": "Step {{current}} of {{total}}",
     "goToStep": "Go to step {{number}}",
-    "openLink": "Open link",
     "stepDone": "Done - nice work",
     "markStepDone": "Mark this step as done",
     "previous": "Previous",
     "next": "Next",
     "moduleComplete": "You finished \"{{title}}\". That is real progress.",
     "readinessWelcome": "Welcome! Start here. These short guides help you feel at home with the tech you will use every day. Take them at your own pace.",
-    "readinessLoadError": "We could not load the guides right now. Check your connection and try again.",
+    "readinessLoadError": "The guides did not load just now. Please check your connection and try again in a moment.",
     "startHereTitle": "New here? Start here",
     "startHereHint": "Short guides on computer basics, Funda, printing and Wi-Fi.",
     "readinessProgress": "{{done}} of {{total}} guides opened. One step at a time.",
@@ -124,6 +119,306 @@
     "readinessDoneHint": "You have finished every guide. You can revisit any of them.",
     "venueToBeConfirmed": "Venue to be confirmed",
     "notSureWhereTitle": "Not sure where this is?",
-    "openMap": "Open map"
+    "openMap": "Open map",
+    "startHereEyebrow": "WELCOME",
+    "startHereCta": "Start the guides",
+    "startHereContinue": "Continue"
+  },
+  "home": {
+    "brand": "Campus Companion",
+    "heroLine1": "You belong here.",
+    "heroLine2": "One step at a time.",
+    "heroSubtitle": "Everything for your first week is here. Not sure where to start? Search, or open Support. Asking is always okay.",
+    "smallerText": "Smaller text",
+    "largerText": "Larger text",
+    "themeButton": "Appearance: {{mode}}. Tap to change.",
+    "checklistEyebrow": "Checklist",
+    "checklistTitle": "Your orientation checklist",
+    "checklistDone": "You finished everything. Well done!",
+    "checklistHint": "Tap a task to tick it off, or open the full checklist. There is no rush.",
+    "cards": {
+      "department": {
+        "title": "From your department",
+        "subtitle": "Expectations, assignments and contacts from your head of department."
+      },
+      "calendar": {
+        "title": "My calendar",
+        "subtitle": "Lectures, orientation, events and your own plans in one month view."
+      },
+      "shuttles": {
+        "title": "Learn your shuttles",
+        "subtitle": "Times, what you need to board, and what to do when you are lost."
+      },
+      "societies": {
+        "title": "Societies",
+        "subtitle": "Faith, your field of study, or something completely different."
+      },
+      "aiGuide": {
+        "title": "Using AI for your studies",
+        "subtitle": "What each tool is good for, and what will get you in trouble."
+      },
+      "arcade": {
+        "title": "Madibaz Arcade",
+        "subtitle": "Play a quick game and unlock a fact about your university."
+      }
+    },
+    "noteTitle": "A note for you",
+    "readMore": "Tap to read more",
+    "openChat": "Open chat assistant"
+  },
+  "appearance": {
+    "system": "Same as phone",
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "emergency": {
+    "eyebrow": "YOU ARE NOT ALONE",
+    "title": "Emergency contacts",
+    "subtitle": "Reaching out takes courage. Whatever is happening, help is a call away, and you will not be judged.",
+    "dangerTitle": "In danger right now?",
+    "dangerText": "Get to a safe place if you can, then call. You do not need to explain everything.",
+    "call": "Call",
+    "callNumber": "Call {{name}} on {{phone}}",
+    "hours24": "24 hours",
+    "footer": "Numbers can change. If one does not work, tell a mentor or the coordinators so it can be fixed.",
+    "back": "Back",
+    "homeTitle": "Need urgent help?",
+    "homeText": "Emergency and counselling numbers. Calling takes courage, and nobody will judge you.",
+    "loginLink": "Need urgent help? Emergency contacts",
+    "categories": {
+      "emergency-services": "Emergency services",
+      "mental-health": "Mental health",
+      "abuse-and-violence": "Abuse and violence",
+      "campus": "Campus"
+    },
+    "items": {
+      "112": {
+        "name": "Emergency services",
+        "description": "Police, ambulance or fire brigade. Works from any cell phone."
+      },
+      "10111": {
+        "name": "Police (SAPS)",
+        "description": "Report a crime or ask the police for help."
+      },
+      "10177": {
+        "name": "Ambulance",
+        "description": "Medical emergencies."
+      },
+      "0800567567": {
+        "name": "Suicide crisis line (SADAG)",
+        "description": "If you are thinking about ending your life, or you are worried about someone who is. You will not be judged."
+      },
+      "0800212223": {
+        "name": "Mental health helpline (SADAG)",
+        "description": "Free counselling and support for stress, anxiety, low mood and more."
+      },
+      "0861322322": {
+        "name": "Lifeline counselling",
+        "description": "Confidential counselling from trained volunteers, when you need someone to talk to."
+      },
+      "0800428428": {
+        "name": "GBV Command Centre",
+        "description": "Free, confidential help if you or someone you know is experiencing gender-based violence."
+      },
+      "27415041111": {
+        "name": "University switchboard",
+        "description": "The main university number, if you are not sure who to call."
+      }
+    },
+    "tapHint": "Tap any card to call. Your phone asks you to confirm before it dials."
+  },
+  "auth": {
+    "enterBoth": "Please add your email and password so we can sign you in.",
+    "emailFormat": "That email does not look quite right. It should look like name@mandela.ac.za.",
+    "credentials": "That email and password do not match. Please check them and try again.",
+    "confirmEmail": "Please confirm your email first. We sent you a message with a link.",
+    "notConnected": "The app could not reach its service. Please tell your administrator.",
+    "noRole": "Your account is not ready yet. That is not your fault. Please ask an administrator to finish setting it up.",
+    "enterEmailFirst": "Please add your email address first.",
+    "resetSent": "We have sent password reset instructions to your email.",
+    "welcome": "Welcome! You are signed in."
+  },
+  "profile": {
+    "tab": "Profile",
+    "title": "Profile & Settings",
+    "myAccount": "MY ACCOUNT",
+    "notSignedIn": "Not signed in",
+    "preferences": "PREFERENCES",
+    "language": "Language",
+    "appearance": "Appearance",
+    "textSize": "Text size",
+    "decreaseText": "Decrease text size",
+    "increaseText": "Increase text size",
+    "appTour": "App tour",
+    "replay": "Replay",
+    "replayLabel": "Replay the app tour",
+    "roleStudent": "Student",
+    "roleBuddy": "FYS Buddy (Mentor)"
+  },
+  "logout": {
+    "action": "Log out",
+    "confirm": "Are you sure you want to log out?",
+    "stay": "Stay signed in"
+  },
+  "tour": {
+    "skip": "Skip",
+    "counter": "STEP {{current}} OF {{total}}",
+    "back": "Back",
+    "next": "Next",
+    "letsGo": "Let's go",
+    "a11y": {
+      "skip": "Skip the tour",
+      "previous": "Previous step",
+      "next": "Next step",
+      "finish": "Finish the tour and start using the app",
+      "progress": "Step {{current}} of {{total}}",
+      "tabBar": "In the bar at the bottom of the app, look for the {{tab}} tab."
+    },
+    "steps": {
+      "welcome": {
+        "title": "Welcome to Campus Companion",
+        "body": "Your first weeks at university can feel like a lot, and that is completely normal. This app puts what you need in one place. Take a one-minute tour. You cannot get anything wrong.",
+        "hint": "Skip any time. You can replay this tour from your Profile."
+      },
+      "home": {
+        "title": "Your home base",
+        "body": "Home shows the latest announcements, shuttle times for your stop, and quick links to everything else. A NEW tag means an announcement went out recently and you have not opened it yet.",
+        "hint": "Scroll down on Home for Sport & gym, programmes and FAQs."
+      },
+      "search": {
+        "title": "Find anything, fast",
+        "body": "Not sure where to look? Use the search bar. It searches answers, venues, sessions, people to contact and guides, all at once.",
+        "hint": "Look for the search bar at the top of Home."
+      },
+      "schedule": {
+        "title": "Know where to be, and when",
+        "body": "See your orientation sessions with their times and venues. Switch to Campus events to see what is on around campus."
+      },
+      "map": {
+        "title": "Never get lost",
+        "body": "The campus map shows buildings and venues. Find a place and get walking directions to it."
+      },
+      "checklist": {
+        "title": "Tick off the essentials",
+        "body": "The new student checklist lists what to sort out in your first weeks, like registration and your student email. Go at your own pace and tick things off as you finish them.",
+        "hint": "Find it on Home: New student checklist."
+      },
+      "digital": {
+        "title": "Get digital-ready",
+        "body": "Step-by-step guides for Funda, Wi-Fi and printing, plus short lessons on file management, staying safe online, strong passwords and using AI tools responsibly."
+      },
+      "tribe": {
+        "title": "Meet your Tribe",
+        "body": "Your Tribe is a chat with your mentor and other first-years. Before you choose a chat name you will agree to keep it respectful. Tap Find groups to browse mentor groups or scan a QR code."
+      },
+      "help": {
+        "title": "Help is always close",
+        "body": "Not sure who to ask? Open Support, choose what you need help with, and the app points you to the right person or service. Contacts lists mentors and advisors you can reach directly. For urgent help, use the red Emergency contacts card on Home."
+      },
+      "profile": {
+        "title": "Make it yours",
+        "body": "In Profile you can switch between English, isiXhosa and Afrikaans, choose light or dark mode, and make the text bigger. You can replay this tour there whenever you like."
+      }
+    }
+  },
+  "shuttle": {
+    "yourStop": "YOUR STOP",
+    "chooseStop": "Choose your stop",
+    "chooseHint": "Choose your stop to see when your shuttle leaves.",
+    "chooseAbove": "Choose your stop above and your times will appear here.",
+    "changeStop": "Your stop is {{stop}}. Tap to change it.",
+    "beforeYouBoard": "Before you board",
+    "closeList": "Close stop list",
+    "close": "Close",
+    "nextShuttle": "next shuttle",
+    "rules": {
+      "boarding-requirement": {
+        "title": "Boarding requirement",
+        "text": "To board the shuttle, all students must present a valid student ID card along with their proof of acceptance or registration letter."
+      },
+      "early-arrival": {
+        "title": "Early arrival",
+        "text": "Students wishing to arrive early on campus are advised to take the first scheduled shuttle of the day."
+      },
+      "assistance": {
+        "title": "Assistance",
+        "text": "Shuttle marshals are available to assist. Students who are unsure of the correct shuttle should ask a marshal for guidance."
+      },
+      "code-of-conduct": {
+        "title": "Code of conduct",
+        "text": "Students are required to follow marshal and driver instructions at all times. Disrespectful behaviour or refusal to comply will result in immediate suspension of shuttle service privileges."
+      },
+      "prohibited-items-and-behaviour": {
+        "title": "Prohibited items and behaviour",
+        "text": "No eating or drinking is permitted inside the shuttles. Alcohol is strictly prohibited. Any student deemed to be intoxicated will be denied access."
+      }
+    },
+    "caption": "{{campus}} campus · {{year}} schedule"
+  },
+  "announcements": {
+    "justNow": "Just now",
+    "minutesAgo": "{{count}} min ago",
+    "hoursAgo": "{{count}} h ago",
+    "yesterday": "Yesterday",
+    "daysAgo": "{{count}} days ago",
+    "posted": "Posted {{when}}"
+  },
+  "tribe": {
+    "yourTribe": "YOUR TRIBE",
+    "mentorGroup": "Mentor group",
+    "members": "{{count}} members",
+    "findGroups": "Find groups",
+    "findGroupsSub": "Browse mentor groups or scan a QR code",
+    "findGroupsLabel": "Find groups or scan a QR code",
+    "loading": "Loading your Tribe...",
+    "almostReady": "Your Tribe is almost ready",
+    "almostReadyText": "Your mentor group will appear here once it has been assigned.",
+    "chooseName": "Choose your chat name",
+    "updateName": "Update your chat name",
+    "keepPrivate": "Keep your real name, student number, and email private in the community.",
+    "namePlaceholder": "e.g. Thando_23",
+    "saveName": "Save chat name",
+    "chattingAs": "Chatting as",
+    "change": "Change",
+    "you": "you",
+    "noMessages": "No messages yet. Start the conversation.",
+    "messagePlaceholder": "Share something with your Tribe...",
+    "chooseFirst": "Choose a chat name first...",
+    "send": "Send message",
+    "errors": {
+      "nameRule": "Use 3-30 letters, numbers, or underscores for your chat name.",
+      "nameTaken": "That chat name is already taken. Try another one.",
+      "saveFailed": "We could not save your chat name just now. Please try again.",
+      "sendFailed": "Your message did not send. Please try again.",
+      "tooLong": "Messages can be up to 1,000 characters.",
+      "loadFailed": "We could not open your Tribe just now. Please try again in a moment."
+    },
+    "conduct": {
+      "title": "Before you join the conversation",
+      "intro": "Tribe is part of Nelson Mandela University's public communication platforms. What you write here represents you and the University, so we keep it respectful and safe for everyone.",
+      "respect": "I will treat everyone in Tribe with respect: my mentor, the coordinators and every other student.",
+      "bully": "I will not bully, harass, threaten, shame or exclude anyone.",
+      "swear": "I will not swear or use offensive, hateful or discriminatory language.",
+      "private": "I will keep my own private details, and other people's, private.",
+      "watched": "I understand that mentors and coordinators can read Tribe messages, and that messages that break these rules can be removed.",
+      "agree": "I have read this and I agree to follow it.",
+      "continue": "Agree and continue"
+    }
+  },
+  "support": {
+    "eyebrow": "STUDENT SUPPORT",
+    "title": "Help & support",
+    "subtitle": "Asking for help takes courage, and everyone needs it sometimes. Find the right person or service, and nobody will judge you.",
+    "moreInfo": "More support information",
+    "unavailableTitle": "Support information did not load",
+    "unavailableText": "Please try again when your connection is back.",
+    "noneTitle": "No support options published yet",
+    "noneText": "Your coordinator will add support services here. In the meantime, use Emergency contacts or ask a mentor.",
+    "adviceLabel": "Academic advice: see School of IT programmes",
+    "adviceTitle": "Need academic advice?",
+    "adviceText": "See your programme and who to speak to."
+  },
+  "faq": {
+    "cantFind": "Can't find it? Ask a question. Others are probably wondering too."
   }
 }

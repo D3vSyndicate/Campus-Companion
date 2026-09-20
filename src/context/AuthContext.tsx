@@ -1,5 +1,6 @@
 import type { Session, User } from '@supabase/supabase-js';
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import i18n from '../i18n';
 import { supabase } from '../lib/superbase';
 
 type AuthContextValue = {
@@ -33,11 +34,11 @@ function getLoginErrorMessage(message: string) {
   const normalized = message.toLowerCase();
 
   if (normalized.includes('invalid login credentials')) {
-    return 'That email or password is incorrect, or the account does not exist in this Supabase project.';
+    return i18n.t('auth.credentials');
   }
 
   if (normalized.includes('email not confirmed')) {
-    return 'Confirm your email address from the Supabase confirmation email before logging in.';
+    return i18n.t('auth.confirmEmail');
   }
 
   return message;
@@ -87,7 +88,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       supabaseUrl === 'https://your-project-ref.supabase.co' ||
       supabaseKey === 'your-publishable-or-anon-key'
     ) {
-      const message = 'Supabase is not configured. Add the values from .env.example to .env.';
+      const message = i18n.t('auth.notConnected');
       setError(message);
       return { error: message, role: null };
     }

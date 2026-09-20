@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Modal, Pressable, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { fetchShuttleRows, SHUTTLE_LABEL, SHUTTLE_RULES } from '../lib/shuttle';
+import { fetchShuttleRows, ruleKey, SHUTTLE_CAMPUS, SHUTTLE_RULES, SHUTTLE_YEAR } from '../lib/shuttle';
 import { useTheme } from '../theme/ThemeContext';
 import { ScaledText as Text } from './ScaledText';
 
@@ -122,21 +122,21 @@ export function ShuttleCard() {
               ? next.tomorrow
                 ? t('common.shuttleTomorrow', { time: next.shuttle.time })
                 : t('common.shuttleNext', { time: next.shuttle.time, route: next.shuttle.shift === 'night' ? next.shuttle.route : myStop })
-              : 'Choose your stop to see when your shuttle leaves.'}
+              : t('shuttle.chooseHint')}
           </Text>
         </View>
       </View>
 
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel={myStop ? `Your stop is ${myStop}. Tap to change it.` : 'Choose your stop'}
+        accessibilityLabel={myStop ? t('shuttle.changeStop', { stop: myStop }) : t('shuttle.chooseStop')}
         onPress={() => setPickerOpen(true)}
         style={({ pressed }) => [styles.stopButton, { backgroundColor: colors.card, borderColor: myStop ? colors.accent : colors.border }, pressed && styles.pressed]}
       >
         <Ionicons name="location-outline" size={18} color={colors.accent} />
         <View style={styles.stopCopy}>
-          <Text style={[styles.stopLabel, { color: colors.textSecondary }]}>YOUR STOP</Text>
-          <Text style={[styles.stopName, { color: colors.text }]} numberOfLines={1}>{myStop || 'Choose your stop'}</Text>
+          <Text style={[styles.stopLabel, { color: colors.textSecondary }]}>{t('shuttle.yourStop')}</Text>
+          <Text style={[styles.stopName, { color: colors.text }]} numberOfLines={1}>{myStop || t('shuttle.chooseStop')}</Text>
         </View>
         <Ionicons name="chevron-down" size={18} color={colors.textSecondary} />
       </Pressable>
@@ -160,7 +160,7 @@ export function ShuttleCard() {
       </View>
 
       {shift !== 'night' && !myStop ? (
-        <Text style={[styles.empty, { color: colors.textSecondary }]}>Choose your stop above and your times will appear here.</Text>
+        <Text style={[styles.empty, { color: colors.textSecondary }]}>{t('shuttle.chooseAbove')}</Text>
       ) : visible.length === 0 ? (
         <Text style={[styles.empty, { color: colors.textSecondary }]}>{t('common.shuttleNoneInShift')}</Text>
       ) : (
@@ -172,7 +172,7 @@ export function ShuttleCard() {
               return (
                 <View
                   key={shuttle.id}
-                  accessibilityLabel={`${shuttle.time}${isNext ? ', next shuttle' : ''}`}
+                  accessibilityLabel={`${shuttle.time}${isNext ? `, ${t('shuttle.nextShuttle')}` : ''}`}
                   style={[styles.pill, { borderColor: isNext ? colors.accent : colors.border, backgroundColor: isNext ? colors.accent : colors.card }]}
                 >
                   <Text style={[styles.pillText, { color: isNext ? '#071B2C' : colors.text }]}>{shuttle.time}</Text>
@@ -193,7 +193,7 @@ export function ShuttleCard() {
         style={[styles.rulesHead, { borderTopColor: colors.border }]}
       >
         <Ionicons name="shield-checkmark-outline" size={18} color={colors.accent} />
-        <Text style={[styles.rulesTitle, { color: colors.text }]}>Before you board</Text>
+        <Text style={[styles.rulesTitle, { color: colors.text }]}>{t('shuttle.beforeYouBoard')}</Text>
         <Ionicons name={rulesOpen ? 'chevron-up' : 'chevron-down'} size={18} color={colors.textSecondary} />
       </Pressable>
 
@@ -201,21 +201,21 @@ export function ShuttleCard() {
         <View style={styles.rules}>
           {SHUTTLE_RULES.map((rule) => (
             <View key={rule.title} style={styles.rule}>
-              <Text style={[styles.ruleTitle, { color: colors.text }]}>{rule.title}</Text>
-              <Text style={[styles.ruleText, { color: colors.textSecondary }]}>{rule.text}</Text>
+              <Text style={[styles.ruleTitle, { color: colors.text }]}>{t(`shuttle.rules.${ruleKey(rule.title)}.title`, { defaultValue: rule.title })}</Text>
+              <Text style={[styles.ruleText, { color: colors.textSecondary }]}>{t(`shuttle.rules.${ruleKey(rule.title)}.text`, { defaultValue: rule.text })}</Text>
             </View>
           ))}
         </View>
       ) : null}
 
-      <Text style={[styles.caption, { color: colors.textSecondary }]}>{SHUTTLE_LABEL}</Text>
+      <Text style={[styles.caption, { color: colors.textSecondary }]}>{t('shuttle.caption', { campus: SHUTTLE_CAMPUS, year: SHUTTLE_YEAR })}</Text>
 
       <Modal visible={pickerOpen} animationType="slide" transparent onRequestClose={() => setPickerOpen(false)}>
-        <Pressable style={styles.backdrop} onPress={() => setPickerOpen(false)} accessibilityLabel="Close stop list" />
+        <Pressable style={styles.backdrop} onPress={() => setPickerOpen(false)} accessibilityLabel={t('shuttle.closeList')} />
         <View style={[styles.sheet, { backgroundColor: colors.background, borderColor: colors.border }]}>
           <View style={styles.sheetHead}>
-            <Text style={[styles.sheetTitle, { color: colors.text }]}>Choose your stop</Text>
-            <Pressable accessibilityRole="button" accessibilityLabel="Close" onPress={() => setPickerOpen(false)} hitSlop={10}>
+            <Text style={[styles.sheetTitle, { color: colors.text }]}>{t('shuttle.chooseStop')}</Text>
+            <Pressable accessibilityRole="button" accessibilityLabel={t('shuttle.close')} onPress={() => setPickerOpen(false)} hitSlop={10}>
               <Ionicons name="close" size={24} color={colors.text} />
             </Pressable>
           </View>

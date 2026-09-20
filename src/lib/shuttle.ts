@@ -12,7 +12,13 @@ const BUILT_IN_ROWS: Row[] = (schedule.rows as Row[]).map((row, index) => ({
 }));
 
 export const SHUTTLE_RULES = schedule.rules as { title: string; text: string }[];
+// The English wording, for screens that are not translated yet. Translated screens use shuttle.caption.
 export const SHUTTLE_LABEL = `${schedule.campus} campus · ${schedule.year} schedule`;
+export const SHUTTLE_CAMPUS = schedule.campus;
+export const SHUTTLE_YEAR = schedule.year;
+
+// "Code of conduct" becomes "code-of-conduct", which names the rule's translation in the language files.
+export const ruleKey = (title: string) => title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 
 // The starter times the old setup script added are placeholders, not a timetable. Never show them.
 const isPlaceholder = (row: Row) => /^sample time/i.test(String(row.notes ?? ''));

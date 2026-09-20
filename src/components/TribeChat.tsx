@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
   FlatList,
@@ -13,6 +14,7 @@ import {
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import i18n from '../i18n';
 import { supabase } from '../lib/superbase';
 import { useTheme } from '../theme/ThemeContext';
 import { ScaledText as Text } from './ScaledText';
@@ -45,21 +47,23 @@ type Message = {
   created_at: string;
 };
 
-// What a new member agrees to before they can choose a chat name.
-const CONDUCT_POINTS: { icon: keyof typeof Ionicons.glyphMap; text: string }[] = [
-  { icon: 'heart-outline', text: 'I will treat everyone in Tribe with respect: my mentor, the coordinators and every other student.' },
-  { icon: 'hand-left-outline', text: 'I will not bully, harass, threaten, shame or exclude anyone.' },
-  { icon: 'chatbubble-ellipses-outline', text: 'I will not swear or use offensive, hateful or discriminatory language.' },
-  { icon: 'lock-closed-outline', text: 'I will keep my own private details, and other people\'s, private.' },
-  { icon: 'eye-outline', text: 'I understand that mentors and coordinators can read Tribe messages, and that messages that break these rules can be removed.' },
+// What a new member agrees to before they can choose a chat name. The wording is in the translation files,
+// under tribe.conduct.<key>.
+const CONDUCT_POINTS: { icon: keyof typeof Ionicons.glyphMap; key: string }[] = [
+  { icon: 'heart-outline', key: 'respect' },
+  { icon: 'hand-left-outline', key: 'bully' },
+  { icon: 'chatbubble-ellipses-outline', key: 'swear' },
+  { icon: 'lock-closed-outline', key: 'private' },
+  { icon: 'eye-outline', key: 'watched' },
 ];
 
-function getErrorMessage(error: unknown, fallback: string) {
-  return error instanceof Error ? error.message : fallback;
-}
+// An error whose message is already written for the student. Any other error is a technical one, and the
+// student sees a kind, general message instead of its raw text.
+class FriendlyError extends Error {}
 
 export function TribeChat({ groupId, setupMessage = '' }: TribeChatProps) {
   const router = useRouter();
+  const { t } = useTranslation();
   const { colors, isDark } = useTheme();
   const insets = useSafeAreaInsets();
   const [group, setGroup] = useState<Group | null>(null);
@@ -88,7 +92,7 @@ export function TribeChat({ groupId, setupMessage = '' }: TribeChatProps) {
 
       try {
         if (!groupId) {
-          throw new Error(setupMessage || 'Your mentor group has not been assigned yet. Check again soon.');
+          throw new FriendlyError(setupMessage || i18n.t('tribe.almostReadyText'));
         }
 
         const {
@@ -142,7 +146,7 @@ export function TribeChat({ groupId, setupMessage = '' }: TribeChatProps) {
           .subscribe();
       } catch (loadError) {
         if (active) {
-          setError(getErrorMessage(loadError, 'Unable to load Tribe right now.'));
+          setError(loadError instanceof FriendlyError ? loadError.message : i18n.t('tribe.errors.loadFailed'));
         }
       } finally {
         if (active) setLoading(false);
@@ -161,7 +165,7 @@ export function TribeChat({ groupId, setupMessage = '' }: TribeChatProps) {
     const cleanedUsername = username.trim();
 
     if (!/^[A-Za-z0-9_]{3,30}$/.test(cleanedUsername)) {
-      setError('Use 3-30 letters, numbers, or underscores for your username.');
+      setError(i18n.t('tribe.errors.nameRule'));
       return;
     }
 
@@ -173,7 +177,7 @@ export function TribeChat({ groupId, setupMessage = '' }: TribeChatProps) {
         data: { user },
       } = await supabase.auth.getUser();
 
-      if (!user) throw new Error('You must be logged in to save a username.');
+      if (!user) throw new Error('not signed in');
 
       const createProfile = (withConduct: boolean) =>
         supabase
@@ -204,7 +208,7 @@ export function TribeChat({ groupId, setupMessage = '' }: TribeChatProps) {
       const { data, error: profileError } = result;
       if (profileError) {
         if (profileError.code === '23505') {
-          throw new Error('That username is already taken. Try another one.');
+          throw new FriendlyError(i18n.t('tribe.errors.nameTaken'));
         }
         throw profileError;
       }
@@ -213,7 +217,7 @@ export function TribeChat({ groupId, setupMessage = '' }: TribeChatProps) {
       setUsername((data as Profile).username);
       setEditingUsername(false);
     } catch (saveError) {
-      setError(getErrorMessage(saveError, 'Unable to save your username.'));
+      setError(saveError instanceof FriendlyError ? saveError.message : i18n.t('tribe.errors.saveFailed'));
     } finally {
       setSavingUsername(false);
     }
@@ -223,7 +227,7 @@ export function TribeChat({ groupId, setupMessage = '' }: TribeChatProps) {
     const cleanedMessage = input.trim();
     if (!cleanedMessage || !profile || sending) return;
     if (cleanedMessage.length > 1000) {
-      setError('Messages can be up to 1,000 characters.');
+      setError(i18n.t('tribe.errors.tooLong'));
       return;
     }
 
@@ -234,7 +238,7 @@ export function TribeChat({ groupId, setupMessage = '' }: TribeChatProps) {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (!user) throw new Error('You must be logged in to send a message.');
+      if (!user) throw new Error('not signed in');
 
       const { error: messageError } = await supabase.from('community_messages').insert({
         group_id: groupId,
@@ -245,7 +249,7 @@ export function TribeChat({ groupId, setupMessage = '' }: TribeChatProps) {
       if (messageError) throw messageError;
       setInput('');
     } catch (sendError) {
-      setError(getErrorMessage(sendError, 'Unable to send your message.'));
+      setError(i18n.t('tribe.errors.sendFailed'));
     } finally {
       setSending(false);
     }
@@ -255,7 +259,7 @@ export function TribeChat({ groupId, setupMessage = '' }: TribeChatProps) {
     return (
       <View style={styles.centerState}>
         <ActivityIndicator color={colors.accent} />
-        <Text style={[styles.stateText, { color: colors.textSecondary }]}>Loading your Tribe...</Text>
+        <Text style={[styles.stateText, { color: colors.textSecondary }]}>{t('tribe.loading')}</Text>
       </View>
     );
   }
@@ -266,8 +270,8 @@ export function TribeChat({ groupId, setupMessage = '' }: TribeChatProps) {
         <View style={[styles.stateIcon, { backgroundColor: colors.card }]}>
           <Ionicons name="people-outline" size={26} color={colors.accent} />
         </View>
-        <Text style={[styles.stateTitle, { color: colors.text }]}>Your Tribe is almost ready</Text>
-        <Text style={[styles.stateText, { color: colors.textSecondary }]}>{error || 'Your mentor group will appear here once it has been assigned.'}</Text>
+        <Text style={[styles.stateTitle, { color: colors.text }]}>{t('tribe.almostReady')}</Text>
+        <Text style={[styles.stateText, { color: colors.textSecondary }]}>{error || t('tribe.almostReadyText')}</Text>
       </View>
     );
   }
@@ -283,24 +287,24 @@ export function TribeChat({ groupId, setupMessage = '' }: TribeChatProps) {
           <Ionicons name="people" size={22} color="#071B2C" />
         </View>
         <View style={styles.groupCopy}>
-          <Text style={[styles.groupLabel, { color: colors.accent }]}>YOUR TRIBE</Text>
+          <Text style={[styles.groupLabel, { color: colors.accent }]}>{t('tribe.yourTribe')}</Text>
           <Text style={styles.heroName} numberOfLines={1}>{group.name}</Text>
           <Text style={styles.heroMeta}>
-            {group.mentor_name || 'Mentor group'}{group.member_count ? ` · ${group.member_count} members` : ''}
+            {group.mentor_name || t('tribe.mentorGroup')}{group.member_count ? ` · ${t('tribe.members', { count: group.member_count })}` : ''}
           </Text>
         </View>
       </View>
 
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel="Find groups or scan a QR code"
+        accessibilityLabel={t('tribe.findGroupsLabel')}
         onPress={() => router.push('/(student)/mentorGroups/groups' as never)}
         style={({ pressed }) => [styles.findGroups, { backgroundColor: colors.accent }, pressed && styles.pressed]}
       >
         <Ionicons name="search" size={18} color="#071B2C" />
         <View style={styles.findCopy}>
-          <Text style={styles.findTitle}>Find groups</Text>
-          <Text style={styles.findSub}>Browse mentor groups or scan a QR code</Text>
+          <Text style={styles.findTitle}>{t('tribe.findGroups')}</Text>
+          <Text style={styles.findSub}>{t('tribe.findGroupsSub')}</Text>
         </View>
         <Ionicons name="chevron-forward" size={18} color="#071B2C" />
       </Pressable>
@@ -318,42 +322,39 @@ export function TribeChat({ groupId, setupMessage = '' }: TribeChatProps) {
                 <Ionicons name="shield-checkmark" size={22} color={colors.accent} />
               </View>
               <Text style={[styles.conductTitle, { color: colors.text }]} accessibilityRole="header">
-                Before you join the conversation
+                {t('tribe.conduct.title')}
               </Text>
             </View>
 
-            <Text style={[styles.conductIntro, { color: colors.textSecondary }]}>
-              Tribe is part of Nelson Mandela University&apos;s public communication platforms. What you write here
-              represents you and the University, so we keep it respectful and safe for everyone.
-            </Text>
+            <Text style={[styles.conductIntro, { color: colors.textSecondary }]}>{t('tribe.conduct.intro')}</Text>
 
             {CONDUCT_POINTS.map((point) => (
-              <View key={point.text} style={styles.conductRow}>
+              <View key={point.key} style={styles.conductRow}>
                 <Ionicons name={point.icon} size={19} color={colors.accent} style={styles.conductRowIcon} />
-                <Text style={[styles.conductText, { color: colors.text }]}>{point.text}</Text>
+                <Text style={[styles.conductText, { color: colors.text }]}>{t(`tribe.conduct.${point.key}`)}</Text>
               </View>
             ))}
 
             <Pressable
               accessibilityRole="checkbox"
               accessibilityState={{ checked: agreed }}
-              accessibilityLabel="I have read this and I agree to follow it"
+              accessibilityLabel={t('tribe.conduct.agree')}
               onPress={() => setAgreed((current) => !current)}
               style={[styles.agreeRow, { borderColor: agreed ? colors.accent : colors.border, backgroundColor: colors.card }]}
             >
               <Ionicons name={agreed ? 'checkbox' : 'square-outline'} size={24} color={agreed ? colors.accent : colors.textSecondary} />
-              <Text style={[styles.agreeText, { color: colors.text }]}>I have read this and I agree to follow it.</Text>
+              <Text style={[styles.agreeText, { color: colors.text }]}>{t('tribe.conduct.agree')}</Text>
             </Pressable>
 
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Agree and continue"
+              accessibilityLabel={t('tribe.conduct.continue')}
               accessibilityState={{ disabled: !agreed }}
               disabled={!agreed}
               onPress={() => setConductAccepted(true)}
               style={[styles.continueButton, { backgroundColor: colors.accent }, !agreed && styles.disabled]}
             >
-              <Text style={styles.continueText}>Agree and continue</Text>
+              <Text style={styles.continueText}>{t('tribe.conduct.continue')}</Text>
               <Ionicons name="arrow-forward" size={18} color="#071B2C" />
             </Pressable>
           </View>
@@ -372,21 +373,21 @@ export function TribeChat({ groupId, setupMessage = '' }: TribeChatProps) {
 
       {(profile ? editingUsername : conductAccepted) ? (
         <View style={[styles.usernameCard, { backgroundColor: colors.surface, borderColor: colors.border }]}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>{profile ? 'Update your chat name' : 'Choose your chat name'}</Text>
-          <Text style={[styles.sectionText, { color: colors.textSecondary }]}>Keep your real name, student number, and email private in the community.</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>{profile ? t('tribe.updateName') : t('tribe.chooseName')}</Text>
+          <Text style={[styles.sectionText, { color: colors.textSecondary }]}>{t('tribe.keepPrivate')}</Text>
           <View style={styles.usernameRow}>
             <TextInput
               style={[styles.usernameInput, { backgroundColor: colors.card, borderColor: colors.border, color: colors.text }]}
               value={username}
               onChangeText={setUsername}
-              placeholder="e.g. Thando_23"
+              placeholder={t('tribe.namePlaceholder')}
               placeholderTextColor={colors.textSecondary}
               maxLength={30}
               autoCapitalize="none"
             />
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel={profile ? 'Update chat name' : 'Save chat name'}
+              accessibilityLabel={profile ? t('tribe.updateName') : t('tribe.saveName')}
               style={[styles.saveButton, { backgroundColor: colors.accent }, savingUsername && styles.disabled]}
               onPress={() => void saveUsername()}
               disabled={savingUsername}
@@ -400,9 +401,9 @@ export function TribeChat({ groupId, setupMessage = '' }: TribeChatProps) {
       {profile && !editingUsername ? (
         <View style={[styles.identityStrip, { backgroundColor: colors.card }]}>
           <Ionicons name="shield-checkmark-outline" size={17} color={colors.accent} />
-          <Text style={[styles.identityText, { color: colors.textSecondary }]}>Chatting as <Text style={{ color: colors.text, fontWeight: '800' }}>{profile.username}</Text></Text>
+          <Text style={[styles.identityText, { color: colors.textSecondary }]}>{t('tribe.chattingAs')} <Text style={{ color: colors.text, fontWeight: '800' }}>{profile.username}</Text></Text>
           <Pressable onPress={() => setEditingUsername(true)} accessibilityRole="button">
-            <Text style={[styles.changeText, { color: colors.text }]}>Change</Text>
+            <Text style={[styles.changeText, { color: colors.text }]}>{t('tribe.change')}</Text>
           </Pressable>
         </View>
       ) : null}
@@ -416,14 +417,14 @@ export function TribeChat({ groupId, setupMessage = '' }: TribeChatProps) {
         onContentSizeChange={() => listRef.current?.scrollToEnd({ animated: true })}
         data={messages}
         keyExtractor={(item) => item.id}
-        ListEmptyComponent={<Text style={[styles.emptyText, { color: colors.textSecondary }]}>No messages yet. Start the conversation.</Text>}
+        ListEmptyComponent={<Text style={[styles.emptyText, { color: colors.textSecondary }]}>{t('tribe.noMessages')}</Text>}
         renderItem={({ item }) => {
           const isMentor = item.role === 'mentor';
           const isMine = Boolean(myId) && item.auth_id === myId;
           return (
             <View style={[styles.messageBubble, { backgroundColor: isMentor ? colors.text : isMine ? colors.card : colors.surface, borderColor: isMine ? colors.accent : colors.border }, isMine ? styles.studentBubble : styles.mentorBubble]}>
               <View style={styles.messageHeader}>
-                <Text style={[styles.messageName, { color: isMentor ? colors.accent : colors.text }]}>{isMine ? `${item.display_name} (you)` : item.display_name}</Text>
+                <Text style={[styles.messageName, { color: isMentor ? colors.accent : colors.text }]}>{isMine ? `${item.display_name} (${t('tribe.you')})` : item.display_name}</Text>
                 <Text style={[styles.messageTime, { color: isMentor ? colors.surface : colors.textSecondary }]}>{new Date(item.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
               </View>
               <Text style={[styles.messageText, { color: isMentor ? colors.surface : colors.text }]}>{item.message_text}</Text>
@@ -437,7 +438,7 @@ export function TribeChat({ groupId, setupMessage = '' }: TribeChatProps) {
           style={[styles.messageInput, { backgroundColor: colors.card, borderColor: colors.border, color: colors.text }]}
           value={input}
           onChangeText={setInput}
-          placeholder={profile ? 'Share something with your Tribe...' : 'Choose a chat name first...'}
+          placeholder={profile ? t('tribe.messagePlaceholder') : t('tribe.chooseFirst')}
           placeholderTextColor={colors.textSecondary}
           editable={Boolean(profile) && !sending}
           maxLength={1000}
@@ -445,7 +446,7 @@ export function TribeChat({ groupId, setupMessage = '' }: TribeChatProps) {
         />
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="Send message"
+          accessibilityLabel={t('tribe.send')}
           style={[styles.sendButton, { backgroundColor: colors.accent }, (!profile || !input.trim() || sending) && styles.disabled]}
           onPress={() => void sendMessage()}
           disabled={!profile || !input.trim() || sending}

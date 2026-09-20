@@ -36,12 +36,12 @@ export default function LoginScreen() {
     setMessage(null);
 
     if (!email.trim() || !password) {
-      setError('Enter your email and password.');
+      setError(t('auth.enterBoth'));
       return;
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      setError('Enter a valid email address, for example name@mandela.ac.za.');
+      setError(t('auth.emailFormat'));
       return;
     }
 
@@ -58,13 +58,11 @@ export default function LoginScreen() {
     // person to a screen that silently sends them back here.
     if (!result.role) {
       await signOut();
-      setError(
-        'You are signed in, but this account has not been given a role yet, so the app does not know where to take you. Please ask an administrator to set your role.',
-      );
+      setError(t('auth.noRole'));
       return;
     }
 
-    showToast('Login successful', 'success');
+    showToast(t('auth.welcome'), 'success');
     // Always the home screen for this account, never wherever the last person was.
     router.replace(homeRouteFor(result.role) as never);
   };
@@ -74,7 +72,7 @@ export default function LoginScreen() {
     setMessage(null);
 
     if (!email.trim()) {
-      setError('Enter your email address first.');
+      setError(t('auth.enterEmailFirst'));
       return;
     }
 
@@ -87,7 +85,7 @@ export default function LoginScreen() {
       return;
     }
 
-    setMessage('Password reset instructions have been sent to your email.');
+    setMessage(t('auth.resetSent'));
   };
 
   if (!authLoading && user && role) {
@@ -116,7 +114,7 @@ export default function LoginScreen() {
             <Text style={[styles.title, { color: colors.text }]}>{t('common.welcomeBack')}</Text>
 
             <Text style={[styles.subtitle, { color: colors.textSecondary }]}> 
-              Sign in to your Campus Companion account
+              {t('common.loginSubtitle')}
             </Text>
 
             <LanguageSwitcher />
@@ -162,7 +160,7 @@ export default function LoginScreen() {
               disabled={loading}
             >
               <Text style={[styles.forgotText, { color: colors.text }]}> 
-                Forgot password?
+                {t('common.forgotPassword')}
               </Text>
             </TouchableOpacity>
 
@@ -183,6 +181,14 @@ export default function LoginScreen() {
 
             {error && <Text style={[styles.errorText, { color: colors.danger }]}>{error}</Text>}
             {message && <Text style={[styles.messageText, { color: colors.accent }]}>{message}</Text>}
+
+            <TouchableOpacity
+              accessibilityRole="button"
+              onPress={() => router.push('/emergency' as never)}
+              style={styles.urgentHelp}
+            >
+              <Text style={[styles.urgentHelpText, { color: colors.textSecondary }]}>{t('emergency.loginLink')}</Text>
+            </TouchableOpacity>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -191,6 +197,16 @@ export default function LoginScreen() {
 }
 
 const styles = StyleSheet.create({
+  urgentHelp: {
+    alignItems: 'center',
+    marginTop: 18,
+    paddingVertical: 8,
+  },
+  urgentHelpText: {
+    fontSize: 13,
+    fontWeight: '700',
+    textDecorationLine: 'underline',
+  },
   container: {
     flex: 1,
   },

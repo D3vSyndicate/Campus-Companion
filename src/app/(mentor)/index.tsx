@@ -20,6 +20,7 @@ const ACTIONS: Action[] = [
   { route: '/(mentor)/map', icon: 'map-outline', title: 'Campus map', text: 'Find any building and show first-years the way.' },
   { route: '/(mentor)/venues', icon: 'location-outline', title: 'Venue guide', text: 'Directions you can give with confidence.' },
   { route: '/(mentor)/refer', icon: 'hand-left-outline', title: 'Refer a student', text: 'Who to point students to for each kind of help.' },
+  { route: '/(mentor)/emergency', icon: 'call-outline', title: 'Emergency contacts', text: 'Numbers to share when a student needs urgent help.' },
   { route: '/(mentor)/guide', icon: 'book-outline', title: 'Buddy guide', text: 'Kind wording, your boundaries and a first-week checklist.' },
 ];
 

@@ -42,7 +42,8 @@ It runs these, in this order:
 6. `supabase/hod.sql` (head of department content)
 7. `supabase/migrations/20260919140000_sport_gym_madibaz.sql` (the Madibaz clubs and how to join)
 8. `supabase/migrations/20260919150000_shuttle_times_2026.sql` (the 2026 Gqeberha shuttle schedule)
-9. `supabase/mentor_groups.sql` (mentor groups, join requests and QR codes)
+9. `supabase/migrations/20260920100000_emergency_contacts.sql` (emergency and counselling numbers)
+10. `supabase/mentor_groups.sql` (mentor groups, join requests and QR codes)
 
 Login routing uses the signed-in user's Supabase Auth metadata. Set a user's
 role to `admin`, `coordinator`, `hod`, `mentor`, or `student` in `app_metadata.role` (preferred) or

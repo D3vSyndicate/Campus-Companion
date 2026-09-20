@@ -20,6 +20,7 @@ const parts = [
   ['supabase/hod.sql', 'Head of department: programme information, expectations, assignments, resources, contacts'],
   ['supabase/migrations/20260919140000_sport_gym_madibaz.sql', 'Sport & gym: the real Madibaz clubs and how to join'],
   ['supabase/migrations/20260919150000_shuttle_times_2026.sql', 'Shuttle times: the real 2026 Gqeberha schedule'],
+  ['supabase/migrations/20260920100000_emergency_contacts.sql', 'Emergency contacts: the national help numbers, editable by staff'],
   ['supabase/mentor_groups.sql', 'Mentor groups, join requests and QR codes'],
 ];
 

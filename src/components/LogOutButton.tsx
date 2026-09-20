@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import { Alert, Platform, Pressable, StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../theme/ThemeContext';
@@ -8,6 +9,7 @@ import { ScaledText as Text } from './ScaledText';
 // screen. Redirecting by hand as well used to race that, which is what made it feel unreliable.
 export function useLogOut() {
   const { signOut } = useAuth();
+  const { t } = useTranslation();
 
   return () => {
     const logOut = () => {
@@ -16,30 +18,31 @@ export function useLogOut() {
 
     // Alert shows no buttons on the web build, so ask with the browser's own dialog there.
     if (Platform.OS === 'web') {
-      if (typeof window === 'undefined' || window.confirm('Are you sure you want to log out?')) logOut();
+      if (typeof window === 'undefined' || window.confirm(t('logout.confirm'))) logOut();
       return;
     }
 
-    Alert.alert('Log out', 'Are you sure you want to log out?', [
-      { text: 'Stay signed in', style: 'cancel' },
-      { text: 'Log out', style: 'destructive', onPress: logOut },
+    Alert.alert(t('logout.action'), t('logout.confirm'), [
+      { text: t('logout.stay'), style: 'cancel' },
+      { text: t('logout.action'), style: 'destructive', onPress: logOut },
     ]);
   };
 }
 
 export function LogOutButton({ style }: { style?: StyleProp<ViewStyle> }) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const logOut = useLogOut();
 
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel="Log out"
+      accessibilityLabel={t('logout.action')}
       onPress={logOut}
       style={({ pressed }) => [styles.button, { borderColor: colors.danger }, pressed && { opacity: 0.7 }, style]}
     >
       <Ionicons name="log-out-outline" size={18} color={colors.danger} />
-      <Text style={[styles.label, { color: colors.danger }]}>Log out</Text>
+      <Text style={[styles.label, { color: colors.danger }]}>{t('logout.action')}</Text>
     </Pressable>
   );
 }

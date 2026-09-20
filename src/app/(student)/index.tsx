@@ -91,6 +91,18 @@ interface ActionItem {
 // Quick actions
 // -----------------------------------------------------------------------------
 
+// Where each card gets its wording. Cards without an entry use home.cards.<key>.
+const CARD_TEXT: Record<string, { title: string; subtitle: string }> = {
+  schedule: { title: 'common.scheduleTitleShort', subtitle: 'common.scheduleSubtitleShort' },
+  checklist: { title: 'common.checklistTitleShort', subtitle: 'common.checklistSubtitleShort' },
+  contacts: { title: 'common.contactsTitleShort', subtitle: 'common.contactsSubtitleShort' },
+  digital: { title: 'common.digitalTitleShort', subtitle: 'common.digitalSubtitleShort' },
+  faqs: { title: 'common.faqsTitleShort', subtitle: 'common.faqsSubtitleShort' },
+  events: { title: 'common.eventsTitle', subtitle: 'common.eventsSubtitle' },
+  sportGym: { title: 'common.sportGymTitle', subtitle: 'common.sportGymSubtitle' },
+  programmes: { title: 'common.programmesTitle', subtitle: 'common.programmesSubtitle' },
+};
+
 const ACTIONS: ActionItem[] = [
   {
     key: 'schedule',
@@ -336,6 +348,7 @@ function AnnouncementCard({
   posted: string;
 }) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
 
   const urgent =
     item.priority?.toLowerCase() === 'urgent' ||
@@ -417,7 +430,7 @@ function AnnouncementCard({
             urgent && styles.readMoreUrgent,
           ]}
         >
-          Tap to read more
+          {t('home.readMore')}
         </Text>
       )}
     </Pressable>
@@ -552,6 +565,9 @@ export default function HomeScreen() {
       userMetadata.first_name ??
       'Student',
   ).trim();
+  // Only a name the student actually has. Falling back to the word "Student" or an email would read coldly.
+  const knownName = String(userMetadata.full_name ?? userMetadata.name ?? userMetadata.first_name ?? '').trim();
+  const firstName = knownName.split(/\s+/)[0] ?? '';
   const studentNumber = String(
     userMetadata.student_number ??
       userMetadata.studentNumber ??
@@ -841,7 +857,11 @@ export default function HomeScreen() {
             style={styles.heroBackgroundImage}
             contentFit="fill"
           />
-          <View style={styles.heroImageOverlay} />
+          <LinearGradient
+            colors={['rgba(4,19,29,0.25)', 'rgba(4,19,29,0.55)', 'rgba(4,19,29,0.9)']}
+            locations={[0, 0.45, 1]}
+            style={styles.heroImageOverlay}
+          />
           {/* Decorative glow */}
 
           <View style={styles.heroGlowOne} />
@@ -849,90 +869,62 @@ export default function HomeScreen() {
           <View style={styles.heroGlowTwo} />
 
           <View style={styles.heroTopRow}>
-            <View>
-              <Text style={styles.eyebrow}>
-                {t('common.schoolOfIt')}
-              </Text>
-
-              <Text style={styles.heroMiniText}>
-                {t('common.campusCompanion')}
-              </Text>
+            <View style={styles.heroBrand}>
+              <Text style={styles.eyebrow}>{t('common.schoolOfIt')}</Text>
+              <Text style={styles.heroMiniText}>{t('home.brand')}</Text>
             </View>
 
             <View style={styles.appearanceControls}>
-              <View
-                style={styles.fontSizeControls}
-                accessibilityLabel="Text size"
-              >
+              <View style={styles.fontSizeControls}>
                 <Pressable
-                  style={[
-                    styles.fontSizeButton,
-                    fontScale <= 0.7 &&
-                      styles.fontSizeButtonDisabled,
-                  ]}
-                  onPress={() =>
-                    adjustFontScale(-0.1)
-                  }
+                  style={[styles.fontSizeButton, fontScale <= 0.7 && styles.fontSizeButtonDisabled]}
+                  onPress={() => adjustFontScale(-0.1)}
                   disabled={fontScale <= 0.7}
                   accessibilityRole="button"
-                  accessibilityLabel="Decrease text size"
+                  accessibilityLabel={t('home.smallerText')}
                 >
-                  <Text style={styles.fontSizeButtonText}>
-                    A-
-                  </Text>
+                  <Text style={styles.fontSizeButtonText}>A-</Text>
                 </Pressable>
 
-                <Text style={styles.fontSizeValue}>
-                  {Math.round(fontScale * 100)}%
-                </Text>
-
                 <Pressable
-                  style={[
-                    styles.fontSizeButton,
-                    fontScale >= 1.3 &&
-                      styles.fontSizeButtonDisabled,
-                  ]}
-                  onPress={() =>
-                    adjustFontScale(0.1)
-                  }
+                  style={[styles.fontSizeButton, fontScale >= 1.3 && styles.fontSizeButtonDisabled]}
+                  onPress={() => adjustFontScale(0.1)}
                   disabled={fontScale >= 1.3}
                   accessibilityRole="button"
-                  accessibilityLabel="Increase text size"
+                  accessibilityLabel={t('home.largerText')}
                 >
-                  <Text style={styles.fontSizeButtonText}>
-                    A+
-                  </Text>
+                  <Text style={styles.fontSizeButtonText}>A+</Text>
                 </Pressable>
               </View>
 
               <Pressable
-                style={styles.themeToggle}
+                style={styles.themeIconButton}
                 onPress={handleThemeToggle}
                 accessibilityRole="button"
-                accessibilityLabel={`Theme: ${themeLabel}`}
+                accessibilityLabel={t('home.themeButton', { mode: t(`appearance.${themeLabel.toLowerCase()}`) })}
               >
-                <Text style={styles.themeToggleText}>
-                  Theme: {themeLabel}
-                </Text>
+                <Ionicons
+                  name={userOverride === null ? 'phone-portrait-outline' : darkMode ? 'moon' : 'sunny'}
+                  size={18}
+                  color="#FFFFFF"
+                />
               </Pressable>
             </View>
           </View>
 
           <View style={styles.heroContent}>
-            <Text style={styles.greeting}>
-              {greeting}
-            </Text>
-
             <View style={styles.studentIdentity}>
               <View style={styles.studentAvatar}>
                 <Text style={styles.studentAvatarText}>{studentInitials || 'S'}</Text>
               </View>
 
               <View style={styles.studentIdentityCopy}>
-                <Text style={styles.studentName}>{studentName}</Text>
-                <Text style={styles.studentEmail} numberOfLines={1}>
-                  {user?.email ?? 'Student account'}
-                </Text>
+                <Text style={styles.greeting}>{firstName ? `${greeting},` : greeting}</Text>
+                {firstName ? (
+                  <Text style={styles.studentName} numberOfLines={1}>
+                    {firstName}
+                  </Text>
+                ) : null}
               </View>
 
               {studentNumber ? (
@@ -942,33 +934,20 @@ export default function HomeScreen() {
               ) : null}
             </View>
 
-            <Text style={styles.welcomeTitle}>
-              {t('common.startStrong')}
-            </Text>
-
-            <Text style={styles.welcomeTitleAccent}>
-              {t('common.stayConnected')}
-            </Text>
-
-            <Text style={styles.subtitle}>
-              {t('common.weekSubtitle')}
-            </Text>
-          </View>
-
-          <View style={styles.heroBottom}>
-            <View style={styles.statusIndicator} />
-
-            <Text style={styles.heroStatus}>
-              {t('common.campusStatus')}
-            </Text>
-
-            <Ionicons
-              name="arrow-forward"
-              size={15}
-              color={colors.accent}
-            />
+            <Text style={styles.welcomeTitle}>{t('home.heroLine1')}</Text>
+            <Text style={styles.welcomeTitleAccent}>{t('home.heroLine2')}</Text>
+            <Text style={styles.subtitle}>{t('home.heroSubtitle')}</Text>
           </View>
         </LinearGradient>
+
+        {/* The welcome card is the first thing under the header, ahead of search and announcements. */}
+        {readiness.totalSteps > 0 && (
+          <ReadinessCard
+            done={readiness.doneSteps}
+            total={readiness.totalSteps}
+            onPress={() => handleNavigate('/(student)/digital')}
+          />
+        )}
 
         <SearchEntry area="student" scope="all" />
 
@@ -977,9 +956,30 @@ export default function HomeScreen() {
         {/* ================================================================= */}
 
         <ShameResilientBanner
+          title={t('home.noteTitle')}
           message={t('common.supportBanner')}
           type="encouragement"
         />
+
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={t('emergency.homeTitle')}
+          onPress={() => handleNavigate('/(student)/emergency')}
+          style={({ pressed }) => [
+            styles.emergencyCard,
+            { backgroundColor: colors.surface, borderColor: 'rgba(198,40,40,0.35)' },
+            pressed && styles.actionCardPressed,
+          ]}
+        >
+          <View style={[styles.emergencyIcon, { backgroundColor: '#C62828' }]}>
+            <Ionicons name="call" size={20} color="#FFFFFF" />
+          </View>
+          <View style={styles.emergencyCopy}>
+            <Text style={[styles.emergencyTitle, { color: colors.text }]}>{t('emergency.homeTitle')}</Text>
+            <Text style={[styles.emergencyText, { color: colors.textSecondary }]}>{t('emergency.homeText')}</Text>
+          </View>
+          <Ionicons name="chevron-forward" size={18} color={colors.textSecondary} />
+        </Pressable>
 
         {!checklistSummary.loading && checklistSummary.total > 0 && (
           <View style={styles.section}>
@@ -992,13 +992,13 @@ export default function HomeScreen() {
               ]}
             >
               <View style={styles.checklistSummaryHeader}>
-                <Text style={[styles.sectionEyebrow, { color: colors.accent }]}>Checklist</Text>
+                <Text style={[styles.sectionEyebrow, { color: colors.accent }]}>{t('home.checklistEyebrow')}</Text>
                 <Text style={[styles.checklistSummaryBadge, { color: colors.accent }]}>
                   {checklistSummary.completed}/{checklistSummary.total}
                 </Text>
               </View>
 
-              <Text style={[styles.sectionHeader, { color: colors.text }]}>Your orientation checklist</Text>
+              <Text style={[styles.sectionHeader, { color: colors.text }]}>{t('home.checklistTitle')}</Text>
 
               <View style={[styles.progressTrack, { backgroundColor: colors.card }]}>
                 <View
@@ -1045,8 +1045,8 @@ export default function HomeScreen() {
 
               <Text style={[styles.checklistSummaryText, { color: colors.textSecondary }]}>
                 {checklistSummary.completed === checklistSummary.total
-                  ? 'Nice work — you finished everything. Keep going!'
-                  : 'Tap a task to update it, or open the full checklist.'}
+                  ? t('home.checklistDone')
+                  : t('home.checklistHint')}
               </Text>
             </Pressable>
           </View>
@@ -1055,14 +1055,6 @@ export default function HomeScreen() {
         {/* ================================================================= */}
         {/* ANNOUNCEMENTS */}
         {/* ================================================================= */}
-
-        {readiness.totalSteps > 0 && (
-          <ReadinessCard
-            done={readiness.doneSteps}
-            total={readiness.totalSteps}
-            onPress={() => handleNavigate('/(student)/digital')}
-          />
-        )}
 
         <ShuttleCard />
 
@@ -1183,12 +1175,8 @@ export default function HomeScreen() {
               key={action.key}
               action={{
                 ...action,
-                title: t(
-                  `common.${action.key}Title`,
-                ),
-                subtitle: t(
-                  `common.${action.key}Subtitle`,
-                ),
+                title: t(CARD_TEXT[action.key]?.title ?? `home.cards.${action.key}.title`, { defaultValue: action.title }),
+                subtitle: t(CARD_TEXT[action.key]?.subtitle ?? `home.cards.${action.key}.subtitle`, { defaultValue: action.subtitle }),
               }}
               onPress={() =>
                 handleNavigate(action.route)
@@ -1224,7 +1212,7 @@ export default function HomeScreen() {
           router.push('/chatbot');
         }}
         accessibilityRole="button"
-        accessibilityLabel="Open chat assistant"
+        accessibilityLabel={t('home.openChat')}
         style={styles.chatFab}
       >
         <Ionicons name="chatbubble-ellipses" size={26} color="#fff" />
@@ -1238,6 +1226,48 @@ export default function HomeScreen() {
 // -----------------------------------------------------------------------------
 
 const styles = StyleSheet.create({
+  heroBrand: {
+    flexShrink: 1,
+  },
+  themeIconButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.26)',
+    backgroundColor: 'rgba(255,255,255,0.1)',
+  },
+  emergencyCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    borderWidth: 1,
+    borderRadius: 18,
+    padding: 14,
+    marginTop: 4,
+    marginBottom: 16,
+  },
+  emergencyIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emergencyCopy: {
+    flex: 1,
+  },
+  emergencyTitle: {
+    fontSize: 15,
+    fontWeight: '800',
+  },
+  emergencyText: {
+    fontSize: 12,
+    lineHeight: 18,
+    marginTop: 2,
+  },
   // ===========================================================================
   // Layout
   // ===========================================================================
@@ -1369,7 +1399,6 @@ const styles = StyleSheet.create({
   },
   heroImageOverlay: {
     ...StyleSheet.absoluteFill,
-    backgroundColor: 'rgba(4, 19, 29, 0.28)',
   },
 
   heroGlowOne: {
@@ -1406,41 +1435,31 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
+    gap: 12,
   },
 
-  themeToggle: {
-    backgroundColor:
-      'rgba(255,255,255,0.12)',
-    borderColor:
-      'rgba(255,255,255,0.26)',
-    borderWidth: 1,
-    borderRadius: 999,
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-  },
 
   appearanceControls: {
-    alignItems: 'flex-end',
-    gap: 6,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
   },
 
   fontSizeControls: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 3,
+    gap: 6,
   },
 
   fontSizeButton: {
-    minWidth: 26,
-    minHeight: 24,
+    minWidth: 40,
+    minHeight: 40,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 5,
+    borderRadius: 12,
     borderWidth: 1,
-    borderColor:
-      'rgba(255,255,255,0.26)',
-    backgroundColor:
-      'rgba(255,255,255,0.08)',
+    borderColor: 'rgba(255,255,255,0.26)',
+    backgroundColor: 'rgba(255,255,255,0.1)',
   },
 
   fontSizeButtonDisabled: {
@@ -1449,24 +1468,11 @@ const styles = StyleSheet.create({
 
   fontSizeButtonText: {
     color: '#FFFFFF',
-    fontSize: 11,
+    fontSize: 14,
     fontWeight: '800',
   },
 
-  fontSizeValue: {
-    color: '#FFFFFF',
-    minWidth: 34,
-    textAlign: 'center',
-    fontSize: 10,
-    fontWeight: '700',
-  },
 
-  themeToggleText: {
-    color: '#FFFFFF',
-    fontSize: 11,
-    fontWeight: '700',
-    letterSpacing: 0.5,
-  },
 
   eyebrow: {
     color: '#F4C542',
@@ -1509,14 +1515,13 @@ const styles = StyleSheet.create({
   },
 
   heroContent: {
-    marginTop: 42,
+    marginTop: 28,
   },
 
   greeting: {
     color: '#F4C542',
-    fontSize: 14,
-    fontWeight: '600',
-    marginBottom: 5,
+    fontSize: 13,
+    fontWeight: '700',
   },
 
   studentIdentity: {
@@ -1524,7 +1529,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'flex-start',
     maxWidth: '100%',
-    marginBottom: 22,
+    marginBottom: 20,
     paddingRight: 10,
   },
 
@@ -1551,15 +1556,11 @@ const styles = StyleSheet.create({
 
   studentName: {
     color: COLORS.white,
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: '800',
+    marginTop: 1,
   },
 
-  studentEmail: {
-    color: 'rgba(255,255,255,0.68)',
-    fontSize: 11,
-    marginTop: 3,
-  },
 
   studentNumberBadge: {
     maxWidth: 120,
@@ -1579,48 +1580,29 @@ const styles = StyleSheet.create({
 
   welcomeTitle: {
     color: COLORS.white,
-    fontSize: 32,
-    lineHeight: 36,
+    fontSize: 30,
+    lineHeight: 35,
     fontWeight: '800',
-    letterSpacing: -0.8,
+    letterSpacing: -0.6,
   },
 
   welcomeTitleAccent: {
     color: '#F4C542',
-    fontSize: 32,
-    lineHeight: 36,
+    fontSize: 30,
+    lineHeight: 35,
     fontWeight: '800',
-    letterSpacing: -0.8,
+    letterSpacing: -0.6,
   },
 
   subtitle: {
-    color: 'rgba(255,255,255,0.72)',
-    fontSize: 13.5,
-    lineHeight: 20,
+    color: 'rgba(255,255,255,0.78)',
+    fontSize: 14,
+    lineHeight: 21,
     marginTop: 12,
-    maxWidth: '88%',
   },
 
-  heroBottom: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 7,
-    marginTop: 24,
-  },
 
-  statusIndicator: {
-    width: 7,
-    height: 7,
-    borderRadius: 4,
-    backgroundColor: '#7CE8D9',
-  },
 
-  heroStatus: {
-    flex: 1,
-    color: 'rgba(255,255,255,0.58)',
-    fontSize: 11,
-    fontWeight: '600',
-  },
 
   // ===========================================================================
   // Section headers
