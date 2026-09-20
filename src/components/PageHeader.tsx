@@ -100,8 +100,13 @@ export function PageHeader({
   const canGoBack = showBack || Boolean(backHref);
 
   const goBack = () => {
-    if (router.canGoBack()) router.back();
-    else if (backTarget) router.replace(backTarget as never);
+    if (backHref) {
+      router.replace(backHref as never);
+    } else if (router.canGoBack()) {
+      router.back();
+    } else if (backTarget) {
+      router.replace(backTarget as never);
+    }
   };
 
   return (

@@ -649,7 +649,13 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
               title={config.title}
               subtitle={config.description}
               showSearch={false}
-              backHref={segments[0] === '(admin)' ? '/(admin)' : undefined}
+              backHref={
+                segments[0] === '(admin)'
+                  ? '/(admin)'
+                  : segments[0] === '(coordinator)'
+                    ? '/(coordinator)'
+                    : undefined
+              }
             />
 
             {loadError ? (
