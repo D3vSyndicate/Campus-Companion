@@ -13,6 +13,19 @@ begin
 end
 $$;
 
+-- Keep the policy decision independent from a client-supplied role and from a
+-- potentially stale app_role lookup. Supabase signs app_metadata into the JWT.
+create or replace function public.coordinator_can_manage()
+returns boolean
+language sql
+stable
+as $$
+  select lower(trim(coalesce(auth.jwt() -> 'app_metadata' ->> 'role', '')))
+    in ('coordinator', 'admin')
+$$;
+
+grant execute on function public.coordinator_can_manage() to authenticated;
+
 do $$
 declare
   table_name text;
@@ -49,15 +62,15 @@ begin
       table_name
     );
     execute format(
-      'create policy cc_staff_insert on public.%I for insert to authenticated with check (public.is_staff())',
+      'create policy cc_staff_insert on public.%I for insert to authenticated with check (public.coordinator_can_manage())',
       table_name
     );
     execute format(
-      'create policy cc_staff_update on public.%I for update to authenticated using (public.is_staff()) with check (public.is_staff())',
+      'create policy cc_staff_update on public.%I for update to authenticated using (public.coordinator_can_manage()) with check (public.coordinator_can_manage())',
       table_name
     );
     execute format(
-      'create policy cc_staff_delete on public.%I for delete to authenticated using (public.is_staff())',
+      'create policy cc_staff_delete on public.%I for delete to authenticated using (public.coordinator_can_manage())',
       table_name
     );
 

@@ -42,6 +42,17 @@ as $$ select public.app_role() in ('coordinator', 'admin') $$;
 grant execute on function public.app_role() to authenticated;
 grant execute on function public.is_staff() to authenticated;
 
+create or replace function public.coordinator_can_manage()
+returns boolean
+language sql
+stable
+as $$
+  select lower(trim(coalesce(auth.jwt() -> 'app_metadata' ->> 'role', '')))
+    in ('coordinator', 'admin')
+$$;
+
+grant execute on function public.coordinator_can_manage() to authenticated;
+
 -- FYS buddies (senior student mentors). They read everything students read and chat in their
 -- tribe as a mentor, but they cannot edit content.
 create or replace function public.is_mentor()
@@ -84,9 +95,9 @@ begin
     end loop;
 
     execute format('create policy cc_read on public.%I for select to anon, authenticated using (true)', t);
-    execute format('create policy cc_staff_insert on public.%I for insert to authenticated with check (public.is_staff())', t);
-    execute format('create policy cc_staff_update on public.%I for update to authenticated using (public.is_staff()) with check (public.is_staff())', t);
-    execute format('create policy cc_staff_delete on public.%I for delete to authenticated using (public.is_staff())', t);
+    execute format('create policy cc_staff_insert on public.%I for insert to authenticated with check (public.coordinator_can_manage())', t);
+    execute format('create policy cc_staff_update on public.%I for update to authenticated using (public.coordinator_can_manage()) with check (public.coordinator_can_manage())', t);
+    execute format('create policy cc_staff_delete on public.%I for delete to authenticated using (public.coordinator_can_manage())', t);
   end loop;
 end
 $$;

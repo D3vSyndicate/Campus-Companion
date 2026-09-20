@@ -344,50 +344,67 @@ export function ManageScreen({ config }: { config: ManageConfig }) {
     const name = config.listTitle(row, lookupLabels);
     const rowId = idOf(row);
 
+    const confirmDelete = () => {
+      void (async () => {
+        setDeletingId(rowId);
+
+        try {
+          const { error } = await supabase
+            .from(config.table)
+            .delete()
+            .eq(config.pk, rowId);
+
+          if (error) {
+            showToast(friendlyError(error, config.setupFile, role), 'error');
+            return;
+          }
+
+          const { data: remainingRow, error: verifyError } = await supabase
+            .from(config.table)
+            .select(config.pk)
+            .eq(config.pk, rowId)
+            .maybeSingle();
+
+          if (verifyError) {
+            showToast(friendlyError(verifyError, config.setupFile, role), 'error');
+            return;
+          }
+
+          if (remainingRow) {
+            showToast(
+              `The database did not delete this ${config.itemNoun}. Check the Coordinator delete policy in Supabase.`,
+              'error',
+            );
+            return;
+          }
+
+          setRows((currentRows) =>
+            currentRows.filter((currentRow) => idOf(currentRow) !== rowId),
+          );
+          setEditing(null);
+          showToast(`${config.itemNoun} deleted`);
+        } catch (error) {
+          const message = error instanceof Error ? error.message : 'The item could not be deleted.';
+          showToast(message, 'error');
+        } finally {
+          setDeletingId(null);
+        }
+      })();
+    };
+
+    if (Platform.OS === 'web' && typeof window !== 'undefined') {
+      if (window.confirm(`Delete "${name}"? This cannot be undone.`)) {
+        confirmDelete();
+      }
+      return;
+    }
+
     Alert.alert(
       `Delete ${config.itemNoun}`,
       `Delete "${name}"? This cannot be undone.`,
       [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: () => {
-            void (async () => {
-              setDeletingId(rowId);
-
-              try {
-                const { data, error } = await supabase
-                  .from(config.table)
-                  .delete()
-                  .eq(config.pk, rowId)
-                  .select(config.pk);
-
-                if (error) {
-                  showToast(friendlyError(error, config.setupFile, role), 'error');
-                  return;
-                }
-
-                if (!data?.length) {
-                  showToast(noPermissionMessage(role, config.setupFile), 'error');
-                  return;
-                }
-
-                await load();
-                setEditing(null);
-                showToast(`${config.itemNoun} deleted`);
-              } catch (error) {
-                const message = error instanceof Error ? error.message : 'The item could not be deleted.';
-                showToast(message, 'error');
-              } finally {
-                setDeletingId(null);
-              }
-            })();
-          },
-        },
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Delete', style: 'destructive', onPress: confirmDelete },
       ],
     );
   };
