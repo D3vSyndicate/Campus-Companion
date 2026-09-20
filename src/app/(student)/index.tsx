@@ -24,7 +24,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ReadinessCard } from '../../components/ReadinessCard';
 import { SearchEntry } from '../../components/search/SearchEntry';
 import { ShameResilientBanner } from '../../components/ShameResilientBanner';
-import { ShuttleCard } from '../../components/ShuttleCard';
 import { useAppearance } from '../../context/AppearanceContext';
 import { useAuth } from '../../context/AuthContext';
 import { isRecent, newestFirst, postedAtOf, postedLabel, useSeenAnnouncements } from '../../lib/announcements';
@@ -1049,8 +1048,6 @@ export default function HomeScreen() {
         {/* ================================================================= */}
         {/* ANNOUNCEMENTS */}
         {/* ================================================================= */}
-
-        <ShuttleCard />
 
         {(loading || announcements.length > 0) && (
           <View style={styles.section}>
