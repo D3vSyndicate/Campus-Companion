@@ -1,32 +1,84 @@
-import { Stack } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import { Tabs } from 'expo-router';
 import { AuthGate } from '../../components/AuthGate';
-import { ThemeProvider } from '../../theme/ThemeContext';
+import { ThemeProvider, useTheme } from '../../theme/ThemeContext';
 
-// Every screen in here draws its own header (PageHeader), so the navigator does not add a second one.
-// Profile keeps the plain navigation header because it is not a content screen.
+const TAB_ICON_SIZE = 22;
+
+function AdminTabs() {
+  const { colors } = useTheme();
+
+  return (
+    <Tabs
+      backBehavior="history"
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: colors.accent,
+        tabBarInactiveTintColor: colors.textSecondary,
+        tabBarLabelStyle: { fontSize: 10, fontWeight: '700' },
+        tabBarStyle: {
+          backgroundColor: colors.surface,
+          borderTopColor: colors.border,
+          height: 68,
+          paddingTop: 6,
+        },
+      }}>
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: 'Home',
+          tabBarIcon: ({ color }) => <Ionicons name="home-outline" size={TAB_ICON_SIZE} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="schedule"
+        options={{
+          title: 'Schedule',
+          tabBarIcon: ({ color }) => <Ionicons name="calendar-outline" size={TAB_ICON_SIZE} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="contacts"
+        options={{
+          title: 'Contacts',
+          tabBarIcon: ({ color }) => <Ionicons name="people-outline" size={TAB_ICON_SIZE} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="faqs"
+        options={{
+          title: 'FAQs',
+          tabBarIcon: ({ color }) => <Ionicons name="help-circle-outline" size={TAB_ICON_SIZE} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Profile',
+          tabBarIcon: ({ color }) => <Ionicons name="person-outline" size={TAB_ICON_SIZE} color={color} />,
+        }}
+      />
+      <Tabs.Screen name="announcements" options={{ href: null, title: 'Announcements' }} />
+      <Tabs.Screen name="venue" options={{ href: null, title: 'Venues' }} />
+      <Tabs.Screen name="checklist" options={{ href: null, title: 'Checklist' }} />
+      <Tabs.Screen name="support" options={{ href: null, title: 'Support' }} />
+      <Tabs.Screen name="shuttle" options={{ href: null, title: 'Shuttle Times' }} />
+      <Tabs.Screen name="events" options={{ href: null, title: 'Campus Events' }} />
+      <Tabs.Screen name="sport" options={{ href: null, title: 'Sport & Gym' }} />
+      <Tabs.Screen name="programmes" options={{ href: null, title: 'Programmes' }} />
+      <Tabs.Screen name="digital" options={{ href: null, title: 'Digital Readiness' }} />
+      <Tabs.Screen name="tribes" options={{ href: null, title: 'Tribes' }} />
+      <Tabs.Screen name="buddies" options={{ href: null, title: 'Buddies' }} />
+      <Tabs.Screen name="faq-suggestions" options={{ href: null, title: 'FAQ Suggestions' }} />
+    </Tabs>
+  );
+}
+
 export default function AdminLayout() {
   return (
     <AuthGate requiredRole="admin">
       <ThemeProvider>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="index" />
-          <Stack.Screen name="profile" options={{ headerShown: true, title: 'Profile & Settings' }} />
-          <Stack.Screen name="schedule" />
-          <Stack.Screen name="announcements" />
-          <Stack.Screen name="faqs" />
-          <Stack.Screen name="contacts" />
-          <Stack.Screen name="venue" />
-          <Stack.Screen name="checklist" />
-          <Stack.Screen name="support" />
-          <Stack.Screen name="shuttle" />
-          <Stack.Screen name="events" />
-          <Stack.Screen name="sport" />
-          <Stack.Screen name="programmes" />
-          <Stack.Screen name="digital" />
-          <Stack.Screen name="tribes" />
-          <Stack.Screen name="buddies" />
-          <Stack.Screen name="faq-suggestions" />
-        </Stack>
+        <AdminTabs />
       </ThemeProvider>
     </AuthGate>
   );
