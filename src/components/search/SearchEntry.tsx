@@ -1,7 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { Pressable, StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
-import { SEARCH_SCOPES, searchHref, type SearchScopeId } from '../../lib/searchScopes';
+import { useTranslation } from 'react-i18next';
+import { SEARCH_SCOPES, scopeText, searchHref, type SearchScopeId } from '../../lib/searchScopes';
 import { useTheme } from '../../theme/ThemeContext';
 import { ScaledText as Text } from '../ScaledText';
 
@@ -17,13 +18,14 @@ export function SearchEntry({
   style?: StyleProp<ViewStyle>;
 }) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const router = useRouter();
   const info = SEARCH_SCOPES[scope];
 
   return (
     <Pressable
       accessibilityRole="search"
-      accessibilityLabel={scope === 'all' ? 'Search the whole app' : `Search ${info.label}`}
+      accessibilityLabel={scope === 'all' ? t('search.wholeApp') : t('search.searchScope', { scope: scopeText(info, 'label') })}
       onPress={() => router.push(searchHref(area, scope) as never)}
       style={({ pressed }) => [
         styles.box,
@@ -34,7 +36,7 @@ export function SearchEntry({
     >
       <Ionicons name="search" size={20} color={colors.accent} />
       <Text style={[styles.text, { color: colors.textSecondary }]} numberOfLines={1}>
-        {info.placeholder}
+        {scopeText(info, 'placeholder')}
       </Text>
     </Pressable>
   );

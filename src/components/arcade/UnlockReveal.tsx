@@ -6,6 +6,7 @@ import type { Unlock } from '../../lib/arcade';
 import { useTheme } from '../../theme/ThemeContext';
 import { ScaledText as Text } from '../ScaledText';
 import { RewardCard } from './RewardCard';
+import { useTranslation } from 'react-i18next';
 
 // The payoff: 🏆 YOU WIN → 🔓 FACT UNLOCKED → the card itself. Kept deliberately short, because a
 // student who has to sit through a long animation after every round stops playing.
@@ -18,6 +19,7 @@ interface UnlockRevealProps {
 }
 
 export function UnlockReveal({ unlock, onClose, onPlayAgain, onOpenVault }: UnlockRevealProps) {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const visible = unlock !== null;
   const enter = useRef(new Animated.Value(0)).current;
@@ -53,12 +55,12 @@ export function UnlockReveal({ unlock, onClose, onPlayAgain, onOpenVault }: Unlo
           ]}
         >
           <Text style={styles.trophy}>🏆</Text>
-          <Text style={[styles.win, { color: colors.text }]}>You win!</Text>
+          <Text style={[styles.win, { color: colors.text }]}>{t('arcade.youWin')}</Text>
 
           <View style={[styles.unlockRow, { borderColor: colors.border }]}>
             <Ionicons name="lock-open-outline" size={14} color={colors.accent} />
             <Text style={[styles.unlockLabel, { color: colors.accent }]}>
-              {unlock.isNew ? 'Unlocked' : 'Already in your vault'}
+              {unlock.isNew ? t('arcade.unlockedNew') : t('arcade.alreadyHave')}
             </Text>
           </View>
 
@@ -66,7 +68,7 @@ export function UnlockReveal({ unlock, onClose, onPlayAgain, onOpenVault }: Unlo
 
           {!unlock.isNew ? (
             <Text style={[styles.exhausted, { color: colors.textSecondary }]}>
-              You have unlocked everything in the vault. More is on the way.
+              {t('arcade.allUnlocked')}
             </Text>
           ) : null}
 
@@ -79,7 +81,7 @@ export function UnlockReveal({ unlock, onClose, onPlayAgain, onOpenVault }: Unlo
               pressed && { opacity: 0.85 },
             ]}
           >
-            <Text style={styles.primaryLabel}>Play again</Text>
+            <Text style={styles.primaryLabel}>{t('arcade.playAgain')}</Text>
           </Pressable>
 
           <View style={styles.secondaryRow}>
@@ -89,7 +91,7 @@ export function UnlockReveal({ unlock, onClose, onPlayAgain, onOpenVault }: Unlo
               style={({ pressed }) => [styles.secondary, pressed && { opacity: 0.6 }]}
             >
               <Text style={[styles.secondaryLabel, { color: colors.textSecondary }]}>
-                Open Fact Vault
+                {t('arcade.openVault')}
               </Text>
             </Pressable>
             <Pressable
@@ -97,7 +99,7 @@ export function UnlockReveal({ unlock, onClose, onPlayAgain, onOpenVault }: Unlo
               onPress={onClose}
               style={({ pressed }) => [styles.secondary, pressed && { opacity: 0.6 }]}
             >
-              <Text style={[styles.secondaryLabel, { color: colors.textSecondary }]}>Done</Text>
+              <Text style={[styles.secondaryLabel, { color: colors.textSecondary }]}>{t('arcade.done')}</Text>
             </Pressable>
           </View>
         </Animated.View>

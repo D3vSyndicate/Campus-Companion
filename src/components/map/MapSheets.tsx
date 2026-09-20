@@ -9,9 +9,11 @@ import {
     type CampusId,
     type CampusPlace,
 } from '../../data/campus';
+import { campusIntro, campusName, campusNumbering, categoryLabel } from '../../lib/campusText';
 import { formatDistance, type RouteResult } from '../../lib/routing';
 import { useTheme } from '../../theme/ThemeContext';
 import { ScaledText as Text } from '../ScaledText';
+import { useTranslation } from 'react-i18next';
 
 const ink = '#071B2C';
 
@@ -29,12 +31,13 @@ export function Badge({ place, size = 34 }: { place: CampusPlace; size?: number 
 }
 
 export function PlaceRow({ place, onPress, showCampus = false }: { place: CampusPlace; onPress: () => void; showCampus?: boolean }) {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const meta = CATEGORIES[place.category];
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={`${place.name}${place.number ? `, building ${place.number}` : ''}`}
+      accessibilityLabel={`${place.name}${place.number ? `, ${t('map.building', { number: place.number }).toLowerCase()}` : ''}`}
       onPress={onPress}
       style={({ pressed }) => [styles.row, { borderColor: colors.border }, pressed && { opacity: 0.7 }]}
     >
@@ -44,7 +47,7 @@ export function PlaceRow({ place, onPress, showCampus = false }: { place: Campus
           {place.name}
         </Text>
         <Text style={[styles.rowSub, { color: colors.textSecondary }]} numberOfLines={1}>
-          {[showCampus ? CAMPUSES[place.campus].name : '', meta.label].filter(Boolean).join(' · ')}
+          {[showCampus ? campusName(place.campus) : '', categoryLabel(place.category)].filter(Boolean).join(' · ')}
         </Text>
       </View>
       <Ionicons name="chevron-forward" size={18} color={colors.textSecondary} />
@@ -82,6 +85,7 @@ function Button({
 }
 
 function SheetHeader({ title, subtitle, onClose, leading }: { title: string; subtitle?: string; onClose?: () => void; leading?: ReactNode }) {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   return (
     <View style={styles.header}>
@@ -91,7 +95,7 @@ function SheetHeader({ title, subtitle, onClose, leading }: { title: string; sub
         {subtitle ? <Text style={[styles.sub, { color: colors.textSecondary }]}>{subtitle}</Text> : null}
       </View>
       {onClose ? (
-        <Pressable accessibilityRole="button" accessibilityLabel="Close" onPress={onClose} hitSlop={10} style={[styles.close, { backgroundColor: colors.card }]}>
+        <Pressable accessibilityRole="button" accessibilityLabel={t('shuttle.close')} onPress={onClose} hitSlop={10} style={[styles.close, { backgroundColor: colors.card }]}>
           <Ionicons name="close" size={18} color={colors.text} />
         </Pressable>
       ) : null}
@@ -100,25 +104,26 @@ function SheetHeader({ title, subtitle, onClose, leading }: { title: string; sub
 }
 
 function OfficialMaps() {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   return (
     <View style={[styles.official, { borderTopColor: colors.border }]}>
-      <Text style={[styles.label, { color: colors.textSecondary }]}>Official university maps</Text>
+      <Text style={[styles.label, { color: colors.textSecondary }]}>{t('map.official')}</Text>
       <View style={styles.actions}>
         <Button label="MapBuddy" icon="navigate-outline" variant="outline" onPress={() => void Linking.openURL(OFFICIAL_MAPS.interactive)} />
-        <Button label="South PDF" icon="document-outline" variant="outline" onPress={() => void Linking.openURL(OFFICIAL_MAPS.south)} />
-        <Button label="North PDF" icon="document-outline" variant="outline" onPress={() => void Linking.openURL(OFFICIAL_MAPS.north)} />
+        <Button label={t('map.southPdf')} icon="document-outline" variant="outline" onPress={() => void Linking.openURL(OFFICIAL_MAPS.south)} />
+        <Button label={t('map.northPdf')} icon="document-outline" variant="outline" onPress={() => void Linking.openURL(OFFICIAL_MAPS.north)} />
       </View>
     </View>
   );
 }
 
 export function Attribution() {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   return (
     <Text style={[styles.attribution, { color: colors.textSecondary }]}>
-      Building numbers: NMU official campus maps (2024). Map data © OpenStreetMap contributors, tiles by HOT hosted by OpenStreetMap France. Positions are
-      approximate, so check building signs.
+      {t('map.attribution')}
     </Text>
   );
 }
@@ -148,6 +153,7 @@ export function BrowseSheet({
   onPlanCampusWalk: () => void;
   onLost: () => void;
 }) {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const info = CAMPUSES[campus];
 
@@ -155,28 +161,28 @@ export function BrowseSheet({
     return (
       <View>
         <SheetHeader
-          title={results.length ? `${results.length} ${results.length === 1 ? 'place' : 'places'} found` : 'Nothing matches yet'}
+          title={results.length ? (results.length === 1 ? t('map.foundOne') : t('map.foundMany', { count: results.length })) : t('map.nothing')}
           subtitle={
             results.length
-              ? 'Tap one to see it on the map.'
-              : 'That is okay. Try the number on the building, like 12, or a word like library, food or clinic.'
+              ? t('map.tapOne')
+              : t('map.tryNumber')
           }
         />
         {results.map((place) => (
           <PlaceRow key={place.id} place={place} showCampus onPress={() => onSelect(place.id)} />
         ))}
-        {!results.length ? <Button label="I am lost. Help me" icon="help-buoy-outline" variant="outline" onPress={onLost} /> : null}
+        {!results.length ? <Button label={t('map.lostHelp')} icon="help-buoy-outline" variant="outline" onPress={onLost} /> : null}
       </View>
     );
   }
 
   return (
     <View>
-      <SheetHeader title="Where to next?" subtitle={`${info.intro} ${info.numbering}`} />
+      <SheetHeader title={t('map.whereNext')} subtitle={`${campusIntro(info.id)} ${campusNumbering(info.id)}`} />
 
       {todayStops.length ? (
         <View style={styles.block}>
-          <Text style={[styles.label, { color: colors.textSecondary }]}>Your sessions today</Text>
+          <Text style={[styles.label, { color: colors.textSecondary }]}>{t('map.sessionsToday')}</Text>
           {todayStops.map((stop) => {
             const place = placeById.get(stop.placeId);
             if (!place) return null;
@@ -204,7 +210,7 @@ export function BrowseSheet({
       ) : null}
 
       <View style={styles.block}>
-        <Text style={[styles.label, { color: colors.textSecondary }]}>Places you will probably need</Text>
+        <Text style={[styles.label, { color: colors.textSecondary }]}>{t('map.placesNeed')}</Text>
         {keyPlaces.map((place) => (
           <PlaceRow key={place.id} place={place} onPress={() => onSelect(place.id)} />
         ))}
@@ -213,13 +219,13 @@ export function BrowseSheet({
       <View style={[styles.tip, { backgroundColor: colors.card, borderColor: colors.border }]}>
         <Ionicons name="walk-outline" size={20} color={colors.accent} />
         <View style={styles.rowText}>
-          <Text style={[styles.rowTitle, { color: colors.text }]}>Between the campuses</Text>
+          <Text style={[styles.rowTitle, { color: colors.text }]}>{t('map.between')}</Text>
           <Text style={[styles.rowSub, { color: colors.textSecondary }]}>
-            South and North campus are roughly 1.5 km apart on foot. See the route before you set off.
+            {t('map.betweenText')}
           </Text>
         </View>
       </View>
-      <Button label="Show the walk between campuses" icon="trail-sign-outline" variant="outline" onPress={onPlanCampusWalk} />
+      <Button label={t('map.showWalk')} icon="trail-sign-outline" variant="outline" onPress={onPlanCampusWalk} />
 
       <OfficialMaps />
     </View>
@@ -239,6 +245,7 @@ export function PlaceSheet({
   onRoute: () => void;
   onShare: () => void;
 }) {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const meta = CATEGORIES[place.category];
 
@@ -247,7 +254,7 @@ export function PlaceSheet({
       <SheetHeader
         leading={<Badge place={place} size={44} />}
         title={place.name}
-        subtitle={`${CAMPUSES[place.campus].name} · ${meta.label}${place.number ? ` · Building ${place.number}` : ''}`}
+        subtitle={`${campusName(place.campus)} · ${categoryLabel(place.category)}${place.number ? ` · ${t('map.building', { number: place.number })}` : ''}`}
         onClose={onClose}
       />
       {place.note ? <Text style={[styles.body, { color: colors.textSecondary }]}>{place.note}</Text> : null}
@@ -255,13 +262,13 @@ export function PlaceSheet({
         <View style={[styles.tip, { backgroundColor: colors.card, borderColor: colors.border }]}>
           <Ionicons name="eye-outline" size={20} color={colors.accent} />
           <Text style={[styles.rowSub, styles.rowText, { color: colors.textSecondary }]}>
-            Not sure you are at the right one? Look for the number {place.number} on the building or a nearby sign.
+            {t('map.rightOne', { number: place.number })}
           </Text>
         </View>
       ) : null}
       <View style={styles.actions}>
-        <Button label="Walking route" icon="walk-outline" onPress={onRoute} />
-        <Button label="Share" icon="share-social-outline" variant="outline" onPress={onShare} />
+        <Button label={t('map.walkingRoute')} icon="walk-outline" onPress={onRoute} />
+        <Button label={t('common.share')} icon="share-social-outline" variant="outline" onPress={onShare} />
       </View>
     </View>
   );
@@ -280,6 +287,7 @@ export function PickFromSheet({
   onPick: (id: string) => void;
   onClose: () => void;
 }) {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const [text, setText] = useState('');
 
@@ -290,24 +298,24 @@ export function PickFromSheet({
 
   return (
     <View>
-      <SheetHeader title="Where are you starting from?" subtitle={`Walking to ${destination.name}`} onClose={onClose} />
+      <SheetHeader title={t('map.startFrom')} subtitle={t('map.walkingTo', { name: destination.name })} onClose={onClose} />
       <View style={[styles.input, { backgroundColor: colors.card, borderColor: colors.border }]}>
         <Ionicons name="search" size={18} color={colors.textSecondary} />
         <TextInput
           value={text}
           onChangeText={setText}
-          placeholder="A building number or name near you"
+          placeholder={t('map.nearYou')}
           placeholderTextColor={colors.textSecondary}
           style={[styles.inputText, { color: colors.text }]}
           autoCapitalize="none"
           autoCorrect={false}
         />
       </View>
-      <Text style={[styles.label, { color: colors.textSecondary }]}>{text.trim() ? 'Matches' : 'Popular starting points'}</Text>
+      <Text style={[styles.label, { color: colors.textSecondary }]}>{text.trim() ? t('map.matches') : t('map.popularStarts')}</Text>
       {options.map((place) => (
         <PlaceRow key={place.id} place={place} showCampus onPress={() => onPick(place.id)} />
       ))}
-      {!options.length ? <Text style={[styles.sub, { color: colors.textSecondary }]}>Nothing matches yet. Try the number on the nearest building.</Text> : null}
+      {!options.length ? <Text style={[styles.sub, { color: colors.textSecondary }]}>{t('map.nothingNear')}</Text> : null}
     </View>
   );
 }
@@ -329,6 +337,7 @@ export function RouteSheet({
   onSwap: () => void;
   onClose: () => void;
 }) {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const [showAll, setShowAll] = useState(false);
   const steps = result?.steps ?? [];
@@ -336,7 +345,7 @@ export function RouteSheet({
 
   return (
     <View>
-      <SheetHeader title="Walking route" onClose={onClose} />
+      <SheetHeader title={t('map.walkingRoute')} onClose={onClose} />
 
       <View style={[styles.stops, { backgroundColor: colors.card, borderColor: colors.border }]}>
         <View style={styles.stopLine}>
@@ -351,7 +360,7 @@ export function RouteSheet({
             {to.name}
           </Text>
         </View>
-        <Pressable accessibilityRole="button" accessibilityLabel="Swap start and destination" onPress={onSwap} hitSlop={10} style={styles.swap}>
+        <Pressable accessibilityRole="button" accessibilityLabel={t('map.swap')} onPress={onSwap} hitSlop={10} style={styles.swap}>
           <Ionicons name="swap-vertical" size={20} color={colors.accent} />
         </Pressable>
       </View>
@@ -359,20 +368,20 @@ export function RouteSheet({
       {loading || !result ? (
         <View style={styles.loading}>
           <ActivityIndicator color={colors.accent} />
-          <Text style={[styles.sub, { color: colors.textSecondary }]}>Finding a good path...</Text>
+          <Text style={[styles.sub, { color: colors.textSecondary }]}>{t('map.finding')}</Text>
         </View>
       ) : (
         <>
           <View style={styles.chips}>
             <View style={[styles.chip, { backgroundColor: colors.accent }]}>
               <Ionicons name="walk-outline" size={16} color={ink} />
-              <Text style={styles.chipText}>{formatDistance(result.distanceM)} on foot</Text>
+              <Text style={styles.chipText}>{t('map.onFoot', { distance: formatDistance(result.distanceM) })}</Text>
             </View>
           </View>
 
           {result.approximate ? (
             <Text style={[styles.body, { color: colors.textSecondary }]}>
-              We could not load the exact path right now, so this is an estimate of the distance along a straight line.
+              {t('map.estimate')}
             </Text>
           ) : null}
 
@@ -386,7 +395,7 @@ export function RouteSheet({
           ))}
           {steps.length > 5 ? (
             <Pressable accessibilityRole="button" onPress={() => setShowAll((current) => !current)}>
-              <Text style={[styles.link, { color: colors.accent }]}>{showAll ? 'Show fewer steps' : `Show all ${steps.length} steps`}</Text>
+              <Text style={[styles.link, { color: colors.accent }]}>{showAll ? t('map.fewerSteps') : t('map.allSteps', { count: steps.length })}</Text>
             </Pressable>
           ) : null}
         </>
@@ -408,33 +417,34 @@ export function LostSheet({
   onAskTribe: () => void;
   onWholeMap: () => void;
 }) {
+  const { t } = useTranslation();
   const { colors } = useTheme();
 
   const steps: { icon: keyof typeof Ionicons.glyphMap; text: string; action?: { label: string; onPress: () => void } }[] = [
     {
       icon: 'eye-outline',
-      text: 'Look for a number on the wall of the nearest building or on a sign, then search it here to see where you are.',
-      action: { label: 'Search a number', onPress: onSearchNumber },
+      text: t('map.lostNumber'),
+      action: { label: t('map.searchNumber'), onPress: onSearchNumber },
     },
     {
       icon: 'bus-outline',
-      text: 'Head for a main road or the bus stop. They are easy to find on the map and a good place to start again.',
+      text: t('map.lostRoad'),
     },
     {
       icon: 'chatbubbles-outline',
-      text: 'Ask someone nearby. Students and staff are happy to point the way, and your buddy in Tribe can help too.',
-      action: { label: 'Ask my Tribe', onPress: onAskTribe },
+      text: t('map.lostAsk'),
+      action: { label: t('map.askTribe'), onPress: onAskTribe },
     },
     {
       icon: 'map-outline',
-      text: 'Zoom out to see both campuses and where the buildings are, then work your way to the one you need.',
-      action: { label: 'View the whole map', onPress: onWholeMap },
+      text: t('map.lostZoom'),
+      action: { label: t('map.viewWhole'), onPress: onWholeMap },
     },
   ];
 
   return (
     <View>
-      <SheetHeader title="Feeling turned around? That is completely normal." subtitle="A new campus confuses almost everyone in the first weeks. Here is what helps." onClose={onClose} />
+      <SheetHeader title={t('map.turned')} subtitle={t('map.turnedText')} onClose={onClose} />
       {steps.map((step) => (
         <View key={step.text} style={[styles.tip, { backgroundColor: colors.card, borderColor: colors.border }]}>
           <Ionicons name={step.icon} size={22} color={colors.accent} />

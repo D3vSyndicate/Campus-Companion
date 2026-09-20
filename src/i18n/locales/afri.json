@@ -5,7 +5,6 @@
     "checklist": "Kontrolelys",
     "digital": "Digitaal",
     "faqs": "Gereelde vrae",
-    "support": "Ondersteuning",
     "contacts": "Kontakte",
     "tribe": "Gemeenskap",
     "email": "E-pos",
@@ -18,16 +17,16 @@
     "scheduleTitle": "Jou rooster",
     "scheduleSubtitle": "Sien wat vandag gebeur en vind jou pad na elke sessie.",
     "checklistTitle": "Nuwe student-kontrolelys",
-    "checklistSubtitle": "Klein stappe maak saak. Hou rekord van wat gedoen is.",
+    "checklistSubtitle": "Klein stappe maak saak. Hou rekord van wat gedoen is en wat volgende kom.",
     "contactsTitle": "Mense wat kan help",
-    "contactsSubtitle": "Reik vroeg uit vir vrae, praktiese ondersteuning en hulp.",
+    "contactsSubtitle": "Reik vroeg uit vir vrae, praktiese ondersteuning en 'n vinnige nuwe begin wanneer universiteit oorweldigend voel.",
     "faqsTitle": "Gereelde vrae",
     "faqsSubtitle": "Soek algemene vrae oor Funda, lokale, roosters en ondersteuning.",
     "digitalTitle": "Digitale gereedheid",
     "digitalSubtitle": "Stel die gereedskap op wat jy vir leer en kampuslewe sal gebruik.",
     "savedSchedule": "Jy sien gestoorde roosterdata omdat jou verbinding tans nie beskikbaar is nie.",
     "missedSession": "As jy 'n sessie mis, moenie bekommerd wees nie. Hersieningspaaie is hieronder.",
-    "pastSession": "Hierdie sessie is verby. Hersien materiaal op Funda of vra 'n mentor.",
+    "pastSession": "Hierdie sessie is verby. Moenie bekommerd wees nie: hersien die materiaal op Funda of vra 'n How2buddy-mentor vir 'n vinnige opsomming!",
     "directions": "Wys my waarheen om te gaan",
     "noSchedule": "Geen rooster gelaai nie",
     "tryAgain": "Kontroleer jou verbinding en probeer later weer.",
@@ -39,16 +38,15 @@
     "searchFaqs": "Soek vrae (bv. Funda, lokale, rooster)...",
     "openLink": "Maak oop",
     "digitalUnavailable": "Digitale leiding is nog nie beskikbaar nie. Probeer asseblief later weer.",
-    "digitalBanner": "Almal begin as beginners met universiteitstegnologie.",
+    "digitalBanner": "Almal begin as beginners met universiteitstegnologie. Moenie bekommerd wees as dit 'n paar pogings neem om aan te meld nie!",
     "orientation": "ORIËNTERING",
     "firstSteps": "JOU EERSTE STAPPE",
     "notAlone": "JY IS NIE ALLEEN NIE",
     "quickAnswer": "HET JY 'N VINNIGE ANTWOORD NODIG?",
-    "getConnected": "VERBINDING",
+    "getConnected": "MAAK KONTAK",
     "goodMorning": "Goeiemôre",
     "goodAfternoon": "Goeiemiddag",
     "goodEvening": "Goeienaand",
-    "schoolOfIt": "SKOOL VIR IT",
     "campusCompanion": "CAMPUS COMPANION",
     "supportBanner": "Onseker waarheen om te gaan of wat om te vra? Dit is heeltemal normaal. Neem dit een stap op 'n slag.",
     "latest": "NUUTSTE",
@@ -122,7 +120,19 @@
     "openMap": "Maak kaart oop",
     "startHereEyebrow": "WELKOM",
     "startHereCta": "Begin met die gidse",
-    "startHereContinue": "Gaan voort"
+    "startHereContinue": "Gaan voort",
+    "offlineRefresh": "Jy is aflyn, so dit kan verouderd wees. Dit sal opdateer wanneer jy weer aanlyn is.",
+    "offlineShort": "Jy is aflyn, so dit kan verouderd wees.",
+    "cancel": "Kanselleer",
+    "goBack": "Gaan terug",
+    "support": "Ondersteuning",
+    "schoolOfIt": "SKOOL VIR IT",
+    "today": "Vandag",
+    "tomorrow": "Môre",
+    "share": "Deel",
+    "ok": "Goed",
+    "vs": "teen",
+    "and": "en"
   },
   "home": {
     "brand": "Campus Companion",
@@ -403,7 +413,8 @@
       "watched": "Ek verstaan dat mentors en koördineerders Gemeenskap-boodskappe kan lees, en dat boodskappe wat hierdie reëls breek, verwyder kan word.",
       "agree": "Ek het dit gelees en stem in om dit na te kom.",
       "continue": "Stem in en gaan voort"
-    }
+    },
+    "stillSettingUp": "Gemeenskap word nog opgestel. Kyk asseblief gou weer."
   },
   "support": {
     "eyebrow": "STUDENTE-ONDERSTEUNING",
@@ -420,5 +431,1223 @@
   },
   "faq": {
     "cantFind": "Kan jy dit nie vind nie? Vra 'n vraag. Ander wonder waarskynlik ook."
+  },
+  "checklist": {
+    "allDone": "🎉 Jy doen fantasties! Jy het jou kontrolelys voltooi.",
+    "notAvailableTitle": "Jou kontrolelys is nog nie beskikbaar nie",
+    "notAvailableText": "Jou oriënteringstappe sal hier verskyn wanneer dit gepubliseer word."
+  },
+  "contacts": {
+    "noneTitle": "Nog geen ondersteuningskontakte nie",
+    "noneText": "Jou ondersteuningspan sal hier verskyn wanneer kontakte gepubliseer word."
+  },
+  "programmes": {
+    "title": "Programme",
+    "subtitle": "Vind uit wat elke program dek, waarheen dit jou kan neem, en wie om vir akademiese advies te vra.",
+    "loadFail": "Programme kon nie gelaai word nie",
+    "none": "Nog geen programme gepubliseer nie",
+    "retry": "Probeer asseblief weer wanneer jou verbinding beskikbaar is.",
+    "noneText": "Die Skool vir IT sal programinligting hier publiseer. Vra intussen jou FYS-maat of 'n koördineerder.",
+    "backAll": "Terug na alle programme",
+    "all": "Alle programme",
+    "notFound": "Ons kon nie daardie program vind nie",
+    "notFoundText": "Dit is dalk verwyder. Gaan terug om die huidige lys te sien.",
+    "detailEyebrow": "Skool vir IT-program",
+    "about": "Oor hierdie program",
+    "years": "Jaarvlakstruktuur",
+    "modules": "Sleutelmodules",
+    "careers": "Loopbaanmoontlikhede",
+    "expectations": "Akademiese verwagtinge",
+    "advice": "Akademiese advies",
+    "theAdvisor": "die adviseur",
+    "noAdvisor": "Adviseurbesonderhede is nog nie bygevoeg nie. Vra jou FYS-maat of 'n koördineerder met wie om te praat.",
+    "openDetail": "{{name}}. Maak programbesonderhede oop"
+  },
+  "programme": {
+    "eyebrow": "JOU DEPARTEMENT",
+    "title": "Programinligting",
+    "subtitle": "Programleiding, wat van jou verwag word, en waar om ondersteuning te kry.",
+    "partial": "Sommige departementsinligting kon nie gelaai word nie. Kontroleer jou verbinding en trek af om weer te probeer.",
+    "empty": "Jou departement het nog niks gepubliseer nie. Kyk gou weer.",
+    "expected": "Wat van jou verwag word",
+    "assignments": "Opdragte",
+    "noDue": "Geen sperdatum",
+    "resources": "Ondersteuningsbronne",
+    "deptSupport": "Departementele ondersteuning",
+    "due": "Verskuldig {{date}}"
+  },
+  "digital": {
+    "aboutTitle": "Oor hierdie inhoud",
+    "aiNote": "Van die inhoud op die Digitaal-skerm, veral die beelde, is met die hulp van generatiewe KI-gereedskap geskep. Prente is daar om jou te help verstaan en stem dalk nie presies met die regte skerms ooreen nie. Kontroleer belangrike besonderhede, soos skakels en datums, by IT-dienste of jou dosent.",
+    "guide": "Gids",
+    "closeGuide": "Maak gids toe",
+    "guideIntro": "Hierdie gids sal jou help om jou volgende stap met selfvertroue te neem.",
+    "stepsTitle": "Stappe om te volg",
+    "noSteps": "Daar is nog geen stappe om te wys nie. Jy kan steeds die gids hieronder verken.",
+    "videoLabel": "Maak opsionele gidsvideo oop",
+    "watch": "Kyk video",
+    "opensSeparately": "Maak apart oop",
+    "imageFail": "Hierdie prent het nie gelaai nie, maar jy kan steeds die stappe hierbo lees.",
+    "openImage": "Maak prent oop",
+    "openGuide": "Maak gids oop",
+    "learnMore": "Leer meer",
+    "openGuideNamed": "Maak gids oop: {{title}}",
+    "openLesson": "Maak {{section}}-les {{number}} oop: {{title}}",
+    "openImageNamed": "Maak prent oop: {{title}}"
+  },
+  "map": {
+    "searchPlaceholder": "Soek 'n gebou, nommer of plek",
+    "searchLabel": "Soek op die kampuskaart",
+    "clear": "Vee soektog uit",
+    "lost": "Ek is verdwaal",
+    "allPlaces": "Alle plekke",
+    "zoomIn": "Zoem in",
+    "zoomOut": "Zoem uit",
+    "searchAndPlaces": "Soek en plekke",
+    "wholeMap": "Hele kaart",
+    "unavailable": "Die kaart kan nie nou laai nie, maar jy kan steeds hieronder geboue en nommers soek.",
+    "official": "Amptelike universiteitskaarte",
+    "southPdf": "Suid-PDF",
+    "northPdf": "Noord-PDF",
+    "attribution": "Gebounommers: NMU se amptelike kampuskaarte (2024). Kaartdata © OpenStreetMap-bydraers, teëls deur HOT gehuisves deur OpenStreetMap France. Posisies is benaderd, so kyk na gebou-borde.",
+    "nothing": "Niks pas nog nie",
+    "tapOne": "Tik een om dit op die kaart te sien.",
+    "tryNumber": "Dis reg. Probeer die nommer op die gebou, soos 12, of 'n woord soos biblioteek, kos of kliniek.",
+    "lostHelp": "Ek is verdwaal. Help my",
+    "whereNext": "Waarheen volgende?",
+    "sessionsToday": "Jou sessies vandag",
+    "placesNeed": "Plekke wat jy waarskynlik sal nodig hê",
+    "between": "Tussen die kampusse",
+    "betweenText": "Suid- en Noordkampus is ongeveer 1,5 km te voet van mekaar. Sien die roete voordat jy vertrek.",
+    "showWalk": "Wys die stap tussen kampusse",
+    "walkingRoute": "Stap-roete",
+    "startFrom": "Van waar begin jy?",
+    "nearYou": "'n Gebounommer of -naam naby jou",
+    "matches": "Treffers",
+    "popularStarts": "Gewilde beginpunte",
+    "nothingNear": "Niks pas nog nie. Probeer die nommer op die naaste gebou.",
+    "swap": "Verwissel begin en bestemming",
+    "finding": "Vind 'n goeie pad...",
+    "estimate": "Ons kon nie nou die presiese pad laai nie, so dit is 'n skatting van die afstand in 'n reguit lyn.",
+    "fewerSteps": "Wys minder stappe",
+    "lostNumber": "Kyk vir 'n nommer op die muur van die naaste gebou of op 'n bord, en soek dit dan hier om te sien waar jy is.",
+    "searchNumber": "Soek 'n nommer",
+    "lostRoad": "Gaan na 'n hoofpad of die bushalte. Dit is maklik om op die kaart te vind en 'n goeie plek om weer te begin.",
+    "lostAsk": "Vra iemand naby. Studente en personeel wys graag die pad, en jou FYS-maat in Gemeenskap kan ook help.",
+    "askTribe": "Vra my Gemeenskap",
+    "lostZoom": "Zoem uit om beide kampusse en waar die geboue is te sien, en werk dan jou pad na die een wat jy nodig het.",
+    "viewWhole": "Bekyk die hele kaart",
+    "turned": "Voel jy deurmekaar? Dit is heeltemal normaal.",
+    "turnedText": "'n Nuwe kampus verwar amper almal in die eerste weke. Hier is wat help.",
+    "category": {
+      "learning": "Lesings en laboratoriums",
+      "services": "Dienste en administrasie",
+      "residence": "Koshuise",
+      "food": "Kos en winkels",
+      "sport": "Sport",
+      "transport": "Vervoer",
+      "building": "Ander geboue",
+      "venue": "Oriënteringslokale"
+    },
+    "campus": {
+      "south": "Suidkampus",
+      "north": "Noordkampus"
+    },
+    "intro": {
+      "south": "Die hoofkampus, in Summerstrand.",
+      "north": "Ingenieurswese, wetenskap, kuns en meer, noord van Suidkampus."
+    },
+    "numbering": {
+      "south": "Geboue hier het lae nommers, wat by 1 begin (Hoofgebou).",
+      "north": "Geboue hier is in die 200's genommer (Hoofadministrasiegebou is 260)."
+    },
+    "foundOne": "1 plek gevind",
+    "foundMany": "{{count}} plekke gevind",
+    "walkingTo": "Stap na {{name}}",
+    "rightOne": "Onseker of jy by die regte een is? Kyk vir nommer {{number}} op die gebou of 'n nabygeleë bord.",
+    "onFoot": "{{distance}} te voet",
+    "allSteps": "Wys al {{count}} stappe",
+    "room": "Kamer {{number}}",
+    "building": "Gebou {{number}}"
+  },
+  "mg": {
+    "title": "Mentorgroepe",
+    "subtitle": "Maak kontak met jou mentor en medestudente.",
+    "findYours": "Vind jou mentorgroep",
+    "findYoursText": "Sluit by 'n groep vir jou program aan en bly in kontak met jou mentor.",
+    "findTitle": "Vind 'n mentorgroep",
+    "findText": "Deursoek beskikbare groepe en stuur 'n aansluitingsversoek.",
+    "scanTitle": "Skandeer mentor-QR",
+    "scanText": "Skandeer 'n QR-kode van jou mentor om toegang tot hul groep te versoek.",
+    "mine": "My mentorgroep",
+    "mineText": "Kyk jou aansluitingsversoek of gaan na jou goedgekeurde mentorgroep.",
+    "notAutomatic": "Aansluiting by 'n mentorgroep is nie outomaties nie. Jou versoek moet deur die mentor goedgekeur word voordat jy 'n lid word.",
+    "requestPending": "Versoek hangende",
+    "alreadyRequested": "Jy het reeds gevra om by hierdie groep aan te sluit.",
+    "groupFull": "Groep vol",
+    "groupFullText": "Hierdie mentorgroep het sy maksimum kapasiteit bereik.",
+    "joinGroup": "Sluit by groep aan",
+    "sendRequest": "Stuur versoek",
+    "notSent": "Versoek nie gestuur nie",
+    "requestSent": "Versoek gestuur",
+    "requestSentText": "Jou versoek is aan die mentor gestuur. Jy sal in kennis gestel word wanneer dit hersien is.",
+    "browse": "Deursoek beskikbare groepe",
+    "available": "Beskikbare groepe",
+    "chooseText": "Kies 'n mentorgroep vir jou program. Aansluiting vereis goedkeuring van die mentor.",
+    "loading": "Laai tans beskikbare groepe...",
+    "mentorLabel": "Mentor:",
+    "capacity": "Groepkapasiteit",
+    "requestToJoin": "Versoek om aan te sluit",
+    "haveQr": "Het jy 'n mentor-QR-kode?",
+    "scanDirect": "Skandeer dit om direk 'n aansluitingsversoek te stuur.",
+    "approved": "Versoek goedgekeur",
+    "approvedText": "Jou mentor het jou versoek goedgekeur. Jy is nou 'n lid van hierdie mentorgroep.",
+    "rejected": "Versoek afgekeur",
+    "rejectedText": "Jou versoek is nie deur die mentor goedgekeur nie. Jy kan versoek om by 'n ander beskikbare groep aan te sluit.",
+    "pendingText": "Jou versoek is aan die mentor gestuur. Jy sal 'n lid word sodra die mentor dit goedkeur.",
+    "stillWaiting": "Jou versoek wag nog vir goedkeuring van die mentor.",
+    "statusTitle": "Versoekstatus",
+    "statusSubtitle": "Jou mentorgroepversoek",
+    "details": "Groepbesonderhede",
+    "requestedLabel": "Versoek:",
+    "progress": "Versoekvordering",
+    "submitted": "Versoek ingedien",
+    "submittedText": "Jou versoek is suksesvol aan die mentor gestuur.",
+    "review": "Mentorhersiening",
+    "reviewWaiting": "Wag vir jou mentor om die versoek te hersien.",
+    "reviewDone": "Jou mentor het jou versoek hersien.",
+    "approvedShort": "Goedgekeur",
+    "rejectedShort": "Afgekeur",
+    "nowMember": "Jy is nou 'n lid van die mentorgroep.",
+    "notApproved": "Die mentor het nie hierdie versoek goedgekeur nie.",
+    "openMine": "Maak my mentorgroep oop",
+    "findAnother": "Vind 'n ander groep",
+    "checkAgain": "Kyk weer",
+    "oneGroupOnly": "Jy kan net aan een mentorgroep op 'n slag behoort. Wag asseblief dat hierdie versoek hersien word voordat jy 'n ander groep versoek.",
+    "browseOthers": "Jy kan ander beskikbare mentorgroepe deursoek en 'n nuwe versoek indien.",
+    "qrInvalid": "Ongeldige QR-kode",
+    "qrInvalidText": "Hierdie QR-kode bevat nie geldige mentorgroepinligting nie.",
+    "scanAgain": "Skandeer weer",
+    "qrFound": "Mentorgroep gevind",
+    "qrFoundText": "Hierdie QR-kode behoort aan 'n mentorgroep. Wil jy 'n aansluitingsversoek stuur?",
+    "joinSentText": "Jou aansluitingsversoek is aan die mentor gestuur.",
+    "cameraChecking": "Kontroleer kameratoestemming...",
+    "cameraNeeded": "Kameratoestemming benodig",
+    "cameraNeededText": "Kamera-toegang is nodig om die QR-kode van jou mentor te skandeer.",
+    "allowCamera": "Laat kamera toe",
+    "scanYours": "Skandeer jou mentor se QR-kode",
+    "positionQr": "Plaas die QR-kode binne die raam",
+    "scanNote": "Skandering van die kode stuur 'n aansluitingsversoek. Jy word nie outomaties 'n lid nie.",
+    "mentor": "Mentor",
+    "members": "Lede",
+    "about": "Oor hierdie groep",
+    "broadcasts": "Mentor-uitsendings",
+    "broadcastsSub": "Belangrike opdaterings van jou mentor",
+    "readOnly": "Slegs mentors kan boodskappe aan hierdie groep stuur. Studente kan uitsendings lees maar nie antwoord nie.",
+    "confirmJoin": "Stuur 'n versoek om by {{name}} aan te sluit?"
+  },
+  "buddy": {
+    "actions": {
+      "myTribe": {
+        "title": "My Gemeenskap",
+        "text": "Klets met die eerstejaars in jou groep."
+      },
+      "search": {
+        "title": "Soek",
+        "text": "Vind vinnig antwoorde, sessies, kontakte en lokale."
+      },
+      "answers": {
+        "title": "Vinnige antwoorde",
+        "text": "Vind en deel antwoorde op algemene vrae."
+      },
+      "announcements": {
+        "title": "Aankondigings",
+        "text": "Weet wat aan studente gesê word."
+      },
+      "schedule": {
+        "text": "Waar studente moet wees, en wanneer."
+      },
+      "map": {
+        "title": "Kampuskaart",
+        "text": "Vind enige gebou en wys eerstejaars die pad."
+      },
+      "venues": {
+        "title": "Lokaalgids",
+        "text": "Aanwysings wat jy met selfvertroue kan gee."
+      },
+      "refer": {
+        "title": "Verwys 'n student",
+        "text": "Na wie om studente te verwys vir elke soort hulp."
+      },
+      "emergency": {
+        "text": "Nommers om te deel wanneer 'n student dringende hulp nodig het."
+      },
+      "guide": {
+        "title": "Maat-gids",
+        "text": "Vriendelike bewoording, jou grense en 'n eerstewekekontrolelys."
+      }
+    },
+    "todaySessions": "Vandag se sessies",
+    "comingUp": "Kom op {{date}}",
+    "eyebrow": "FYS-MAAT",
+    "hi": "Hallo {{name}}, dankie dat jy 'n FYS-maat is",
+    "hiThere": "Hallo, dankie dat jy 'n FYS-maat is",
+    "heroText": "Jy is die vriendelike gesig wat 'n eerstejaar laat voel hy of sy behoort. Jy hoef nie alles te weet nie. Jy hoef net te weet waarheen om te wys.",
+    "banner": "Baie nuwe studente vra die vrae wat hulle dink voor die hand liggend is. Behandel elke vraag as 'n goeie een.",
+    "noSessions": "Daar is nog geen sessies geskeduleer nie. Kyk gou weer na die oriënteringsrooster.",
+    "tabAnswers": "Antwoorde",
+    "tabRefer": "Verwys",
+    "tabVenues": "Lokale"
+  },
+  "buddyGuide": {
+    "say": {
+      "missed": {
+        "situation": "'n Student het 'n sessie gemis",
+        "avoid": "Jy het hierdie sessie gemis.",
+        "better": "Hierdie sessie is reeds verby. Hier is wat jy volgende kan doen."
+      },
+      "lost": {
+        "situation": "'n Student weet nie waarheen om te gaan nie",
+        "avoid": "Lokaal onbekend.",
+        "better": "Onseker waar dit is? Hier is aanwysings."
+      },
+      "basic": {
+        "situation": "'n Student vra 'n basiese vraag",
+        "avoid": "Dis 'n voor-die-hand-liggende vraag.",
+        "better": "Baie nuwe studente vra dit. Hier is 'n vinnige gids."
+      },
+      "funda": {
+        "situation": "'n Student kry nie toegang tot Funda nie",
+        "avoid": "Aanmelding het misluk.",
+        "better": "Kom ons kyk na 'n paar dinge: jou gebruikersnaam, wagwoord en internetverbinding."
+      },
+      "support": {
+        "situation": "'n Student het ondersteuning nodig",
+        "avoid": "Kontak ondersteuning.",
+        "better": "Sê vir ons waarmee jy hulp nodig het, en ons sal jou na die regte plek lei."
+      }
+    },
+    "principles": {
+      "courage": {
+        "title": "Moed",
+        "text": "Moedig die volgende klein stap aan: woon die sessie by, vra die vraag, stuur die e-pos."
+      },
+      "empathy": {
+        "title": "Empatie",
+        "text": "Oriëntering kan oorweldigend voel. Gebruik warm, eenvoudige woorde en los die jargon."
+      },
+      "vulnerability": {
+        "title": "Kwesbaarheid",
+        "text": "Maak dit veilig om te sê \"Ek weet nog nie\". Deel 'n tyd toe jy dieselfde gevoel het."
+      },
+      "shame": {
+        "title": "Skaamteweerstand",
+        "text": "Moet nooit iemand laat voel hy of sy is laat, verdwaal of dwaas nie. Laat hulle altyd met 'n volgende stap."
+      }
+    },
+    "boundaries": {
+      "b1": "Jy is 'n FYS-maat, nie 'n berader nie. By ernstige bekommernisse oor veiligheid of welstand, verwys die student na professionele ondersteuning en sê vir die oriënteringskoördineerders.",
+      "b2": "Moet nooit vir ID-nommers, mediese besonderhede of finansiële inligting vra nie, en moenie deel wat 'n student in vertroue vir jou sê nie.",
+      "b3": "Hou Gemeenskap-gesprekke respekvol. Oriënteringspersoneel kan dit lees om die ruimte veilig te hou.",
+      "b4": "As jy nie die antwoord weet nie, sê so, en vind dit dan saam in die Antwoorde-oortjie of vra 'n koördineerder."
+    },
+    "checklist": {
+      "c1": "Sê hallo vir jou gemeenskap in die klets",
+      "c2": "Lees vandag se aankondigings",
+      "c3": "Kyk na hierdie week se rooster en weet waar die lokale is",
+      "c4": "Stoor die belangrike kontakte in die Verwys-oortjie",
+      "c5": "Lees deur die algemene vrae sodat die algemene antwoorde bekend voel"
+    },
+    "subtitle": "As eerstejaarstudentemaat help jy nuwe studente om hulle voete te vind gedurende oriëntering en die eerste weke. Jy deel inligting, wys waar hulp is, en laat dit normaal voel om te vra.",
+    "checklistTitle": "Jou eerstewekekontrolelys",
+    "progress": "{{done}} van {{total}} voltooi. Een stap op 'n slag.",
+    "howToHelp": "Hoe om te help",
+    "sayThis": "Sê dit, nie dat nie",
+    "avoid": "Vermy: {{text}}",
+    "try": "Probeer: {{text}}",
+    "boundariesTitle": "Jou grense"
+  },
+  "buddyAnn": {
+    "subtitle": "Wat eerstejaars vertel word. As 'n boodskap dringend is, deel dit kalm en wys studente na die volgende stap.",
+    "saved": "Jy sien gestoorde aankondigings terwyl jou verbinding nie beskikbaar is nie.",
+    "none": "Nog geen aankondigings is geplaas nie."
+  },
+  "buddyRefer": {
+    "subtitle": "Jy luister en wys die pad. Om vroeg hulp te vra is 'n slim, verantwoordelike gewoonte, so laat dit normaal voel.",
+    "safety": "As iemand se veiligheid of welstand jou bekommer, moenie dit alleen dra nie. Verwys hulle na professionele beradings- en welstandsdienste, en sê vir die oriënteringskoördineerders.",
+    "none": "Nog geen kontakte is gepubliseer nie.",
+    "fallbackName": "Ondersteuningskontak"
+  },
+  "buddyVenues": {
+    "subtitle": "Onseker waar iets is? Baie studente is. Gee duidelike, vriendelike aanwysings en bied aan om saam met hulle te stap as jy kan.",
+    "search": "Soek lokale, geboue of kamers",
+    "noMatch": "Geen lokaal pas nog daarby nie. Probeer 'n ander woord.",
+    "none": "Nog geen lokale is bygevoeg nie.",
+    "soon": "Ligginsbesonderhede kom binnekort",
+    "directions": "Aanwysings",
+    "accessibility": "Toeganklikheid",
+    "share": "Deel aanwysings",
+    "readOut": "Jy kan steeds die aanwysings vir die student voorlees."
+  },
+  "share": {
+    "unavailable": "Deling is nie hier beskikbaar nie",
+    "readAnswer": "Jy kan steeds die antwoord vir die student voorlees.",
+    "shareAnswer": "Deel hierdie antwoord"
+  },
+  "mgm": {
+    "tribeSubtitle": "Maak kontak met jou studente en bestuur jou mentorgemeenskap.",
+    "groupsText": "Skep en bestuur groepe vir jou studente, keur versoeke goed, en stuur aankondigings.",
+    "manageStudents": "Bestuur jou studentegroepe",
+    "manageYours": "Bestuur jou mentorgroep.",
+    "noGroups": "Nog geen mentorgroepe nie",
+    "noGroupsText": "Skep jou eerste mentorgroep om met jou studente kontak te maak.",
+    "createGroup": "Skep groep",
+    "loadFail": "Kon nie groep laai nie",
+    "notFound": "Hierdie groep kon nie gevind word nie.",
+    "missing": "Ontbrekende inligting",
+    "enterName": "Voer asseblief 'n groepnaam in.",
+    "enterProgramme": "Voer asseblief 'n program in.",
+    "invalidCapacity": "Ongeldige kapasiteit",
+    "enterCapacity": "Voer asseblief 'n geldige maksimum groepkapasiteit in.",
+    "signInRequired": "Aanmelding vereis",
+    "signInText": "Meld asseblief aan voordat jy 'n mentorgroep skep.",
+    "saveFail": "Kon nie veranderinge stoor nie",
+    "onlyCreator": "Slegs die mentor wat hierdie groep geskep het, kan dit verander.",
+    "updated": "Groep opgedateer",
+    "saved": "Jou veranderinge is gestoor.",
+    "createFail": "Kon nie groep skep nie",
+    "created": "Groep geskep",
+    "createdText": "Jou mentorgroep is gereed. Studente kan dit nou vind of sy QR-kode skandeer.",
+    "editTitle": "Wysig mentorgroep",
+    "createTitle": "Skep mentorgroep",
+    "editSub": "Verander die besonderhede van jou groep.",
+    "createSub": "Skep 'n groep vir jou studente.",
+    "groupName": "Groepnaam",
+    "groupNameEg": "bv. Sagteware-ontwikkelingsgroep",
+    "programme": "Program",
+    "programmeEg": "bv. Sagteware-ontwikkeling",
+    "description": "Beskrywing",
+    "descriptionEg": "Beskryf waarvoor hierdie mentorgroep is...",
+    "maxCapacity": "Maksimum kapasiteit",
+    "maxCapacityText": "Maksimum aantal studente wat in hierdie groep toegelaat word.",
+    "joinNote": "Studente sal moet versoek om by jou groep aan te sluit. Jy kan versoeke goedkeur of afkeur vanaf die groepbestuurskerm.",
+    "saveChanges": "Stoor veranderinge",
+    "capacityUpper": "GROEPKAPASITEIT",
+    "spacesLeft": "plekke oor",
+    "manageGroup": "Bestuur groep",
+    "joinRequests": "Aansluitingsversoeke",
+    "joinRequestsText": "Hersien studente wat wag om by jou groep aan te sluit.",
+    "membersText": "Bekyk en bestuur studente in jou groep.",
+    "qrTitle": "Groep-QR-kode",
+    "qrText": "Wys aan studente die QR-kode om toegang te versoek.",
+    "broadcast": "Uitsending",
+    "broadcastText": "Stuur 'n aankondiging aan jou groep.",
+    "missingTitle": "Titel ontbreek",
+    "enterTitle": "Voer asseblief 'n uitsendingtitel in.",
+    "missingMessage": "Boodskap ontbreek",
+    "enterMessage": "Voer asseblief 'n boodskap in.",
+    "broadcastSent": "Uitsending gestuur",
+    "broadcastSentText": "Jou boodskap is aan alle lede van hierdie groep gestuur.",
+    "priorityNormal": "Normaal",
+    "priorityImportant": "Belangrik",
+    "priorityUrgent": "Dringend",
+    "broadcastSub": "Stuur 'n boodskap aan jou groep",
+    "groupBroadcast": "Groepuitsending",
+    "broadcastIntro": "Stuur aankondigings en belangrike inligting aan almal in jou mentorgroep.",
+    "title": "Titel",
+    "titleEg": "bv. Oriënteringsvergadering",
+    "message": "Boodskap",
+    "messageEg": "Skryf jou boodskap...",
+    "priority": "Prioriteit",
+    "sendBroadcast": "Stuur uitsending",
+    "previous": "Vorige uitsendings",
+    "readOnlyNote": "Studente kan uitsendings lees maar nie antwoord of boodskappe aan die groep stuur nie.",
+    "removeMember": "Verwyder lid",
+    "remove": "Verwyder",
+    "memberRemoved": "Lid verwyder",
+    "membersSub": "Studente in jou mentorgroep",
+    "activeMembers": "Aktiewe lede",
+    "noMembers": "Nog geen lede nie",
+    "noMembersText": "Studente wat jy goedkeur sal hier verskyn.",
+    "groupMembers": "Groeplede",
+    "joined": "Aangesluit",
+    "regenTitle": "Herskep QR-kode",
+    "regenText": "Herskep van die QR-kode maak die vorige kode ongeldig. Gaan voort?",
+    "regen": "Herskep",
+    "regenDone": "QR-kode herskep",
+    "regenDoneText": "'n Nuwe QR-kode sal geskep word wanneer die databasis gekoppel is.",
+    "shareQr": "Deel QR-kode",
+    "shareQrLater": "QR-deling sal later gekoppel word.",
+    "qrCanScan": "Studente kan hierdie kode skandeer om toegang te versoek.",
+    "scanToJoin": "Skandeer om aan te sluit",
+    "qrHow": "Studente kan hierdie QR-kode met die Campus Companion-toep skandeer. Skandering skep 'n aansluitingsversoek en voeg hulle nie outomaties by die groep nie.",
+    "approvalRequired": "Goedkeuring benodig",
+    "approvalText": "Studente bly hangende totdat jy hul versoek goedkeur.",
+    "qrShareOnly": "QR-kodes moet slegs gedeel word met studente wat deel van jou program is.",
+    "applicant": "Mentorgroepaansoeker",
+    "approveTitle": "Keur versoek goed",
+    "approve": "Keur goed",
+    "approveFail": "Kon nie versoek goedkeur nie",
+    "approvedToast": "Versoek goedgekeur",
+    "rejectTitle": "Verwerp versoek",
+    "reject": "Verwerp",
+    "rejectFail": "Kon nie versoek verwerp nie",
+    "rejectedToast": "Versoek verwerp",
+    "waiting": "Studente wat wag vir goedkeuring",
+    "pendingRequests": "Hangende versoeke",
+    "noPending": "Geen hangende versoeke nie",
+    "noPendingText": "Nuwe studenteversoeke sal hier verskyn.",
+    "pending": "Hangende",
+    "requested": "Versoek",
+    "confirmRemove": "Is jy seker jy wil {{name}} uit hierdie groep verwyder?",
+    "removed": "{{name}} is uit die groep verwyder.",
+    "confirmApprove": "Voeg {{name}} by hierdie mentorgroep?",
+    "added": "{{name}} is by die groep gevoeg.",
+    "confirmReject": "Verwerp {{name}} se versoek?",
+    "rejectedNamed": "{{name}} se versoek is verwerp."
+  },
+  "schedule": {
+    "tabOrientation": "Oriëntering",
+    "dateTbc": "Datum moet nog bevestig word",
+    "whatsOn": "WAT AANGAAN",
+    "eventsSub": "Sien wat op kampus gebeur, wanneer dit begin en waarheen om te gaan.",
+    "orientationSub": "Jou oriënteringsrooster, deur die oriënteringskoördineerder opgestel. Vind jou pad na elke sessie.",
+    "yourVenue": "jou lokaal",
+    "today": "Vandag · {{date}}",
+    "directionsText": "Begin by die hoofingang en volg die tekens na {{venue}}. Jy kan ook 'n How2buddy vra om te help."
+  },
+  "events": {
+    "dateTba": "Datum moet nog aangekondig word",
+    "timeTba": "Tyd moet nog aangekondig word",
+    "thisWeek": "Hierdie week",
+    "later": "Later",
+    "now": "Gebeur nou",
+    "organisedBy": "Georganiseer deur",
+    "cost": "Koste:",
+    "showWhere": "Wys my waar",
+    "signUp": "Skryf in / meer inligting",
+    "nothingElse": "Niks anders kom nou op nie. Kyk gou weer.",
+    "none": "Nog geen geleenthede is geplaas nie. Kyk gou weer, of vra jou FYS-maat wat hierdie week aangaan.",
+    "from": "Vanaf {{time}}",
+    "pictureFor": "Prent vir {{title}}"
+  },
+  "date": {
+    "weekdaysShort": {
+      "0": "So",
+      "1": "Ma",
+      "2": "Di",
+      "3": "Wo",
+      "4": "Do",
+      "5": "Vr",
+      "6": "Sa"
+    },
+    "weekdaysLong": {
+      "0": "Sondag",
+      "1": "Maandag",
+      "2": "Dinsdag",
+      "3": "Woensdag",
+      "4": "Donderdag",
+      "5": "Vrydag",
+      "6": "Saterdag"
+    },
+    "monthsShort": {
+      "0": "Jan",
+      "1": "Feb",
+      "2": "Mrt",
+      "3": "Apr",
+      "4": "Mei",
+      "5": "Jun",
+      "6": "Jul",
+      "7": "Aug",
+      "8": "Sep",
+      "9": "Okt",
+      "10": "Nov",
+      "11": "Des"
+    },
+    "monthsLong": {
+      "0": "Januarie",
+      "1": "Februarie",
+      "2": "Maart",
+      "3": "April",
+      "4": "Mei",
+      "5": "Junie",
+      "6": "Julie",
+      "7": "Augustus",
+      "8": "September",
+      "9": "Oktober",
+      "10": "November",
+      "11": "Desember"
+    },
+    "weekdayHeads": {
+      "0": "M",
+      "1": "D",
+      "2": "W",
+      "3": "D",
+      "4": "V",
+      "5": "S",
+      "6": "S"
+    }
+  },
+  "cal": {
+    "signInFirst": "Meld eers aan",
+    "signInText": "Jou eie kalenderinskrywings word teen jou rekening gestoor.",
+    "removeTitle": "Verwyder dit?",
+    "keep": "Hou dit",
+    "eyebrow": "Kalender",
+    "title": "Alles wat jy het",
+    "subtitle": "Oriëntering, lesings, kampusgeleenthede en jou eie planne, in een maandaansig.",
+    "timetableTitle": "Jou lesrooster",
+    "timetableSub": "Kies jou klas om lesings te sien",
+    "prevMonth": "Vorige maand",
+    "nextMonth": "Volgende maand",
+    "addOwn": "Voeg jou eie inskrywing by",
+    "add": "Voeg by",
+    "noFriday": "Geen Vrydaglesings is nog gelaai nie. Kyk na jou gedrukte rooster; dit beteken nie jy is vry nie.",
+    "loading": "Laai tans jou maand…",
+    "emptyDay": "Niks op hierdie dag nie. Tik Voeg by om iets van jou eie hier te plaas.",
+    "allDay": "Heeldag",
+    "form": {
+      "needName": "Gee dit 'n naam sodat jy dit later herken.",
+      "startFormat": "Begintyd moet lyk soos 18:30.",
+      "endFormat": "Eindtyd moet lyk soos 20:00.",
+      "endBefore": "Die eindtyd is voor die begintyd.",
+      "title": "Voeg by jou kalender",
+      "what": "Wat is dit?",
+      "whatEg": "Koshuisbraai, studiegroep, skof…",
+      "entryName": "Inskrywingnaam",
+      "starts": "Begin (opsioneel)",
+      "startTime": "Begintyd",
+      "ends": "Eindig (opsioneel)",
+      "endTime": "Eindtyd",
+      "where": "Waar (opsioneel)",
+      "whereEg": "Koshuis-gemeenskaplike vertrek",
+      "place": "Plek",
+      "save": "Stoor in my kalender",
+      "note": "Slegs op hierdie foon gestoor. Personeel kan nie sien wat jy hier byvoeg nie, en dit sal nie op 'n ander toestel verskyn nie."
+    },
+    "kind": {
+      "timetable": {
+        "label": "Lesings"
+      },
+      "orientation": {
+        "note": "Die moeite werd om by te wees"
+      },
+      "event": {
+        "note": "Kom as jy kan"
+      },
+      "personal": {
+        "label": "Jou eie planne",
+        "note": "Joune om te skuif"
+      }
+    },
+    "blurb": "Geel beteken jy is uitgenooi, nie verplig nie. As jy iets moet mis, is dit oorleefbaar: sê vir 'n dosent of jou FYS-maat vroeg en hulle sal help om by te bly.",
+    "addedByYou": "Deur jou bygevoeg",
+    "removeText": "\"{{title}}\" sal van jou kalender verwyder word.",
+    "tapRemove": "{{title}}. Tik om te verwyder."
+  },
+  "search": {
+    "showLess": "Wys minder",
+    "readWhole": "Lees die hele antwoord",
+    "readMore": "Lees meer",
+    "seeFaqs": "Sien dit in Gereelde vrae",
+    "relatedQuestions": "Verwante vrae",
+    "openHelp": "Maak hulpopsies oop",
+    "openSchedule": "Maak rooster oop",
+    "onlineMap": "Aanlyn kaart",
+    "seeWho": "Sien met wie om kontak te maak",
+    "seeEvent": "Sien die geleentheid",
+    "howSignUp": "Hoe om in te skryf",
+    "howJoin": "Hoe om aan te sluit",
+    "seeProgramme": "Sien die program",
+    "seeAnnouncements": "Sien aankondigings",
+    "seeOnHome": "Sien dit op Tuis",
+    "openChecklist": "Maak kontrolelys oop",
+    "openSupport": "Maak ondersteuning oop",
+    "seeShuttles": "Sien pendelbus-tye",
+    "openProfile": "Maak profiel oop",
+    "openGuide": "Maak die gids oop",
+    "preparing": "Maak alles gereed om te soek...",
+    "whatToFind": "Wat moet jy vind?",
+    "try": "Probeer",
+    "popular": "Gewilde soektogte",
+    "recent": "Onlangse",
+    "clear": "Vee uit",
+    "notFound": "Ons kon dit nog nie vind nie",
+    "notFoundText": "Dis reg. Probeer 'n korter of ander woord, soos die nommer op 'n gebou of 'n woord soos biblioteek, kos, rooster of kliniek.",
+    "stillStuck": "Sit jy nog vas?",
+    "stillStuckText": "Sê vir ons waarmee jy hulp nodig het, en ons sal jou na die regte plek lei.",
+    "closestOnly": "Niks pas nog by al die woorde nie, so hier is die naaste treffers.",
+    "showFewer": "Wys minder",
+    "goBack": "Gaan terug",
+    "wholeApp": "Soek die hele toep",
+    "offline": "Jy soek gestoorde inligting omdat jou verbinding tans nie beskikbaar is nie.",
+    "kind": {
+      "faq": "Antwoorde",
+      "support": "Hulp kry",
+      "schedule": "Rooster",
+      "venue": "Lokale",
+      "place": "Kampusgeboue",
+      "contact": "Mense om te kontak",
+      "guide": "Digitale gidse",
+      "event": "Geleenthede",
+      "sport": "Sport en gimnasium",
+      "programme": "Programme",
+      "announcement": "Aankondigings",
+      "checklist": "Kontrolelys",
+      "info": "Ondersteuningsinligting",
+      "shuttle": "Pendelbus-tye",
+      "setting": "Instellings"
+    },
+    "scopes": {
+      "all": {
+        "label": "die hele toep",
+        "placeholder": "Soek alles in die toep...",
+        "hint": "Soek alles in die toep: die rooster en geleenthede, antwoorde, kontakte, lokale en geboue, gidse, programme, sport en meer."
+      },
+      "schedule": {
+        "label": "Rooster",
+        "placeholder": "Soek in die rooster...",
+        "hint": "Soek oriënteringsessies en kampusgeleenthede volgens naam, dag, tyd of lokaal."
+      },
+      "contacts": {
+        "label": "Kontakte",
+        "placeholder": "Soek kontakte...",
+        "hint": "Soek die mense met wie jy kontak kan maak volgens naam, rol of ondersteuningsarea."
+      },
+      "support": {
+        "label": "Ondersteuning",
+        "placeholder": "Soek ondersteuning...",
+        "hint": "Soek die \"Ek het hulp nodig met...\"-opsies en die ondersteuningsinligting wat deur jou koördineerders gepubliseer is."
+      },
+      "digital": {
+        "label": "Digitale gidse",
+        "placeholder": "Soek die digitale gidse...",
+        "hint": "Soek die stap-vir-stap-gidse vir Funda, Wi-Fi, druk, e-pos en meer."
+      },
+      "checklist": {
+        "label": "Kontrolelys",
+        "placeholder": "Soek jou kontrolelys...",
+        "hint": "Soek die take op jou nuwe student-kontrolelys."
+      },
+      "programmes": {
+        "label": "Programme",
+        "placeholder": "Soek die programme...",
+        "hint": "Soek Skool vir IT-programme volgens naam, module, loopbaan of adviseur."
+      },
+      "sport": {
+        "label": "Sport en gimnasium",
+        "placeholder": "Soek sport en gimnasium...",
+        "hint": "Soek sport, klubs, fasiliteite en hoe om vir die gimnasium in te skryf."
+      },
+      "profile": {
+        "label": "Profiel en instellings",
+        "placeholder": "Soek instellings...",
+        "hint": "Soek jou instellings, soos taal, teksgrootte en voorkoms."
+      }
+    },
+    "wholeAppNote": "Om die hele toep te deursoek, gebruik die soekkassie op die Tuisskerm.",
+    "searchScope": "Soek {{scope}}",
+    "noneInScope": "Niks in {{scope}} pas daarby nie. Probeer 'n korter of ander woord. {{note}}",
+    "showAll": "Wys al {{count}} in {{kind}}",
+    "searchingOnly": "Soek slegs {{scope}}",
+    "resultOne": "1 resultaat. Tik 'n knoppie om die volgende stap te neem.",
+    "resultMany": "{{count}} resultate. Tik 'n knoppie om die volgende stap te neem."
+  },
+  "suggest": {
+    "writeFirst": "Skryf eers die vraag, en stuur dit dan.",
+    "notSetUp": "Voorstelle is nog nie opgestel nie. Vra 'n koördineerder om die nuutste databasisskrip te laat loop.",
+    "notSent": "Dit is nog nie gestuur nie. Kontroleer asseblief jou verbinding en probeer weer.",
+    "thanks": "Dankie. Die koördineerders sal daarna kyk.",
+    "title": "Stel 'n vraag voor",
+    "intro": "Het jy 'n vraag gehoor wat nie hier beantwoord word nie? Sê vir die koördineerders sodat dit bygevoeg kan word. Moet asseblief geen student se persoonlike besonderhede insluit nie.",
+    "whatAsk": "Wat vra studente aanhoudend?",
+    "helpAnswer": "Enigiets wat kan help om dit te beantwoord? (opsioneel)",
+    "send": "Stuur aan koördineerders"
+  },
+  "role": {
+    "buddy": "FYS-maat",
+    "coordinator": "Oriënteringskoördineerder",
+    "admin": "Administrateur",
+    "hod": "Hoof van departement"
+  },
+  "sport": {
+    "tabSport": "Sport",
+    "tabGym": "Gimnasium",
+    "whoToAsk": "WIE OM TE VRA",
+    "facility": "Fasiliteit",
+    "club": "Sport / klub",
+    "howJoin": "HOE OM AAN TE SLUIT",
+    "moreInfo": "Meer inligting",
+    "howSignUp": "HOE OM IN TE SKRYF",
+    "hours": "OPENINGSURE",
+    "bring": "WAT OM TE BRING",
+    "signOnline": "Skryf aanlyn in",
+    "eyebrow": "SPORT EN ONTSPANNING",
+    "subtitle": "Vind 'n sport of klub, en leer hoe om vir die gimnasium in te skryf.",
+    "seeGym": "Sien hoe om vir die gimnasium in te skryf",
+    "wantGym": "Wil jy by die gimnasium aansluit?",
+    "seeHow": "Sien hoe om in te skryf",
+    "noSports": "Sportsoorte en klubs is nog nie bygevoeg nie. Kyk gou weer.",
+    "noGym": "Gimnasium-inskrywingsbesonderhede is nog nie bygevoeg nie. Vra intussen by die Sportkantoor of jou FYS-maat."
+  },
+  "shuttleGuide": {
+    "title": "Rondkom, sonder die raaiwerk",
+    "subtitle": "Wanneer die pendelbusse ry, wat jy nodig het om op te klim, en wat om te doen as jy verdwaal het.",
+    "cardRule": "Geen studentekaart, geen pendelbus nie. Dra dit elke dag, saam met jou registrasiebrief.",
+    "loading": "Laai tans pendelbus-tye…",
+    "nothing": "Niks gelys nie",
+    "nothingText": "Geen pendelbusse is vir hierdie tyd van die dag gelys nie. Kyk na die gedrukte rooster by jou halte, of vra 'n pendelbusmarshal.",
+    "openMap": "Maak die kampuskaart oop",
+    "findStop": "Vind jou halte op die kaart",
+    "lostHelp": "Verdwaal? Maak die kampuskaart oop, vind die gebou naaste aan jou en stap van daar af.",
+    "shift": {
+      "morning": {
+        "label": "Kom by die kampus uit",
+        "hint": "Oggendritte. As jy 'n 07:45 het, bring die 06:45 jou kalm daar."
+      },
+      "afternoon": {
+        "label": "Op pad huis toe",
+        "hint": "Middagritte. Mik vir die een voor die een wat jy nodig het."
+      },
+      "night": {
+        "label": "Laatnagte op die kampus",
+        "hint": "As jy laat studeer, is dit jou pad terug."
+      }
+    },
+    "advice": {
+      "lost": {
+        "title": "Verdwaal en moet 'n halte vind",
+        "body": "Maak die kampuskaart oop en vind die gebou naaste aan jou, en stap dan na die halte wat dit lys. As jy buite die kampus en onseker is, gaan na die naaste bekende halte: Feather Market Hall, Kings Beach en Central is almal maklik om te vind en om aanwysings na te vra."
+      },
+      "last": {
+        "title": "Die laaste pendelbus is die laaste een",
+        "body": "Besluit voor die laaste vertrek eerder as vyf minute daarna. As jy dit mis, reël jy jou eie pad huis toe, laat, en betaal waarskynlik daarvoor."
+      }
+    },
+    "footnote": "{{label}}. Tye kan verander — die gedrukte rooster by jou halte is altyd die finale woord."
+  },
+  "route": {
+    "start": "Begin stap vir {{distance}}",
+    "startAlong": "Begin stap langs {{name}} vir {{distance}}",
+    "arrived": "Jy het aangekom",
+    "turn": "Draai {{direction}}, en stap dan {{distance}}",
+    "turnOnto": "Draai {{direction}} in {{name}} in, en stap dan {{distance}}",
+    "keep": "Hou aan vir {{distance}}",
+    "keepOn": "Hou aan op {{name}} vir {{distance}}",
+    "continue": "Gaan voort vir {{distance}}",
+    "direction": {
+      "left": "links",
+      "right": "regs",
+      "slight_left": "effens links",
+      "slight_right": "effens regs",
+      "sharp_left": "skerp links",
+      "sharp_right": "skerp regs",
+      "straight": "reguit",
+      "uturn": "om (omdraai)",
+      "ahead": "vorentoe"
+    }
+  },
+  "soc": {
+    "title": "Vind jou mense",
+    "subtitle": "Geloof, studieveld, of iets heeltemal anders. Om by een aan te sluit is die vinnigste manier om op te hou voel soos 'n vreemdeling hier.",
+    "what": "Wat is 'n vereniging?",
+    "searchLabel": "Soek verenigings of 'n betalingskode",
+    "search": "Soek verenigings",
+    "noMatch": "Geen passing nie",
+    "incomplete": "Hierdie lys is nie volledig nie: sien die nota onder aan. As jou vereniging nie hier is nie, bestaan dit dalk steeds. Vra by Student Governance and Development.",
+    "about": "Oor hierdie lys",
+    "aboutText": "Geneem uit die gedrukte verenigingsinskrywingsvorm, wat onder aan die bladsy afgesny was, so die Akademiese en Ontwikkelingsafdelings is onvolledig. Fooie en kodes kan tussen jare verander. Bevestig voordat jy betaal.",
+    "whatIs": "'n Vereniging is 'n studentebestuurde klub waarby jy vir die jaar kan aansluit. Sommige is rondom 'n geloof gebou, sommige rondom wat jy studeer, en sommige rondom 'n saak of 'n vaardigheid wat niks met jou graad te doen het nie. Jy betaal 'n klein eenmalige fooi, en in ruil kry jy mense wat reeds weet waardeur jy gaan. Jy hoef nie goed te wees in enigiets, iemand te ken, of jou aan elke vergadering te verbind nie: net een keer opdaag is genoeg om te begin.",
+    "cat": {
+      "religious": {
+        "label": "Godsdienstig",
+        "blurb": "Geloofsgemeenskappe op kampus, oor baie tradisies heen."
+      },
+      "academic": {
+        "label": "Akademies",
+        "blurb": "Gekoppel aan 'n studieveld: goed vir kontakte in jou bedryf voordat jy gradueer."
+      },
+      "developmental": {
+        "label": "Ontwikkelend",
+        "blurb": "Vaardighede, sake en netwerke wat nie oor jou graad gaan nie."
+      }
+    },
+    "clashOne": "{{codes}} verskyn by meer as een vereniging op die vorm. Kontroleer die kode by die vereniging voordat jy betaal.",
+    "clashMany": "{{codes}} verskyn by meer as een vereniging op die vorm. Kontroleer die kode by die vereniging voordat jy betaal."
+  },
+  "ai": {
+    "eyebrow": "Studiegereedskap",
+    "title": "Gebruik KI sonder om jou vingers te verbrand",
+    "subtitle": "Verskillende gereedskap pas by verskillende probleme. Hier is wat werklik help, en wat jou in die moeilikheid kan bring.",
+    "rule": "Kyk na jou modulegids voordat jy KI vir enige opdrag gebruik. Die reëls verskil per fakulteit, en \"Ek het nie geweet nie\" het nog nooit as verdediging gewerk nie.",
+    "whatDo": "Wat moet jy doen?",
+    "whichTool": "Watter gereedskap is watter",
+    "whichToolText": "Gegroepeer volgens waarvoor elkeen gebou is, nie gerangskik nie. Enige rangorde sal verouderd wees voor die semester eindig, en almal doen die meeste dinge redelik.",
+    "before": "Voordat jy enige van hulle gebruik",
+    "suits": "Wat daarby pas",
+    "howAsk": "Hoe om te vra",
+    "watchOut": "Pasop"
+  },
+  "arcade": {
+    "tagline": "Speel. Ontsluit. Versamel.",
+    "subtitle": "Wen 'n ronde en ontsluit iets wat die moeite werd is om oor Mandela-universiteit te weet.",
+    "play": "Speel",
+    "vault": "Feitekluis",
+    "opening": "Maak oop…",
+    "vaultTitle": "Wat jy ontsluit het",
+    "comingSoon": "Kom binnekort",
+    "comingSoonText": "Gegradueerdes se stories word versamel. Daar is nog niks om hier te ontsluit nie.",
+    "openingVault": "Maak die kluis oop…",
+    "nothingYet": "Nog niks hier nie",
+    "nothingText": "Wen 'n ronde in die arkade en alles wat jy ontsluit, word hier gehou.",
+    "goArcade": "Gaan na die arkade",
+    "notFound": "Speletjie nie gevind nie",
+    "notFoundText": "Daardie speletjie is nie in die arkade nie. Gaan terug en kies 'n ander.",
+    "played": "Gespeel",
+    "won": "Gewen",
+    "best": "Beste",
+    "you": "Jy",
+    "pick": "Kies jou gooi",
+    "draw": "Gelykop, gaan weer",
+    "youTake": "Jy wen",
+    "houseTakes": "Madibaz wen",
+    "throwAgain": "Gooi weer",
+    "youWin": "Jy wen!",
+    "unlockedNew": "Ontsluit",
+    "alreadyHave": "Reeds in jou kluis",
+    "allUnlocked": "Jy het alles in die kluis ontsluit. Meer is op pad.",
+    "playAgain": "Speel weer",
+    "openVault": "Maak Feitekluis oop",
+    "done": "Klaar",
+    "playGame": "Speel {{game}}",
+    "wonOf": "{{won}} gewen uit {{played}}",
+    "vaultLabel": "Feitekluis, {{count}} van {{total}} ontsluit",
+    "unlocked": "{{count}} van {{total}} ontsluit",
+    "collected": "{{count}} van {{total}} versamel.",
+    "stillLocked": "🔒 {{count}} nog gesluit",
+    "openSource": "Maak bron oop: {{label}}",
+    "games": {
+      "rps": {
+        "title": "Klip, Papier, Skêr",
+        "tagline": "Beste van een teen die huis",
+        "howTo": "Kies 'n gooi en klop die Madibaz-hand."
+      }
+    },
+    "kind": {
+      "fact": "Het jy geweet?",
+      "madibaz": "Ontmoet 'n Madibaz",
+      "tip": "Eerstejaarwenk"
+    }
+  },
+  "about": {
+    "label": "OOR DIE PROJEK",
+    "appTitle": "Oor hierdie toep",
+    "subtitle": "Skool vir IT se studente-oriënteringstoep",
+    "summary": "Gebou om eerstejaar Skool vir IT-studente te help om welkom, ingelig en gereed te voel. Dit bring die oriënteringsrooster, lokale, kontakte, gereelde vrae, ondersteuning en digitale vaardigheidsgidse op een plek bymekaar, sodat niemand dit uit e-posse en boodskappe hoef saam te stel nie.",
+    "status": "Dit is 'n hackathon-prototipe. Inhoud wat gewys word kan voorbeelddata wees totdat personeel die regte oriënteringsprogram publiseer.",
+    "supportTitle": "Hoe dit studente ondersteun",
+    "principles": {
+      "courage": "Duidelike volgende stappe en klein oorwinnings, sodat die eerste stap doenbaar voel.",
+      "empathy": "Warm, eenvoudige taal. Ons neem nooit aan jy weet reeds hoe universiteit werk nie.",
+      "vulnerability": "Om iets nog nie te weet nie is normaal. Die gidse en gereelde vrae is presies daarvoor.",
+      "shame": "'n Sessie gemis of voel jy verdwaal? Jy sal altyd gewys word wat om volgende te doen, nooit blaam nie."
+    },
+    "insideTitle": "Wat binne is",
+    "features": {
+      "f1": "Tuis met aankondigings, pendelbus-tye en jou vordering",
+      "f2": "Soek deur die rooster, gereelde vrae, kontakte, lokale en hulpopsies",
+      "f3": "Oriënteringsrooster met lokaalaanwysings",
+      "f4": "Kampuskaart vir Suid- en Noordkampus: gebounommers, soek, stap-roetes",
+      "f6": "Digitale gereedheidsgidse: rekenaarvaardighede, Funda, druk en Wi-Fi",
+      "f7": "Gereelde vrae gegroepeer volgens kategorie",
+      "f8": "Ondersteuningsroetes (\"Ek het hulp nodig met...\") en sleutelkontakte",
+      "f9": "Gemeenskap: 'n klets met die studente in jou mentorgroep",
+      "f10": "Taalwisselaar (Engels, isiXhosa, Afrikaans), donker modus en aanpasbare teksgrootte",
+      "f11": "Gestoorde kopie van sleutelinligting vir wanneer jou verbinding wegval"
+    },
+    "privacyTitle": "Privaatheid en jou data",
+    "privacy": {
+      "keep": {
+        "label": "Wat ons hou",
+        "text": "Jou e-posadres (om jou aan te meld), die kletsnaam wat jy vir Gemeenskap kies, die boodskappe wat jy daar stuur, en watter digitale gereedheidstappe jy voltooi het."
+      },
+      "never": {
+        "label": "Waarvoor ons nooit vra nie",
+        "text": "ID-nommers, mediese besonderhede of finansiële inligting."
+      },
+      "who": {
+        "label": "Wie dit kan sien",
+        "text": "Gemeenskap-boodskappe is sigbaar vir die studente in jou gemeenskap en vir oriënteringspersoneel, wat help om die ruimte veilig te hou. Jou vordering is net joune."
+      },
+      "device": {
+        "label": "Op jou toestel",
+        "text": "Jou taal, teksgrootte en tema, jou laaste paar soektogte, plus 'n gestoorde kopie van die rooster, gereelde vrae en kontakte sodat dit vanlyn werk."
+      },
+      "map": {
+        "label": "Die kampuskaart",
+        "text": "Die kaart laai sy prente en stap-roetes vanaf gratis OpenStreetMap-gebaseerde dienste. Hulle ontvang net watter deel van die kaart jy bekyk en die begin- en eindpunte van 'n roete. Die toep gebruik nie GPS nie en spoor nooit waar jy is nie. Jou naam en rekening word nooit gestuur nie."
+      },
+      "approach": {
+        "label": "Ons benadering",
+        "text": "Ontwerp met POPIA-beginsels in gedagte: versamel net wat nodig is, en hou private besonderhede privaat."
+      }
+    },
+    "helpTitle": "Kry regte hulp",
+    "helpText": "Hierdie toep wys jou waar om hulp te kry. Dit vervang dit nie. As jy sukkel, of jy of iemand anders dalk in gevaar is, kontak dadelik die universiteit se beradings- en welstandsdienste of kampusbeskermingsdienste. Om vroeg hulp te vra is 'n slim, verantwoordelike ding om te doen.",
+    "openRefer": "Maak Verwys 'n student oop",
+    "openSupport": "Maak die Ondersteuning-oortjie oop",
+    "infoTitle": "Toepinligting",
+    "version": "Weergawe",
+    "platform": "Platform",
+    "data": "Data",
+    "dataValue": "Regstreeks vanaf die Skool vir IT se databasis, met 'n gestoorde kopie vir vanlyngebruik"
+  },
+  "lessons": {
+    "file-management": {
+      "title": "Basiese lêerbestuur",
+      "subtitle": "Nuut by lêers en vouers? Werk deur hierdie kort lesse in volgorde."
+    },
+    "files-1-files-and-folders": {
+      "title": "Lêers en vouers",
+      "summary": "Wat dit is en hoe om dit oop te maak, deur te blaai en te skep.",
+      "desc": "'n Lêer is een stuk werk, soos 'n opstel of 'n foto. 'n Vouer hou lêers bymekaar, soos 'n papiervouer bladsye bymekaar hou.",
+      "steps": {
+        "0": "Op 'n Windows-rekenaar, druk die Windows-sleutel en E saam om File Explorer oop te maak. Op 'n foon, maak die Lêers-toep oop.",
+        "1": "Kyk na die lys aan die linkerkant. Documents, Downloads en Desktop is plekke waar jou lêers kan woon.",
+        "2": "Dubbelklik op 'n vouer om dit oop te maak. Klik die terugpyltjie bo-aan om een vlak op te gaan.",
+        "3": "Om jou eie vouer te maak, regsklik op 'n leë spasie, kies New, dan Folder.",
+        "4": "Tik 'n naam vir die vouer en druk Enter. Jou vouer is gereed om te gebruik."
+      },
+      "tip": "Meeste dinge wat jy aflaai beland in Downloads. Skuif die wat jy wil hou na jou eie vouers."
+    },
+    "files-2-naming-and-organising": {
+      "title": "Benaming en organisering",
+      "summary": "'n Eenvoudige vouerplan sodat jy jou werk vinnig kan vind.",
+      "desc": "Duidelike name en 'n eenvoudige vouerplan beteken jy kan jou werk in sekondes vind, selfs die aand voor 'n sperdatum.",
+      "steps": {
+        "0": "Maak een hoofvouer vir die jaar, byvoorbeeld '2027 First Year'.",
+        "1": "Binne-in dit, maak een vouer vir elke module, soos 'Programming' of 'Networks'.",
+        "2": "Binne elke modulevouer, voeg 'Assignments', 'Notes' en 'Study material' by.",
+        "3": "Gee lêers name wat hulself verduidelik, soos 'Programming - Assignment 1 - Draft.docx'.",
+        "4": "Vermy name soos 'final', 'final2' of 'new'. Voeg eerder 'n datum of 'n weergawenommer by, soos 'v2'.",
+        "5": "Om 'n lêer te hernoem, klik een keer daarop, druk F2, tik die nuwe naam en druk Enter."
+      },
+      "tip": "Windows laat nie hierdie karakters in 'n lêernaam toe nie: / \\ : * ? \" < > |"
+    },
+    "files-3-save-copy-move": {
+      "title": "Stoor, kopieer en skuif",
+      "summary": "Hou jou werk, maak 'n tweede weergawe, of plaas dit êrens anders.",
+      "desc": "Stoor hou jou werk. Kopieer maak 'n tweede weergawe. Skuif plaas die oorspronklike op 'n ander plek.",
+      "steps": {
+        "0": "Stoor terwyl jy werk. In die meeste programme, druk Ctrl en S saam, en doen dit elke paar minute.",
+        "1": "Die eerste keer wat jy stoor, kies die vouer en tik 'n duidelike naam. Gebruik Save As om nog 'n weergawe onder 'n nuwe naam te hou.",
+        "2": "Om 'n lêer te kopieer, klik daarop, druk Ctrl en C, maak die vouer oop wat jy wil hê, en druk dan Ctrl en V.",
+        "3": "Om 'n lêer te skuif, klik daarop, druk Ctrl en X, maak die vouer oop wat jy wil hê, en druk dan Ctrl en V.",
+        "4": "Jy kan ook 'n lêer in 'n vouer insleep om dit te skuif. Hou Ctrl terwyl jy sleep om dit eerder te kopieer."
+      },
+      "tip": "'n Uitgesnyde lêer bly waar dit is totdat jy dit plak, so niks gaan verlore as jy halfpad onderbreek word nie."
+    },
+    "files-4-find-and-recover": {
+      "title": "Lêers vind en herstel",
+      "summary": "Soek 'n lêer, en kry een terug wat jy per ongeluk uitgevee het.",
+      "desc": "Almal verloor op 'n stadium 'n lêer. Hierdie stappe help jou om dit weer te vind, of terug te bring.",
+      "steps": {
+        "0": "In File Explorer, klik die soekkassie bo regs en tik deel van die lêernaam.",
+        "1": "Maak 'Quick access' oop (genoem 'Home' in Windows 11) om die lêers te sien wat jy onlangs oopgemaak het.",
+        "2": "Klik die 'Date modified'-opskrif om jou nuutste werk bo-aan 'n vouer te plaas.",
+        "3": "As jy per ongeluk 'n lêer uitgevee het, maak die Recycle Bin op jou lessenaar oop.",
+        "4": "Regsklik op die lêer en kies Restore. Dit gaan terug na die vouer waarvandaan dit gekom het."
+      },
+      "tip": "Sodra jy die Recycle Bin leegmaak, is lêers baie moeilik om terug te kry. Kyk daardeur voordat jy dit leegmaak."
+    },
+    "files-5-back-up": {
+      "title": "Rugsteun jou werk",
+      "summary": "Hou elke opdrag op minstens twee plekke.",
+      "desc": "Skootrekenaars raak weg, breek en word gesteel. Hou jou opdragte op minstens twee plekke, sodat een probleem jou nooit jou werk kos nie.",
+      "steps": {
+        "0": "Meld aan by OneDrive met jou universiteit se e-posadres. Jou lêers kopieer na die wolk wanneer jy aanlyn is.",
+        "1": "Stoor jou opdragte in jou OneDrive-vouer, of sleep jou modulevouers daarin.",
+        "2": "Wag vir die groen regmerkie op 'n lêer. Dit beteken die lêer is klaar gekopieer na die wolk.",
+        "3": "Hou 'n tweede kopie op 'n USB-stokkie vir groot sperdatums.",
+        "4": "Rugsteun voordat jy inhandig, en voordat jy jou rekenaar opdateer of terugstel."
+      },
+      "tip": "Laboratoriumrekenaars word gedeel. Stoor na OneDrive of 'n USB-stokkie, en moenie die enigste kopie op die rekenaar los nie."
+    },
+    "files-6-types-and-sharing": {
+      "title": "Lêertipes en deel",
+      "summary": "Wat .docx en .pdf beteken, en hoe om lêers veilig te stuur.",
+      "desc": "Die letters ná die punt in 'n lêernaam wys watter soort lêer dit is en watter program dit oopmaak.",
+      "steps": {
+        "0": ".docx is 'n Word-dokument, .xlsx is 'n Excel-blad, .pptx is 'n PowerPoint en .pdf lyk dieselfde op elke toestel.",
+        "1": "Om hierdie letters te sien, maak die View-oortjie in File Explorer oop en merk 'File name extensions'.",
+        "2": "Handig die tipe lêer in wat jou dosent vra. Vir 'n PDF, kies File, dan Save As of Export, en kies PDF.",
+        "3": "Om verskeie lêers gelyk te stuur, kies hulle, regsklik, kies 'Compress to ZIP file' en heg die ZIP aan.",
+        "4": "Vir groot lêers, deel 'n OneDrive-skakel in plaas daarvan om die lêer aan 'n e-pos te heg.",
+        "5": "Maak net aanhegsels oop van mense wat jy ken. Onbekende .exe- en .zip-lêers kan virusse dra."
+      },
+      "tip": "Kontroleer die lêer se naam voordat jy dit inhandig. 'n Dosent merk wat jy oplaai, so maak seker dit is die nuutste weergawe."
+    },
+    "cyber-safety": {
+      "title": "Kuberveiligheid",
+      "subtitle": "Herken swendelary, blaai veilig, en beskerm jou toestel en jou privaatheid."
+    },
+    "safety-1-scams": {
+      "title": "Herken swendelary en hengel-e-posse (phishing)",
+      "summary": "Vals e-posse en boodskappe wat jou probeer mislei.",
+      "desc": "Phishing is 'n vals e-pos, SMS of WhatsApp-boodskap wat voorgee om iemand te wees wat jy vertrou, soos die universiteit, 'n bank of 'n beurs. Dit probeer jou besonderhede of jou geld steel.",
+      "steps": {
+        "0": "Vertraag as 'n boodskap dringend voel. Swendelaars sê dinge soos 'act now' of 'jou rekening sal gesluit word'.",
+        "1": "Kyk wie dit regtig gestuur het. Kyk na die volledige e-posadres, nie net die naam wat gewys word nie.",
+        "2": "Moenie 'n skakel tik wat jy nie verwag het nie. Tik eerder self die webwerf se adres.",
+        "3": "Moet nooit 'n wagwoord, PIN, eenmalige kode of studentenommer in antwoord op 'n boodskap deel nie. Regte organisasies vra nie hiervoor nie.",
+        "4": "Wees agterdogtig oor aanbiedinge wat te goed klink om waar te wees, soos gratis data, maklike werk of 'n beurs waarvoor jy nooit aansoek gedoen het nie.",
+        "5": "As jy onseker is, moenie antwoord nie. Stuur die boodskap aan IT-dienste aan en vee dit uit."
+      },
+      "tip": "Kontroleer by die sender met 'n foonnommer of webwerf wat jy reeds vertrou, nooit een wat uit die boodskap kom nie."
+    },
+    "safety-2-browsing": {
+      "title": "Veilige blaai en openbare Wi-Fi",
+      "summary": "Gewoontes wat jou veilig hou op webwerwe en netwerke.",
+      "desc": "Amper alles wat jy aanlyn doen gaan deur 'n webwerf of 'n Wi-Fi-netwerk. 'n Paar gewoontes hou jou op albei veilig.",
+      "steps": {
+        "0": "Soek die hangslot en https aan die begin van 'n webwerf se adres voordat jy persoonlike besonderhede invul.",
+        "1": "Laai toepassings net af vanaf die Play Store of App Store, en programme net vanaf die amptelike webwerf.",
+        "2": "Wees versigtig op gratis openbare Wi-Fi. Moenie bankdoen of wagwoorde invoer op 'n netwerk wat jy nie vertrou nie.",
+        "3": "Op kampus, koppel aan die amptelike eduroam-netwerk, nie 'n oop netwerk met 'n soortgelyke naam nie.",
+        "4": "Meld af op gedeelde en laboratoriumrekenaars wanneer jy klaar is, en maak die blaaier toe.",
+        "5": "Moenie 'remember me' of 'save password' merk op 'n gedeelde rekenaar nie."
+      },
+      "tip": "'n Hangslot beteken net die verbinding is privaat. Dit bewys nie die webwerf is eerlik nie, so kyk steeds na die adres."
+    },
+    "safety-3-device": {
+      "title": "Beskerm jou toestel",
+      "summary": "Hou jou foon en skootrekenaar veilig, en jou werk saam met hulle.",
+      "desc": "Jou foon en skootrekenaar bevat jou opdragte, foto's en rekeninge. Beskerm hulle soos jy jou beursie sou beskerm.",
+      "steps": {
+        "0": "Sluit jou foon en skootrekenaar met 'n PIN, wagwoord, vingerafdruk of gesigsontsluiting.",
+        "1": "Installeer opdaterings wanneer hulle verskyn. Opdaterings maak sekuriteitsgate toe wat misdadigers gebruik.",
+        "2": "Hou antivirus aan. Windows Security doen dit gratis op 'n Windows-rekenaar.",
+        "3": "Moenie jou skootrekenaar of foon alleen los in die biblioteek, 'n laboratorium of 'n taxi nie.",
+        "4": "Skakel Find My Device aan op Android, of Find My iPhone, sodat jy 'n verlore foon kan opspoor of uitvee.",
+        "5": "Rugsteun jou werk, sodat 'n verlore of besmette toestel jou nie 'n opdrag kos nie."
+      },
+      "tip": "Skryf jou skootrekenaar se reeksnommer neer en hou dit êrens veilig. Dit help as jy ooit 'n diefstal moet aanmeld."
+    },
+    "safety-4-privacy": {
+      "title": "Privaatheid, sosiale media en hulp kry",
+      "summary": "Dink voor jy deel, en weet wat om te doen as dinge skeef loop.",
+      "desc": "Wat jy plaas kan jare lank aanlyn bly. Dink voor jy deel, en weet wat om te doen as iets skeef loop.",
+      "steps": {
+        "0": "Dink voor jy plaas. Alles wat jy deel kan gekopieer word, selfs al vee jy dit later uit.",
+        "1": "Hou jou studentenommer, ID-nommer, adres en rooster privaat.",
+        "2": "Gebruik privaatheidsinstellings sodat net mense wat jy ken jou plasings en foto's kan sien.",
+        "3": "Moet nooit private foto's van jouself of ander mense sonder toestemming deel nie.",
+        "4": "As iemand jou aanlyn boelie of dreig, moenie antwoord nie. Neem skermkiekies, blokkeer hulle en sê vir iemand wat jy vertrou.",
+        "5": "As jou rekening gekaap is of jy vir 'n swendelary geval het, verander dadelik jou wagwoord en kontak IT-dienste."
+      },
+      "tip": "Om aanlyn geboelie te word is nooit jou skuld nie. Die Ondersteuning-afdeling van hierdie toep kan jou wys na mense wat kan help."
+    },
+    "password-safety": {
+      "title": "Wagwoordveiligheid",
+      "subtitle": "Maak 'n sterk wagwoord, hou dit veilig en voeg ekstra beskerming by."
+    },
+    "password-1-strong": {
+      "title": "Bou 'n sterk wagwoord",
+      "summary": "Hoekom lengte slinkse simbole klop.",
+      "desc": "Hoe langer en ongewoner 'n wagwoord is, hoe moeiliker is dit om te raai. Lengte tel meer as slim simbole.",
+      "steps": {
+        "0": "Mik vir minstens 12 karakters. Langer is beter.",
+        "1": "Gebruik 'n wagwoordfrase: vier of meer ewekansige woorde, soos 'purple-bicycle-river-toast'.",
+        "2": "Voeg syfers of simbole by as jy wil, maar moenie daarop staatmaak om 'n kort wagwoord sterk te maak nie.",
+        "3": "Moenie jou naam, verjaarsdag, studentenommer, selfoonnommer of 'password123' gebruik nie.",
+        "4": "Vermy algemene patrone soos 123456, qwerty of die naam van jou gunstelingspan."
+      },
+      "tip": "'n Lang frase wat net vir jou iets beteken is makliker om te onthou en moeiliker om te kraak as 'n kort deurmekaar reeks soos P@ssw0rd."
+    },
+    "password-2-keep-safe": {
+      "title": "Hou jou wagwoorde veilig",
+      "summary": "Een wagwoord per rekening, en moet dit nooit deel nie.",
+      "desc": "'n Sterk wagwoord help net as niemand anders dit kry nie. Hou elkeen privaat, en anders.",
+      "steps": {
+        "0": "Gebruik 'n ander wagwoord vir elke belangrike rekening, veral jou studente-e-pos en jou bankrekening.",
+        "1": "Moet nooit 'n wagwoord met 'n vriend, 'n dosent of iemand wat jou boodskap stuur deel nie. Niemand werklik het dit nodig nie.",
+        "2": "Gebruik 'n wagwoordbestuurder om dit vir jou te onthou. Jou foon of blaaier het dalk reeds een ingebou.",
+        "3": "Moenie wagwoorde op plakkertjies hou nie, of in 'n gewone lêer genaamd 'passwords' op jou rekenaar nie.",
+        "4": "Tik nooit 'n wagwoord nadat jy 'n skakel in 'n boodskap getik het nie. Gaan self na die webwerf."
+      },
+      "tip": "As een webwerf gekaap word en jy oral dieselfde wagwoord gebruik het, sal misdadigers dit op al jou ander rekeninge probeer."
+    },
+    "password-3-two-step": {
+      "title": "Ekstra beskerming, en wat om te doen as dit uitlek",
+      "summary": "Tweestap-kontroles en vinnige optrede ná 'n lekkasie.",
+      "desc": "Tweestap-verifikasie voeg 'n tweede kontrole by, sodat 'n gesteelde wagwoord alleen nie genoeg is om by jou rekening in te kom nie.",
+      "steps": {
+        "0": "Skakel tweestap-verifikasie aan, ook genoem multifaktor-verifikasie, vir jou e-pos en ander belangrike rekeninge.",
+        "1": "Gebruik 'n verifikasietoep of 'n kode wat na jou foon gestuur word as die tweede stap.",
+        "2": "Hou jou rugsteunkodes êrens veilig, ingeval jy jou foon verloor.",
+        "3": "As jy dink 'n wagwoord het uitgelek, verander dit dadelik, en verander dit dan oral anders waar jy dit gebruik het.",
+        "4": "Jy kan kyk of jou e-posadres in 'n bekende databreuk verskyn het by haveibeenpwned.com.",
+        "5": "As jy nie by 'n universiteitsrekening kan aanmeld nie, kontak IT-dienste om dit terug te stel."
+      },
+      "tip": "Moet nooit 'n verifikasiekode vir iemand gee nie, selfs iemand wat sê hy of sy is van die universiteit of jou bank."
+    },
+    "responsible-ai": {
+      "title": "Verantwoordelike gebruik van KI-gereedskap",
+      "subtitle": "Gebruik KI om te leer, kontroleer wat dit jou vertel, en bly eerlik in jou werk."
+    },
+    "ai-1-what-it-is": {
+      "title": "Wat KI-gereedskap kan en nie kan doen nie",
+      "summary": "Behulpsaam, vinnig, en nie altyd reg nie.",
+      "desc": "KI-gereedskap soos kletsbotte kan in sekondes skryf, verduidelik en opsom. Hulle is nuttige helpers, maar hulle is nie altyd reg nie.",
+      "steps": {
+        "0": "'n KI-instrument voorspel waarskynlike woorde. Dit weet nie of iets waar is nie.",
+        "1": "Dit kan antwoorde gee wat selfversekerd klink maar verkeerd is, of feite, aanhalings en verwysings versin.",
+        "2": "Dit kan onregverdige idees herhaal uit die materiaal waaruit dit geleer het.",
+        "3": "Dit vervang nie jou eie denke, jou dosent of jou handboek nie.",
+        "4": "Behandel wat dit sê as 'n eerste konsep of 'n beginpunt, nooit as die finale antwoord nie."
+      },
+      "tip": "As 'n antwoord regtig saak maak, kontroleer dit teen jou notas, jou handboek of 'n betroubare webwerf."
+    },
+    "ai-2-learn-not-cheat": {
+      "title": "KI gebruik om te leer, nie om te kul nie",
+      "summary": "Wat 'n goeie gebruik is, en wat die reëls oortree.",
+      "desc": "Om werk in te handig wat 'n KI geskryf het en te sê dit is joune, is 'n vorm van bedrog. Goed gebruik, kan KI jou help om meer te verstaan.",
+      "steps": {
+        "0": "Lees jou modulegids en assesseringsinstruksies. Elke dosent stel die reëls vir KI-gebruik in hul module.",
+        "1": "As jy nie seker is of 'n instrument toegelaat is nie, vra jou dosent voordat jy dit gebruik.",
+        "2": "Goeie gebruike: vra dit om 'n idee in eenvoudiger woorde te verduidelik, jou voor 'n toets te ondervra, of voor te stel hoe om 'n opstel te beplan.",
+        "3": "Riskante gebruike: dit jou opdrag, kode of antwoorde laat skryf, en dit dan as jou eie werk inhandig.",
+        "4": "As KI-gebruik toegelaat is, sê hoe jy dit gebruik het, op die manier wat jou dosent vra.",
+        "5": "Doen die denke en die skryf self, sodat jy jou werk in 'n toets of mondeling kan verduidelik."
+      },
+      "tip": "'n Goeie toets: kan jy elke reël van jou werk verduidelik en verdedig sonder dat die KI-instrument oop is?"
+    },
+    "ai-3-privacy": {
+      "title": "Beskerm jou privaatheid met KI",
+      "summary": "Wat jy nooit in 'n KI-klets moet tik nie.",
+      "desc": "Wat jy in 'n KI-instrument tik kan gestoor word, en deur die maatskappy wat dit bedryf gebruik word.",
+      "steps": {
+        "0": "Moenie jou studentenommer, ID-nommer, wagwoorde, adres of bankbesonderhede in 'n KI-instrument tik nie.",
+        "1": "Moenie private inligting oor ander mense, soos hul foto's of boodskappe, plak nie.",
+        "2": "Moenie werk plak wat aan iemand anders behoort nie, soos 'n dosent se toets of 'n klasmaat se opdrag, sonder toestemming.",
+        "3": "Kontroleer die instrument se privaatheidsinstellings, en skakel klets-geskiedenis of opleiding op jou data af as jy kan.",
+        "4": "Wees versigtig met gratis toepassings wat baie toestemmings vra."
+      },
+      "tip": "'n Eenvoudige reël: as jy dit nie op 'n openbare kennisgewingbord sou sit nie, moenie dit in 'n KI-klets sit nie."
+    },
+    "ai-4-check-and-credit": {
+      "title": "KI-uitset nagaan en erken",
+      "summary": "Verifieer dit, sit dit in jou eie woorde, en wees eerlik.",
+      "desc": "Voordat jy enigiets gebruik wat 'n KI-instrument jou gee, kontroleer dit, en wees eerlik oor waar dit vandaan kom.",
+      "steps": {
+        "0": "Kontroleer elke feit, datum, getal en naam teen 'n betroubare bron.",
+        "1": "Soek enige boek, artikel of aanhaling wat dit gee. KI-gereedskap versin soms verwysings wat nie bestaan nie.",
+        "2": "Vir kode, laat dit loop en toets dit. Maak seker jy verstaan elke deel voordat jy dit gebruik.",
+        "3": "Sit idees in jou eie woorde. Om KI-teks reguit in jou werk te kopieer kan as plagiaat tel.",
+        "4": "Gebruik die verwysingstyl wat jou departement vra, en volg sy reëls oor die vermelding van KI.",
+        "5": "As jy twyfel, wees openhartig daaroor en vra jou dosent."
+      },
+      "tip": "Jy is verantwoordelik vir alles wat jy inhandig, insluitend enige foute wat 'n KI-instrument vir jou gemaak het."
+    }
   }
 }

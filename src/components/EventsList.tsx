@@ -6,6 +6,9 @@ import { useTheme } from '../theme/ThemeContext';
 import { CampusActionButton } from './CampusActionButton';
 import { ScaledText as Text } from './ScaledText';
 import { ShameResilientBanner } from './ShameResilientBanner';
+import { useTranslation } from 'react-i18next';
+import { monthShort, shortDate } from '../lib/dates';
+import i18n from '../i18n';
 
 // General campus events (sport, social, culture...). These are separate from the orientation
 // schedule, which is the timetable the orientation coordinator sets for first-years.
@@ -70,9 +73,6 @@ const CATEGORY_COLOURS: Record<string, string> = {
 };
 const categoryColour = (category: string) => CATEGORY_COLOURS[category.toLowerCase()] ?? '#64748B';
 
-const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
 // Dates are written by hand rather than with toLocaleDateString, so they look the same on every phone.
 const parseDate = (iso: string) => {
   const [year, month, day] = iso.split('-').map(Number);
@@ -86,22 +86,23 @@ const daysFrom = (iso: string, today: Date) =>
   Math.round((parseDate(iso).getTime() - new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime()) / 86_400_000);
 
 function dayLabel(iso: string, today: Date) {
-  if (!iso) return 'Date to be announced';
+  if (!iso) return i18n.t('events.dateTba');
   const days = daysFrom(iso, today);
-  if (days === 0) return 'Today';
-  if (days === 1) return 'Tomorrow';
+  if (days === 0) return i18n.t('common.today');
+  if (days === 1) return i18n.t('common.tomorrow');
   const date = parseDate(iso);
-  return `${WEEKDAYS[date.getDay()]} ${date.getDate()} ${MONTHS[date.getMonth()]}`;
+  return shortDate(date);
 }
 
 const timeRange = (event: CampusEvent) =>
-  event.start ? (event.end ? `${event.start} - ${event.end}` : `From ${event.start}`) : 'Time to be announced';
+  event.start ? (event.end ? `${event.start} - ${event.end}` : i18n.t('events.from', { time: event.start })) : i18n.t('events.timeTba');
 
 const where = (event: CampusEvent) => [event.venue, event.room].filter(Boolean).join(' · ');
 
 type Group = { title: string; events: CampusEvent[] };
 
 export function EventsList({ events, focusId = '' }: { events: CampusEvent[]; focusId?: string }) {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const router = useRouter();
   const segments = useSegments();
@@ -131,10 +132,10 @@ export function EventsList({ events, focusId = '' }: { events: CampusEvent[]; fo
   const shown = category === 'All' || !categories.includes(category) ? upcoming : upcoming.filter((event) => event.category === category);
 
   const groups = useMemo(() => {
-    const today: Group = { title: 'Today', events: [] };
-    const week: Group = { title: 'This week', events: [] };
-    const later: Group = { title: 'Later', events: [] };
-    const undated: Group = { title: 'Date to be announced', events: [] };
+    const today: Group = { title: t('common.today'), events: [] };
+    const week: Group = { title: t('events.thisWeek'), events: [] };
+    const later: Group = { title: t('events.later'), events: [] };
+    const undated: Group = { title: t('events.dateTba'), events: [] };
     for (const event of shown) {
       if (!event.date) {
         undated.events.push(event);
@@ -182,7 +183,7 @@ export function EventsList({ events, focusId = '' }: { events: CampusEvent[]; fo
             {date ? (
               <>
                 <Text style={[styles.dateDay, { color: colors.text }]}>{date.getDate()}</Text>
-                <Text style={[styles.dateMonth, { color: colors.textSecondary }]}>{MONTHS[date.getMonth()].toUpperCase()}</Text>
+                <Text style={[styles.dateMonth, { color: colors.textSecondary }]}>{monthShort(date.getMonth()).toUpperCase()}</Text>
               </>
             ) : (
               <Text style={[styles.dateMonth, { color: colors.textSecondary }]}>TBA</Text>
@@ -195,7 +196,7 @@ export function EventsList({ events, focusId = '' }: { events: CampusEvent[]; fo
               </View>
               {live ? (
                 <View style={[styles.badge, { backgroundColor: '#DC262622' }]}>
-                  <Text style={[styles.badgeText, { color: '#DC2626' }]}>Happening now</Text>
+                  <Text style={[styles.badgeText, { color: '#DC2626' }]}>{t('events.now')}</Text>
                 </View>
               ) : date ? (
                 <Text style={[styles.when, { color: colors.accent }]}>{dayLabel(event.date, now)}</Text>
@@ -223,17 +224,17 @@ export function EventsList({ events, focusId = '' }: { events: CampusEvent[]; fo
                 source={{ uri: event.image }}
                 style={styles.image}
                 resizeMode="cover"
-                accessibilityLabel={`Picture for ${event.title}`}
+                accessibilityLabel={t('events.pictureFor', { title: event.title })}
                 onError={() => setBrokenImages((current) => new Set(current).add(event.id))}
               />
             ) : null}
             {event.description ? <Text style={[styles.body, { color: colors.text }]}>{event.description}</Text> : null}
-            {event.organizer ? <Text style={[styles.meta, { color: colors.textSecondary }]}>Organised by {event.organizer}</Text> : null}
-            {event.cost ? <Text style={[styles.meta, { color: colors.textSecondary }]}>Cost: {event.cost}</Text> : null}
+            {event.organizer ? <Text style={[styles.meta, { color: colors.textSecondary }]}>{t('events.organisedBy')} {event.organizer}</Text> : null}
+            {event.cost ? <Text style={[styles.meta, { color: colors.textSecondary }]}>{t('events.cost')} {event.cost}</Text> : null}
             <View style={styles.actions}>
-              {event.venue ? <CampusActionButton icon="location-outline" label="Show me where" primary onPress={() => showOnMap(event.venue)} /> : null}
+              {event.venue ? <CampusActionButton icon="location-outline" label={t('events.showWhere')} primary onPress={() => showOnMap(event.venue)} /> : null}
               {event.link ? (
-                <CampusActionButton icon="open-outline" label="Sign up / more info" onPress={() => Linking.openURL(event.link).catch(() => undefined)} />
+                <CampusActionButton icon="open-outline" label={t('events.signUp')} onPress={() => Linking.openURL(event.link).catch(() => undefined)} />
               ) : null}
             </View>
           </View>
@@ -247,8 +248,8 @@ export function EventsList({ events, focusId = '' }: { events: CampusEvent[]; fo
       <ShameResilientBanner
         message={
           events.length
-            ? 'Nothing else is coming up right now. Check back soon.'
-            : 'No events have been posted yet. Check back soon, or ask your buddy what is on this week.'
+            ? t('events.nothingElse')
+            : t('events.none')
         }
         type="info"
       />
@@ -269,7 +270,7 @@ export function EventsList({ events, focusId = '' }: { events: CampusEvent[]; fo
                 onPress={() => setCategory(name)}
                 style={[styles.chip, { borderColor: colors.border, backgroundColor: colors.surface }, active && { backgroundColor: colors.accent, borderColor: colors.accent }]}
               >
-                <Text style={[styles.chipText, { color: colors.text }]}>{name}</Text>
+                <Text style={[styles.chipText, { color: colors.text }]}>{name === 'All' ? t('common.allCategories') : name}</Text>
               </Pressable>
             );
           })}

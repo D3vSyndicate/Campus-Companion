@@ -4,6 +4,7 @@ import { Animated, Easing, Platform, Pressable, StyleSheet, View } from 'react-n
 import { useTheme } from '../../theme/ThemeContext';
 import { ScaledText as Text } from '../ScaledText';
 import type { GameProps } from './types';
+import { useTranslation } from 'react-i18next';
 
 const THROWS = ['rock', 'paper', 'scissors'] as const;
 type Throw = (typeof THROWS)[number];
@@ -19,6 +20,7 @@ const COUNT_STEPS = 3;
 const COUNT_INTERVAL_MS = 300;
 
 export function RockPaperScissors({ onRoundEnd, paused }: GameProps) {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const [phase, setPhase] = useState<Phase>('choosing');
   const [playerThrow, setPlayerThrow] = useState<Throw | null>(null);
@@ -97,9 +99,9 @@ export function RockPaperScissors({ onRoundEnd, paused }: GameProps) {
             <Animated.Text style={[styles.hand, { transform: [{ rotate }] }]}>
               {shownPlayer}
             </Animated.Text>
-            <Text style={[styles.handLabel, { color: colors.textSecondary }]}>You</Text>
+            <Text style={[styles.handLabel, { color: colors.textSecondary }]}>{t('arcade.you')}</Text>
           </View>
-          <Text style={[styles.versus, { color: colors.textSecondary }]}>vs</Text>
+          <Text style={[styles.versus, { color: colors.textSecondary }]}>{t('common.vs')}</Text>
           <View style={styles.handColumn}>
             {/* Both transforms belong in one array: a second `transform` in the style list would
                 replace the first, and the mirroring would be lost. */}
@@ -112,14 +114,14 @@ export function RockPaperScissors({ onRoundEnd, paused }: GameProps) {
 
         <Text style={[styles.status, { color: colors.text }]}>
           {phase === 'choosing'
-            ? 'Pick your throw'
+            ? t('arcade.pick')
             : phase === 'counting'
               ? '.'.repeat(Math.max(count, 1))
               : result === 'draw'
-                ? 'Draw — go again'
+                ? t('arcade.draw')
                 : result === 'win'
-                  ? 'You take it'
-                  : 'Madibaz takes it'}
+                  ? t('arcade.youTake')
+                  : t('arcade.houseTakes')}
         </Text>
       </View>
 
@@ -135,7 +137,7 @@ export function RockPaperScissors({ onRoundEnd, paused }: GameProps) {
             pressed && { opacity: 0.85 },
           ]}
         >
-          <Text style={styles.againLabel}>Throw again</Text>
+          <Text style={styles.againLabel}>{t('arcade.throwAgain')}</Text>
         </Pressable>
       ) : (
         <View style={styles.choices}>

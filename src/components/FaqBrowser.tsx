@@ -123,7 +123,7 @@ export function FaqBrowser({ canShare = false, canSuggest = false }: Props) {
     try {
       await Share.share({ message: `${faq.question}\n\n${faq.answer}` });
     } catch {
-      Alert.alert('Sharing is not available here', 'You can still read the answer out to the student.');
+      Alert.alert(t('share.unavailable'), t('share.readAnswer'));
     }
   };
 
@@ -213,7 +213,7 @@ export function FaqBrowser({ canShare = false, canSuggest = false }: Props) {
                         onPress={() => void shareAnswer(item)}
                         style={[styles.shareButton, { backgroundColor: colors.accent }]}
                       >
-                        <Text style={styles.shareText}>Share this answer</Text>
+                        <Text style={styles.shareText}>{t('share.shareAnswer')}</Text>
                       </TouchableOpacity>
                     ) : null}
                   </View>

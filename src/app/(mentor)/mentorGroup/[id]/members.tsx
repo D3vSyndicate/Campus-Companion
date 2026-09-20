@@ -10,6 +10,7 @@ import {
     View,
 } from 'react-native';
 import { useTheme } from '../../../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 type Member = {
   id: string;
@@ -20,6 +21,7 @@ type Member = {
 };
 
 export default function MentorGroupMembers() {
+  const { t } = useTranslation();
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { colors } = useTheme();
@@ -50,15 +52,15 @@ export default function MentorGroupMembers() {
 
   const handleRemove = (member: Member) => {
     Alert.alert(
-      'Remove member',
-      `Are you sure you want to remove ${member.name} from this group?`,
+      t('mgm.removeMember'),
+      t('mgm.confirmRemove', { name: member.name }),
       [
         {
-          text: 'Cancel',
+          text: t('common.cancel'),
           style: 'cancel',
         },
         {
-          text: 'Remove',
+          text: t('mgm.remove'),
           style: 'destructive',
           onPress: () => {
             setMembers((current) =>
@@ -66,8 +68,8 @@ export default function MentorGroupMembers() {
             );
 
             Alert.alert(
-              'Member removed',
-              `${member.name} has been removed from the group.`
+              t('mgm.memberRemoved'),
+              t('mgm.removed', { name: member.name })
             );
           },
         },
@@ -109,7 +111,7 @@ export default function MentorGroupMembers() {
               { color: colors.text },
             ]}
           >
-            Members
+            {t('mg.members')}
           </Text>
 
           <Text
@@ -118,7 +120,7 @@ export default function MentorGroupMembers() {
               { color: colors.textSecondary },
             ]}
           >
-            Students in your mentor group
+            {t('mgm.membersSub')}
           </Text>
         </View>
       </View>
@@ -162,7 +164,7 @@ export default function MentorGroupMembers() {
               { color: colors.textSecondary },
             ]}
           >
-            Active members
+            {t('mgm.activeMembers')}
           </Text>
         </View>
       </View>
@@ -190,7 +192,7 @@ export default function MentorGroupMembers() {
               { color: colors.text },
             ]}
           >
-            No members yet
+            {t('mgm.noMembers')}
           </Text>
 
           <Text
@@ -199,7 +201,7 @@ export default function MentorGroupMembers() {
               { color: colors.textSecondary },
             ]}
           >
-            Students you approve will appear here.
+            {t('mgm.noMembersText')}
           </Text>
         </View>
       ) : (
@@ -210,7 +212,7 @@ export default function MentorGroupMembers() {
               { color: colors.text },
             ]}
           >
-            Group Members
+            {t('mgm.groupMembers')}
           </Text>
 
           {members.map((member) => (
@@ -276,7 +278,7 @@ export default function MentorGroupMembers() {
                     { color: colors.textSecondary },
                   ]}
                 >
-                  Joined {member.joinedAt}
+                  {t('mgm.joined')} {member.joinedAt}
                 </Text>
               </View>
 

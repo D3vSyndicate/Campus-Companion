@@ -6,6 +6,7 @@ import { useTheme } from '../../theme/ThemeContext';
 import { PageHeader } from '../PageHeader';
 import { ScaledText as Text } from '../ScaledText';
 import { GAMES } from './games';
+import { useTranslation } from 'react-i18next';
 
 // The arcade's front door: the game, and how full the vault is.
 //
@@ -13,6 +14,7 @@ import { GAMES } from './games';
 // row of a list that implies more are hiding below it.
 
 export function ArcadeHub() {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const router = useRouter();
   const { ledger, unlockedRewards, totalRewards, loading } = useArcade();
@@ -24,9 +26,9 @@ export function ArcadeHub() {
     <View style={[styles.screen, { backgroundColor: colors.background }]}>
       <ScrollView contentContainerStyle={styles.content}>
         <PageHeader
-          eyebrow="Madibaz Arcade"
-          title="Play. Unlock. Collect."
-          subtitle="Win a round and unlock something worth knowing about Mandela University."
+          eyebrow={t('home.cards.arcade.title')}
+          title={t('arcade.tagline')}
+          subtitle={t('arcade.subtitle')}
           showSearch={false}
           showBack
           backFallback="/(student)"
@@ -38,7 +40,7 @@ export function ArcadeHub() {
             <Pressable
               key={game.id}
               accessibilityRole="button"
-              accessibilityLabel={`Play ${game.title}`}
+              accessibilityLabel={t('arcade.playGame', { game: t(`arcade.games.${game.id}.title`, { defaultValue: game.title }) })}
               onPress={() => router.push(`/(student)/arcade-game?game=${game.id}`)}
               style={({ pressed }) => [
                 styles.tile,
@@ -49,17 +51,17 @@ export function ArcadeHub() {
               <View style={[styles.tileIcon, { backgroundColor: colors.surfaceMuted }]}>
                 <Text style={styles.tileEmoji}>{game.emoji}</Text>
               </View>
-              <Text style={[styles.tileTitle, { color: colors.text }]}>{game.title}</Text>
+              <Text style={[styles.tileTitle, { color: colors.text }]}>{t(`arcade.games.${game.id}.title`, { defaultValue: game.title })}</Text>
               <Text style={[styles.tileTagline, { color: colors.textSecondary }]}>
-                {game.tagline}
+                {t(`arcade.games.${game.id}.tagline`, { defaultValue: game.tagline })}
               </Text>
               {stats && stats.played > 0 ? (
                 <Text style={[styles.tileStats, { color: colors.textSecondary }]}>
-                  {stats.won} won of {stats.played}
+                  {t('arcade.wonOf', { won: stats.won, played: stats.played })}
                 </Text>
               ) : null}
               <View style={[styles.playButton, { backgroundColor: colors.accent }]}>
-                <Text style={styles.playLabel}>Play</Text>
+                <Text style={styles.playLabel}>{t('arcade.play')}</Text>
                 <Ionicons name="arrow-forward" size={15} color="#071B2C" />
               </View>
             </Pressable>
@@ -68,7 +70,7 @@ export function ArcadeHub() {
 
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel={`Fact Vault, ${collected} of ${totalRewards} unlocked`}
+          accessibilityLabel={t('arcade.vaultLabel', { count: collected, total: totalRewards })}
           onPress={() => router.push('/(student)/fact-vault')}
           style={({ pressed }) => [
             styles.vault,
@@ -79,9 +81,9 @@ export function ArcadeHub() {
           <View style={styles.vaultTop}>
             <Text style={styles.vaultEmoji}>🔓</Text>
             <View style={styles.vaultCopy}>
-              <Text style={[styles.vaultTitle, { color: colors.text }]}>Fact Vault</Text>
+              <Text style={[styles.vaultTitle, { color: colors.text }]}>{t('arcade.vault')}</Text>
               <Text style={[styles.vaultMeta, { color: colors.textSecondary }]}>
-                {loading ? 'Opening…' : `${collected} of ${totalRewards} unlocked`}
+                {loading ? t('arcade.opening') : t('arcade.unlocked', { count: collected, total: totalRewards })}
               </Text>
             </View>
             <Ionicons name="chevron-forward" size={18} color={colors.textSecondary} />

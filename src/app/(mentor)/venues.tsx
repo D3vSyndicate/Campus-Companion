@@ -15,6 +15,7 @@ import { PageHeader } from '../../components/PageHeader';
 import { ScaledText as Text } from '../../components/ScaledText';
 import { fetchWithOfflineFallback } from '../../lib/offlineData';
 import { useTheme } from '../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 type Venue = {
   id: string;
@@ -30,6 +31,7 @@ const str = (value: unknown) => String(value ?? '').trim();
 
 // Directions a buddy can give (or send) to a student who is not sure where to go.
 export default function VenueGuide() {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const [venues, setVenues] = useState<Venue[]>([]);
   const [loading, setLoading] = useState(true);
@@ -64,15 +66,15 @@ export default function VenueGuide() {
 
   const guidance = (venue: Venue) =>
     venue.directions ||
-    `Start at the main entrance and follow the signs to ${venue.name}. You can also ask a How2buddy for help.`;
+    t('schedule.directionsText', { venue: venue.name });
 
   const share = async (venue: Venue) => {
     try {
       await Share.share({
-        message: `${venue.name}${venue.building ? `, ${venue.building}` : ''}${venue.room ? `, room ${venue.room}` : ''}\n\n${guidance(venue)}`,
+        message: `${venue.name}${venue.building ? `, ${venue.building}` : ''}${venue.room ? `, ${t('map.room', { number: venue.room }).toLowerCase()}` : ''}\n\n${guidance(venue)}`,
       });
     } catch {
-      Alert.alert('Sharing is not available here', 'You can still read the directions out to the student.');
+      Alert.alert(t('share.unavailable'), t('buddyVenues.readOut'));
     }
   };
 
@@ -86,14 +88,14 @@ export default function VenueGuide() {
         ListHeaderComponent={
           <View>
             <PageHeader
-              eyebrow="FYS BUDDY"
-              title="Venue guide"
-              subtitle="Not sure where something is? Many students are not. Give clear, kind directions and offer to walk with them if you can."
+              eyebrow={t('buddy.eyebrow')}
+              title={t('buddy.actions.venues.title')}
+              subtitle={t('buddyVenues.subtitle')}
               showSearch={false}
             />
             <TextInput
               style={[styles.search, { backgroundColor: colors.card, borderColor: colors.border, color: colors.text }]}
-              placeholder="Search venues, buildings or rooms"
+              placeholder={t('buddyVenues.search')}
               placeholderTextColor={colors.textSecondary}
               value={search}
               onChangeText={setSearch}
@@ -105,7 +107,7 @@ export default function VenueGuide() {
             <ActivityIndicator color={colors.accent} style={styles.loading} />
           ) : (
             <Text style={[styles.empty, { color: colors.textSecondary }]}>
-              {venues.length ? 'No venue matches that yet. Try another word.' : 'No venues have been added yet.'}
+              {venues.length ? t('buddyVenues.noMatch') : t('buddyVenues.none')}
             </Text>
           )
         }
@@ -123,7 +125,7 @@ export default function VenueGuide() {
                 <View style={styles.cardText}>
                   <Text style={[styles.cardTitle, { color: colors.text }]}>{item.name}</Text>
                   <Text style={[styles.meta, { color: colors.textSecondary }]}>
-                    {[item.building, item.room ? `Room ${item.room}` : ''].filter(Boolean).join(' · ') || 'Location details coming soon'}
+                    {[item.building, item.room ? t('map.room', { number: item.room }) : ''].filter(Boolean).join(' · ') || t('buddyVenues.soon')}
                   </Text>
                 </View>
                 <Ionicons name={open ? 'chevron-up' : 'chevron-down'} size={18} color={colors.textSecondary} />
@@ -131,26 +133,26 @@ export default function VenueGuide() {
 
               {open ? (
                 <View style={[styles.details, { borderTopColor: colors.border }]}>
-                  <Text style={[styles.label, { color: colors.accent }]}>Directions</Text>
+                  <Text style={[styles.label, { color: colors.accent }]}>{t('buddyVenues.directions')}</Text>
                   <Text style={[styles.body, { color: colors.textSecondary }]}>{guidance(item)}</Text>
 
                   {item.accessibility ? (
                     <>
-                      <Text style={[styles.label, { color: colors.accent }]}>Accessibility</Text>
+                      <Text style={[styles.label, { color: colors.accent }]}>{t('buddyVenues.accessibility')}</Text>
                       <Text style={[styles.body, { color: colors.textSecondary }]}>{item.accessibility}</Text>
                     </>
                   ) : null}
 
                   <View style={styles.actions}>
                     <TouchableOpacity style={[styles.button, { backgroundColor: colors.accent }]} onPress={() => void share(item)}>
-                      <Text style={styles.buttonText}>Share directions</Text>
+                      <Text style={styles.buttonText}>{t('buddyVenues.share')}</Text>
                     </TouchableOpacity>
                     {item.mapLink ? (
                       <TouchableOpacity
                         style={[styles.button, styles.outlined, { borderColor: colors.border }]}
                         onPress={() => void Linking.openURL(item.mapLink)}
                       >
-                        <Text style={[styles.buttonText, { color: colors.text }]}>Open map</Text>
+                        <Text style={[styles.buttonText, { color: colors.text }]}>{t('common.openMap')}</Text>
                       </TouchableOpacity>
                     ) : null}
                   </View>

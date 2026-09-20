@@ -11,8 +11,10 @@ import {
 } from 'react-native';
 import { supabase } from '../../../lib/superbase';
 import { useTheme } from '../../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 export default function ScanMentorQRScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   const { colors } = useTheme();
 
@@ -34,11 +36,11 @@ export default function ScanMentorQRScreen() {
 
     if (!groupId) {
       Alert.alert(
-        'Invalid QR Code',
-        'This QR code does not contain valid mentor group information.',
+        t('mg.qrInvalid'),
+        t('mg.qrInvalidText'),
         [
           {
-            text: 'Scan Again',
+            text: t('mg.scanAgain'),
             onPress: () => setScanned(false),
           },
         ]
@@ -48,28 +50,28 @@ export default function ScanMentorQRScreen() {
     }
 
     Alert.alert(
-      'Mentor Group Found',
-      'This QR code belongs to a mentor group. Would you like to send a join request?',
+      t('mg.qrFound'),
+      t('mg.qrFoundText'),
       [
         {
-          text: 'Cancel',
+          text: t('common.cancel'),
           style: 'cancel',
           onPress: () => setScanned(false),
         },
         {
-          text: 'Send Request',
+          text: t('mg.sendRequest'),
           onPress: () => void (async () => {
             const { error } = await supabase.rpc('request_to_join_mentor_group', { target_group: groupId });
             if (error) {
-              Alert.alert('Request not sent', error.message, [{ text: 'OK', onPress: () => setScanned(false) }]);
+              Alert.alert(t('mg.notSent'), error.message, [{ text: t('common.ok'), onPress: () => setScanned(false) }]);
               return;
             }
             Alert.alert(
-              'Request Sent',
-              'Your join request has been sent to the mentor.',
+              t('mg.requestSent'),
+              t('mg.joinSentText'),
               [
                 {
-                  text: 'OK',
+                  text: t('common.ok'),
                   onPress: () =>
                     router.replace(
                       '/(student)/mentorGroups/request-status'
@@ -93,7 +95,7 @@ export default function ScanMentorQRScreen() {
         ]}
       >
         <Text style={[styles.loadingText, { color: colors.text }]}>
-          Checking camera permission...
+          {t('mg.cameraChecking')}
         </Text>
       </View>
     );
@@ -129,7 +131,7 @@ export default function ScanMentorQRScreen() {
               { color: colors.text },
             ]}
           >
-            Camera Permission Required
+            {t('mg.cameraNeeded')}
           </Text>
 
           <Text
@@ -138,8 +140,7 @@ export default function ScanMentorQRScreen() {
               { color: colors.textSecondary },
             ]}
           >
-            Camera access is needed to scan the QR code provided
-            by your mentor.
+            {t('mg.cameraNeededText')}
           </Text>
 
           <Pressable
@@ -155,7 +156,7 @@ export default function ScanMentorQRScreen() {
                 { color: colors.background },
               ]}
             >
-              Allow Camera
+              {t('mg.allowCamera')}
             </Text>
           </Pressable>
 
@@ -169,7 +170,7 @@ export default function ScanMentorQRScreen() {
                 { color: colors.textSecondary },
               ]}
             >
-              Go Back
+              {t('common.goBack')}
             </Text>
           </Pressable>
         </View>
@@ -218,7 +219,7 @@ export default function ScanMentorQRScreen() {
           </Pressable>
 
           <Text style={styles.headerTitle}>
-            Scan Mentor QR
+            {t('mg.scanTitle')}
           </Text>
 
           <View style={styles.headerSpacer} />
@@ -227,11 +228,11 @@ export default function ScanMentorQRScreen() {
         {/* Scanner */}
         <View style={styles.scannerArea}>
           <Text style={styles.instructionTitle}>
-            Scan your mentor&apos;s QR code
+            {t('mg.scanYours')}
           </Text>
 
           <Text style={styles.instructionText}>
-            Position the QR code inside the frame
+            {t('mg.positionQr')}
           </Text>
 
           <View style={styles.scannerFrame}>
@@ -249,8 +250,7 @@ export default function ScanMentorQRScreen() {
             />
 
             <Text style={styles.infoText}>
-              Scanning the code will send a join request. You will
-              not automatically become a member.
+              {t('mg.scanNote')}
             </Text>
           </View>
         </View>
@@ -269,7 +269,7 @@ export default function ScanMentorQRScreen() {
               />
 
               <Text style={styles.scanAgainText}>
-                Scan Again
+                {t('mg.scanAgain')}
               </Text>
             </Pressable>
           )}

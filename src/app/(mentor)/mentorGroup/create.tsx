@@ -13,8 +13,10 @@ import {
 import { useAuth } from '../../../context/AuthContext';
 import { supabase } from '../../../lib/superbase';
 import { useTheme } from '../../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 export default function CreateMentorGroup() {
+  const { t } = useTranslation();
   const router = useRouter();
   const { colors } = useTheme();
   const { user } = useAuth();
@@ -44,8 +46,8 @@ export default function CreateMentorGroup() {
       if (!active) return;
 
       if (error || !data) {
-        Alert.alert('Could not load group', error?.message ?? 'This group could not be found.', [
-          { text: 'OK', onPress: () => router.back() },
+        Alert.alert(t('mgm.loadFail'), error?.message ?? t('mgm.notFound'), [
+          { text: t('common.ok'), onPress: () => router.back() },
         ]);
         return;
       }
@@ -64,12 +66,12 @@ export default function CreateMentorGroup() {
 
   const handleSave = async () => {
     if (!groupName.trim()) {
-      Alert.alert('Missing information', 'Please enter a group name.');
+      Alert.alert(t('mgm.missing'), t('mgm.enterName'));
       return;
     }
 
     if (!programme.trim()) {
-      Alert.alert('Missing information', 'Please enter a programme.');
+      Alert.alert(t('mgm.missing'), t('mgm.enterProgramme'));
       return;
     }
 
@@ -77,14 +79,14 @@ export default function CreateMentorGroup() {
 
     if (!capacity || Number.isNaN(capacityNumber) || capacityNumber <= 0) {
       Alert.alert(
-        'Invalid capacity',
-        'Please enter a valid maximum group capacity.'
+        t('mgm.invalidCapacity'),
+        t('mgm.enterCapacity')
       );
       return;
     }
 
     if (!user) {
-      Alert.alert('Sign in required', 'Please sign in before creating a mentor group.');
+      Alert.alert(t('mgm.signInRequired'), t('mgm.signInText'));
       return;
     }
 
@@ -104,17 +106,17 @@ export default function CreateMentorGroup() {
       setSaving(false);
 
       if (error) {
-        Alert.alert('Could not save changes', error.message);
+        Alert.alert(t('mgm.saveFail'), error.message);
         return;
       }
 
       // Row-level security skips groups that belong to someone else, so nothing comes back.
       if (!data?.length) {
-        Alert.alert('Could not save changes', 'Only the mentor who created this group can change it.');
+        Alert.alert(t('mgm.saveFail'), t('mgm.onlyCreator'));
         return;
       }
 
-      Alert.alert('Group updated', 'Your changes have been saved.', [{ text: 'OK', onPress: () => router.back() }]);
+      Alert.alert(t('mgm.updated'), t('mgm.saved'), [{ text: t('common.ok'), onPress: () => router.back() }]);
       return;
     }
 
@@ -128,16 +130,16 @@ export default function CreateMentorGroup() {
     setSaving(false);
 
     if (error) {
-      Alert.alert('Could not create group', error.message);
+      Alert.alert(t('mgm.createFail'), error.message);
       return;
     }
 
     Alert.alert(
-      'Group created',
-      'Your mentor group is ready. Students can now find it or scan its QR code.',
+      t('mgm.created'),
+      t('mgm.createdText'),
       [
         {
-          text: 'OK',
+          text: t('common.ok'),
           onPress: () => router.back(),
         },
       ]
@@ -179,7 +181,7 @@ export default function CreateMentorGroup() {
               { color: colors.text },
             ]}
           >
-            {editing ? 'Edit Mentor Group' : 'Create Mentor Group'}
+            {editing ? t('mgm.editTitle') : t('mgm.createTitle')}
           </Text>
 
           <Text
@@ -188,7 +190,7 @@ export default function CreateMentorGroup() {
               { color: colors.textSecondary },
             ]}
           >
-            {editing ? 'Change the details of your group.' : 'Create a group for your students.'}
+            {editing ? t('mgm.editSub') : t('mgm.createSub')}
           </Text>
         </View>
       </View>
@@ -196,13 +198,13 @@ export default function CreateMentorGroup() {
       {/* Group Name */}
       <View style={styles.inputGroup}>
         <Text style={[styles.label, { color: colors.text }]}>
-          Group Name
+          {t('mgm.groupName')}
         </Text>
 
         <TextInput
           value={groupName}
           onChangeText={setGroupName}
-          placeholder="e.g. Software Development Group"
+          placeholder={t('mgm.groupNameEg')}
           placeholderTextColor={colors.textSecondary}
           style={[
             styles.input,
@@ -218,13 +220,13 @@ export default function CreateMentorGroup() {
       {/* Programme */}
       <View style={styles.inputGroup}>
         <Text style={[styles.label, { color: colors.text }]}>
-          Programme
+          {t('mgm.programme')}
         </Text>
 
         <TextInput
           value={programme}
           onChangeText={setProgramme}
-          placeholder="e.g. Software Development"
+          placeholder={t('mgm.programmeEg')}
           placeholderTextColor={colors.textSecondary}
           style={[
             styles.input,
@@ -240,13 +242,13 @@ export default function CreateMentorGroup() {
       {/* Description */}
       <View style={styles.inputGroup}>
         <Text style={[styles.label, { color: colors.text }]}>
-          Description
+          {t('mgm.description')}
         </Text>
 
         <TextInput
           value={description}
           onChangeText={setDescription}
-          placeholder="Describe what this mentor group is for..."
+          placeholder={t('mgm.descriptionEg')}
           placeholderTextColor={colors.textSecondary}
           multiline
           numberOfLines={5}
@@ -265,11 +267,11 @@ export default function CreateMentorGroup() {
       {/* Capacity */}
       <View style={styles.inputGroup}>
         <Text style={[styles.label, { color: colors.text }]}>
-          Maximum Capacity
+          {t('mgm.maxCapacity')}
         </Text>
 
         <Text style={[styles.helper, { color: colors.textSecondary }]}>
-          Maximum number of students allowed in this group.
+          {t('mgm.maxCapacityText')}
         </Text>
 
         <TextInput
@@ -311,9 +313,7 @@ export default function CreateMentorGroup() {
             { color: colors.textSecondary },
           ]}
         >
-          Students will need to request to join your group.
-          You can approve or reject requests from the group
-          management screen.
+          {t('mgm.joinNote')}
         </Text>
       </View>
 
@@ -333,7 +333,7 @@ export default function CreateMentorGroup() {
         />
 
         <Text style={styles.createButtonText}>
-          {saving ? (editing ? 'Saving...' : 'Creating...') : editing ? 'Save Changes' : 'Create Group'}
+          {saving ? (editing ? 'Saving...' : 'Creating...') : editing ? t('mgm.saveChanges') : t('mgm.createGroup')}
         </Text>
       </Pressable>
     </ScrollView>

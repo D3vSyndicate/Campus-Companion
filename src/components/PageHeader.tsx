@@ -3,7 +3,8 @@ import { useRouter, useSegments } from 'expo-router';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '../context/AuthContext';
-import { SEARCH_SCOPES, scopeForScreen, searchHref } from '../lib/searchScopes';
+import { useTranslation } from 'react-i18next';
+import { SEARCH_SCOPES, scopeForScreen, scopeText, searchHref } from '../lib/searchScopes';
 import { useTheme } from '../theme/ThemeContext';
 import { ScaledText as Text } from './ScaledText';
 
@@ -13,12 +14,13 @@ const INK_LIGHT = '#071B2C';
 const INK_DARK = '#0E2A40';
 const ON_INK = '#FFFFFF';
 
-const ROLE_LABELS: Record<string, string> = {
-  student: 'Student',
-  mentor: 'FYS Buddy',
-  coordinator: 'Orientation Coordinator',
-  admin: 'Administrator',
-  hod: 'Head of Department',
+// Locale keys for the role shown next to the person's name.
+const ROLE_KEYS: Record<string, string> = {
+  student: 'profile.roleStudent',
+  mentor: 'role.buddy',
+  coordinator: 'role.coordinator',
+  admin: 'role.admin',
+  hod: 'role.hod',
 };
 
 interface PageHeaderProps {
@@ -40,6 +42,7 @@ interface PageHeaderProps {
 // on the Home screen is the one that looks across the whole app. Students and buddies have their own.
 function HeaderSearch() {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const router = useRouter();
   const segments = useSegments();
   const area = segments[0] === '(mentor)' ? 'mentor' : segments[0] === '(student)' ? 'student' : null;
@@ -53,13 +56,13 @@ function HeaderSearch() {
   return (
     <Pressable
       accessibilityRole="search"
-      accessibilityLabel={`Search ${info.label}`}
+      accessibilityLabel={t('search.searchScope', { scope: scopeText(info, 'label') })}
       onPress={() => router.push(href as never)}
       style={({ pressed }) => [styles.search, pressed && { opacity: 0.8 }]}
     >
       <Ionicons name="search" size={18} color={colors.accent} />
       <Text style={styles.searchText} numberOfLines={1}>
-        {info.placeholder}
+        {scopeText(info, 'placeholder')}
       </Text>
     </Pressable>
   );
@@ -72,12 +75,13 @@ export function PageHeader({
   showSearch = true,
 }: PageHeaderProps) {
   const { colors, isDark } = useTheme();
+  const { t } = useTranslation();
   const { user, role } = useAuth();
   const insets = useSafeAreaInsets();
 
   const metadata = user?.user_metadata ?? {};
   const displayName = String(
-    metadata.full_name ?? metadata.name ?? metadata.first_name ?? user?.email ?? 'Student',
+    metadata.full_name ?? metadata.name ?? metadata.first_name ?? user?.email ?? t('profile.roleStudent'),
   ).trim();
   const initials = displayName
     .split(/\s+/)
@@ -85,7 +89,7 @@ export function PageHeader({
     .slice(0, 2)
     .map((part) => part.charAt(0).toUpperCase())
     .join('') || 'S';
-  const roleLabel = ROLE_LABELS[role ?? ''] ?? 'Student';
+  const roleLabel = t(ROLE_KEYS[role ?? ''] ?? 'profile.roleStudent');
 
   return (
     <View

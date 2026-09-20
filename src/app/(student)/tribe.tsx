@@ -4,8 +4,10 @@ import { TribeChat } from '../../components/TribeChat';
 import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/superbase';
 import { useTheme } from '../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 export default function TribeScreen() {
+  const { t } = useTranslation();
 	const { colors } = useTheme();
 	const { user } = useAuth();
 	const userId = user?.id;
@@ -24,7 +26,7 @@ export default function TribeScreen() {
 
 			if (rpcError) {
 				console.error('Failed to join a tribe.', rpcError);
-				setError('Tribe is still being set up. Please check again soon.');
+				setError(t('tribe.stillSettingUp'));
 			} else {
 				setGroupId(data ? String(data) : null);
 			}

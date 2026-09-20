@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import * as WebBrowser from 'expo-web-browser';
 import { Pressable, StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { KIND_META, type Reward } from '../../data/arcade-rewards';
 import { useTheme } from '../../theme/ThemeContext';
 import { ScaledText as Text } from '../ScaledText';
@@ -16,6 +17,7 @@ interface RewardCardProps {
 
 export function RewardCard({ reward, compact = false }: RewardCardProps) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const meta = KIND_META[reward.kind];
   // Present on every kind, though only First-Year Tips are allowed to leave it out.
   const source = reward.source;
@@ -31,7 +33,7 @@ export function RewardCard({ reward, compact = false }: RewardCardProps) {
       <View style={styles.kindRow}>
         <View style={[styles.kindPill, { backgroundColor: meta.accent }]}>
           <Text style={styles.kindEmoji}>{meta.emoji}</Text>
-          <Text style={styles.kindLabel}>{meta.label}</Text>
+          <Text style={styles.kindLabel}>{t(`arcade.kind.${reward.kind}`, { defaultValue: meta.label })}</Text>
         </View>
       </View>
 
@@ -48,7 +50,7 @@ export function RewardCard({ reward, compact = false }: RewardCardProps) {
       {!compact && source ? (
         <Pressable
           accessibilityRole="link"
-          accessibilityLabel={`Open source: ${source.label}`}
+          accessibilityLabel={t('arcade.openSource', { label: source.label })}
           onPress={() => void WebBrowser.openBrowserAsync(source.url)}
           style={({ pressed }) => [styles.source, pressed && { opacity: 0.6 }]}
         >

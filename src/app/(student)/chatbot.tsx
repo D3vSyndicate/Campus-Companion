@@ -1,14 +1,16 @@
 import { Stack } from 'expo-router';
 import { Platform, StyleSheet } from 'react-native';
 import WebView from 'react-native-webview';
+import { useTranslation } from 'react-i18next';
 
 const SHAREABLE_URL =
   'https://cdn.botpress.cloud/webchat/v5.0/shareable.html?configUrl=https://files.bpcontent.cloud/2026/09/18/14/20260918140402-SI0TWA2K.json';
 
 export default function ChatbotScreen() {
+  const { t } = useTranslation();
   return (
     <>
-      <Stack.Screen options={{ title: 'Support' }} />
+      <Stack.Screen options={{ title: t('common.support') }} />
       {Platform.OS === 'web' ? (
         <iframe
           src={SHAREABLE_URL}

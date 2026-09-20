@@ -12,6 +12,7 @@ import {
 import { useAuth } from '../../../context/AuthContext';
 import { supabase } from '../../../lib/superbase';
 import { useTheme } from '../../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 type MentorGroup = {
   id: string;
@@ -24,6 +25,7 @@ type MentorGroup = {
 };
 
 export default function MentorGroupsListScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   const { colors } = useTheme();
   const { user } = useAuth();
@@ -73,38 +75,38 @@ export default function MentorGroupsListScreen() {
   const requestToJoin = (group: MentorGroup) => {
     if (requestedGroups.includes(group.id)) {
       Alert.alert(
-        'Request Pending',
-        'You have already requested to join this group.'
+        t('mg.requestPending'),
+        t('mg.alreadyRequested')
       );
       return;
     }
 
     if (group.members >= group.capacity) {
       Alert.alert(
-        'Group Full',
-        'This mentor group has reached its maximum capacity.'
+        t('mg.groupFull'),
+        t('mg.groupFullText')
       );
       return;
     }
 
     Alert.alert(
-      'Join Group',
-      `Send a request to join ${group.name}?`,
+      t('mg.joinGroup'),
+      t('mg.confirmJoin', { name: group.name }),
       [
         {
-          text: 'Cancel',
+          text: t('common.cancel'),
           style: 'cancel',
         },
         {
-          text: 'Send Request',
+          text: t('mg.sendRequest'),
           onPress: () => void (async () => {
             const { error } = await supabase.rpc('request_to_join_mentor_group', { target_group: group.id });
             if (error) {
-              Alert.alert('Request not sent', error.message);
+              Alert.alert(t('mg.notSent'), error.message);
               return;
             }
             setRequestedGroups((current) => [...current, group.id]);
-            Alert.alert('Request Sent', 'Your request has been sent to the mentor. You will be notified when it is reviewed.');
+            Alert.alert(t('mg.requestSent'), t('mg.requestSentText'));
           })(),
         },
       ]
@@ -143,7 +145,7 @@ export default function MentorGroupsListScreen() {
           <Text
             style={[styles.headerTitle, { color: colors.text }]}
           >
-            Find a Mentor Group
+            {t('mg.findTitle')}
           </Text>
 
           <Text
@@ -152,7 +154,7 @@ export default function MentorGroupsListScreen() {
               { color: colors.textSecondary },
             ]}
           >
-            Browse available groups
+            {t('mg.browse')}
           </Text>
         </View>
       </View>
@@ -164,7 +166,7 @@ export default function MentorGroupsListScreen() {
         {/* Intro */}
         <View style={styles.intro}>
           <Text style={[styles.title, { color: colors.text }]}>
-            Available groups
+            {t('mg.available')}
           </Text>
 
           <Text
@@ -173,14 +175,13 @@ export default function MentorGroupsListScreen() {
               { color: colors.textSecondary },
             ]}
           >
-            Choose a mentor group for your programme. Joining
-            requires approval from the mentor.
+            {t('mg.chooseText')}
           </Text>
         </View>
 
         {/* Groups */}
         {loading ? (
-          <Text style={[styles.description, { color: colors.textSecondary }]}>Loading available groups...</Text>
+          <Text style={[styles.description, { color: colors.textSecondary }]}>{t('mg.loading')}</Text>
         ) : null}
         {groups.map((group) => {
           const isFull = group.members >= group.capacity;
@@ -260,7 +261,7 @@ export default function MentorGroupsListScreen() {
                     { color: colors.textSecondary },
                   ]}
                 >
-                  Mentor: {group.mentor}
+                  {t('mg.mentorLabel')} {group.mentor}
                 </Text>
               </View>
 
@@ -273,7 +274,7 @@ export default function MentorGroupsListScreen() {
                       { color: colors.textSecondary },
                     ]}
                   >
-                    Group capacity
+                    {t('mg.capacity')}
                   </Text>
 
                   <Text
@@ -328,7 +329,7 @@ export default function MentorGroupsListScreen() {
                       { color: colors.textSecondary },
                     ]}
                   >
-                    Group Full
+                    {t('mg.groupFull')}
                   </Text>
                 </View>
               )}
@@ -352,7 +353,7 @@ export default function MentorGroupsListScreen() {
                       { color: colors.accent },
                     ]}
                   >
-                    Request Pending
+                    {t('mg.requestPending')}
                   </Text>
                 </View>
               )}
@@ -398,10 +399,10 @@ export default function MentorGroupsListScreen() {
                   ]}
                 >
                   {isFull
-                    ? 'Group Full'
+                    ? t('mg.groupFull')
                     : requestPending
-                    ? 'Request Pending'
-                    : 'Request to Join'}
+                    ? t('mg.requestPending')
+                    : t('mg.requestToJoin')}
                 </Text>
               </Pressable>
             </View>
@@ -431,7 +432,7 @@ export default function MentorGroupsListScreen() {
             <Text
               style={[styles.scanTitle, { color: colors.text }]}
             >
-              Have a mentor QR code?
+              {t('mg.haveQr')}
             </Text>
 
             <Text
@@ -440,7 +441,7 @@ export default function MentorGroupsListScreen() {
                 { color: colors.textSecondary },
               ]}
             >
-              Scan it to send a join request directly.
+              {t('mg.scanDirect')}
             </Text>
           </View>
 

@@ -5,7 +5,6 @@
     "checklist": "Uluhlu",
     "digital": "Idijithali",
     "faqs": "Imibuzo",
-    "support": "Inkxaso",
     "contacts": "Abafowunelwa",
     "tribe": "Iqela",
     "email": "I-imeyile",
@@ -18,16 +17,16 @@
     "scheduleTitle": "Ishedyuli yakho",
     "scheduleSubtitle": "Jonga okwenzekayo namhlanje uze ufumane indlela eya kwiiseshoni.",
     "checklistTitle": "Uluhlu lwabafundi abatsha",
-    "checklistSubtitle": "Amanyathelo amancinci ayanceda. Gcina umkhondo wento egqityiweyo.",
+    "checklistSubtitle": "Amanyathelo amancinci ayanceda. Gcina umkhondo wento egqityiweyo nento elandelayo.",
     "contactsTitle": "Abantu abanokukunceda",
-    "contactsSubtitle": "Cela uncedo ngemibuzo nenkxaso yaseyunivesithi.",
+    "contactsSubtitle": "Cela uncedo kwangoko ngemibuzo, inkxaso esebenzayo, nokuqala kwakhona xa iyunivesithi ibonakala inzima kakhulu.",
     "faqsTitle": "Imibuzo edla ngokubuzwa",
     "faqsSubtitle": "Khangela imibuzo malunga neFunda, iindawo, iishedyuli nenkxaso.",
     "digitalTitle": "Ukulungela idijithali",
     "digitalSubtitle": "Lungisa izixhobo oza kuzisebenzisa ekufundeni nakubomi baseyunivesithi.",
     "savedSchedule": "Ubona idatha egciniweyo yeshedyuli kuba unxibelelwano alukho ngoku.",
     "missedSession": "Ukuba uphoswa yiseshoni, ungakhathazeki. Iindlela zokuyifumana zidweliswe ngezantsi.",
-    "pastSession": "Le seshoni idlulile. Ungaphonononga izinto kwiFunda okanye ubuze umcebisi.",
+    "pastSession": "Le seshoni idlulile. Musa ukuxhala: phonononga izinto kwiFunda okanye ubuze umkhokeli we-How2buddy ukuze akushwankathele.",
     "directions": "Ndibonise apho ndiya khona",
     "noSchedule": "Akukho shedyuli ilayishiweyo",
     "tryAgain": "Jonga unxibelelwano lwakho uze uzame kwakhona.",
@@ -39,16 +38,15 @@
     "searchFaqs": "Khangela imibuzo (umz. Funda, iindawo, ishedyuli)...",
     "openLink": "Vula",
     "digitalUnavailable": "Ulwazi lwedijithali alukafumaneki. Nceda uzame kwakhona kamva.",
-    "digitalBanner": "Wonke umntu uqala engumqali ngetekhnoloji yaseyunivesithi.",
+    "digitalBanner": "Wonke umntu uqala engumqali ngetekhnoloji yaseyunivesithi. Musa ukuxhala ukuba kuthatha iinzame ezimbalwa ukungena!",
     "orientation": "UKUQHELANA",
     "firstSteps": "AMANYATHELO AKHO OKUQALA",
     "notAlone": "AWUWEDWA",
     "quickAnswer": "UFUNA IMPENDULO EKHAWULEZAYO?",
-    "getConnected": "QHAGAMSHELANA",
-    "goodMorning": "Molweni kusasa",
-    "goodAfternoon": "Molo emini",
-    "goodEvening": "Molweni ngokuhlwa",
-    "schoolOfIt": "ISIKOLO SE-IT",
+    "getConnected": "NXIBELELANA",
+    "goodMorning": "Molo",
+    "goodAfternoon": "Molo",
+    "goodEvening": "Molo",
     "campusCompanion": "CAMPUS COMPANION",
     "supportBanner": "Uziva ungaqinisekanga ukuba uyephi okanye ubuze ntoni? Kuxhaphakile oko. Thatha inyathelo elinye ngexesha.",
     "latest": "EZINTSHA",
@@ -91,8 +89,8 @@
     "peopleWhoCanHelp": "Abantu abanokukunceda",
     "shuttleTitle": "Amaxesha e-shuttle",
     "shuttleNext": "I-shuttle elandelayo ngo-{{time}} - {{route}}",
-    "shuttleTomorrow": "Akusekho zi-shuttle namhlanje. Eyokuqala ngomso ngo-{{time}}.",
-    "shuttleNoneInShift": "Akukho zi-shuttle ezidwelisiweyo kweli xesha okwangoku.",
+    "shuttleTomorrow": "Akusekho ii-shuttle namhlanje. Eyokuqala ngomso ngo-{{time}}.",
+    "shuttleNoneInShift": "Akukho ii-shuttle ezidwelisiweyo kweli xesha okwangoku.",
     "shift_morning": "Kusasa",
     "shift_afternoon": "Emini",
     "shift_night": "Ebusuku",
@@ -122,7 +120,19 @@
     "openMap": "Vula imephu",
     "startHereEyebrow": "WAMKELEKILE",
     "startHereCta": "Qalisa izikhokelo",
-    "startHereContinue": "Qhubeka"
+    "startHereContinue": "Qhubeka",
+    "offlineRefresh": "Awunxibelelanga ne-intanethi, ngoko oku kunokuba kudala. Kuya kuhlaziyeka xa ubuya kwi-intanethi.",
+    "offlineShort": "Awunxibelelanga ne-intanethi, ngoko oku kunokuba kudala.",
+    "cancel": "Rhoxisa",
+    "goBack": "Buyela",
+    "support": "Inkxaso",
+    "schoolOfIt": "ISIKOLO SE-IT",
+    "today": "Namhlanje",
+    "tomorrow": "Ngomso",
+    "share": "Yabelana",
+    "ok": "Kulungile",
+    "vs": "vs",
+    "and": "kunye"
   },
   "home": {
     "brand": "Campus Companion",
@@ -146,7 +156,7 @@
         "subtitle": "Iintetho, i-orientation, iziganeko neenkqubo zakho kwimbonakalo yenyanga enye."
       },
       "shuttles": {
-        "title": "Funda iishathile zakho",
+        "title": "Funda ii-shuttle zakho",
         "subtitle": "Amaxesha, into oyifunayo ukuze ukhwele, nokuba wenza ntoni xa udungekile."
       },
       "societies": {
@@ -191,7 +201,41 @@
       "abuse-and-violence": "Ukuxhatshazwa nobundlobongela",
       "campus": "Ikhampasi"
     },
-    "tapHint": "Cofa nayiphi na ikhadi ukufowuna. Ifowuni yakho iza kukubuza ukuqinisekisa ngaphambi kokudayela."
+    "tapHint": "Cofa nayiphi na ikhadi ukufowuna. Ifowuni yakho iza kukubuza ukuqinisekisa ngaphambi kokudayela.",
+    "items": {
+      "112": {
+        "name": "Iinkonzo zongxamiseko",
+        "description": "Amapolisa, i-ambulensi okanye abacimi-mlilo. Isebenza kuyo nayiphi na ifowuni yeselula."
+      },
+      "10111": {
+        "name": "Amapolisa (SAPS)",
+        "description": "Xela ulwaphulo-mthetho okanye ucele amapolisa uncedo."
+      },
+      "10177": {
+        "name": "I-ambulensi",
+        "description": "Iimeko zonyango ezingxamisekileyo."
+      },
+      "0800567567": {
+        "name": "Umgca wengxaki yokuzibulala (SADAG)",
+        "description": "Ukuba ucinga ngokuphelisa ubomi bakho, okanye ukhathazeke ngomntu ocinga njalo. Akuyi kugwetywa."
+      },
+      "0800212223": {
+        "name": "Umgca woncedo lwempilo yengqondo (SADAG)",
+        "description": "Ingcebiso nenkxaso ekhululekileyo yoxinzelelo, ukukhathazeka, imo ephantsi nokunye."
+      },
+      "0861322322": {
+        "name": "Ingcebiso ye-Lifeline",
+        "description": "Ingcebiso eyimfihlo evela kubantu abazinikeleyo abaqeqeshiweyo, xa ufuna umntu wokuthetha naye."
+      },
+      "0800428428": {
+        "name": "Iziko lomyalelo le-GBV",
+        "description": "Uncedo olukhululekileyo, oluyimfihlo ukuba wena okanye umntu omaziyo uhlelelwe bubundlobongela obusekelwe kwisini."
+      },
+      "27415041111": {
+        "name": "Iswitshi yeyunivesithi",
+        "description": "Inombolo enkulu yeyunivesithi, ukuba awuqinisekanga ukuba ufowunela bani."
+      }
+    }
   },
   "auth": {
     "enterBoth": "Nceda ufake i-imeyile negama lakho lokugqitha ukuze sikungenise.",
@@ -279,7 +323,7 @@
       },
       "help": {
         "title": "Uncedo lusoloko luseduze",
-        "body": "Awuqinisekanga ukuba ubuza bani? Vula iNkxaso, khetha into ofuna uncedo ngayo, kwaye i-app ikubonisa umntu okanye inkonzo efanelekileyo. Abafowunelwa babonisa abakhokeli nabacebisi onokuqhagamshelana nabo ngqo. Ngoncedo olungxamisekileyo, sebenzisa ikhadi ebomvu leeNombolo zongxamiseko eKhaya."
+        "body": "Awuqinisekanga ukuba ubuza bani? Vula iNkxaso, khetha into ofuna uncedo ngayo, kwaye i-app ikubonisa umntu okanye inkonzo efanelekileyo. Abafowunelwa babonisa abakhokeli nabacebisi onokuqhagamshelana nabo ngqo. Ngoncedo olungxamisekileyo, sebenzisa ikhadi elibomvu leeNombolo zongxamiseko eKhaya."
       },
       "profile": {
         "title": "Yenze eyakho",
@@ -297,7 +341,29 @@
     "closeList": "Vala uluhlu lwezitishini",
     "close": "Vala",
     "nextShuttle": "i-shuttle elandelayo",
-    "caption": "Ikhampasi ye-{{campus}} · ishedyuli ye-{{year}}"
+    "caption": "Ikhampasi ye-{{campus}} · ishedyuli ye-{{year}}",
+    "rules": {
+      "boarding-requirement": {
+        "title": "Imfuneko yokukhwela",
+        "text": "Ukukhwela i-shuttle, bonke abafundi kufuneka babonise ikhadi lomfundi elisebenzayo kunye nobungqina bokwamkelwa okanye ileta yokubhalisa."
+      },
+      "early-arrival": {
+        "title": "Ukufika kwangoko",
+        "text": "Abafundi abafuna ukufika kwangoko ekhampasini bacetyiswa ukuba bathathe i-shuttle yokuqala eyicwangcisiweyo yosuku."
+      },
+      "assistance": {
+        "title": "Uncedo",
+        "text": "Oomarshal be-shuttle bakhona ukunceda. Abafundi abangaqinisekanga ukuba yeyiphi i-shuttle echanekileyo kufuneka babuze uMarshal ngesikhokelo."
+      },
+      "code-of-conduct": {
+        "title": "Umthetho wokuziphatha",
+        "text": "Abafundi kufuneka balandele imiyalelo yooMarshal nabaqhubi ngalo lonke ixesha. Ukuziphatha ngokungenanhlonipho okanye ukwala ukuthobela kuya kubangela ukumiswa kwangoko kwamalungelo eenkonzo ze-shuttle."
+      },
+      "prohibited-items-and-behaviour": {
+        "title": "Izinto nokuziphatha okuthintelweyo",
+        "text": "Akuvumelekanga ukutya okanye ukusela ngaphakathi kwii-shuttle. Utywala luthintelwe ngokuqinileyo. Nawuphi na umfundi obonakala edakiwe akayi kuvunyelwa ukukhwela."
+      }
+    }
   },
   "announcements": {
     "justNow": "Ngoku nje",
@@ -330,13 +396,25 @@
     "chooseFirst": "Khetha igama lencoko kuqala...",
     "send": "Thumela umyalezo",
     "errors": {
-      "nameRule": "Sebenzisa oonobumba, amanani okanye imigca engezantsi engama-3 ukuya kwangama-30 kwigama lakho lencoko.",
+      "nameRule": "Sebenzisa oonobumba, amanani okanye imigca engezantsi (3 ukuya kwi-30) kwigama lakho lencoko.",
       "nameTaken": "Eli gama lencoko selithathiwe. Zama elinye.",
       "saveFailed": "Asikwazanga ukugcina igama lakho lencoko ngoku. Nceda uzame kwakhona.",
       "sendFailed": "Umyalezo wakho awuthunyelwanga. Nceda uzame kwakhona.",
-      "tooLong": "Imiyalezo inokufikelela kwiinkcukacha ezingama-1,000.",
+      "tooLong": "Imiyalezo inokufikelela kwiimpawu ezingama-1,000.",
       "loadFailed": "Asikwazanga ukuvula iQela lakho ngoku. Nceda uzame kwakhona kwimizuzwana embalwa."
-    }
+    },
+    "conduct": {
+      "title": "Ngaphambi kokuba ujoyine incoko",
+      "intro": "IQela liyinxalenye yeeplatifomu zonxibelelwano zikawonke-wonke zeNelson Mandela University. Oko ukubhalayo apha kukumela wena neYunivesithi, ngoko sikugcina kuhloniphekile kwaye kukhuselekile kumntu wonke.",
+      "respect": "Ndiza kuphatha wonke umntu kwiQela ngentlonelo: umkhokeli wam, abaququzeleli nomfundi ngamnye.",
+      "bully": "Andiyi kuhlukumeza, ndiphazamise, ndisongele, ndihlazise okanye ndikhuphe mntu ngaphandle.",
+      "swear": "Andiyi kuthuka okanye ndisebenzise ulwimi olunyelisayo, olubonisa inzondo okanye olucalulayo.",
+      "private": "Ndiza kugcina iinkcukacha zam nezabanye abantu ziyimfihlo.",
+      "watched": "Ndiyaqonda ukuba abakhokeli nabaququzeleli bangafunda imiyalezo yeQela, nokuba imiyalezo eyaphula le mithetho ingasuswa.",
+      "agree": "Ndiyifundile kwaye ndiyavuma ukuyilandela.",
+      "continue": "Vuma uqhubeke"
+    },
+    "stillSettingUp": "IQela lisalungiswa. Nceda ukhangele kwakhona kungekudala."
   },
   "support": {
     "eyebrow": "INKXASO YABAFUNDI",
@@ -353,5 +431,1223 @@
   },
   "faq": {
     "cantFind": "Ayifumaneki? Buza umbuzo. Abanye mhlawumbi bayazibuza nabo."
+  },
+  "checklist": {
+    "allDone": "🎉 Wenza umsebenzi omhle! Ugqibile uluhlu lwakho.",
+    "notAvailableTitle": "Uluhlu lwakho alukafumaneki okwangoku",
+    "notAvailableText": "Amanyathelo akho oqhelaniso aya kuvela apha xa epapashiwe."
+  },
+  "contacts": {
+    "noneTitle": "Akukabikho bafowunelwa benkxaso okwangoku",
+    "noneText": "Iqela lakho lenkxaso liya kuvela apha xa abafowunelwa bepapashiwe."
+  },
+  "programmes": {
+    "title": "Iinkqubo",
+    "subtitle": "Funda ukuba inkqubo nganye ibandakanya ntoni, ikusa phi, nokuba ubuza bani ngengcebiso yezemfundo.",
+    "loadFail": "Iinkqubo azikwazanga ukulayishwa",
+    "none": "Akukabikho nkqubo ipapashiweyo",
+    "retry": "Nceda uzame kwakhona xa unxibelelwano lukhona.",
+    "noneText": "ISikolo se-IT siza kupapasha ulwazi ngeenkqubo apha. Okwangoku, buza umhlobo wakho we-FYS okanye umququzeleli.",
+    "backAll": "Buyela kuzo zonke iinkqubo",
+    "all": "Zonke iinkqubo",
+    "notFound": "Asiyifumananga leyo nkqubo",
+    "notFoundText": "Kusenokwenzeka ukuba isusiwe. Buyela ukuze ubone uluhlu lwangoku.",
+    "detailEyebrow": "Inkqubo yeSikolo se-IT",
+    "about": "Malunga nale nkqubo",
+    "years": "Ubume bonyaka",
+    "modules": "Iimodyuli eziphambili",
+    "careers": "Amathuba emisebenzi",
+    "expectations": "Okulindelekileyo kwezemfundo",
+    "advice": "Ingcebiso yezemfundo",
+    "theAdvisor": "umcebisi",
+    "noAdvisor": "Iinkcukacha zomcebisi azikatshintshelwa okwangoku. Buza umhlobo wakho we-FYS okanye umququzeleli ukuba uthethe nabani.",
+    "openDetail": "{{name}}. Vula iinkcukacha zenkqubo"
+  },
+  "programme": {
+    "eyebrow": "ISEBE LAKHO",
+    "title": "Ulwazi ngenkqubo",
+    "subtitle": "Isikhokelo senkqubo, into ekulindelekileyo kuwe, nokuba ungayifumana phi inkxaso.",
+    "partial": "Ulwazi lwesebe olunye alukwazanga ukulayishwa. Jonga unxibelelwano lwakho uze utsalele ezantsi ukuzama kwakhona.",
+    "empty": "Isebe lakho alikapapashi nto okwangoku. Buya kungekudala.",
+    "expected": "Okulindelekileyo kuwe",
+    "assignments": "Imisebenzi",
+    "noDue": "Akukho mhla wokuphela",
+    "resources": "Izixhobo zenkxaso",
+    "deptSupport": "Inkxaso yesebe",
+    "due": "Umhla wokuphela: {{date}}"
+  },
+  "digital": {
+    "aboutTitle": "Malunga nale nto ikuyo",
+    "aiNote": "Ezinye zezinto ezikwisikrini seDijithali, ingakumbi imifanekiso, zenziwe ngoncedo lwezixhobo ze-AI ezenzayo. Imifanekiso ilapho ukukunceda uqonde kwaye ayifani ngqo neziskrini zokwenene. Qinisekisa iinkcukacha ezibalulekileyo, njengamakhonkco nemihla, kunye ne-IT Services okanye unjingalwazi wakho.",
+    "guide": "Isikhokelo",
+    "closeGuide": "Vala isikhokelo",
+    "guideIntro": "Esi sikhokelo siya kukunceda uthathe inyathelo lakho elilandelayo unokuzithemba.",
+    "stepsTitle": "Amanyathelo okulandela",
+    "noSteps": "Akukabikho manyathelo okubonisa okwangoku. Usakwazi ukuphonononga isikhokelo ngezantsi.",
+    "videoLabel": "Vula ividiyo yesikhokelo ekhethekayo",
+    "watch": "Bukela ividiyo",
+    "opensSeparately": "Ivulwa ngokwahlukileyo",
+    "imageFail": "Lo mfanekiso awulayishwanga, kodwa usakwazi ukufunda amanyathelo aphezulu.",
+    "openImage": "Vula umfanekiso",
+    "openGuide": "Vula isikhokelo",
+    "learnMore": "Funda ngakumbi",
+    "openGuideNamed": "Vula isikhokelo: {{title}}",
+    "openLesson": "Vula isifundo {{number}} se-{{section}}: {{title}}",
+    "openImageNamed": "Vula umfanekiso: {{title}}"
+  },
+  "map": {
+    "searchPlaceholder": "Khangela isakhiwo, inani okanye indawo",
+    "searchLabel": "Khangela kwimephu yekhampasi",
+    "clear": "Cima ukukhangela",
+    "lost": "Ndilahlekile",
+    "allPlaces": "Zonke iindawo",
+    "zoomIn": "Yandisa",
+    "zoomOut": "Nciphisa",
+    "searchAndPlaces": "Khangela neendawo",
+    "wholeMap": "Yonke imephu",
+    "unavailable": "Imephu ayikwazi ukulayishwa ngoku, kodwa usakwazi ukukhangela izakhiwo namanani ngezantsi.",
+    "official": "Iimephu ezisemthethweni zeyunivesithi",
+    "southPdf": "I-PDF yaseMazantsi",
+    "northPdf": "I-PDF yaseMntla",
+    "attribution": "Amanani ezakhiwo: iimephu zekhampasi ezisemthethweni ze-NMU (2024). Idatha yemephu © abaxhasi be-OpenStreetMap, iithayile ze-HOT ezisingathwe yi-OpenStreetMap France. Iindawo zimalunga nje, ngoko jonga imiqondiso yezakhiwo.",
+    "nothing": "Akukho nto ehambelana okwangoku",
+    "tapOne": "Cofa enye ukuyibona kwimephu.",
+    "tryNumber": "Kulungile. Zama inani elisesakhiweni, njenge-12, okanye igama elifana nelayibrari, ukutya okanye ikliniki.",
+    "lostHelp": "Ndilahlekile. Ndincede",
+    "whereNext": "Uya phi ngokulandelayo?",
+    "sessionsToday": "Iiseshoni zakho zanamhlanje",
+    "placesNeed": "Iindawo ongazifuna ngokwesiqhelo",
+    "between": "Phakathi kweekhampasi",
+    "betweenText": "IKhampasi eseMazantsi neseMntla ziqikelelwa ku-1.5 km ukwahlukana ngeenyawo. Jonga indlela phambi kokuba uhambe.",
+    "showWalk": "Bonisa uhambo phakathi kweekhampasi",
+    "walkingRoute": "Indlela yokuhamba ngeenyawo",
+    "startFrom": "Uqala phi?",
+    "nearYou": "Inani okanye igama lesakhiwo esikufutshane",
+    "matches": "Ehambelanayo",
+    "popularStarts": "Iindawo zokuqala ezidumileyo",
+    "nothingNear": "Akukho nto ehambelana okwangoku. Zama inani lesakhiwo esisondeleyo.",
+    "swap": "Tshintshanisa indawo yokuqala nendawo eya kuyo",
+    "finding": "Ifumana indlela entle...",
+    "estimate": "Asikwazanga ukulayisha indlela echanekileyo ngoku, ngoko oku kuqikelelo lomgama ngomgca othe ngqo.",
+    "fewerSteps": "Bonisa amanyathelo ambalwa",
+    "lostNumber": "Khangela inani eludongeni lwesakhiwo esisondeleyo okanye kumqondiso, uze ulikhangele apha ukubona ukuba ukuphi.",
+    "searchNumber": "Khangela inani",
+    "lostRoad": "Yiya kwindlela enkulu okanye kwisitishini sebhasi. Ziyafumaneka lula kwimephu kwaye yindawo entle yokuqala kwakhona.",
+    "lostAsk": "Buza umntu okufutshane. Abafundi nabasebenzi bayavuya ukubonisa indlela, kwaye umhlobo wakho we-FYS kwiQela unokunceda nawe.",
+    "askTribe": "Buza iQela lam",
+    "lostZoom": "Nciphisa ukubona iikhampasi zombini nokuba izakhiwo zikuphi, uze uhambe uye kweso ufunayo.",
+    "viewWhole": "Jonga yonke imephu",
+    "turned": "Uziva udidekile? Kuqhelekile ngokupheleleyo.",
+    "turnedText": "Ikhampasi entsha iyabadida phantse wonke umntu kwiiveki zokuqala. Nantsi into enceda.",
+    "category": {
+      "learning": "Iintetho neelabhorethri",
+      "services": "Iinkonzo nolawulo",
+      "residence": "Iindawo zokuhlala",
+      "food": "Ukutya neevenkile",
+      "sport": "Ezemidlalo",
+      "transport": "Uthutho",
+      "building": "Ezinye izakhiwo",
+      "venue": "Iindawo zoqhelaniso"
+    },
+    "campus": {
+      "south": "IKhampasi eseMazantsi",
+      "north": "IKhampasi eseMntla"
+    },
+    "intro": {
+      "south": "Ikhampasi ephambili, eSummerstrand.",
+      "north": "Ubunjineli, inzululwazi, ubugcisa nokunye, emantla eKhampasi eseMazantsi."
+    },
+    "numbering": {
+      "south": "Izakhiwo apha zinamanani amancinci, aqala ku-1 (Isakhiwo Esikhulu).",
+      "north": "Izakhiwo apha zinamanani angama-200 (Isakhiwo Sokulawula Esikhulu singuye-260)."
+    },
+    "foundOne": "Indawo enye ifunyenwe",
+    "foundMany": "Iindawo ezi-{{count}} zifunyenwe",
+    "walkingTo": "Uhamba uya e-{{name}}",
+    "rightOne": "Awuqinisekanga ukuba usendaweni echanekileyo? Khangela inani {{number}} esakhiweni okanye kumqondiso okufutshane.",
+    "onFoot": "{{distance}} ngeenyawo",
+    "allSteps": "Bonisa onke amanyathelo angama-{{count}}",
+    "room": "Igumbi {{number}}",
+    "building": "Isakhiwo {{number}}"
+  },
+  "mg": {
+    "title": "Amaqela abakhokeli",
+    "subtitle": "Nxibelelana nomkhokeli wakho nabanye abafundi.",
+    "findYours": "Fumana iqela lakho lomkhokeli",
+    "findYoursText": "Joyina iqela lenkqubo yakho uhlale unxibelelene nomkhokeli wakho.",
+    "findTitle": "Fumana iqela lomkhokeli",
+    "findText": "Jonga amaqela akhoyo uthumele isicelo sokujoyina.",
+    "scanTitle": "Skeneya i-QR yomkhokeli",
+    "scanText": "Skeneya ikhowudi ye-QR enikwe ngumkhokeli wakho ukucela ukungena kwiqela lakhe.",
+    "mine": "Iqela lomkhokeli wam",
+    "mineText": "Jonga isicelo sakho sokujoyina okanye ungene kwiqela lakho lomkhokeli elivunyiweyo.",
+    "notAutomatic": "Ukujoyina iqela lomkhokeli akuzenzekeli ngokwako. Isicelo sakho kufuneka sivunywe ngumkhokeli ngaphambi kokuba ube lilungu.",
+    "requestPending": "Isicelo silindile",
+    "alreadyRequested": "Sele ucele ukujoyina eli qela.",
+    "groupFull": "Iqela ligcwele",
+    "groupFullText": "Eli qela lomkhokeli lifikelele kubuninzi balo obuvumelekileyo.",
+    "joinGroup": "Joyina iqela",
+    "sendRequest": "Thumela isicelo",
+    "notSent": "Isicelo asithunyelwanga",
+    "requestSent": "Isicelo sithunyelwe",
+    "requestSentText": "Isicelo sakho sithunyelwe kumkhokeli. Uya kwaziswa xa siphononongiwe.",
+    "browse": "Jonga amaqela akhoyo",
+    "available": "Amaqela akhoyo",
+    "chooseText": "Khetha iqela lomkhokeli lenkqubo yakho. Ukujoyina kufuna ukuvunywa ngumkhokeli.",
+    "loading": "Ilayisha amaqela akhoyo...",
+    "mentorLabel": "Umkhokeli:",
+    "capacity": "Ubukhulu beqela",
+    "requestToJoin": "Cela ukujoyina",
+    "haveQr": "Une-QR code yomkhokeli?",
+    "scanDirect": "Yiskeneye ukuthumela isicelo sokujoyina ngqo.",
+    "approved": "Isicelo sivunyiwe",
+    "approvedText": "Umkhokeli wakho uvumile isicelo sakho. Ngoku uyilungu leli qela lomkhokeli.",
+    "rejected": "Isicelo asamkelwanga",
+    "rejectedText": "Isicelo sakho asivunywanga ngumkhokeli. Ungacela ukujoyina elinye iqela elikhoyo.",
+    "pendingText": "Isicelo sakho sithunyelwe kumkhokeli. Uya kuba lilungu xa umkhokeli esivumile.",
+    "stillWaiting": "Isicelo sakho sisalinde ukuvunywa ngumkhokeli.",
+    "statusTitle": "Imeko yesicelo",
+    "statusSubtitle": "Isicelo sakho seqela lomkhokeli",
+    "details": "Iinkcukacha zeqela",
+    "requestedLabel": "Kucelwe:",
+    "progress": "Inkqubela yesicelo",
+    "submitted": "Isicelo singeniswe",
+    "submittedText": "Isicelo sakho sithunyelwe ngempumelelo kumkhokeli.",
+    "review": "Uphononongo lomkhokeli",
+    "reviewWaiting": "Silindele umkhokeli wakho ukuba asiphonononge isicelo.",
+    "reviewDone": "Umkhokeli wakho usiphonononge isicelo sakho.",
+    "approvedShort": "Kuvunyiwe",
+    "rejectedShort": "Akuvunyiwe",
+    "nowMember": "Ngoku uyilungu leqela lomkhokeli.",
+    "notApproved": "Umkhokeli akasivumanga esi sicelo.",
+    "openMine": "Vula iqela lomkhokeli wam",
+    "findAnother": "Fumana elinye iqela",
+    "checkAgain": "Khangela kwakhona",
+    "oneGroupOnly": "Ungaba lilungu leqela lomkhokeli elinye kuphela ngexesha. Nceda ulinde ukuba esi sicelo siphononongwe ngaphambi kokucela elinye iqela.",
+    "browseOthers": "Ungajonga amanye amaqela abakhokeli akhoyo uthumele isicelo esitsha.",
+    "qrInvalid": "Ikhowudi ye-QR ayifanelekanga",
+    "qrInvalidText": "Le khowudi ye-QR ayinalo ulwazi olufanelekileyo lweqela lomkhokeli.",
+    "scanAgain": "Skeneya kwakhona",
+    "qrFound": "Iqela lomkhokeli lifunyenwe",
+    "qrFoundText": "Le khowudi ye-QR yeqela lomkhokeli. Ungathanda ukuthumela isicelo sokujoyina?",
+    "joinSentText": "Isicelo sakho sokujoyina sithunyelwe kumkhokeli.",
+    "cameraChecking": "Ijonga imvume yekhamera...",
+    "cameraNeeded": "Kufuneka imvume yekhamera",
+    "cameraNeededText": "Ufikelelo lwekhamera luyafuneka ukuskena ikhowudi ye-QR enikwe ngumkhokeli wakho.",
+    "allowCamera": "Vumela ikhamera",
+    "scanYours": "Skeneya ikhowudi ye-QR yomkhokeli wakho",
+    "positionQr": "Beka ikhowudi ye-QR ngaphakathi kwesakhelo",
+    "scanNote": "Ukuskena ikhowudi kuya kuthumela isicelo sokujoyina. Awuyi kuba lilungu ngokuzenzekelayo.",
+    "mentor": "Umkhokeli",
+    "members": "Amalungu",
+    "about": "Malunga neli qela",
+    "broadcasts": "Izaziso zomkhokeli",
+    "broadcastsSub": "Iindaba ezibalulekileyo ezivela kumkhokeli wakho",
+    "readOnly": "Abakhokeli kuphela abanokuthumela imiyalezo kweli qela. Abafundi bangafunda izaziso kodwa abanakuphendula.",
+    "confirmJoin": "Thumela isicelo sokujoyina u-{{name}}?"
+  },
+  "buddy": {
+    "actions": {
+      "myTribe": {
+        "title": "IQela lam",
+        "text": "Ncokola nabafundi bonyaka wokuqala kwiqela lakho."
+      },
+      "search": {
+        "title": "Khangela",
+        "text": "Fumana iimpendulo, iiseshoni, abafowunelwa neendawo ngokukhawuleza."
+      },
+      "answers": {
+        "title": "Iimpendulo ezikhawulezayo",
+        "text": "Fumana wabelane ngeempendulo zemibuzo eqhelekileyo."
+      },
+      "announcements": {
+        "title": "Izaziso",
+        "text": "Yazi ukuba abafundi baxelelwa ntoni."
+      },
+      "schedule": {
+        "text": "Apho abafundi kufuneka babe khona, nini."
+      },
+      "map": {
+        "title": "Imephu yekhampasi",
+        "text": "Fumana nasiphi na isakhiwo ubonise abafundi bonyaka wokuqala indlela."
+      },
+      "venues": {
+        "title": "Isikhokelo seendawo",
+        "text": "Izalathiso onokuzinika unokuzithemba."
+      },
+      "refer": {
+        "title": "Bhekisa umfundi",
+        "text": "Ukubonisa abafundi bani kuhlobo ngalunye loncedo."
+      },
+      "emergency": {
+        "text": "Iinombolo zokwabelana ngazo xa umfundi efuna uncedo olungxamisekileyo."
+      },
+      "guide": {
+        "title": "Isikhokelo somhlobo we-FYS",
+        "text": "Amagama anobubele, imida yakho noluhlu lweveki yokuqala."
+      }
+    },
+    "todaySessions": "Iiseshoni zanamhlanje",
+    "comingUp": "Ezizayo ngomhla we-{{date}}",
+    "eyebrow": "UMHLOBO WE-FYS",
+    "hi": "Molo {{name}}, enkosi ngokuba ngumhlobo we-FYS",
+    "hiThere": "Molo, enkosi ngokuba ngumhlobo we-FYS",
+    "heroText": "Nguwe ubuso obumnandi obenza umfundi wonyaka wokuqala azive enendawo. Akufuneki wazi yonke into. Kufuneka nje wazi ukuba ubonisa ngakuphi.",
+    "banner": "Abafundi abatsha abaninzi babuza imibuzo abacinga ukuba icacile. Yiphathe yonke imibuzo njengemihle.",
+    "noSessions": "Akukabikho seshoni ecwangcisiweyo. Jonga ishedyuli yoqhelaniso kwakhona kungekudala.",
+    "tabAnswers": "Iimpendulo",
+    "tabRefer": "Bhekisa",
+    "tabVenues": "Iindawo"
+  },
+  "buddyGuide": {
+    "say": {
+      "missed": {
+        "situation": "Umfundi uphosise iseshoni",
+        "avoid": "Uphosise le seshoni.",
+        "better": "Le seshoni sele idlulile. Nantsi into onokuyenza ngokulandelayo."
+      },
+      "lost": {
+        "situation": "Umfundi akazi ukuba aye phi",
+        "avoid": "Indawo ayaziwa.",
+        "better": "Awuqinisekanga ukuba ikuphi le ndawo? Nazi izalathiso."
+      },
+      "basic": {
+        "situation": "Umfundi ubuza umbuzo oyisiseko",
+        "avoid": "Lo ngumbuzo ocacileyo.",
+        "better": "Abafundi abatsha abaninzi bayibuza le. Nazi isikhokelo esikhawulezayo."
+      },
+      "funda": {
+        "situation": "Umfundi akakwazi ukungena kwiFunda",
+        "avoid": "Ukungena akuphumelelanga.",
+        "better": "Masijonge izinto ezimbalwa: igama lakho lomsebenzisi, igama lokugqitha kunye nonxibelelwano lwe-intanethi."
+      },
+      "support": {
+        "situation": "Umfundi ufuna inkxaso",
+        "avoid": "Qhagamshelana nenkxaso.",
+        "better": "Sixelele ukuba ufuna uncedo ngantoni, size sikukhokelele kwindawo efanelekileyo."
+      }
+    },
+    "principles": {
+      "courage": {
+        "title": "Isibindi",
+        "text": "Khuthaza inyathelo elincinci elilandelayo: hamba kwiseshoni, buza umbuzo, thumela i-imeyile."
+      },
+      "empathy": {
+        "title": "Uvelwano",
+        "text": "Uqhelaniso lunokubonakala lunzima kakhulu. Sebenzisa amagama anobubele, alula ushiye isigama esinzima."
+      },
+      "vulnerability": {
+        "title": "Ukuvuleka",
+        "text": "Yenza kukhuseleke ukuthi \"Andikazi okwangoku\". Yabelana ngexesha owaziva ngalo ngendlela enye."
+      },
+      "shame": {
+        "title": "Ukumelana neentloni",
+        "text": "Musa ukwenza mntu azive ephuzile, elahlekile okanye enobudenge. Musa ukumshiya engenalo inyathelo elilandelayo."
+      }
+    },
+    "boundaries": {
+      "b1": "Ungumhlobo we-FYS, hayi umcebisi. Ngenkxalabo enzulu ngokhuseleko okanye impilo, thumela umfundi kwinkxaso yobuchule kwaye uxelele abaququzeleli boqhelaniso.",
+      "b2": "Musa ukucela amanani esazisi, iinkcukacha zonyango okanye ulwazi lwemali, kwaye musa ukwabelana ngento oxelelwa yona ngumfundi ngokuthembeka.",
+      "b3": "Gcina iincoko zeQela zihloniphekile. Abasebenzi boqhelaniso bangazifunda ukunceda ukugcina indawo ikhuselekile.",
+      "b4": "Ukuba awuyazi impendulo, yithi, uze uyifumane kunye kwithebhu yeempendulo okanye ubuze umququzeleli."
+    },
+    "checklist": {
+      "c1": "Molela iQela lakho kwincoko",
+      "c2": "Funda izaziso zanamhlanje",
+      "c3": "Jonga ishedyuli yeveki ubone ukuba iindawo zikuphi",
+      "c4": "Gcina abafowunelwa abaphambili kwithebhu yokubhekisa",
+      "c5": "Funda imibuzo eqhelekileyo ukuze iimpendulo eziqhelekileyo zibonakale ziqhelekile"
+    },
+    "subtitle": "Njengomhlobo wabafundi bonyaka wokuqala uncedisa abafundi abatsha ukuba baqhelane ngexesha loqhelaniso nakwiiveki zokuqala. Wabelana ngolwazi, ubonisa apho kufumaneka khona uncedo, kwaye wenze kubonakale kuqhelekile ukubuza.",
+    "checklistTitle": "Uluhlu lwakho lweveki yokuqala",
+    "progress": "{{done}} kwezi-{{total}} zigqityiwe. Inyathelo elinye ngexesha.",
+    "howToHelp": "Indlela yokunceda",
+    "sayThis": "Yithi oku, hayi oko",
+    "avoid": "Phepha: {{text}}",
+    "try": "Zama: {{text}}",
+    "boundariesTitle": "Imida yakho"
+  },
+  "buddyAnn": {
+    "subtitle": "Oko abafundi bonyaka wokuqala baxelelwa kona. Ukuba umyalezo ungxamile, wabelane ngawo ngokuzolileyo ubonise abafundi inyathelo elilandelayo.",
+    "saved": "Ubona izaziso ezigciniweyo ngelixa unxibelelwano lungekhoyo.",
+    "none": "Akukabikho zaziso zipapashiweyo okwangoku."
+  },
+  "buddyRefer": {
+    "subtitle": "Uyamamela ubonise indlela. Ukucela uncedo kwangoko yinto ehlakaniphileyo, enembopheleleko, ngoko yenza kubonakale kuqhelekile.",
+    "safety": "Ukuba ukhuseleko okanye impilo yomntu ikukhathaza, musa ukuyithwala wedwa. Bhekisa kwiinkonzo zengcebiso nezempilo ezinobuchule, uze uxelele abaququzeleli boqhelaniso.",
+    "none": "Akukabikho bafowunelwa bapapashiweyo okwangoku.",
+    "fallbackName": "Umfowunelwa wenkxaso"
+  },
+  "buddyVenues": {
+    "subtitle": "Awuqinisekanga ukuba into ikuphi? Abafundi abaninzi abaqinisekanga. Nika izalathiso ezicacileyo, ezinobubele uze ubonelele ngokuhamba nabo ukuba unako.",
+    "search": "Khangela iindawo, izakhiwo okanye amagumbi",
+    "noMatch": "Akukho ndawo ihambelana nale okwangoku. Zama elinye igama.",
+    "none": "Akukabikho ndawo ongezelelweyo okwangoku.",
+    "soon": "Iinkcukacha zendawo ziyeza kungekudala",
+    "directions": "Izalathiso",
+    "accessibility": "Ukufikeleleka",
+    "share": "Yabelana ngezalathiso",
+    "readOut": "Usakwazi ukufundela umfundi izalathiso."
+  },
+  "share": {
+    "unavailable": "Ukwabelana akukho apha",
+    "readAnswer": "Usakwazi ukufundela umfundi impendulo.",
+    "shareAnswer": "Yabelana ngale mpendulo"
+  },
+  "mgm": {
+    "tribeSubtitle": "Nxibelelana nabafundi bakho ulawule uluntu lwakho lwabakhokeli.",
+    "groupsText": "Yenza ulawule amaqela abafundi bakho, uvume izicelo, uthumele izaziso.",
+    "manageStudents": "Lawula amaqela abafundi bakho",
+    "manageYours": "Lawula iqela lakho lomkhokeli.",
+    "noGroups": "Akukabikho maqela abakhokeli okwangoku",
+    "noGroupsText": "Yenza iqela lakho lokuqala lomkhokeli ukuqala ukunxibelelana nabafundi bakho.",
+    "createGroup": "Yenza iqela",
+    "loadFail": "Iqela alikwazanga ukulayishwa",
+    "notFound": "Eli qela alifumanekanga.",
+    "missing": "Ulwazi olulahlekileyo",
+    "enterName": "Nceda ufake igama leqela.",
+    "enterProgramme": "Nceda ufake inkqubo.",
+    "invalidCapacity": "Ubukhulu obungasebenziyo",
+    "enterCapacity": "Nceda ufake ubuninzi beqela obusebenzayo.",
+    "signInRequired": "Kufuneka ungene",
+    "signInText": "Nceda ungene ngaphambi kokwenza iqela lomkhokeli.",
+    "saveFail": "Utshintsho alukwazanga ukugcinwa",
+    "onlyCreator": "Umkhokeli owenze eli qela kuphela onokulitshintsha.",
+    "updated": "Iqela lihlaziyiwe",
+    "saved": "Utshintsho lwakho lugciniwe.",
+    "createFail": "Iqela alikwazanga ukwenziwa",
+    "created": "Iqela lenziwe",
+    "createdText": "Iqela lakho lomkhokeli lilungile. Abafundi ngoku bangalifumana okanye baskeneye ikhowudi yalo ye-QR.",
+    "editTitle": "Hlela iqela lomkhokeli",
+    "createTitle": "Yenza iqela lomkhokeli",
+    "editSub": "Tshintsha iinkcukacha zeqela lakho.",
+    "createSub": "Yenza iqela labafundi bakho.",
+    "groupName": "Igama leqela",
+    "groupNameEg": "umz. Iqela lophuhliso lwesoftware",
+    "programme": "Inkqubo",
+    "programmeEg": "umz. Uphuhliso lwesoftware",
+    "description": "Inkcazelo",
+    "descriptionEg": "Chaza ukuba eli qela lomkhokeli lilelani...",
+    "maxCapacity": "Ubuninzi obuvumelekileyo",
+    "maxCapacityText": "Ubuninzi babafundi abavumelekileyo kweli qela.",
+    "joinNote": "Abafundi kuya kufuneka bacele ukujoyina iqela lakho. Ungavuma okanye ugatye izicelo kwiskrini solawulo lweqela.",
+    "saveChanges": "Gcina utshintsho",
+    "capacityUpper": "UBUKHULU BEQELA",
+    "spacesLeft": "iindawo eziseleyo",
+    "manageGroup": "Lawula iqela",
+    "joinRequests": "Izicelo zokujoyina",
+    "joinRequestsText": "Phonononga abafundi abalindele ukujoyina iqela lakho.",
+    "membersText": "Jonga ulawule abafundi kwiqela lakho.",
+    "qrTitle": "Ikhowudi ye-QR yeqela",
+    "qrText": "Bonisa abafundi ikhowudi ye-QR ukucela ukungena.",
+    "broadcast": "Isaziso",
+    "broadcastText": "Thumela isaziso kwiqela lakho.",
+    "missingTitle": "Isihloko silahlekile",
+    "enterTitle": "Nceda ufake isihloko sesaziso.",
+    "missingMessage": "Umyalezo ulahlekile",
+    "enterMessage": "Nceda ufake umyalezo.",
+    "broadcastSent": "Isaziso sithunyelwe",
+    "broadcastSentText": "Umyalezo wakho uthunyelwe kumalungu onke eli qela.",
+    "priorityNormal": "Iqhelekile",
+    "priorityImportant": "Ibalulekile",
+    "priorityUrgent": "Ingxamisekile",
+    "broadcastSub": "Thumela umyalezo kwiqela lakho",
+    "groupBroadcast": "Isaziso seqela",
+    "broadcastIntro": "Thumela izaziso nolwazi olubalulekileyo kumntu wonke kwiqela lakho lomkhokeli.",
+    "title": "Isihloko",
+    "titleEg": "umz. Intlanganiso yoqhelaniso",
+    "message": "Umyalezo",
+    "messageEg": "Bhala umyalezo wakho...",
+    "priority": "Ukubaluleka",
+    "sendBroadcast": "Thumela isaziso",
+    "previous": "Izaziso ezidlulileyo",
+    "readOnlyNote": "Abafundi bangafunda izaziso kodwa abanakuphendula okanye bathumele imiyalezo kwiqela.",
+    "removeMember": "Susa ilungu",
+    "remove": "Susa",
+    "memberRemoved": "Ilungu lisusiwe",
+    "membersSub": "Abafundi kwiqela lakho lomkhokeli",
+    "activeMembers": "Amalungu asebenzayo",
+    "noMembers": "Akukabikho malungu okwangoku",
+    "noMembersText": "Abafundi ovuma ukuba babe lilungu baya kuvela apha.",
+    "groupMembers": "Amalungu eqela",
+    "joined": "Ujoyine",
+    "regenTitle": "Vuselela ikhowudi ye-QR",
+    "regenText": "Ukuvuselela ikhowudi ye-QR kuya kubangela ukuba ikhowudi yangaphambili ingasebenzi. Qhubeka?",
+    "regen": "Vuselela",
+    "regenDone": "Ikhowudi ye-QR ivuselelwe",
+    "regenDoneText": "Ikhowudi entsha ye-QR iya kwenziwa xa idatha isele ixhunyiwe.",
+    "shareQr": "Yabelana ngekhowudi ye-QR",
+    "shareQrLater": "Ukwabelana nge-QR kuya kuxhunywa kamva.",
+    "qrCanScan": "Abafundi bangaskena le khowudi ukucela ukungena.",
+    "scanToJoin": "Skena ukujoyina",
+    "qrHow": "Abafundi bangaskena le khowudi ye-QR besebenzisa i-app ye-Campus Companion. Ukuskena kwenza isicelo sokujoyina, akubongezi ngokuzenzekelayo kwiqela.",
+    "approvalRequired": "Kufuneka ukuvunywa",
+    "approvalText": "Abafundi baya kuhlala belindile de uvume isicelo sabo.",
+    "qrShareOnly": "Iikhowudi ze-QR kufuneka zabelwe kuphela nabafundi abasenkqubeni yakho.",
+    "applicant": "Umfundi ocela iqela lomkhokeli",
+    "approveTitle": "Vuma isicelo",
+    "approve": "Vuma",
+    "approveFail": "Isicelo asikwazanga ukuvunywa",
+    "approvedToast": "Isicelo sivunyiwe",
+    "rejectTitle": "Gatya isicelo",
+    "reject": "Gatya",
+    "rejectFail": "Isicelo asikwazanga ukugatywa",
+    "rejectedToast": "Isicelo sigatyiwe",
+    "waiting": "Abafundi abalindele ukuvunywa",
+    "pendingRequests": "Izicelo ezilindileyo",
+    "noPending": "Akukho zicelo zilindileyo",
+    "noPendingText": "Izicelo ezitsha zabafundi ziya kuvela apha.",
+    "pending": "Ilindile",
+    "requested": "Kucelwe",
+    "confirmRemove": "Uqinisekile ukuba ufuna ukususa u-{{name}} kweli qela?",
+    "removed": "U-{{name}} ususiwe kwiqela.",
+    "confirmApprove": "Ukongeza u-{{name}} kweli qela lomkhokeli?",
+    "added": "U-{{name}} ongeziwe kwiqela.",
+    "confirmReject": "Ugatya isicelo sika-{{name}}?",
+    "rejectedNamed": "Isicelo sika-{{name}} sigatyiwe."
+  },
+  "schedule": {
+    "tabOrientation": "Uqhelaniso",
+    "dateTbc": "Umhla uza kuqinisekiswa",
+    "whatsOn": "OKWENZEKAYO",
+    "eventsSub": "Jonga okwenzekayo ekhampasini, xa kuqala nokuba uya phi.",
+    "orientationSub": "Ishedyuli yakho yoqhelaniso, ehlelwe ngumququzeleli woqhelaniso. Fumana indlela eya kwiseshoni nganye.",
+    "yourVenue": "indawo yakho",
+    "today": "Namhlanje · {{date}}",
+    "directionsText": "Qala ekungeneni okukhulu ulandele imiqondiso ukuya e-{{venue}}. Ungacela nomhlobo we-How2buddy ukuba akunceda."
+  },
+  "events": {
+    "dateTba": "Umhla uza kubhengezwa",
+    "timeTba": "Ixesha liza kubhengezwa",
+    "thisWeek": "Kule veki",
+    "later": "Kamva",
+    "now": "Kwenzeka ngoku",
+    "organisedBy": "Ulungiswe ngu",
+    "cost": "Ixabiso:",
+    "showWhere": "Ndibonise apho",
+    "signUp": "Bhalisa / ulwazi olungakumbi",
+    "nothingElse": "Akukho nto ilandelayo ngoku. Buya kungekudala.",
+    "none": "Akukabikho ziganeko zipapashiweyo. Buya kungekudala, okanye ubuze umhlobo wakho we-FYS ukuba yintoni ekhoyo kule veki.",
+    "from": "Ukusuka ku-{{time}}",
+    "pictureFor": "Umfanekiso we-{{title}}"
+  },
+  "date": {
+    "weekdaysShort": {
+      "0": "Caw",
+      "1": "Mvu",
+      "2": "Bin",
+      "3": "Tha",
+      "4": "Sin",
+      "5": "Hla",
+      "6": "Mgq"
+    },
+    "weekdaysLong": {
+      "0": "iCawa",
+      "1": "uMvulo",
+      "2": "uLwesibini",
+      "3": "uLwesithathu",
+      "4": "uLwesine",
+      "5": "uLwesihlanu",
+      "6": "uMgqibelo"
+    },
+    "monthsShort": {
+      "0": "Jan",
+      "1": "Feb",
+      "2": "Mat",
+      "3": "Epr",
+      "4": "Mey",
+      "5": "Jun",
+      "6": "Jul",
+      "7": "Aga",
+      "8": "Sep",
+      "9": "Okt",
+      "10": "Nov",
+      "11": "Dis"
+    },
+    "monthsLong": {
+      "0": "Janyuwari",
+      "1": "Februwari",
+      "2": "Matshi",
+      "3": "Epreli",
+      "4": "Meyi",
+      "5": "Juni",
+      "6": "Julayi",
+      "7": "Agasti",
+      "8": "Septemba",
+      "9": "Oktobha",
+      "10": "Novemba",
+      "11": "Disemba"
+    },
+    "weekdayHeads": {
+      "0": "M",
+      "1": "B",
+      "2": "T",
+      "3": "S",
+      "4": "H",
+      "5": "M",
+      "6": "C"
+    }
+  },
+  "cal": {
+    "signInFirst": "Ngena kuqala",
+    "signInText": "Izinto ozifake kwikhalenda yakho zigcinwa kwiakhawunti yakho.",
+    "removeTitle": "Susa le nto?",
+    "keep": "Yigcine",
+    "eyebrow": "Ikhalenda",
+    "title": "Yonke into onayo",
+    "subtitle": "Uqhelaniso, iintetho, iziganeko zekhampasi neenkqubo zakho, kwimbonakalo yenyanga enye.",
+    "timetableTitle": "Ishedyuli yakho yeeklasi",
+    "timetableSub": "Khetha iklasi yakho ukubona iintetho",
+    "prevMonth": "Inyanga edlulileyo",
+    "nextMonth": "Inyanga elandelayo",
+    "addOwn": "Yongeza into yakho",
+    "add": "Yongeza",
+    "noFriday": "Akukabikho ntetho zangoLwesihlanu ezilayishiweyo. Jonga ishedyuli yakho eshicilelweyo, oku akuthethi ukuba akunamsebenzi.",
+    "loading": "Iyalayisha inyanga yakho…",
+    "emptyDay": "Akukho nto ngalo mhla. Cofa Yongeza ukubeka into yakho apha.",
+    "allDay": "Usuku lonke",
+    "form": {
+      "needName": "Yinike igama ukuze uyazi kamva.",
+      "startFormat": "Ixesha lokuqala kufuneka libonakale ngathi ngu-18:30.",
+      "endFormat": "Ixesha lokuphela kufuneka libonakale ngathi ngu-20:00.",
+      "endBefore": "Ixesha lokuphela lingaphambi kwelokuqala.",
+      "title": "Yongeza kwikhalenda yakho",
+      "what": "Yintoni?",
+      "whatEg": "Braai yendlu yokuhlala, iqela lokufunda, ishifti…",
+      "entryName": "Igama lento",
+      "starts": "Iqala (ngokuzithandela)",
+      "startTime": "Ixesha lokuqala",
+      "ends": "Iphela (ngokuzithandela)",
+      "endTime": "Ixesha lokuphela",
+      "where": "Phi (ngokuzithandela)",
+      "whereEg": "Igumbi lokuhlala eliqhelekileyo lendlu yokuhlala",
+      "place": "Indawo",
+      "save": "Gcina kwikhalenda yam",
+      "note": "Igcinwe kule fowuni kuphela. Abasebenzi abakwazi ukubona oko ukongezayo apha, kwaye akuyi kuvela kwenye ifowuni."
+    },
+    "kind": {
+      "timetable": {
+        "label": "Iintetho"
+      },
+      "orientation": {
+        "note": "Kufanelekile ukuba khona"
+      },
+      "event": {
+        "note": "Yiza ukuba unako"
+      },
+      "personal": {
+        "label": "Iinkqubo zakho",
+        "note": "Zezakho ukuzitshintsha"
+      }
+    },
+    "blurb": "Okuphuzi kuthetha ukuba umenyiwe, akunyanzelwanga. Ukuba kufuneka uphoswe yinto, oko kunokunyamezelwa: xelela unjingalwazi okanye umhlobo wakho we-FYS kwangoko kwaye baza kukunceda ubambe.",
+    "addedByYou": "Longezwe nguwe",
+    "removeText": "\"{{title}}\" iya kususwa kwikhalenda yakho.",
+    "tapRemove": "{{title}}. Cofa ukususa."
+  },
+  "search": {
+    "showLess": "Bonisa okuncinci",
+    "readWhole": "Funda impendulo iphela",
+    "readMore": "Funda ngakumbi",
+    "seeFaqs": "Yibone kwiMibuzo",
+    "relatedQuestions": "Imibuzo enxulumeneyo",
+    "openHelp": "Vula iinketho zoncedo",
+    "openSchedule": "Vula ishedyuli",
+    "onlineMap": "Imephu ekwi-intanethi",
+    "seeWho": "Jonga ukuba uqhagamshelane nabani",
+    "seeEvent": "Jonga isiganeko",
+    "howSignUp": "Indlela yokubhalisa",
+    "howJoin": "Indlela yokujoyina",
+    "seeProgramme": "Jonga inkqubo",
+    "seeAnnouncements": "Jonga izaziso",
+    "seeOnHome": "Yibone eKhaya",
+    "openChecklist": "Vula uluhlu",
+    "openSupport": "Vula inkxaso",
+    "seeShuttles": "Jonga amaxesha e-shuttle",
+    "openProfile": "Vula iprofayile",
+    "openGuide": "Vula isikhokelo",
+    "preparing": "Silungisa yonke into yokukhangela...",
+    "whatToFind": "Ufuna ukufumana ntoni?",
+    "try": "Zama",
+    "popular": "Ukukhangela okudumileyo",
+    "recent": "Zamva nje",
+    "clear": "Cima",
+    "notFound": "Asikayifumani leyo okwangoku",
+    "notFoundText": "Kulungile. Zama igama elifutshane okanye elahlukileyo, njengenani lesakhiwo okanye igama elifana nelayibrari, ukutya, ishedyuli okanye ikliniki.",
+    "stillStuck": "Usaxakekile?",
+    "stillStuckText": "Sixelele ukuba ufuna uncedo ngantoni, size sikukhokelele kwindawo efanelekileyo.",
+    "closestOnly": "Akukho nto ehambelana nawo onke amagama okwangoku, ngoko nantsi ehambelana ngokusondeleyo.",
+    "showFewer": "Bonisa ezimbalwa",
+    "goBack": "Buyela",
+    "wholeApp": "Khangela yonke i-app",
+    "offline": "Ukhangela ulwazi olugciniweyo kuba unxibelelwano alukho ngoku.",
+    "kind": {
+      "faq": "Iimpendulo",
+      "support": "Ukufumana uncedo",
+      "schedule": "Ishedyuli",
+      "venue": "Iindawo",
+      "place": "Izakhiwo zekhampasi",
+      "contact": "Abantu onokuqhagamshelana nabo",
+      "guide": "Izikhokelo zedijithali",
+      "event": "Iziganeko",
+      "sport": "Ezemidlalo ne-gym",
+      "programme": "Iinkqubo",
+      "announcement": "Izaziso",
+      "checklist": "Uluhlu",
+      "info": "Ulwazi lwenkxaso",
+      "shuttle": "Amaxesha e-shuttle",
+      "setting": "Iisetingi"
+    },
+    "scopes": {
+      "all": {
+        "label": "yonke i-app",
+        "placeholder": "Khangela yonke into kwi-app...",
+        "hint": "Khangela yonke into kwi-app: ishedyuli neziganeko, iimpendulo, abafowunelwa, iindawo nezakhiwo, izikhokelo, iinkqubo, ezemidlalo nokunye."
+      },
+      "schedule": {
+        "label": "Ishedyuli",
+        "placeholder": "Khangela kwishedyuli...",
+        "hint": "Khangela iiseshoni zoqhelaniso neziganeko zekhampasi ngegama, usuku, ixesha okanye indawo."
+      },
+      "contacts": {
+        "label": "Abafowunelwa",
+        "placeholder": "Khangela abafowunelwa...",
+        "hint": "Khangela abantu onokuqhagamshelana nabo ngegama, indima okanye indawo yenkxaso."
+      },
+      "support": {
+        "label": "Inkxaso",
+        "placeholder": "Khangela inkxaso...",
+        "hint": "Khangela iinketho ze-\"Ndifuna uncedo ngo...\" nolwazi lwenkxaso olupapashwe ngabaququzeleli bakho."
+      },
+      "digital": {
+        "label": "Izikhokelo zedijithali",
+        "placeholder": "Khangela izikhokelo zedijithali...",
+        "hint": "Khangela izikhokelo ngenyathelo ngenyathelo zeFunda, i-Wi-Fi, ukuprinta, i-imeyile nokunye."
+      },
+      "checklist": {
+        "label": "Uluhlu",
+        "placeholder": "Khangela uluhlu lwakho...",
+        "hint": "Khangela imisebenzi kuluhlu lwakho lwabafundi abatsha."
+      },
+      "programmes": {
+        "label": "Iinkqubo",
+        "placeholder": "Khangela iinkqubo...",
+        "hint": "Khangela iinkqubo zeSikolo se-IT ngegama, imodyuli, umsebenzi okanye umcebisi."
+      },
+      "sport": {
+        "label": "Ezemidlalo ne-gym",
+        "placeholder": "Khangela ezemidlalo ne-gym...",
+        "hint": "Khangela imidlalo, iiklabhu, izibonelelo nendlela yokubhalisela i-gym."
+      },
+      "profile": {
+        "label": "IProfayile neesetingi",
+        "placeholder": "Khangela iisetingi...",
+        "hint": "Khangela iisetingi zakho, ezifana nolwimi, ubungakanani bombhalo nembonakalo."
+      }
+    },
+    "wholeAppNote": "Ukukhangela yonke i-app, sebenzisa ibhokisi yokukhangela kwiKhaya.",
+    "searchScope": "Khangela {{scope}}",
+    "noneInScope": "Akukho nto kwi-{{scope}} ehambelana noko. Zama igama elifutshane okanye elahlukileyo. {{note}}",
+    "showAll": "Bonisa zonke ezingama-{{count}} kwi-{{kind}}",
+    "searchingOnly": "Ukhangela {{scope}} kuphela",
+    "resultOne": "Umphumo omnye. Cofa iqhosha ukuthatha inyathelo elilandelayo.",
+    "resultMany": "Iziphumo ezi-{{count}}. Cofa iqhosha ukuthatha inyathelo elilandelayo."
+  },
+  "suggest": {
+    "writeFirst": "Bhala umbuzo kuqala, uze uwuthumele.",
+    "notSetUp": "Iingcebiso azikalungiswa okwangoku. Cela umququzeleli aqhube iskripthi sedathabheyisi sakutshanje.",
+    "notSent": "Oku akuthunyelwanga okwangoku. Nceda ujonge unxibelelwano lwakho uzame kwakhona.",
+    "thanks": "Enkosi. Abaququzeleli baya kujonga.",
+    "title": "Cebisa umbuzo",
+    "intro": "Uweva umbuzo ongaphenduliwe apha? Xelela abaququzeleli ukuze wongezwe. Nceda ungabandakanyi iinkcukacha zobuqu zomfundi nawuphi na.",
+    "whatAsk": "Bafundi bahlala bebuza ntoni?",
+    "helpAnswer": "Nantoni na enokunceda ekuphenduleni? (ngokuzithandela)",
+    "send": "Thumela kubaququzeleli"
+  },
+  "role": {
+    "buddy": "Umhlobo we-FYS",
+    "coordinator": "Umququzeleli woqhelaniso",
+    "admin": "Umlawuli",
+    "hod": "Intloko yesebe"
+  },
+  "sport": {
+    "tabSport": "Ezemidlalo",
+    "tabGym": "I-gym",
+    "whoToAsk": "UBUZA BANI",
+    "facility": "Isibonelelo",
+    "club": "Umdlalo / iklabhu",
+    "howJoin": "INDLELA YOKUJOYINA",
+    "moreInfo": "Ulwazi olungakumbi",
+    "howSignUp": "INDLELA YOKUBHALISA",
+    "hours": "AMAXESHA OKUVULA",
+    "bring": "OKUFUNEKA UKUBA UZE NAKO",
+    "signOnline": "Bhalisa kwi-intanethi",
+    "eyebrow": "EZEMIDLALO NEMIDLALO",
+    "subtitle": "Fumana umdlalo okanye iklabhu, ufunde indlela yokubhalisela i-gym.",
+    "seeGym": "Jonga indlela yokubhalisela i-gym",
+    "wantGym": "Ufuna ukujoyina i-gym?",
+    "seeHow": "Jonga indlela yokubhalisa",
+    "noSports": "Ezemidlalo neeklabhu azikongezwa okwangoku. Buya kungekudala.",
+    "noGym": "Iinkcukacha zokubhalisela i-gym azikongezwa okwangoku. Buza kwi-ofisi yezemidlalo okanye kumhlobo wakho we-FYS okwangoku."
+  },
+  "shuttleGuide": {
+    "title": "Ukujikeleza, ngaphandle kokuqikelela",
+    "subtitle": "Xa ii-shuttle ziqhuba, into oyifunayo ukuze ukhwele, nokuba wenza ntoni xa ulahlekile.",
+    "cardRule": "Akukho khadi lomfundi, akukho shuttle. Yithwale yonke imihla, kunye neleta yakho yokubhalisa.",
+    "loading": "Iyalayisha amaxesha e-shuttle…",
+    "nothing": "Akukho nto edweliswe",
+    "nothingText": "Akukho ii-shuttle zidwelisiweyo kweli xesha losuku. Jonga ishedyuli eshicilelweyo esitishini sakho, okanye ubuze uMarshal we-shuttle.",
+    "openMap": "Vula imephu yekhampasi",
+    "findStop": "Fumana isitishini sakho kwimephu",
+    "lostHelp": "Ulahlekile? Vula imephu yekhampasi, ufumane isakhiwo esikufutshane uze uhambe ukusuka apho.",
+    "shift": {
+      "morning": {
+        "label": "Ukufika ekhampasini",
+        "hint": "Uhambo lwasekuseni. Ukuba unayo eyi-07:45, eyi-06:45 ikufikisa ngokuzola."
+      },
+      "afternoon": {
+        "label": "Ukuya ekhaya",
+        "hint": "Uhambo lwasemva kwemini. Khetha eyandulelayo kweyo uyifunayo."
+      },
+      "night": {
+        "label": "Iintsuku zasebusuku ekhampasini",
+        "hint": "Ukuba ufunda kade, ezi yindlela yakho yokubuya."
+      }
+    },
+    "advice": {
+      "lost": {
+        "title": "Ulahlekile, kwaye ufuna ukufumana isitishini",
+        "body": "Vula imephu yekhampasi ufumane isakhiwo esikufutshane, uze uhambe uye kwisitishini esidwelisiweyo. Ukuba ungaphandle kwekhampasi kwaye awuqinisekanga, yiya kwisitishini esisondeleyo esaziwayo: iFeather Market Hall, iKings Beach neCentral zonke ziyafumaneka lula kwaye kulula ukubuza izalathiso."
+      },
+      "last": {
+        "title": "I-shuttle yokugqibela yeyokugqibela",
+        "body": "Thatha isigqibo ngaphambi kokuhamba kokugqibela hayi imizuzu emihlanu emva kwako. Ukuba uyaphosa uceba indlela yakho yokuya ekhaya, kade, kwaye mhlawumbi uhlawula."
+      }
+    },
+    "footnote": "{{label}}. Amaxesha anokutshintsha: ishedyuli eshicilelweyo esitishini sakho ihlala iyilo igqibela."
+  },
+  "route": {
+    "start": "Qala ukuhamba ngeenyawo ukuya kutsho kwi-{{distance}}",
+    "startAlong": "Qala ukuhamba ngeenyawo ecaleni kwe-{{name}} ukuya kutsho kwi-{{distance}}",
+    "arrived": "Ufikile",
+    "turn": "Jika {{direction}}, uze uhambe i-{{distance}}",
+    "turnOnto": "Jika {{direction}} ungene kwi-{{name}}, uze uhambe i-{{distance}}",
+    "keep": "Qhubeka ukuya kutsho kwi-{{distance}}",
+    "keepOn": "Qhubeka kwi-{{name}} ukuya kutsho kwi-{{distance}}",
+    "continue": "Qhubeka ukuya kutsho kwi-{{distance}}",
+    "direction": {
+      "left": "ngasekhohlo",
+      "right": "ngasekunene",
+      "slight_left": "kancinci ngasekhohlo",
+      "slight_right": "kancinci ngasekunene",
+      "sharp_left": "kakhulu ngasekhohlo",
+      "sharp_right": "kakhulu ngasekunene",
+      "straight": "ngqo phambili",
+      "uturn": "buyela umva",
+      "ahead": "phambili"
+    }
+  },
+  "soc": {
+    "title": "Fumana abantu bakho",
+    "subtitle": "Ukholo, intsimi yezifundo, okanye into eyahlukileyo kwaphela. Ukujoyina enye yeyona ndlela ekhawulezayo yokuyeka ukuziva ungumntu ongaziwayo apha.",
+    "what": "Yintoni umbutho?",
+    "searchLabel": "Khangela imibutho okanye ikhowudi yentlawulo",
+    "search": "Khangela imibutho",
+    "noMatch": "Akukho ehambelanayo",
+    "incomplete": "Olu luhlu aluphelelanga: jonga inqaku elingezantsi. Ukuba umbutho wakho awukho apha, usenokubakho. Buza kwi-Student Governance and Development.",
+    "about": "Malunga nolu luhlu",
+    "aboutText": "Ithathwe kwiphepha lokubhalisa imibutho eliprintiweyo, elinqunyulwe ezantsi kwephepha, ngoko amacandelo eZemfundo neNkqubela aphelele. Iindleko neekhowudi zinokutshintsha phakathi kweminyaka. Qinisekisa phambi kokuhlawula.",
+    "whatIs": "Umbutho yiklabhu eqhutywa ngabafundi onokujoyina unyaka. Ezinye zakhelwe ngokwenkolo, ezinye ngokwento oyifundayo, kwaye ezinye ngenjongo okanye ubuchule obungenanto yakwenza nesidanga sakho. Uhlawula ifizi encinci kanye, kwaye ubuya nabantu esele beyazi into odlula kuyo. Akufuneki ube nobuchule kuyo nayiphi na into, wazi mntu, okanye ubophelele kuwo wonke umhlangano: ukuvela kanye kwanele ukuqala.",
+    "cat": {
+      "religious": {
+        "label": "Ezenkolo",
+        "blurb": "Uluntu lokholo ekhampasini, kwizithethe ezininzi."
+      },
+      "academic": {
+        "label": "Ezemfundo",
+        "blurb": "Zidityaniswe nentsimi yezifundo: zilungele oonxibelelwano kushishino lwakho phambi kokuba uphumelele."
+      },
+      "developmental": {
+        "label": "Zophuhliso",
+        "blurb": "Ubuchule, iinjongo namanethiwekhi angezizo ezesidanga sakho."
+      }
+    },
+    "clashOne": "{{codes}} livela ngaphezu kombutho omnye kwiphepha. Jonga ikhowudi nombutho phambi kokuhlawula.",
+    "clashMany": "{{codes}} zivela ngaphezu kombutho omnye kwiphepha. Jonga ikhowudi nombutho phambi kokuhlawula."
+  },
+  "ai": {
+    "eyebrow": "Izixhobo zokufunda",
+    "title": "Ukusebenzisa i-AI ngaphandle kokutshiswa",
+    "subtitle": "Izixhobo ezahlukeneyo zilungele iingxaki ezahlukeneyo. Nantsi into eyenene enceda, neyo enokubangela ingxaki.",
+    "rule": "Jonga isikhokelo semodyuli yakho phambi kokusebenzisa i-AI kuwo nawuphi na umsebenzi. Imithetho iyahluka ngokwefakhalthi, kwaye \"Bendingazi\" ayikaze isebenze njengesikhusela.",
+    "whatDo": "Ufuna ukwenza ntoni?",
+    "whichTool": "Sesiphi isixhobo esiyintoni",
+    "whichToolText": "Zihlelwe ngokwento nganye eyakhelwe yona, azisikwanga. Nakuphi na ukuqikelelwa kuya kuba sele kudala ngaphambi kokuphela kwesemesta, kwaye zonke zenza uninzi lwezinto ngokwaneleyo.",
+    "before": "Phambi kokusebenzisa nayiphi na kuzo",
+    "suits": "Into elungele yona",
+    "howAsk": "Indlela yokubuza",
+    "watchOut": "Lumka"
+  },
+  "arcade": {
+    "tagline": "Dlala. Vula. Qokelela.",
+    "subtitle": "Woyisa umjikelo uvule into efanele ukwaziwa ngeYunivesithi yaseMandela.",
+    "play": "Dlala",
+    "vault": "Isigodlo seenyaniso",
+    "opening": "Iyavula…",
+    "vaultTitle": "Oko ukuvuleleyo",
+    "comingSoon": "Kuyeza kungekudala",
+    "comingSoonText": "Amabali abaphumeleleyo ayaqokelelwa. Akukabikho nto yokuvula apha okwangoku.",
+    "openingVault": "Iyavula isigodlo…",
+    "nothingYet": "Akukabikho nto apha",
+    "nothingText": "Woyisa umjikelo kwi-arcade kwaye oko ukuvulayo kugcinwa apha.",
+    "goArcade": "Yiya kwi-arcade",
+    "notFound": "Umdlalo awufumanekanga",
+    "notFoundText": "Lo mdlalo awukho kwi-arcade. Buyela uze ukhethe omnye.",
+    "played": "Idlalwe",
+    "won": "Uphumelele",
+    "best": "Ezona zilungileyo",
+    "you": "Wena",
+    "pick": "Khetha ukuphosa kwakho",
+    "draw": "Alukho oyisileyo, phinda",
+    "youTake": "Uyoyisile",
+    "houseTakes": "IMadibaz iyoyisile",
+    "throwAgain": "Phosa kwakhona",
+    "youWin": "Uyoyisile!",
+    "unlockedNew": "Kuvuliwe",
+    "alreadyHave": "Sele kwisigodlo sakho",
+    "allUnlocked": "Uvule yonke into kwisigodlo. Ezinye ziyeza.",
+    "playAgain": "Dlala kwakhona",
+    "openVault": "Vula isigodlo seenyaniso",
+    "done": "Kugqityiwe",
+    "playGame": "Dlala {{game}}",
+    "wonOf": "Woyise {{won}} kwezi-{{played}}",
+    "vaultLabel": "Isigodlo seenyaniso, ezi-{{count}} kwezi-{{total}} zivuliwe",
+    "unlocked": "{{count}} kwezi-{{total}} zivuliwe",
+    "collected": "{{count}} kwezi-{{total}} ziqokelelwe.",
+    "stillLocked": "🔒 ezi-{{count}} zisavaliwe",
+    "openSource": "Vula umthombo: {{label}}",
+    "games": {
+      "rps": {
+        "title": "Ilitye, Iphepha, Isikere",
+        "tagline": "Eyona ilungileyo kwesinye ngokuchasene nendlu",
+        "howTo": "Khetha ukuphosa uze uyoyise isandla seMadibaz."
+      }
+    },
+    "kind": {
+      "fact": "Ubusazi?",
+      "madibaz": "Hlangana neMadibaz",
+      "tip": "Icebiso lonyaka wokuqala"
+    }
+  },
+  "about": {
+    "label": "MALUNGA NEPROJEKTHI",
+    "appTitle": "Malunga nale app",
+    "subtitle": "I-app yoqhelaniso lwabafundi beSikolo se-IT",
+    "summary": "Yakhelwe ukunceda abafundi bonyaka wokuqala beSikolo se-IT bazive bamkelekile, benolwazi kwaye belungile. Ibeka ishedyuli yoqhelaniso, iindawo, abafowunelwa, imibuzo eqhelekileyo, inkxaso nezikhokelo zezakhono zedijithali kwindawo enye, ukuze kungabikho mntu kufuneka aqokelele oko kwii-imeyile nakwimiyalezo.",
+    "status": "Le yiprototype ye-hackathon. Umxholo obonisiweyo unokuba yidatha yesampulu de abasebenzi bapapashe inkqubo yoqhelaniso yokwenene.",
+    "supportTitle": "Indlela ekuxhasa ngayo abafundi",
+    "principles": {
+      "courage": "Amanyathelo alandelayo acacileyo nempumelelo emincinci, ukuze ukuthatha inyathelo lokuqala kubonakale kunokwenzeka.",
+      "empathy": "Ulwimi olunobubele, olulula. Asisoze sicinge ukuba usele uyazi ukuba iyunivesithi isebenza njani.",
+      "vulnerability": "Ukungayazi into okwangoku kuqhelekile. Izikhokelo nemibuzo eqhelekileyo zikho ngenxa yoko.",
+      "shame": "Uphosise iseshoni okanye uziva ulahlekile? Uya kuhlala ubonisiwe into emayenziwe okulandelayo, ungasoze utyholwe."
+    },
+    "insideTitle": "Okukuyo",
+    "features": {
+      "f1": "IKhaya enezaziso, amaxesha e-shuttle nenkqubela yakho",
+      "f2": "Ukukhangela kwishedyuli, kwimibuzo eqhelekileyo, kubafowunelwa, kwiindawo nakwiinketho zoncedo",
+      "f3": "Ishedyuli yoqhelaniso enezalathiso zeendawo",
+      "f4": "Imephu yekhampasi yaseMazantsi naseMntla: amanani ezakhiwo, ukukhangela, iindlela zokuhamba",
+      "f6": "Izikhokelo zokulungela idijithali: izakhono zekhompyutha, iFunda, ukuprinta ne-Wi-Fi",
+      "f7": "Imibuzo eqhelekileyo ihlelwe ngeecandelo",
+      "f8": "Iindlela zenkxaso (\"Ndifuna uncedo ngo...\") nabafowunelwa abaphambili",
+      "f9": "IQela: incoko nabafundi kwiqela lakho lomkhokeli",
+      "f10": "Isitshintshi solwimi (isiNgesi, isiXhosa, isiAfrikansi), imo emnyama nobungakanani bombhalo obulungiselelekayo",
+      "f11": "Ikopi egciniweyo yolwazi olubalulekileyo xa unxibelelwano lunqamka"
+    },
+    "privacyTitle": "Ubumfihlo nedatha yakho",
+    "privacy": {
+      "keep": {
+        "label": "Esikugcinayo",
+        "text": "Idilesi yakho ye-imeyile (ukukungenisa), igama lencoko olikhethela iQela, imiyalezo oyithumela apho, kunye namanyathelo okulungela idijithali owagqibileyo."
+      },
+      "never": {
+        "label": "Esingakhe sikucele",
+        "text": "Amanani esazisi, iinkcukacha zonyango okanye ulwazi lwemali."
+      },
+      "who": {
+        "label": "Ongabona",
+        "text": "Imiyalezo yeQela ibonakala kubafundi kwiQela lakho nakubasebenzi boqhelaniso, abanceda ukugcina indawo ikhuselekile. Inkqubela yakho yeyakho wedwa."
+      },
+      "device": {
+        "label": "Kwifowuni yakho",
+        "text": "Ulwimi lwakho, ubungakanani bombhalo nemo, ukukhangela kwakho kokugqibela, kunye nekopi egciniweyo yeshedyuli, imibuzo eqhelekileyo nabafowunelwa ukuze zisebenze ngaphandle kwe-intanethi."
+      },
+      "map": {
+        "label": "Imephu yekhampasi",
+        "text": "Imephu ilayisha imifanekiso neendlela zokuhamba kwiinkonzo zasimahla ezisekelwe kwi-OpenStreetMap. Zifumana kuphela ukuba yeyiphi inxalenye yemephu oyijongayo nezinto zokuqala nezokugqibela zendlela. I-app ayisebenzisi i-GPS kwaye ayikhe ilandelele ukuba ukuphi. Igama lakho ne-akhawunti azikhe zithunyelwe."
+      },
+      "approach": {
+        "label": "Indlela yethu",
+        "text": "Yenzelwe ngokucinga imigaqo ye-POPIA: qokelela kuphela into efunekayo, kwaye ugcine iinkcukacha zobuqu ziyimfihlo."
+      }
+    },
+    "helpTitle": "Ukufumana uncedo lwenene",
+    "helpText": "Le app ikubonisa apho ufumana uncedo. Ayilithatheli indawo. Ukuba uyasokola, okanye wena okanye omnye umntu usemngciphekweni, qhagamshelana nezinkonzo zengcebiso nezempilo zeyunivesithi okanye iinkonzo zokhuselo lwekhampasi ngoko nangoko. Ukucela uncedo kwangoko yinto ehlakaniphileyo nenembopheleleko.",
+    "openRefer": "Vula Bhekisa umfundi",
+    "openSupport": "Vula ithebhu yeNkxaso",
+    "infoTitle": "Ulwazi lwe-app",
+    "version": "Uhlelo",
+    "platform": "Iplatifomu",
+    "data": "Idatha",
+    "dataValue": "Ngqo evela kwidathabheyisi yeSikolo se-IT, enekopi egciniweyo yokusetyenziswa ngaphandle kwe-intanethi"
+  },
+  "lessons": {
+    "file-management": {
+      "title": "Ulawulo olusisiseko lweefayile",
+      "subtitle": "Uyintsha kwiifayile neefolda? Yenza ezi zifundo ezimfutshane ngokulandelelana."
+    },
+    "files-1-files-and-folders": {
+      "title": "Iifayile neefolda",
+      "summary": "Ziyintoni nokuba uzivula, uzijonge kwaye uzenze njani.",
+      "desc": "Ifayile yicandelo elinye lomsebenzi, njengesincoko okanye umfanekiso. Ifolda iphatha iifayile kunye, njengoko ifolda yephepha iphatha amaphepha.",
+      "steps": {
+        "0": "Kwikhompyutha ye-Windows, cinezela iqhosha le-Windows ne-E kunye ukuvula i-File Explorer. Kwifowuni, vula i-app ye-Files.",
+        "1": "Jonga uluhlu olusekhohlo. IiDocuments, iiDownloads ne-Desktop ziindawo apho iifayile zakho zinokuhlala khona.",
+        "2": "Cofa kabini kwifolda ukuyivula. Cofa utolo lokubuya ngasemva ngaphezulu ukuya inqanaba elinye ngentla.",
+        "3": "Ukwenza ifolda yakho, cofa ngasekunene kwindawo engenanto, khetha i-New, uze ukhethe i-Folder.",
+        "4": "Chwetheza igama lefolda uze ucinezele i-Enter. Ifolda yakho ilungele ukusetyenziswa."
+      },
+      "tip": "Uninzi lwezinto ozikhuphelayo luphelela kwi-Downloads. Shenxisela ezo ufuna ukuzigcina kwiifolda zakho."
+    },
+    "files-2-naming-and-organising": {
+      "title": "Ukunika amagama nokucwangcisa",
+      "summary": "Isicwangciso esilula sefolda ukuze ufumane umsebenzi wakho ngokukhawuleza.",
+      "desc": "Amagama acacileyo nesicwangciso esilula sefolda kuthetha ukuba ungafumana umsebenzi wakho ngemizuzwana, nasebusuku phambi komhla wokuphela.",
+      "steps": {
+        "0": "Yenza ifolda enye ephambili yonyaka, umzekelo '2027 First Year'.",
+        "1": "Ngaphakathi kuyo, yenza ifolda enye kwimodyuli nganye, enje ngo-'Programming' okanye 'Networks'.",
+        "2": "Ngaphakathi kwifolda nganye yemodyuli, yongeza i-'Assignments', i-'Notes' ne-'Study material'.",
+        "3": "Nika iifayile amagama azicacisayo, anje ngo-'Programming - Assignment 1 - Draft.docx'.",
+        "4": "Phepha amagama anjenge-'final', 'final2' okanye 'new'. Yongeza umhla okanye inani loguqulelo endaweni yalo, njenge-'v2'.",
+        "5": "Ukuphinda unike ifayile igama, cofa kanye kuyo, cinezela i-F2, chwetheza igama elitsha uze ucinezele i-Enter."
+      },
+      "tip": "I-Windows ayivumeli ezi zimpawu kwigama lefayile: / \\ : * ? \" < > |"
+    },
+    "files-3-save-copy-move": {
+      "title": "Ukugcina, ukukopa nokushenxisa",
+      "summary": "Gcina umsebenzi wakho, yenza uguqulelo lwesibini, okanye uwubeke kwenye indawo.",
+      "desc": "Ukugcina kugcina umsebenzi wakho. Ukukopa kwenza uguqulelo lwesibini. Ukushenxisa kubeka eyoqobo kwenye indawo.",
+      "steps": {
+        "0": "Gcina njengoko usebenza. Kwiiprogram ezininzi, cinezela i-Ctrl ne-S kunye, uyenze rhoqo emva kwemizuzu embalwa.",
+        "1": "Xa ugcina okokuqala, khetha ifolda uze uchwetheze igama elicacileyo. Sebenzisa i-Save As ukugcina olunye uguqulelo phantsi kwegama elitsha.",
+        "2": "Ukukopa ifayile, cofa kuyo, cinezela i-Ctrl ne-C, vula ifolda oyifunayo, uze ucinezele i-Ctrl ne-V.",
+        "3": "Ukushenxisa ifayile, cofa kuyo, cinezela i-Ctrl ne-X, vula ifolda oyifunayo, uze ucinezele i-Ctrl ne-V.",
+        "4": "Ungatsalela nefayile kwifolda ukuyishenxisa. Bamba i-Ctrl ngoxa utsalela ukuyikopa endaweni yoko."
+      },
+      "tip": "Ifayile enqunyulweyo ihlala apho ikhoyo de uyincamathisele, ngoko akukho nto ilahlekayo ukuba uphazanyiswa embindini."
+    },
+    "files-4-find-and-recover": {
+      "title": "Ukufumana nokubuyisela iifayile",
+      "summary": "Khangela ifayile, ubuyise leyo uyicime ngempazamo.",
+      "desc": "Wonke umntu uyayilahla ifayile ngexesha elithile. La manyathelo akunceda uyifumane kwakhona, okanye uyibuyise.",
+      "steps": {
+        "0": "Kwi-File Explorer, cofa ibhokisi yokukhangela phezulu ngasekunene uchwetheze inxalenye yegama lefayile.",
+        "1": "Vula i-'Quick access' (ebizwa ngokuba yi-'Home' kwi-Windows 11) ukubona iifayile ozivule kutshanje.",
+        "2": "Cofa isihloko esithi 'Date modified' ukubeka umsebenzi wakho omtsha ngaphezulu kwifolda.",
+        "3": "Ukuba ucime ifayile ngempazamo, vula i-Recycle Bin kwi-desktop yakho.",
+        "4": "Cofa ngasekunene kwifayile ukhethe i-Restore. Ibuyela kwifolda eyivela kuyo."
+      },
+      "tip": "Xa ungenise i-Recycle Bin, iifayile zinzima kakhulu ukubuya. Yijonge phambi kokuba uyingenise."
+    },
+    "files-5-back-up": {
+      "title": "Ukugcina ikopi yomsebenzi wakho",
+      "summary": "Gcina umsebenzi ngamnye kwiindawo ezimbini ubuncinci.",
+      "desc": "Iilaptop ziyalahleka, ziyaphuka kwaye ziyabiwa. Gcina imisebenzi yakho kwiindawo ezimbini ubuncinci, ukuze ingxaki enye ingakuthinteli umsebenzi wakho.",
+      "steps": {
+        "0": "Ngena kwi-OneDrive usebenzisa idilesi yakho ye-imeyile yeyunivesithi. Iifayile zakho ziyakopa ekloudini ngalo lonke ixesha unxibelelene ne-intanethi.",
+        "1": "Gcina imisebenzi yakho kwifolda yakho ye-OneDrive, okanye tsalela iifolda zakho zemodyuli kuyo.",
+        "2": "Linda uphawu oluluhlaza olulungileyo kwifayile. Lithetha ukuba ifayile igqibile ukukopa ekloudini.",
+        "3": "Gcina ikopi yesibini kwi-USB drive kwimihla yokuphela ebalulekileyo.",
+        "4": "Gcina ikopi phambi kokungenisa, naphambi kokuhlaziya okanye ukuseta kwakhona ikhompyutha yakho."
+      },
+      "tip": "Iikhompyutha zelebhu ziyabelwana. Gcina kwi-OneDrive okanye kwi-USB drive, kwaye ungayishiyi ikopi enye kuphela kwikhompyutha."
+    },
+    "files-6-types-and-sharing": {
+      "title": "Iintlobo zeefayile nokwabelana",
+      "summary": "Zithetha ntoni i-.docx ne-.pdf, nokuba uthumela njani iifayile ngokukhuselekileyo.",
+      "desc": "Oonobumba emva kwenqaku egameni lefayile bubonisa uhlobo lwefayile nokuba yeyiphi iprogram ekuvulayo.",
+      "steps": {
+        "0": "I-.docx yidokhumenti yeWord, i-.xlsx yishiti yeExcel, i-.pptx yiPowerPoint kwaye i-.pdf ibonakala ifana kuwo onke amagajethi.",
+        "1": "Ukubona ezi noonobumba, vula ithebhu ye-View kwi-File Explorer uphawule i-'File name extensions'.",
+        "2": "Ngenisa uhlobo lwefayile olucelwa ngunjingalwazi wakho. Kwi-PDF, khetha i-File, uze ukhethe i-Save As okanye i-Export, ukhethe i-PDF.",
+        "3": "Ukuthumela iifayile ezininzi kunye, zikhethe, cofa ngasekunene, khetha i-'Compress to ZIP file' uncamathisele i-ZIP.",
+        "4": "Kwiifayile ezinkulu, yabelana ngekhonkco le-OneDrive endaweni yokuncamathisela ifayile kwi-imeyile.",
+        "5": "Vula kuphela izincamathiselo ezivela kubantu obaziyo. Iifayile ze-.exe ne-.zip ezingaziwayo zinokuphatha iintsholongwane."
+      },
+      "tip": "Jonga igama lefayile phambi kokuyingenisa. Unjingalwazi uphawula oko ukulayishileyo, ngoko qinisekisa ukuba luguqulelo lwamva nje."
+    },
+    "cyber-safety": {
+      "title": "Ukhuseleko lwe-intanethi",
+      "subtitle": "Fumanisa ubuqhetseba, khangela ngokukhuselekileyo, kwaye ukhusele isixhobo sakho nobumfihlo bakho."
+    },
+    "safety-1-scams": {
+      "title": "Ukubona ubuqhetseba ne-phishing",
+      "summary": "Ii-imeyile nemiyalezo yobuxoki ezizama ukukukhohlisa.",
+      "desc": "I-phishing yi-imeyile, i-SMS okanye umyalezo we-WhatsApp wobuxoki oziyeka ngathi ngumntu omthembileyo, njengeyunivesithi, ibhanki okanye isibonelelo semali. Izama ukuba iinkcukacha zakho okanye imali yakho.",
+      "steps": {
+        "0": "Yehlisa isantya xa umyalezo ubonakala ungxamile. Abaqhetseba bathi izinto ezinjengokuthi 'yenza ngoku' okanye 'iakhawunti yakho iza kuvalwa'.",
+        "1": "Jonga ukuba ngubani ngokwenene othumele. Jonga idilesi epheleleyo ye-imeyile, hayi nje igama elibonisiweyo.",
+        "2": "Musa ukucofa ikhonkco ongalilindelanga. Chwetheza idilesi yewebhsayithi ngokwakho endaweni yoko.",
+        "3": "Ungaze wabelane ngegama lokugqitha, i-PIN, ikhowudi yexesha elinye okanye inombolo yomfundi ekuphenduleni umyalezo. Imibutho yokwenene ayiyicelli ezi zinto.",
+        "4": "Yiba nesikrokro ngeenkonzo ezivakala zilungile kakhulu ukuba zibe ngamanyani, ezinjengedatha yasimahla, imisebenzi elula okanye isibonelelo semali ongazange ucele.",
+        "5": "Ukuba awuqinisekanga, musa ukuphendula. Dlulisela umyalezo kwi-IT Services uze uwucime."
+      },
+      "tip": "Qinisekisa nomthumeli usebenzisa inombolo yefowuni okanye iwebhsayithi oyithembileyo kakade, ungasoze usebenzise eyethathwe kumyalezo."
+    },
+    "safety-2-browsing": {
+      "title": "Ukukhangela ngokukhuselekileyo ne-Wi-Fi kawonke-wonke",
+      "summary": "Imikhwa ekugcina ukhuselekile kumawebhsayithi nakumanethiwekhi.",
+      "desc": "Phantse yonke into oyenzayo kwi-intanethi idlula kwiwebhsayithi okanye kwinethiwekhi ye-Wi-Fi. Imikhwa embalwa ikugcina ukhuselekile kuzo zombini.",
+      "steps": {
+        "0": "Khangela ipadlokhi ne-https ekuqaleni kwedilesi yewebhsayithi phambi kokuba ufake iinkcukacha zobuqu.",
+        "1": "Khuphela ii-app kuphela kwi-Play Store okanye kwi-App Store, kunye neeprogram kuphela kwiwebhsayithi esemthethweni.",
+        "2": "Ukhathalele kwi-Wi-Fi yasimahla kawonke-wonke. Musa ukwenza ibhanki okanye ukufaka amagama okugqitha kwinethiwekhi ongayithembiyo.",
+        "3": "Ekhampasini, xhuma kwinethiwekhi esemthethweni ye-eduroam, hayi kwinethiwekhi evulekileyo enegama elifanayo.",
+        "4": "Phuma kwiikhompyutha ezabelwanayo nezelebhu xa ugqibile, uze uvale ibhrawuza.",
+        "5": "Musa ukuphawula i-'remember me' okanye i-'save password' kwikhompyutha eyabelwanayo."
+      },
+      "tip": "Ipadlokhi ithetha kuphela ukuba unxibelelwano luyimfihlo. Ayibonisi ukuba iwebhsayithi inyanisekile, ngoko usabhekisisa idilesi."
+    },
+    "safety-3-device": {
+      "title": "Ukukhusela isixhobo sakho",
+      "summary": "Gcina ifowuni yakho nelaptop zikhuselekile, nomsebenzi wakho kunye nazo.",
+      "desc": "Ifowuni yakho nelaptop ziphethe imisebenzi yakho, imifanekiso neeakhawunti. Zikhuseleni ngendlela ekhusela ngayo ingxowa yakho yemali.",
+      "steps": {
+        "0": "Vala ifowuni yakho nelaptop nge-PIN, igama lokugqitha, umbala weminwe okanye ukuvula ngobuso.",
+        "1": "Faka uhlaziyo xa lubonakala. Uhlaziyo lulungisa imingxunya yokhuseleko esetyenziswa zizigebenga.",
+        "2": "Gcina i-antivirus ivuliwe. I-Windows Security ikwenza oku simahla kwikhompyutha ye-Windows.",
+        "3": "Musa ukushiya ilaptop okanye ifowuni yakho yodwa kwilayibrari, kwilebhu okanye kwiteksi.",
+        "4": "Vula i-Find My Device kwi-Android, okanye i-Find My iPhone, ukuze ufumane okanye ucime ifowuni elahlekileyo.",
+        "5": "Gcina ikopi yomsebenzi wakho, ukuze isixhobo esilahlekileyo okanye esosulelekileyo singakuthinteli umsebenzi."
+      },
+      "tip": "Bhala inombolo yolandelelwano yelaptop yakho uyigcine kwindawo ekhuselekileyo. Iyanceda ukuba ufuna ukuxela ubusela."
+    },
+    "safety-4-privacy": {
+      "title": "Ubumfihlo, iinkonzo zentlalo nokufumana uncedo",
+      "summary": "Cinga phambi kokwabelana, kwaye wazi into omayiyenzile ukuba izinto ziphosakele.",
+      "desc": "Oko ukuposayo kunokuhlala kwi-intanethi iminyaka. Cinga phambi kokwabelana, kwaye wazi into omayiyenzile ukuba into iphosakele.",
+      "steps": {
+        "0": "Cinga phambi kokuposa. Nantoni na oyabelana ngayo inokukopwa, nokuba uyayicima kamva.",
+        "1": "Gcina inombolo yakho yomfundi, inombolo yesazisi, idilesi neshedyuli yakho iyimfihlo.",
+        "2": "Sebenzisa iisetingi zobumfihlo ukuze abantu obaziyo kuphela bebone oko ukuposayo nemifanekiso yakho.",
+        "3": "Ungaze wabelane ngemifanekiso yobuqu yakho okanye yabanye abantu ngaphandle kwemvume.",
+        "4": "Ukuba umntu ukuhlukumeza okanye ukusongela kwi-intanethi, musa ukuphendula. Thatha izikrini, ummeme uze uxelele umntu omthembileyo.",
+        "5": "Ukuba iakhawunti yakho ihlaselwe okanye uwele kubuqhetseba, tshintsha igama lakho lokugqitha ngoko nangoko uze uqhagamshelane ne-IT Services."
+      },
+      "tip": "Ukuhlukunyezwa kwi-intanethi akuzange kube yityala lakho. Icandelo leNkxaso kule app lingakubonisa abantu abanokunceda."
+    },
+    "password-safety": {
+      "title": "Ukhuseleko lwegama lokugqitha",
+      "subtitle": "Yenza igama lokugqitha eliqinileyo, ligcine likhuselekile kwaye wongeze ukukhuseleka okongezelelweyo."
+    },
+    "password-1-strong": {
+      "title": "Ukwakha igama lokugqitha eliqinileyo",
+      "summary": "Kutheni ubude buloyisa iimpawu ezinobuqili.",
+      "desc": "Ukuba igama lokugqitha lide kwaye lingaqhelekanga, kunzima ukulikhawula. Ubude bubaluleke ngaphezu kweempawu ezikrelekrele.",
+      "steps": {
+        "0": "Zama ukuba nokungenani iimpawu ezili-12. Ubude bulungile ngakumbi.",
+        "1": "Sebenzisa ibinzana lokugqitha: amagama amane okanye ngaphezulu angahleliwe, anjenge-'purple-bicycle-river-toast'.",
+        "2": "Yongeza amanani okanye iimpawu ukuba uyathanda, kodwa ungazithembi ukuba zenze igama lokugqitha elifutshane liqine.",
+        "3": "Musa ukusebenzisa igama lakho, umhla wokuzalwa, inombolo yomfundi, inombolo yefowuni yeselula okanye i-'password123'.",
+        "4": "Phepha iipateni eziqhelekileyo ezinjenge-123456, i-qwerty okanye igama leqela olithandayo."
+      },
+      "tip": "Ibinzana elide elithetha into kuwe kuphela lilula ukulikhumbula kwaye linzima ukulaphula kunemidididi emifutshane enje-P@ssw0rd."
+    },
+    "password-2-keep-safe": {
+      "title": "Ukugcina amagama akho okugqitha ekhuselekile",
+      "summary": "Igama lokugqitha elinye kwiakhawunti nganye, kwaye ungalabeli mntu.",
+      "desc": "Igama lokugqitha eliqinileyo lincedisa kuphela ukuba akukho mntu ulifumeneyo. Gcina ngalinye liyimfihlo, kwaye lahlukile.",
+      "steps": {
+        "0": "Sebenzisa igama lokugqitha eliyahlukileyo kwiakhawunti nganye ebalulekileyo, ingakumbi i-imeyile yakho yomfundi nebhanki yakho.",
+        "1": "Ungaze wabelane ngegama lokugqitha nomhlobo, unjingalwazi okanye nabani na okuthumelela umyalezo. Akukho mntu wokwenene ulifunayo.",
+        "2": "Sebenzisa umphathi wamagama okugqitha ukuze akukhumbuze. Ifowuni yakho okanye ibhrawuza inokuba sele inayo.",
+        "3": "Musa ukugcina amagama okugqitha kumaphepha anamatheleyo, okanye kwifayile eyodwa ebizwa ngokuthi 'passwords' kwikhompyutha yakho.",
+        "4": "Ungaze uchwetheze igama lokugqitha emva kokucofa ikhonkco kumyalezo. Yiya kwiwebhsayithi ngokwakho."
+      },
+      "tip": "Ukuba iwebhsayithi enye ihlaselwa kwaye usebenzise igama lokugqitha elifanayo kuyo yonke indawo, izigebenga ziya kulizama kuwo onke amanye amaakhawunti akho."
+    },
+    "password-3-two-step": {
+      "title": "Ukukhuseleka okongezelelweyo, nokuba wenze ntoni xa kuvuza",
+      "summary": "Ukujonga kumanyathelo amabini nokwenza ngokukhawuleza emva kokuvuza.",
+      "desc": "Ukuqinisekiswa kwamanyathelo amabini kongeza ukujongwa kwesibini, ngoko igama lokugqitha elibiweyo lodwa alanele ukungena kwiakhawunti yakho.",
+      "steps": {
+        "0": "Vula ukuqinisekiswa kwamanyathelo amabini, okubizwa ngokuba yi-multi-factor authentication, kwi-imeyile yakho nakwamanye amaakhawunti abalulekileyo.",
+        "1": "Sebenzisa i-app yokuqinisekisa okanye ikhowudi ethunyelwe kwifowuni yakho njengenyathelo lesibini.",
+        "2": "Gcina iikhowudi zakho zokugcina indawo ekhuselekileyo, ukuba ulahlekelwa yifowuni yakho.",
+        "3": "Ukuba ucinga ukuba igama lokugqitha livuzile, litshintshe ngoko nangoko, uze ulitshintshe naphi na apho ulisebenzise khona.",
+        "4": "Ungajonga ukuba idilesi yakho ye-imeyile ivele kwikhefu ledatha elaziwayo kwi-haveibeenpwned.com.",
+        "5": "Ukuba awukwazi ukungena kwiakhawunti yeyunivesithi, qhagamshelana ne-IT Services ukuze bayiseta kwakhona."
+      },
+      "tip": "Ungaze unike umntu ikhowudi yokuqinisekisa, nokuba ngumntu othi uvela kwiyunivesithi okanye kwibhanki yakho."
+    },
+    "responsible-ai": {
+      "title": "Ukusetyenziswa kwezixhobo ze-AI ngokuzibophelela",
+      "subtitle": "Sebenzisa i-AI ukufunda, jonga oko ikuxelela kona, kwaye uhlale unyanisekile emsebenzini wakho."
+    },
+    "ai-1-what-it-is": {
+      "title": "Oko izixhobo ze-AI ezinokukwenza nezingakwaziyo ukukwenza",
+      "summary": "Zincedisa, zikhawuleza, kodwa azihlali zichanekile.",
+      "desc": "Izixhobo ze-AI ezinjengeechatbot zinokubhala, zichaze kwaye zishwankathele ngemizuzwana. Ziincedisi eziluncedo, kodwa azihlali zichanekile.",
+      "steps": {
+        "0": "Isixhobo se-AI siqikelela amagama anokubakho. Asazi ukuba into iyinyani na.",
+        "1": "Inokunika iimpendulo ezivakala zizithembile kodwa ziphosakele, okanye yenze izinto, amaqhalo neereferensi.",
+        "2": "Inokuphinda iingcinga ezingakhuselekanga ezivela kwizinto eyazifunda.",
+        "3": "Ayithatheli indawo yokucinga kwakho, unjingalwazi wakho okanye incwadi yakho yokufunda.",
+        "4": "Phatha oko ikuthethayo njengomzekelo wokuqala okanye indawo yokuqala, ungasoze ukuthathe njengempendulo yokugqibela."
+      },
+      "tip": "Ukuba impendulo ibaluleke ngokwenene, yijonge kwiinkcukacha zakho, kwincwadi yakho yokufunda okanye kwiwebhsayithi enokuthenjwa."
+    },
+    "ai-2-learn-not-cheat": {
+      "title": "Ukusebenzisa i-AI ukufunda, hayi ukurhweba",
+      "summary": "Yeyiphi indlela elungileyo yokuyisebenzisa, neyaphula imithetho.",
+      "desc": "Ukungenisa umsebenzi obhalwe yi-AI uthi ngowakho luhlobo lokurhweba. Ukuba isetyenziswe kakuhle, i-AI inokukunceda uqonde ngakumbi.",
+      "steps": {
+        "0": "Funda isikhokelo semodyuli yakho neziqinisekiso zovavanyo. Unjingalwazi ngamnye usetha imithetho yokusetyenziswa kwe-AI kwimodyuli yakhe.",
+        "1": "Ukuba awuqinisekanga ukuba isixhobo siyavunyelwa, buza unjingalwazi wakho phambi kokuba usisebenzise.",
+        "2": "Ukusetyenziswa okulungileyo: yicele ichaze ingcinga ngamagama alula, ikuvavanye phambi kovavanyo, okanye icebise indlela yokucwangcisa isincoko.",
+        "3": "Ukusetyenziswa okunobungozi: ukuyenza ibhale umsebenzi wakho, ikhowudi okanye iimpendulo, uze uzingenise njengomsebenzi wakho.",
+        "4": "Ukuba ukusetyenziswa kwe-AI kuvunyelwe, chaza ukuba uyisebenzise njani, ngendlela acela ngayo unjingalwazi wakho.",
+        "5": "Yenza ukucinga nokubhala ngokwakho, ukuze ukwazi ukuchaza umsebenzi wakho kuvavanyo okanye kwi-oral."
+      },
+      "tip": "Ukuhlolwa okulungileyo: ungayichaza uze uyikhusele yonke umgca womsebenzi wakho ngaphandle kwesixhobo se-AI esivuliweyo?"
+    },
+    "ai-3-privacy": {
+      "title": "Ukukhusela ubumfihlo bakho nge-AI",
+      "summary": "Into ongazange uyichwethezele kwincoko ye-AI.",
+      "desc": "Okoukuchwethezayo kwisixhobo se-AI kunokugcinwa, kwaye kusetyenziswe yinkampani eyisebenzisayo.",
+      "steps": {
+        "0": "Musa ukuchwetheza inombolo yakho yomfundi, inombolo yesazisi, amagama okugqitha, idilesi okanye iinkcukacha zebhanki kwisixhobo se-AI.",
+        "1": "Musa ukunamathelisela ulwazi lobuqu ngabanye abantu, njengemifanekiso okanye imiyalezo yabo.",
+        "2": "Musa ukunamathelisela umsebenzi wabanye, njengovavanyo lukanjingalwazi okanye umsebenzi wesifundo, ngaphandle kwemvume.",
+        "3": "Jonga iisetingi zobumfihlo zesixhobo, uze uvale imbali yencoko okanye uqeqesho ngedatha yakho ukuba unako.",
+        "4": "Ukhathalele ii-app zasimahla ezicela iimvume ezininzi."
+      },
+      "tip": "Umgaqo olula: ukuba ubungayibeki kwibhodi yeendaba kawonke-wonke, musa ukuyibeka kwincoko ye-AI."
+    },
+    "ai-4-check-and-credit": {
+      "title": "Ukujonga nokwamkela iziphumo ze-AI",
+      "summary": "Yiqinisekise, yibeke ngamagama akho, kwaye unyanisekile.",
+      "desc": "Phambi kokusebenzisa nantoni na esinikwa sisixhobo se-AI, yijonge, kwaye unyanisekile ngokuba ivela phi.",
+      "steps": {
+        "0": "Jonga inyaniso nganye, umhla, inani negama kwimithombo enokuthenjwa.",
+        "1": "Khangela nayiphi na incwadi, inqaku okanye amaqhalo ayinikayo. Izixhobo ze-AI ngamanye amaxesha zenza iireferensi ezingekhoyo.",
+        "2": "Kwikhowudi, yiqhube uze uyivavanye. Qinisekisa ukuba uyayiqonda inxalenye nganye phambi kokuyisebenzisa.",
+        "3": "Beka iingcinga ngamagama akho. Ukukopa umbhalo we-AI ngqo emsebenzini wakho kunokubalwa njengobusela bemibhalo.",
+        "4": "Sebenzisa indlela yokubhekisa icelwa sisebe lakho, ulandele imithetho yalo ekukhankanyeni i-AI.",
+        "5": "Xa unesithandabuzo, yiba nenyaniso ngayo uze ubuze unjingalwazi wakho."
+      },
+      "tip": "Unoxanduva lwayo yonke into oyingenisayo, kubandakanywa nawaphi na amaphutha esiwenzele wona isixhobo se-AI."
+    }
   }
 }

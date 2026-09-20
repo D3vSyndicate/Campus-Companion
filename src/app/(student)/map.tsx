@@ -18,8 +18,11 @@ import {
     type PlaceCategory,
 } from '../../data/campus';
 import { fetchWithOfflineFallback } from '../../lib/offlineData';
+import { campusName, categoryLabel } from '../../lib/campusText';
+import i18n from '../../i18n';
 import { walkingRoute, type RouteResult } from '../../lib/routing';
 import { useTheme } from '../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 type Mode = 'browse' | 'place' | 'pickFrom' | 'route' | 'lost';
 type RouteState = { fromId: string; toId: string; loading: boolean; result: RouteResult | null };
@@ -31,6 +34,7 @@ const pad = (value: number) => String(value).padStart(2, '0');
 const localIsoDate = (date: Date) => `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
 
 export default function CampusMapScreen() {
+  const { t } = useTranslation();
   const { colors, resolvedScheme } = useTheme();
   const insets = useSafeAreaInsets();
   const { height } = useWindowDimensions();
@@ -87,7 +91,7 @@ export default function CampusMapScreen() {
 
         const nearest: CampusId =
           distanceMeters([lat, lng], CAMPUSES.south.center) <= distanceMeters([lat, lng], CAMPUSES.north.center) ? 'south' : 'north';
-        const detail = [row.building, row.room_number ? `Room ${row.room_number}` : '', row.directions]
+        const detail = [row.building, row.room_number ? i18n.t('map.room', { number: String(row.room_number) }) : '', row.directions]
           .map((part) => String(part ?? '').trim())
           .filter(Boolean)
           .join(' · ');
@@ -244,7 +248,7 @@ export default function CampusMapScreen() {
     if (!selected) return;
     try {
       await Share.share({
-        message: `${selected.name}${selected.number ? ` (Building ${selected.number})` : ''}, ${CAMPUSES[selected.campus].name}.`,
+        message: `${selected.name}${selected.number ? ` (${t('map.building', { number: selected.number })})` : ''}, ${campusName(selected.campus)}.`,
       });
     } catch {
       // Sharing is not available everywhere, and that is fine.
@@ -367,16 +371,16 @@ export default function CampusMapScreen() {
                 setMode('browse');
               }
             }}
-            placeholder="Search a building, number or place"
+            placeholder={t('map.searchPlaceholder')}
             placeholderTextColor={colors.textSecondary}
             style={[styles.searchInput, { color: colors.text }]}
             returnKeyType="search"
             autoCapitalize="none"
             autoCorrect={false}
-            accessibilityLabel="Search the campus map"
+            accessibilityLabel={t('map.searchLabel')}
           />
           {query ? (
-            <Pressable accessibilityRole="button" accessibilityLabel="Clear search" onPress={() => setQuery('')} hitSlop={10}>
+            <Pressable accessibilityRole="button" accessibilityLabel={t('map.clear')} onPress={() => setQuery('')} hitSlop={10}>
               <Ionicons name="close-circle" size={19} color={colors.textSecondary} />
             </Pressable>
           ) : null}
@@ -394,7 +398,7 @@ export default function CampusMapScreen() {
                   onPress={() => chooseCampus(id)}
                   style={[styles.segment, active && { backgroundColor: colors.accent }]}
                 >
-                  <Text style={[styles.segmentText, { color: active ? ink : colors.textSecondary }]}>{CAMPUSES[id].name}</Text>
+                  <Text style={[styles.segmentText, { color: active ? ink : colors.textSecondary }]}>{campusName(id)}</Text>
                 </Pressable>
               );
             })}
@@ -405,7 +409,7 @@ export default function CampusMapScreen() {
             style={[styles.lost, { backgroundColor: colors.surface, borderColor: colors.border }, shadow]}
           >
             <Ionicons name="help-buoy-outline" size={17} color={colors.accent} />
-            <Text style={[styles.lostText, { color: colors.text }]}>I am lost</Text>
+            <Text style={[styles.lostText, { color: colors.text }]}>{t('map.lost')}</Text>
           </Pressable>
         </View>
 
@@ -434,7 +438,7 @@ export default function CampusMapScreen() {
                 ]}
               >
                 {meta ? <View style={[styles.chipDot, { backgroundColor: meta.color }]} /> : null}
-                <Text style={[styles.chipText, { color: active ? ink : colors.text }]}>{meta ? meta.label : 'All places'}</Text>
+                <Text style={[styles.chipText, { color: active ? ink : colors.text }]}>{key === 'all' ? t('map.allPlaces') : categoryLabel(key)}</Text>
               </Pressable>
             );
           })}
@@ -444,7 +448,7 @@ export default function CampusMapScreen() {
 
       {/* Zoom */}
       <View style={[styles.zoom, { bottom: fullView ? 18 : sheetHeight + 14 }]} pointerEvents="box-none">
-        {([['add', 1, 'Zoom in'], ['remove', -1, 'Zoom out']] as const).map(([icon, delta, label]) => (
+        {([['add', 1, t('map.zoomIn')], ['remove', -1, t('map.zoomOut')]] as const).map(([icon, delta, label]) => (
           <Pressable
             key={icon}
             accessibilityRole="button"
@@ -465,7 +469,7 @@ export default function CampusMapScreen() {
           style={[styles.wholeMap, { bottom: 18, backgroundColor: colors.accent, borderColor: colors.accent }, shadow]}
         >
           <Ionicons name="search" size={17} color={ink} />
-          <Text style={[styles.wholeMapText, { color: ink }]}>Search and places</Text>
+          <Text style={[styles.wholeMapText, { color: ink }]}>{t('map.searchAndPlaces')}</Text>
         </Pressable>
       ) : (
         <Pressable
@@ -474,7 +478,7 @@ export default function CampusMapScreen() {
           style={[styles.wholeMap, { bottom: sheetHeight + 14, backgroundColor: colors.surface, borderColor: colors.border }, shadow]}
         >
           <Ionicons name="expand-outline" size={17} color={colors.text} />
-          <Text style={[styles.wholeMapText, { color: colors.text }]}>Whole map</Text>
+          <Text style={[styles.wholeMapText, { color: colors.text }]}>{t('map.wholeMap')}</Text>
         </Pressable>
       )}
 
@@ -490,7 +494,7 @@ export default function CampusMapScreen() {
             <View style={[styles.offline, { backgroundColor: colors.card, borderColor: colors.border }]}>
               <Ionicons name="cloud-offline-outline" size={18} color={colors.accent} />
               <Text style={[styles.offlineText, { color: colors.textSecondary }]}>
-                The map cannot load right now, but you can still search buildings and numbers below.
+                {t('map.unavailable')}
               </Text>
             </View>
           ) : null}

@@ -3,6 +3,7 @@ import { Modal, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react
 import { normaliseTime } from '../../lib/personalEntries';
 import { useTheme } from '../../theme/ThemeContext';
 import { ScaledText as Text } from '../ScaledText';
+import { useTranslation } from 'react-i18next';
 
 // Lets a student put their own things on the calendar — a res event, a study group, a shift.
 // Deliberately plain: a title and a day are enough, and times are optional.
@@ -17,6 +18,7 @@ interface AddEntryFormProps {
 }
 
 export function AddEntryForm({ visible, date, dateLabel, onCancel, onSave }: AddEntryFormProps) {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const [title, setTitle] = useState('');
   const [start, setStart] = useState('');
@@ -34,23 +36,23 @@ export function AddEntryForm({ visible, date, dateLabel, onCancel, onSave }: Add
 
   const save = () => {
     if (!title.trim()) {
-      setError('Give it a name so you recognise it later.');
+      setError(t('cal.form.needName'));
       return;
     }
     // An unreadable time would sort wrongly and show as nonsense, so it is caught here rather than
     // saved. Leaving both blank is fine — it becomes an all-day note.
     const startTime = start.trim() ? normaliseTime(start) : '';
     if (start.trim() && !startTime) {
-      setError('Start time should look like 18:30.');
+      setError(t('cal.form.startFormat'));
       return;
     }
     const endTime = end.trim() ? normaliseTime(end) : '';
     if (end.trim() && !endTime) {
-      setError('End time should look like 20:00.');
+      setError(t('cal.form.endFormat'));
       return;
     }
     if (startTime && endTime && endTime < startTime) {
-      setError('The end time is before the start time.');
+      setError(t('cal.form.endBefore'));
       return;
     }
 
@@ -69,22 +71,22 @@ export function AddEntryForm({ visible, date, dateLabel, onCancel, onSave }: Add
       <View style={styles.backdrop}>
         <View style={[styles.sheet, { backgroundColor: colors.surface }]}>
           <ScrollView keyboardShouldPersistTaps="handled">
-            <Text style={[styles.title, { color: colors.text }]}>Add to your calendar</Text>
+            <Text style={[styles.title, { color: colors.text }]}>{t('cal.form.title')}</Text>
             <Text style={[styles.subtitle, { color: colors.textSecondary }]}>{dateLabel}</Text>
 
-            <Text style={[styles.label, { color: colors.textSecondary }]}>What is it?</Text>
+            <Text style={[styles.label, { color: colors.textSecondary }]}>{t('cal.form.what')}</Text>
             <TextInput
               value={title}
               onChangeText={setTitle}
-              placeholder="Res braai, study group, shift…"
+              placeholder={t('cal.form.whatEg')}
               placeholderTextColor={colors.textSecondary}
               style={[styles.input, field]}
-              accessibilityLabel="Entry name"
+              accessibilityLabel={t('cal.form.entryName')}
             />
 
             <View style={styles.row}>
               <View style={styles.half}>
-                <Text style={[styles.label, { color: colors.textSecondary }]}>Starts (optional)</Text>
+                <Text style={[styles.label, { color: colors.textSecondary }]}>{t('cal.form.starts')}</Text>
                 <TextInput
                   value={start}
                   onChangeText={setStart}
@@ -92,11 +94,11 @@ export function AddEntryForm({ visible, date, dateLabel, onCancel, onSave }: Add
                   placeholderTextColor={colors.textSecondary}
                   keyboardType="numbers-and-punctuation"
                   style={[styles.input, field]}
-                  accessibilityLabel="Start time"
+                  accessibilityLabel={t('cal.form.startTime')}
                 />
               </View>
               <View style={styles.half}>
-                <Text style={[styles.label, { color: colors.textSecondary }]}>Ends (optional)</Text>
+                <Text style={[styles.label, { color: colors.textSecondary }]}>{t('cal.form.ends')}</Text>
                 <TextInput
                   value={end}
                   onChangeText={setEnd}
@@ -104,19 +106,19 @@ export function AddEntryForm({ visible, date, dateLabel, onCancel, onSave }: Add
                   placeholderTextColor={colors.textSecondary}
                   keyboardType="numbers-and-punctuation"
                   style={[styles.input, field]}
-                  accessibilityLabel="End time"
+                  accessibilityLabel={t('cal.form.endTime')}
                 />
               </View>
             </View>
 
-            <Text style={[styles.label, { color: colors.textSecondary }]}>Where (optional)</Text>
+            <Text style={[styles.label, { color: colors.textSecondary }]}>{t('cal.form.where')}</Text>
             <TextInput
               value={venue}
               onChangeText={setVenue}
-              placeholder="Res common room"
+              placeholder={t('cal.form.whereEg')}
               placeholderTextColor={colors.textSecondary}
               style={[styles.input, field]}
-              accessibilityLabel="Place"
+              accessibilityLabel={t('cal.form.place')}
             />
 
             {error ? <Text style={[styles.error, { color: colors.danger }]}>{error}</Text> : null}
@@ -130,7 +132,7 @@ export function AddEntryForm({ visible, date, dateLabel, onCancel, onSave }: Add
                 pressed && { opacity: 0.85 },
               ]}
             >
-              <Text style={styles.primaryLabel}>Save to my calendar</Text>
+              <Text style={styles.primaryLabel}>{t('cal.form.save')}</Text>
             </Pressable>
 
             <Pressable
@@ -141,13 +143,12 @@ export function AddEntryForm({ visible, date, dateLabel, onCancel, onSave }: Add
               }}
               style={({ pressed }) => [styles.cancel, pressed && { opacity: 0.6 }]}
             >
-              <Text style={[styles.cancelLabel, { color: colors.textSecondary }]}>Cancel</Text>
+              <Text style={[styles.cancelLabel, { color: colors.textSecondary }]}>{t('common.cancel')}</Text>
             </Pressable>
 
             {/* Said plainly, because a student may reasonably expect it to sync. */}
             <Text style={[styles.note, { color: colors.textSecondary }]}>
-              Saved on this phone only. Staff cannot see what you add here, and it will not appear on
-              another device.
+              {t('cal.form.note')}
             </Text>
           </ScrollView>
         </View>

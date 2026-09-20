@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { PageHeader } from '../../components/PageHeader';
 import { ScaledText as Text } from '../../components/ScaledText';
@@ -8,60 +9,25 @@ import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../theme/ThemeContext';
 
 // Wording pairs come from the orientation spec's "supportive UI wording" table: the same kindness
-// the app shows students is what a buddy should say out loud.
-const SAY_THIS: { situation: string; avoid: string; better: string }[] = [
-  {
-    situation: 'A student missed a session',
-    avoid: 'You missed this session.',
-    better: 'This session has already passed. Here is what you can do next.',
-  },
-  {
-    situation: 'A student does not know where to go',
-    avoid: 'Venue unknown.',
-    better: 'Not sure where this is? Here are directions.',
-  },
-  {
-    situation: 'A student asks a basic question',
-    avoid: 'That is an obvious question.',
-    better: 'Many new students ask this. Here is a quick guide.',
-  },
-  {
-    situation: 'A student cannot access Funda',
-    avoid: 'Login failed.',
-    better: "Let's check a few things: your username, password and internet connection.",
-  },
-  {
-    situation: 'A student needs support',
-    avoid: 'Contact support.',
-    better: 'Tell us what you need help with, and we will guide you to the right place.',
-  },
+// the app shows students is what a buddy should say out loud. The words themselves live in the locale
+// files under buddyGuide.*, so this list only says which entries to show, and in what order.
+const SAY_THIS = ['missed', 'lost', 'basic', 'funda', 'support'];
+
+const PRINCIPLES: { id: string; icon: keyof typeof Ionicons.glyphMap }[] = [
+  { id: 'courage', icon: 'flame-outline' },
+  { id: 'empathy', icon: 'heart-outline' },
+  { id: 'vulnerability', icon: 'hand-left-outline' },
+  { id: 'shame', icon: 'shield-checkmark-outline' },
 ];
 
-const PRINCIPLES: { icon: keyof typeof Ionicons.glyphMap; title: string; text: string }[] = [
-  { icon: 'flame-outline', title: 'Courage', text: 'Encourage the next small step: attend the session, ask the question, send the email.' },
-  { icon: 'heart-outline', title: 'Empathy', text: 'Orientation can feel overwhelming. Use warm, plain words and skip the jargon.' },
-  { icon: 'hand-left-outline', title: 'Vulnerability', text: 'Make it safe to say "I do not know yet". Share a time you felt the same.' },
-  { icon: 'shield-checkmark-outline', title: 'Shame resilience', text: 'Never make anyone feel late, lost or foolish. Always leave them with a next step.' },
-];
+const BOUNDARIES = ['b1', 'b2', 'b3', 'b4'];
 
-const BOUNDARIES = [
-  'You are a buddy, not a counsellor. For serious worries about safety or wellbeing, refer the student to professional support and tell the orientation coordinators.',
-  'Never ask for ID numbers, medical details or financial information, and do not share what a student tells you in confidence.',
-  'Keep Tribe chats respectful. Orientation staff can read them to help keep the space safe.',
-  'If you do not know the answer, say so, then find it together in the Answers tab or ask a coordinator.',
-];
-
-const CHECKLIST = [
-  'Say hello to your tribe in the chat',
-  "Read today's announcements",
-  "Look at this week's schedule and know where the venues are",
-  'Save the key contacts in the Refer tab',
-  'Read through the FAQs so the common answers feel familiar',
-];
+const CHECKLIST = ['c1', 'c2', 'c3', 'c4', 'c5'];
 
 const storageKey = (userId: string) => `buddy:checklist:${userId}`;
 
 export default function BuddyGuide() {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const { user } = useAuth();
   const userId = user?.id ?? 'guest';
@@ -88,18 +54,18 @@ export default function BuddyGuide() {
   return (
     <ScrollView style={{ backgroundColor: colors.background }} contentContainerStyle={styles.content}>
       <PageHeader
-        eyebrow="FYS BUDDY"
-        title="Buddy guide"
-        subtitle="As a first-year student buddy you help new students find their feet during orientation and the first weeks. You share information, point to help, and make it feel normal to ask."
+        eyebrow={t('buddy.eyebrow')}
+        title={t('buddy.actions.guide.title')}
+        subtitle={t('buddyGuide.subtitle')}
       />
 
-      <Text style={[styles.heading, { color: colors.text }]}>Your first-week checklist</Text>
+      <Text style={[styles.heading, { color: colors.text }]}>{t('buddyGuide.checklistTitle')}</Text>
       <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}>
-        {CHECKLIST.map((item, index) => {
+        {CHECKLIST.map((id, index) => {
           const checked = done.includes(index);
           return (
             <TouchableOpacity
-              key={item}
+              key={id}
               accessibilityRole="checkbox"
               accessibilityState={{ checked }}
               onPress={() => toggle(index)}
@@ -110,43 +76,43 @@ export default function BuddyGuide() {
                 size={22}
                 color={checked ? colors.accent : colors.textSecondary}
               />
-              <Text style={[styles.checkText, { color: colors.text }, checked && styles.checked]}>{item}</Text>
+              <Text style={[styles.checkText, { color: colors.text }, checked && styles.checked]}>{t(`buddyGuide.checklist.${id}`)}</Text>
             </TouchableOpacity>
           );
         })}
         <Text style={[styles.progress, { color: colors.textSecondary }]}>
-          {done.length} of {CHECKLIST.length} done. One step at a time.
+          {t('buddyGuide.progress', { done: done.length, total: CHECKLIST.length })}
         </Text>
       </View>
 
-      <Text style={[styles.heading, { color: colors.text }]}>How to help</Text>
+      <Text style={[styles.heading, { color: colors.text }]}>{t('buddyGuide.howToHelp')}</Text>
       {PRINCIPLES.map((principle) => (
-        <View key={principle.title} style={[styles.principle, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+        <View key={principle.id} style={[styles.principle, { backgroundColor: colors.surface, borderColor: colors.border }]}>
           <View style={[styles.icon, { backgroundColor: colors.card }]}>
             <Ionicons name={principle.icon} size={20} color={colors.accent} />
           </View>
           <View style={styles.principleText}>
-            <Text style={[styles.principleTitle, { color: colors.text }]}>{principle.title}</Text>
-            <Text style={[styles.body, { color: colors.textSecondary }]}>{principle.text}</Text>
+            <Text style={[styles.principleTitle, { color: colors.text }]}>{t(`buddyGuide.principles.${principle.id}.title`)}</Text>
+            <Text style={[styles.body, { color: colors.textSecondary }]}>{t(`buddyGuide.principles.${principle.id}.text`)}</Text>
           </View>
         </View>
       ))}
 
-      <Text style={[styles.heading, { color: colors.text }]}>Say this, not that</Text>
-      {SAY_THIS.map((row) => (
-        <View key={row.situation} style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}>
-          <Text style={[styles.situation, { color: colors.textSecondary }]}>{row.situation}</Text>
-          <Text style={[styles.avoid, { color: colors.danger }]}>Avoid: {row.avoid}</Text>
-          <Text style={[styles.better, { color: colors.text }]}>Try: {row.better}</Text>
+      <Text style={[styles.heading, { color: colors.text }]}>{t('buddyGuide.sayThis')}</Text>
+      {SAY_THIS.map((id) => (
+        <View key={id} style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+          <Text style={[styles.situation, { color: colors.textSecondary }]}>{t(`buddyGuide.say.${id}.situation`)}</Text>
+          <Text style={[styles.avoid, { color: colors.danger }]}>{t('buddyGuide.avoid', { text: t(`buddyGuide.say.${id}.avoid`) })}</Text>
+          <Text style={[styles.better, { color: colors.text }]}>{t('buddyGuide.try', { text: t(`buddyGuide.say.${id}.better`) })}</Text>
         </View>
       ))}
 
-      <Text style={[styles.heading, { color: colors.text }]}>Your boundaries</Text>
+      <Text style={[styles.heading, { color: colors.text }]}>{t('buddyGuide.boundariesTitle')}</Text>
       <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}>
-        {BOUNDARIES.map((line) => (
-          <View key={line} style={styles.bulletRow}>
+        {BOUNDARIES.map((id) => (
+          <View key={id} style={styles.bulletRow}>
             <View style={[styles.dot, { backgroundColor: colors.accent }]} />
-            <Text style={[styles.body, styles.bulletText, { color: colors.textSecondary }]}>{line}</Text>
+            <Text style={[styles.body, styles.bulletText, { color: colors.textSecondary }]}>{t(`buddyGuide.boundaries.${id}`)}</Text>
           </View>
         ))}
       </View>

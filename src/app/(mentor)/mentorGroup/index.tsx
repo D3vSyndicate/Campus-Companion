@@ -8,8 +8,10 @@ import {
   View,
 } from 'react-native';
 import { useTheme } from '../../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 export default function MentorTribe() {
+  const { t } = useTranslation();
   const router = useRouter();
   const { colors } = useTheme();
 
@@ -20,11 +22,11 @@ export default function MentorTribe() {
     >
       <View style={styles.header}>
         <Text style={[styles.title, { color: colors.text }]}>
-          Tribe
+          {t('common.tribe')}
         </Text>
 
         <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-          Connect with your students and manage your mentor community.
+          {t('mgm.tribeSubtitle')}
         </Text>
       </View>
 
@@ -53,7 +55,7 @@ export default function MentorTribe() {
 
         <View style={styles.cardContent}>
           <Text style={[styles.cardTitle, { color: colors.text }]}>
-            Mentor Groups
+            {t('mg.title')}
           </Text>
 
           <Text
@@ -62,8 +64,7 @@ export default function MentorTribe() {
               { color: colors.textSecondary },
             ]}
           >
-            Create and manage groups for your students, approve
-            requests, and send announcements.
+            {t('mgm.groupsText')}
           </Text>
         </View>
 

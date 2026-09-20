@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
 import { AuthGate } from '../../components/AuthGate';
+import { EnglishOnly } from '../../i18n/EnglishOnly';
 import { ThemeProvider, useTheme } from '../../theme/ThemeContext';
 
 const TAB_ICON_SIZE = 22;
@@ -79,9 +80,11 @@ function CoordinatorTabs() {
 export default function CoordinatorLayout() {
   return (
     <AuthGate requiredRole="coordinator">
-      <ThemeProvider>
-        <CoordinatorTabs />
-      </ThemeProvider>
+      <EnglishOnly>
+        <ThemeProvider>
+          <CoordinatorTabs />
+        </ThemeProvider>
+      </EnglishOnly>
     </AuthGate>
   );
 }

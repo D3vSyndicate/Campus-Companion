@@ -9,6 +9,7 @@ import i18n from '../../i18n';
 import { isRecent, newestFirst, postedAtOf, postedLabel, useSeenAnnouncements } from '../../lib/announcements';
 import { fetchWithOfflineFallback } from '../../lib/offlineData';
 import { useTheme } from '../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 type Announcement = { id: string; title: string; message: string; priority: string; postedAt: Date | null };
 
@@ -17,6 +18,7 @@ const isUrgent = (priority: string) => ['urgent', 'high'].includes(priority.toLo
 
 // Read-only: buddies see what students are being told, so their answers match.
 export default function BuddyAnnouncements() {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const { user } = useAuth();
   const { seen, markSeen } = useSeenAnnouncements(user?.id);
@@ -71,18 +73,18 @@ export default function BuddyAnnouncements() {
         ListHeaderComponent={
           <View>
             <PageHeader
-              eyebrow="FYS BUDDY"
-              title="Announcements"
-              subtitle="What first-years are being told. If a message is urgent, share it calmly and point students to the next step."
+              eyebrow={t('buddy.eyebrow')}
+              title={t('buddy.actions.announcements.title')}
+              subtitle={t('buddyAnn.subtitle')}
             />
-            {offline ? <ShameResilientBanner message="You are viewing saved announcements while your connection is unavailable." type="info" /> : null}
+            {offline ? <ShameResilientBanner message={t('buddyAnn.saved')} type="info" /> : null}
           </View>
         }
         ListEmptyComponent={
           loading ? (
             <ActivityIndicator color={colors.accent} style={styles.loading} />
           ) : (
-            <Text style={[styles.empty, { color: colors.textSecondary }]}>No announcements have been posted yet.</Text>
+            <Text style={[styles.empty, { color: colors.textSecondary }]}>{t('buddyAnn.none')}</Text>
           )
         }
         renderItem={({ item }) => {

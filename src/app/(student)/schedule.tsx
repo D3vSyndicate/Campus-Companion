@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter, useSegments } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { shortDate } from '../../lib/dates';
 import { ActivityIndicator, Alert, Linking, Pressable, RefreshControl, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { EventsList, mapEvent, venueLookup, type CampusEvent } from '../../components/EventsList';
 import { PageHeader } from '../../components/PageHeader';
@@ -10,16 +11,14 @@ import { ShameResilientBanner } from '../../components/ShameResilientBanner';
 import { fetchWithOfflineFallback } from '../../lib/offlineData';
 import { useTheme } from '../../theme/ThemeContext';
 import { ScheduleItem } from '../../types';
+import i18n from '../../i18n';
 
 type Tab = 'orientation' | 'events';
 
 const TABS: { key: Tab; label: string; icon: keyof typeof Ionicons.glyphMap }[] = [
-  { key: 'orientation', label: 'Orientation', icon: 'school-outline' },
-  { key: 'events', label: 'Campus events', icon: 'megaphone-outline' },
+  { key: 'orientation', label: 'schedule.tabOrientation', icon: 'school-outline' },
+  { key: 'events', label: 'common.eventsTitle', icon: 'megaphone-outline' },
 ];
-
-const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 const normalizeBoolean = (value: unknown): boolean => {
   if (typeof value === 'boolean') return value;
@@ -34,9 +33,9 @@ const toIso = (date: Date) =>
 function dayHeading(iso: string) {
   const [year, month, day] = iso.split('-').map(Number);
   const date = new Date(year, (month || 1) - 1, day || 1);
-  if (!year || Number.isNaN(date.getTime())) return iso || 'Date to be confirmed';
-  const label = `${WEEKDAYS[date.getDay()]} ${date.getDate()} ${MONTHS[date.getMonth()]}`;
-  return iso === toIso(new Date()) ? `Today · ${label}` : label;
+  if (!year || Number.isNaN(date.getTime())) return iso || i18n.t('schedule.dateTbc');
+  const label = shortDate(date);
+  return iso === toIso(new Date()) ? i18n.t('schedule.today', { date: label }) : label;
 }
 
 // Two different things live on this screen:
@@ -139,11 +138,11 @@ export default function ScheduleScreen() {
   const showDirections = (item: ScheduleItem) => {
     const guidance =
       item.directions ||
-      `Start at the main entrance and follow the signs to ${item.venue || 'your venue'}. You can also ask a How2buddy for help.`;
+      t('schedule.directionsText', { venue: item.venue || t('schedule.yourVenue') });
     const buttons = [
       ...(item.venue ? [{ text: t('common.showOnCampusMap'), onPress: () => router.push({ pathname: mapRoute, params: { q: item.venue } } as never) }] : []),
       ...(item.mapLink ? [{ text: t('common.openMap'), onPress: () => void Linking.openURL(item.mapLink!) }] : []),
-      { text: 'OK' },
+      { text: t('common.ok') },
     ];
     Alert.alert(t('common.notSureWhereTitle'), guidance, buttons);
   };
@@ -181,12 +180,12 @@ export default function ScheduleScreen() {
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => void refresh()} tintColor={colors.accent} />}
     >
       <PageHeader
-        eyebrow={onEvents ? "WHAT'S ON" : t('common.orientation')}
-        title={onEvents ? 'Campus events' : t('common.scheduleTitle')}
+        eyebrow={onEvents ? t('schedule.whatsOn') : t('common.orientation')}
+        title={onEvents ? t('common.eventsTitle') : t('common.scheduleTitle')}
         subtitle={
           onEvents
-            ? 'See what is happening around campus, when it starts and where to go.'
-            : 'Your orientation timetable, set by the orientation coordinator. Find your way to each session.'
+            ? t('schedule.eventsSub')
+            : t('schedule.orientationSub')
         }
       />
 
@@ -202,7 +201,7 @@ export default function ScheduleScreen() {
               style={[styles.tab, active && { backgroundColor: colors.accent }]}
             >
               <Ionicons name={icon} size={16} color={active ? colors.text : colors.textSecondary} />
-              <Text style={[styles.tabText, { color: active ? colors.text : colors.textSecondary }]}>{label}</Text>
+              <Text style={[styles.tabText, { color: active ? colors.text : colors.textSecondary }]}>{t(label)}</Text>
             </Pressable>
           );
         })}

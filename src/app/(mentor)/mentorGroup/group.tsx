@@ -11,6 +11,7 @@ import {
 import { useAuth } from '../../../context/AuthContext';
 import { supabase } from '../../../lib/superbase';
 import { useTheme } from '../../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 type MentorGroup = {
   id: string;
@@ -21,6 +22,7 @@ type MentorGroup = {
 };
 
 export default function MentorGroups() {
+  const { t } = useTranslation();
   const router = useRouter();
   const { colors } = useTheme();
   const { user } = useAuth();
@@ -56,7 +58,7 @@ export default function MentorGroups() {
       <View style={styles.headerRow}>
         <View>
           <Text style={[styles.title, { color: colors.text }]}>
-            Mentor Groups
+            {t('mg.title')}
           </Text>
 
           <Text
@@ -65,7 +67,7 @@ export default function MentorGroups() {
               { color: colors.textSecondary },
             ]}
           >
-            Manage your student groups
+            {t('mgm.manageStudents')}
           </Text>
         </View>
 
@@ -95,7 +97,7 @@ export default function MentorGroups() {
             <Text style={[styles.groupName, { color: colors.text }]}>{group.name}</Text>
             <Text style={[styles.groupProgramme, { color: colors.accent }]}>{group.programme}</Text>
             <Text style={[styles.groupDescription, { color: colors.textSecondary }]} numberOfLines={2}>
-              {group.description || 'Manage your mentor group.'}
+              {group.description || t('mgm.manageYours')}
             </Text>
           </View>
           <Ionicons name="chevron-forward" size={22} color={colors.textSecondary} />
@@ -118,7 +120,7 @@ export default function MentorGroups() {
         </View>
 
         <Text style={[styles.emptyTitle, { color: colors.text }]}>
-          No mentor groups yet
+          {t('mgm.noGroups')}
         </Text>
 
         <Text
@@ -127,8 +129,7 @@ export default function MentorGroups() {
             { color: colors.textSecondary },
           ]}
         >
-          Create your first mentor group to start connecting
-          with your students.
+          {t('mgm.noGroupsText')}
         </Text>
 
         <Pressable
@@ -143,7 +144,7 @@ export default function MentorGroups() {
           <Ionicons name="add" size={20} color="#FFFFFF" />
 
           <Text style={styles.createButtonText}>
-            Create Group
+            {t('mgm.createGroup')}
           </Text>
         </Pressable>
       </View>

@@ -5,6 +5,7 @@ import { PageHeader } from '../../components/PageHeader';
 import { ScaledText as Text } from '../../components/ScaledText';
 import { supabase } from '../../lib/superbase';
 import { useTheme } from '../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 type ProgrammeItem = { id: string; title: string; content: string; category: string | null };
 type Resource = { id: string; title: string; description: string | null; url: string | null };
@@ -21,6 +22,7 @@ function safeUrl(raw: string | null) {
 
 // What the head of department publishes: programme information, expectations, support resources and who to contact.
 export default function StudentProgrammeScreen() {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const [items, setItems] = useState<ProgrammeItem[]>([]);
   const [assignments, setAssignments] = useState<Assignment[]>([]);
@@ -73,9 +75,9 @@ export default function StudentProgrammeScreen() {
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => void refresh()} tintColor={colors.accent} />}
     >
       <PageHeader
-        eyebrow="YOUR DEPARTMENT"
-        title="Programme information"
-        subtitle="Programme guidance, what is expected of you, and where to get support."
+        eyebrow={t('programme.eyebrow')}
+        title={t('programme.title')}
+        subtitle={t('programme.subtitle')}
         showSearch={false}
       />
 
@@ -85,12 +87,12 @@ export default function StudentProgrammeScreen() {
         <>
           {failed ? (
             <Text style={[styles.error, { color: colors.danger }]}>
-              Some department information could not be loaded. Check your connection and pull down to try again.
+              {t('programme.partial')}
             </Text>
           ) : null}
 
           {nothingPublished && !failed ? (
-            <Text style={[styles.empty, { color: colors.textSecondary }]}>Your department has not published anything yet. Check back soon.</Text>
+            <Text style={[styles.empty, { color: colors.textSecondary }]}>{t('programme.empty')}</Text>
           ) : null}
 
           {programmeNotes.map((item) => (
@@ -102,7 +104,7 @@ export default function StudentProgrammeScreen() {
 
           {expectations.length > 0 ? (
             <>
-              <Text style={[styles.sectionHeading, { color: colors.text }]}>What is expected of you</Text>
+              <Text style={[styles.sectionHeading, { color: colors.text }]}>{t('programme.expected')}</Text>
               {expectations.map((item) => (
                 <View key={item.id} style={[styles.item, { backgroundColor: colors.card, borderColor: colors.border }]}>
                   <Text style={[styles.title, { color: colors.text }]}>{item.title}</Text>
@@ -114,12 +116,12 @@ export default function StudentProgrammeScreen() {
 
           {assignments.length > 0 ? (
             <>
-              <Text style={[styles.sectionHeading, { color: colors.text }]}>Assignments</Text>
+              <Text style={[styles.sectionHeading, { color: colors.text }]}>{t('programme.assignments')}</Text>
               {assignments.map((assignment) => (
                 <View key={assignment.id} style={[styles.item, { backgroundColor: colors.card, borderColor: colors.border }]}>
                   <Text style={[styles.title, { color: colors.text }]}>{assignment.title}</Text>
                   <Text style={[styles.meta, { color: colors.accent }]}>
-                    {[assignment.due_date ? `Due ${assignment.due_date}` : 'No due date', assignment.status].filter(Boolean).join(' · ')}
+                    {[assignment.due_date ? t('programme.due', { date: assignment.due_date }) : t('programme.noDue'), assignment.status].filter(Boolean).join(' · ')}
                   </Text>
                   {assignment.description ? <Text style={[styles.body, { color: colors.textSecondary }]}>{assignment.description}</Text> : null}
                 </View>
@@ -129,7 +131,7 @@ export default function StudentProgrammeScreen() {
 
           {resources.length > 0 ? (
             <>
-              <Text style={[styles.sectionHeading, { color: colors.text }]}>Support resources</Text>
+              <Text style={[styles.sectionHeading, { color: colors.text }]}>{t('programme.resources')}</Text>
               {resources.map((resource) => {
                 const link = safeUrl(resource.url);
                 return (
@@ -145,7 +147,7 @@ export default function StudentProgrammeScreen() {
                     {link ? (
                       <View style={styles.linkRow}>
                         <Ionicons name="open-outline" size={15} color={colors.accent} />
-                        <Text style={[styles.meta, { color: colors.accent }]} numberOfLines={1}>Open resource</Text>
+                        <Text style={[styles.meta, { color: colors.accent }]} numberOfLines={1}>{t('common.openResource')}</Text>
                       </View>
                     ) : null}
                   </Pressable>
@@ -156,12 +158,12 @@ export default function StudentProgrammeScreen() {
 
           {contacts.length > 0 ? (
             <>
-              <Text style={[styles.sectionHeading, { color: colors.text }]}>Department support</Text>
+              <Text style={[styles.sectionHeading, { color: colors.text }]}>{t('programme.deptSupport')}</Text>
               {contacts.map((contact) => (
                 <View key={contact.id} style={[styles.item, { backgroundColor: colors.card, borderColor: colors.border }]}>
                   <Text style={[styles.title, { color: colors.text }]}>{contact.name}</Text>
                   <Text style={[styles.body, { color: colors.textSecondary }]}>
-                    {contact.role || 'Department support'}
+                    {contact.role || t('programme.deptSupport')}
                     {`\n`}
                     {contact.email}
                     {contact.phone ? `\n${contact.phone}` : ''}

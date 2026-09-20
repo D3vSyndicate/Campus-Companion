@@ -13,6 +13,7 @@ import {
 import { useTheme } from '../../theme/ThemeContext';
 import { PageHeader } from '../PageHeader';
 import { ScaledText as Text } from '../ScaledText';
+import { useTranslation } from 'react-i18next';
 
 // Societies a student can join. Searchable, because a first-year arrives looking for one specific
 // thing ("is there a debating society?") rather than browsing seventy entries.
@@ -27,6 +28,7 @@ const FILTERS: { key: Filter; label: string }[] = [
 ];
 
 export function SocietiesScreen() {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const [filter, setFilter] = useState<Filter>('all');
   const [query, setQuery] = useState('');
@@ -49,18 +51,18 @@ export function SocietiesScreen() {
     <View style={[styles.screen, { backgroundColor: colors.background }]}>
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
         <PageHeader
-          eyebrow="Societies"
-          title="Find your people"
-          subtitle="Faith, field of study, or something else entirely. Joining one is the fastest way to stop feeling like a stranger here."
+          eyebrow={t('home.cards.societies.title')}
+          title={t('soc.title')}
+          subtitle={t('soc.subtitle')}
           showSearch={false}
           showBack
           backFallback="/(student)"
         />
 
         <View style={[styles.explainer, { backgroundColor: colors.card, borderColor: colors.border }]}>
-          <Text style={[styles.explainerTitle, { color: colors.text }]}>What is a society?</Text>
+          <Text style={[styles.explainerTitle, { color: colors.text }]}>{t('soc.what')}</Text>
           <Text style={[styles.explainerBody, { color: colors.textSecondary }]}>
-            {WHAT_IS_A_SOCIETY}
+            {t('soc.whatIs')}
           </Text>
         </View>
 
@@ -69,13 +71,13 @@ export function SocietiesScreen() {
           <TextInput
             value={query}
             onChangeText={setQuery}
-            placeholder="Search societies or a payment code"
+            placeholder={t('soc.searchLabel')}
             placeholderTextColor={colors.textSecondary}
             style={[styles.searchInput, { color: colors.text }]}
-            accessibilityLabel="Search societies"
+            accessibilityLabel={t('soc.search')}
           />
           {query ? (
-            <Pressable accessibilityRole="button" accessibilityLabel="Clear search" onPress={() => setQuery('')} hitSlop={10}>
+            <Pressable accessibilityRole="button" accessibilityLabel={t('map.clear')} onPress={() => setQuery('')} hitSlop={10}>
               <Ionicons name="close-circle" size={18} color={colors.textSecondary} />
             </Pressable>
           ) : null}
@@ -100,7 +102,7 @@ export function SocietiesScreen() {
                 ]}
               >
                 <Text style={[styles.chipLabel, { color: active ? '#071B2C' : colors.textSecondary }]}>
-                  {option.label}
+                  {option.key === 'all' ? t('common.allCategories') : t(`soc.cat.${option.key}.label`)}
                 </Text>
               </Pressable>
             );
@@ -109,16 +111,15 @@ export function SocietiesScreen() {
 
         {filter !== 'all' ? (
           <Text style={[styles.blurb, { color: colors.textSecondary }]}>
-            {CATEGORY_META[filter].blurb}
+            {t(`soc.cat.${filter}.blurb`)}
           </Text>
         ) : null}
 
         {shown.length === 0 ? (
           <View style={[styles.notice, { backgroundColor: colors.card, borderColor: colors.border }]}>
-            <Text style={[styles.noticeTitle, { color: colors.text }]}>No match</Text>
+            <Text style={[styles.noticeTitle, { color: colors.text }]}>{t('soc.noMatch')}</Text>
             <Text style={[styles.noticeBody, { color: colors.textSecondary }]}>
-              This list is not complete — see the note at the bottom. If your society is not here, it
-              may still exist. Ask at Student Governance and Development.
+              {t('soc.incomplete')}
             </Text>
           </View>
         ) : (
@@ -129,16 +130,13 @@ export function SocietiesScreen() {
         <View style={[styles.disclaimer, { backgroundColor: colors.surfaceMuted, borderColor: colors.border }]}>
           <Ionicons name="information-circle-outline" size={16} color={colors.textSecondary} />
           <View style={styles.disclaimerCopy}>
-            <Text style={[styles.disclaimerTitle, { color: colors.text }]}>About this list</Text>
+            <Text style={[styles.disclaimerTitle, { color: colors.text }]}>{t('soc.about')}</Text>
             <Text style={[styles.disclaimerBody, { color: colors.textSecondary }]}>
-              Taken from the printed society sign-up sheet, which was cut off at the bottom of the
-              page — so the Academic and Developmental sections are incomplete. Fees and codes can
-              change between years. Confirm before you pay.
+              {t('soc.aboutText')}
             </Text>
             {clashes.length > 0 ? (
               <Text style={[styles.disclaimerBody, { color: colors.textSecondary }]}>
-                {clashes.join(' and ')} {clashes.length === 1 ? 'appears' : 'appear'} against more
-                than one society on the sheet. Check the code with the society before paying.
+                {t(clashes.length === 1 ? 'soc.clashOne' : 'soc.clashMany', { codes: clashes.join(` ${t('common.and')} `) })}
               </Text>
             ) : null}
           </View>

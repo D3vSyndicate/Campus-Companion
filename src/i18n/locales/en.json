@@ -122,7 +122,17 @@
     "openMap": "Open map",
     "startHereEyebrow": "WELCOME",
     "startHereCta": "Start the guides",
-    "startHereContinue": "Continue"
+    "startHereContinue": "Continue",
+    "offlineRefresh": "You are offline, so this may be out of date. It will refresh when you are back online.",
+    "offlineShort": "You are offline, so this may be out of date.",
+    "cancel": "Cancel",
+    "goBack": "Go Back",
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "share": "Share",
+    "ok": "OK",
+    "vs": "vs",
+    "and": "and"
   },
   "home": {
     "brand": "Campus Companion",
@@ -403,7 +413,8 @@
       "watched": "I understand that mentors and coordinators can read Tribe messages, and that messages that break these rules can be removed.",
       "agree": "I have read this and I agree to follow it.",
       "continue": "Agree and continue"
-    }
+    },
+    "stillSettingUp": "Tribe is still being set up. Please check again soon."
   },
   "support": {
     "eyebrow": "STUDENT SUPPORT",
@@ -420,5 +431,1223 @@
   },
   "faq": {
     "cantFind": "Can't find it? Ask a question. Others are probably wondering too."
+  },
+  "checklist": {
+    "allDone": "🎉 You’re crushing it! You’ve finished your checklist.",
+    "notAvailableTitle": "Your checklist is not available yet",
+    "notAvailableText": "Your orientation steps will appear here when they are published."
+  },
+  "contacts": {
+    "noneTitle": "No support contacts yet",
+    "noneText": "Your support team will appear here when contacts are published."
+  },
+  "programmes": {
+    "title": "Programmes",
+    "subtitle": "Find out what each programme covers, where it can take you, and who to ask for academic advice.",
+    "loadFail": "Programmes could not be loaded",
+    "none": "No programmes published yet",
+    "retry": "Please try again when your connection is available.",
+    "noneText": "The School of IT will publish programme information here. In the meantime, ask your buddy or a coordinator.",
+    "backAll": "Back to all programmes",
+    "all": "All programmes",
+    "notFound": "We could not find that programme",
+    "notFoundText": "It may have been removed. Go back to see the current list.",
+    "detailEyebrow": "School of IT programme",
+    "about": "About this programme",
+    "years": "Year level structure",
+    "modules": "Key modules",
+    "careers": "Career possibilities",
+    "expectations": "Academic expectations",
+    "advice": "Academic Advice",
+    "theAdvisor": "the advisor",
+    "noAdvisor": "Advisor details have not been added yet. Ask your buddy or a coordinator who to speak to.",
+    "openDetail": "{{name}}. Open programme details"
+  },
+  "programme": {
+    "eyebrow": "YOUR DEPARTMENT",
+    "title": "Programme information",
+    "subtitle": "Programme guidance, what is expected of you, and where to get support.",
+    "partial": "Some department information could not be loaded. Check your connection and pull down to try again.",
+    "empty": "Your department has not published anything yet. Check back soon.",
+    "expected": "What is expected of you",
+    "assignments": "Assignments",
+    "noDue": "No due date",
+    "resources": "Support resources",
+    "deptSupport": "Department support",
+    "due": "Due {{date}}"
+  },
+  "digital": {
+    "aboutTitle": "About this content",
+    "aiNote": "Some of the content on the Digital screen, particularly the images, was created with the help of generative AI tools. Pictures are there to help you understand and may not match the real screens exactly. Check important details, like links and dates, with IT Services or your lecturer.",
+    "guide": "Guide",
+    "closeGuide": "Close guide",
+    "guideIntro": "This guide will help you take your next step with confidence.",
+    "stepsTitle": "Steps to follow",
+    "noSteps": "There are no steps to show yet. You can still explore the guide below.",
+    "videoLabel": "Open optional guide video",
+    "watch": "Watch video",
+    "opensSeparately": "Opens separately",
+    "imageFail": "This picture did not load, but you can still read the steps above.",
+    "openImage": "Open image",
+    "openGuide": "Open guide",
+    "learnMore": "Learn more",
+    "openGuideNamed": "Open guide: {{title}}",
+    "openLesson": "Open {{section}} lesson {{number}}: {{title}}",
+    "openImageNamed": "Open image: {{title}}"
+  },
+  "map": {
+    "searchPlaceholder": "Search a building, number or place",
+    "searchLabel": "Search the campus map",
+    "clear": "Clear search",
+    "lost": "I am lost",
+    "allPlaces": "All places",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "searchAndPlaces": "Search and places",
+    "wholeMap": "Whole map",
+    "unavailable": "The map cannot load right now, but you can still search buildings and numbers below.",
+    "official": "Official university maps",
+    "southPdf": "South PDF",
+    "northPdf": "North PDF",
+    "attribution": "Building numbers: NMU official campus maps (2024). Map data © OpenStreetMap contributors, tiles by HOT hosted by OpenStreetMap France. Positions are approximate, so check building signs.",
+    "nothing": "Nothing matches yet",
+    "tapOne": "Tap one to see it on the map.",
+    "tryNumber": "That is okay. Try the number on the building, like 12, or a word like library, food or clinic.",
+    "lostHelp": "I am lost. Help me",
+    "whereNext": "Where to next?",
+    "sessionsToday": "Your sessions today",
+    "placesNeed": "Places you will probably need",
+    "between": "Between the campuses",
+    "betweenText": "South and North campus are roughly 1.5 km apart on foot. See the route before you set off.",
+    "showWalk": "Show the walk between campuses",
+    "walkingRoute": "Walking route",
+    "startFrom": "Where are you starting from?",
+    "nearYou": "A building number or name near you",
+    "matches": "Matches",
+    "popularStarts": "Popular starting points",
+    "nothingNear": "Nothing matches yet. Try the number on the nearest building.",
+    "swap": "Swap start and destination",
+    "finding": "Finding a good path...",
+    "estimate": "We could not load the exact path right now, so this is an estimate of the distance along a straight line.",
+    "fewerSteps": "Show fewer steps",
+    "lostNumber": "Look for a number on the wall of the nearest building or on a sign, then search it here to see where you are.",
+    "searchNumber": "Search a number",
+    "lostRoad": "Head for a main road or the bus stop. They are easy to find on the map and a good place to start again.",
+    "lostAsk": "Ask someone nearby. Students and staff are happy to point the way, and your buddy in Tribe can help too.",
+    "askTribe": "Ask my Tribe",
+    "lostZoom": "Zoom out to see both campuses and where the buildings are, then work your way to the one you need.",
+    "viewWhole": "View the whole map",
+    "turned": "Feeling turned around? That is completely normal.",
+    "turnedText": "A new campus confuses almost everyone in the first weeks. Here is what helps.",
+    "category": {
+      "learning": "Lectures & labs",
+      "services": "Services & admin",
+      "residence": "Residences",
+      "food": "Food & shops",
+      "sport": "Sport",
+      "transport": "Transport",
+      "building": "Other buildings",
+      "venue": "Orientation venues"
+    },
+    "campus": {
+      "south": "South Campus",
+      "north": "North Campus"
+    },
+    "intro": {
+      "south": "The main campus, in Summerstrand.",
+      "north": "Engineering, science, art and more, north of South Campus."
+    },
+    "numbering": {
+      "south": "Buildings here have low numbers, starting at 1 (Main Building).",
+      "north": "Buildings here are numbered in the 200s (Main Administration Building is 260)."
+    },
+    "foundOne": "1 place found",
+    "foundMany": "{{count}} places found",
+    "walkingTo": "Walking to {{name}}",
+    "rightOne": "Not sure you are at the right one? Look for the number {{number}} on the building or a nearby sign.",
+    "onFoot": "{{distance}} on foot",
+    "allSteps": "Show all {{count}} steps",
+    "room": "Room {{number}}",
+    "building": "Building {{number}}"
+  },
+  "mg": {
+    "title": "Mentor Groups",
+    "subtitle": "Connect with your mentor and fellow students.",
+    "findYours": "Find your mentor group",
+    "findYoursText": "Join a group for your programme and stay connected with your mentor.",
+    "findTitle": "Find a Mentor Group",
+    "findText": "Browse available groups and send a request to join.",
+    "scanTitle": "Scan Mentor QR",
+    "scanText": "Scan a QR code provided by your mentor to request access to their group.",
+    "mine": "My Mentor Group",
+    "mineText": "Check your join request or access your approved mentor group.",
+    "notAutomatic": "Joining a mentor group is not automatic. Your request must be approved by the mentor before you become a member.",
+    "requestPending": "Request Pending",
+    "alreadyRequested": "You have already requested to join this group.",
+    "groupFull": "Group Full",
+    "groupFullText": "This mentor group has reached its maximum capacity.",
+    "joinGroup": "Join Group",
+    "sendRequest": "Send Request",
+    "notSent": "Request not sent",
+    "requestSent": "Request Sent",
+    "requestSentText": "Your request has been sent to the mentor. You will be notified when it is reviewed.",
+    "browse": "Browse available groups",
+    "available": "Available groups",
+    "chooseText": "Choose a mentor group for your programme. Joining requires approval from the mentor.",
+    "loading": "Loading available groups...",
+    "mentorLabel": "Mentor:",
+    "capacity": "Group capacity",
+    "requestToJoin": "Request to Join",
+    "haveQr": "Have a mentor QR code?",
+    "scanDirect": "Scan it to send a join request directly.",
+    "approved": "Request Approved",
+    "approvedText": "Your mentor has approved your request. You are now a member of this mentor group.",
+    "rejected": "Request Rejected",
+    "rejectedText": "Your request was not approved by the mentor. You can request to join another available group.",
+    "pendingText": "Your request has been sent to the mentor. You will become a member once the mentor approves it.",
+    "stillWaiting": "Your request is still waiting for mentor approval.",
+    "statusTitle": "Request Status",
+    "statusSubtitle": "Your mentor group request",
+    "details": "Group Details",
+    "requestedLabel": "Requested:",
+    "progress": "Request Progress",
+    "submitted": "Request Submitted",
+    "submittedText": "Your request was successfully sent to the mentor.",
+    "review": "Mentor Review",
+    "reviewWaiting": "Waiting for your mentor to review the request.",
+    "reviewDone": "Your mentor has reviewed your request.",
+    "approvedShort": "Approved",
+    "rejectedShort": "Rejected",
+    "nowMember": "You are now a member of the mentor group.",
+    "notApproved": "The mentor did not approve this request.",
+    "openMine": "Open My Mentor Group",
+    "findAnother": "Find Another Group",
+    "checkAgain": "Check Again",
+    "oneGroupOnly": "You can only belong to one mentor group at a time. Please wait for this request to be reviewed before requesting another group.",
+    "browseOthers": "You can browse other available mentor groups and submit a new request.",
+    "qrInvalid": "Invalid QR Code",
+    "qrInvalidText": "This QR code does not contain valid mentor group information.",
+    "scanAgain": "Scan Again",
+    "qrFound": "Mentor Group Found",
+    "qrFoundText": "This QR code belongs to a mentor group. Would you like to send a join request?",
+    "joinSentText": "Your join request has been sent to the mentor.",
+    "cameraChecking": "Checking camera permission...",
+    "cameraNeeded": "Camera Permission Required",
+    "cameraNeededText": "Camera access is needed to scan the QR code provided by your mentor.",
+    "allowCamera": "Allow Camera",
+    "scanYours": "Scan your mentor's QR code",
+    "positionQr": "Position the QR code inside the frame",
+    "scanNote": "Scanning the code will send a join request. You will not automatically become a member.",
+    "mentor": "Mentor",
+    "members": "Members",
+    "about": "About this group",
+    "broadcasts": "Mentor Broadcasts",
+    "broadcastsSub": "Important updates from your mentor",
+    "readOnly": "Only mentors can send messages to this group. Students can read broadcasts but cannot reply.",
+    "confirmJoin": "Send a request to join {{name}}?"
+  },
+  "buddy": {
+    "actions": {
+      "myTribe": {
+        "title": "My Tribe",
+        "text": "Chat with the first-years in your group."
+      },
+      "search": {
+        "title": "Search",
+        "text": "Find answers, sessions, contacts and venues fast."
+      },
+      "answers": {
+        "title": "Quick answers",
+        "text": "Find and share answers to common questions."
+      },
+      "announcements": {
+        "title": "Announcements",
+        "text": "Know what students are being told."
+      },
+      "schedule": {
+        "text": "Where students need to be, and when."
+      },
+      "map": {
+        "title": "Campus map",
+        "text": "Find any building and show first-years the way."
+      },
+      "venues": {
+        "title": "Venue guide",
+        "text": "Directions you can give with confidence."
+      },
+      "refer": {
+        "title": "Refer a student",
+        "text": "Who to point students to for each kind of help."
+      },
+      "emergency": {
+        "text": "Numbers to share when a student needs urgent help."
+      },
+      "guide": {
+        "title": "Buddy guide",
+        "text": "Kind wording, your boundaries and a first-week checklist."
+      }
+    },
+    "todaySessions": "Today's sessions",
+    "comingUp": "Coming up on {{date}}",
+    "eyebrow": "FYS BUDDY",
+    "hi": "Hi {{name}}, thank you for being a buddy",
+    "hiThere": "Hi there, thank you for being a buddy",
+    "heroText": "You are the friendly face that makes a first-year feel they belong. You do not need to know everything. You just need to know where to point.",
+    "banner": "Many new students ask the questions they think are obvious. Treat every question as a good one.",
+    "noSessions": "No sessions are scheduled yet. Check the orientation schedule again soon.",
+    "tabAnswers": "Answers",
+    "tabRefer": "Refer",
+    "tabVenues": "Venues"
+  },
+  "buddyGuide": {
+    "say": {
+      "missed": {
+        "situation": "A student missed a session",
+        "avoid": "You missed this session.",
+        "better": "This session has already passed. Here is what you can do next."
+      },
+      "lost": {
+        "situation": "A student does not know where to go",
+        "avoid": "Venue unknown.",
+        "better": "Not sure where this is? Here are directions."
+      },
+      "basic": {
+        "situation": "A student asks a basic question",
+        "avoid": "That is an obvious question.",
+        "better": "Many new students ask this. Here is a quick guide."
+      },
+      "funda": {
+        "situation": "A student cannot access Funda",
+        "avoid": "Login failed.",
+        "better": "Let's check a few things: your username, password and internet connection."
+      },
+      "support": {
+        "situation": "A student needs support",
+        "avoid": "Contact support.",
+        "better": "Tell us what you need help with, and we will guide you to the right place."
+      }
+    },
+    "principles": {
+      "courage": {
+        "title": "Courage",
+        "text": "Encourage the next small step: attend the session, ask the question, send the email."
+      },
+      "empathy": {
+        "title": "Empathy",
+        "text": "Orientation can feel overwhelming. Use warm, plain words and skip the jargon."
+      },
+      "vulnerability": {
+        "title": "Vulnerability",
+        "text": "Make it safe to say \"I do not know yet\". Share a time you felt the same."
+      },
+      "shame": {
+        "title": "Shame resilience",
+        "text": "Never make anyone feel late, lost or foolish. Always leave them with a next step."
+      }
+    },
+    "boundaries": {
+      "b1": "You are a buddy, not a counsellor. For serious worries about safety or wellbeing, refer the student to professional support and tell the orientation coordinators.",
+      "b2": "Never ask for ID numbers, medical details or financial information, and do not share what a student tells you in confidence.",
+      "b3": "Keep Tribe chats respectful. Orientation staff can read them to help keep the space safe.",
+      "b4": "If you do not know the answer, say so, then find it together in the Answers tab or ask a coordinator."
+    },
+    "checklist": {
+      "c1": "Say hello to your tribe in the chat",
+      "c2": "Read today's announcements",
+      "c3": "Look at this week's schedule and know where the venues are",
+      "c4": "Save the key contacts in the Refer tab",
+      "c5": "Read through the FAQs so the common answers feel familiar"
+    },
+    "subtitle": "As a first-year student buddy you help new students find their feet during orientation and the first weeks. You share information, point to help, and make it feel normal to ask.",
+    "checklistTitle": "Your first-week checklist",
+    "progress": "{{done}} of {{total}} done. One step at a time.",
+    "howToHelp": "How to help",
+    "sayThis": "Say this, not that",
+    "avoid": "Avoid: {{text}}",
+    "try": "Try: {{text}}",
+    "boundariesTitle": "Your boundaries"
+  },
+  "buddyAnn": {
+    "subtitle": "What first-years are being told. If a message is urgent, share it calmly and point students to the next step.",
+    "saved": "You are viewing saved announcements while your connection is unavailable.",
+    "none": "No announcements have been posted yet."
+  },
+  "buddyRefer": {
+    "subtitle": "You listen and point the way. Asking for help early is a smart, responsible habit, so make it feel normal.",
+    "safety": "If someone's safety or wellbeing worries you, do not carry it alone. Refer them to professional counselling and wellness services, and tell the orientation coordinators.",
+    "none": "No contacts have been published yet.",
+    "fallbackName": "Support contact"
+  },
+  "buddyVenues": {
+    "subtitle": "Not sure where something is? Many students are not. Give clear, kind directions and offer to walk with them if you can.",
+    "search": "Search venues, buildings or rooms",
+    "noMatch": "No venue matches that yet. Try another word.",
+    "none": "No venues have been added yet.",
+    "soon": "Location details coming soon",
+    "directions": "Directions",
+    "accessibility": "Accessibility",
+    "share": "Share directions",
+    "readOut": "You can still read the directions out to the student."
+  },
+  "share": {
+    "unavailable": "Sharing is not available here",
+    "readAnswer": "You can still read the answer out to the student.",
+    "shareAnswer": "Share this answer"
+  },
+  "mgm": {
+    "tribeSubtitle": "Connect with your students and manage your mentor community.",
+    "groupsText": "Create and manage groups for your students, approve requests, and send announcements.",
+    "manageStudents": "Manage your student groups",
+    "manageYours": "Manage your mentor group.",
+    "noGroups": "No mentor groups yet",
+    "noGroupsText": "Create your first mentor group to start connecting with your students.",
+    "createGroup": "Create Group",
+    "loadFail": "Could not load group",
+    "notFound": "This group could not be found.",
+    "missing": "Missing information",
+    "enterName": "Please enter a group name.",
+    "enterProgramme": "Please enter a programme.",
+    "invalidCapacity": "Invalid capacity",
+    "enterCapacity": "Please enter a valid maximum group capacity.",
+    "signInRequired": "Sign in required",
+    "signInText": "Please sign in before creating a mentor group.",
+    "saveFail": "Could not save changes",
+    "onlyCreator": "Only the mentor who created this group can change it.",
+    "updated": "Group updated",
+    "saved": "Your changes have been saved.",
+    "createFail": "Could not create group",
+    "created": "Group created",
+    "createdText": "Your mentor group is ready. Students can now find it or scan its QR code.",
+    "editTitle": "Edit Mentor Group",
+    "createTitle": "Create Mentor Group",
+    "editSub": "Change the details of your group.",
+    "createSub": "Create a group for your students.",
+    "groupName": "Group Name",
+    "groupNameEg": "e.g. Software Development Group",
+    "programme": "Programme",
+    "programmeEg": "e.g. Software Development",
+    "description": "Description",
+    "descriptionEg": "Describe what this mentor group is for...",
+    "maxCapacity": "Maximum Capacity",
+    "maxCapacityText": "Maximum number of students allowed in this group.",
+    "joinNote": "Students will need to request to join your group. You can approve or reject requests from the group management screen.",
+    "saveChanges": "Save Changes",
+    "capacityUpper": "GROUP CAPACITY",
+    "spacesLeft": "spaces remaining",
+    "manageGroup": "Manage Group",
+    "joinRequests": "Join Requests",
+    "joinRequestsText": "Review students waiting to join your group.",
+    "membersText": "View and manage students in your group.",
+    "qrTitle": "Group QR Code",
+    "qrText": "Show students the QR code to request access.",
+    "broadcast": "Broadcast",
+    "broadcastText": "Send an announcement to your group.",
+    "missingTitle": "Missing title",
+    "enterTitle": "Please enter a broadcast title.",
+    "missingMessage": "Missing message",
+    "enterMessage": "Please enter a message.",
+    "broadcastSent": "Broadcast Sent",
+    "broadcastSentText": "Your message has been sent to all members of this group.",
+    "priorityNormal": "Normal",
+    "priorityImportant": "Important",
+    "priorityUrgent": "Urgent",
+    "broadcastSub": "Send a message to your group",
+    "groupBroadcast": "Group Broadcast",
+    "broadcastIntro": "Send announcements and important information to everyone in your mentor group.",
+    "title": "Title",
+    "titleEg": "e.g. Orientation meeting",
+    "message": "Message",
+    "messageEg": "Write your message...",
+    "priority": "Priority",
+    "sendBroadcast": "Send Broadcast",
+    "previous": "Previous Broadcasts",
+    "readOnlyNote": "Students can read broadcasts but cannot reply or send messages to the group.",
+    "removeMember": "Remove member",
+    "remove": "Remove",
+    "memberRemoved": "Member removed",
+    "membersSub": "Students in your mentor group",
+    "activeMembers": "Active members",
+    "noMembers": "No members yet",
+    "noMembersText": "Students you approve will appear here.",
+    "groupMembers": "Group Members",
+    "joined": "Joined",
+    "regenTitle": "Regenerate QR Code",
+    "regenText": "Regenerating the QR code will invalidate the previous code. Continue?",
+    "regen": "Regenerate",
+    "regenDone": "QR Code regenerated",
+    "regenDoneText": "A new QR code will be generated when the database is connected.",
+    "shareQr": "Share QR Code",
+    "shareQrLater": "QR sharing will be connected later.",
+    "qrCanScan": "Students can scan this code to request access.",
+    "scanToJoin": "Scan to join",
+    "qrHow": "Students can scan this QR code using the Campus Companion app. Scanning creates a join request — it does not automatically add them to the group.",
+    "approvalRequired": "Approval required",
+    "approvalText": "Students will remain pending until you approve their request.",
+    "qrShareOnly": "QR codes should only be shared with students who are part of your programme.",
+    "applicant": "Mentor group applicant",
+    "approveTitle": "Approve request",
+    "approve": "Approve",
+    "approveFail": "Could not approve request",
+    "approvedToast": "Request approved",
+    "rejectTitle": "Reject request",
+    "reject": "Reject",
+    "rejectFail": "Could not reject request",
+    "rejectedToast": "Request rejected",
+    "waiting": "Students waiting for approval",
+    "pendingRequests": "Pending requests",
+    "noPending": "No pending requests",
+    "noPendingText": "New student requests will appear here.",
+    "pending": "Pending",
+    "requested": "Requested",
+    "confirmRemove": "Are you sure you want to remove {{name}} from this group?",
+    "removed": "{{name}} has been removed from the group.",
+    "confirmApprove": "Add {{name}} to this mentor group?",
+    "added": "{{name}} has been added to the group.",
+    "confirmReject": "Reject {{name}}'s request?",
+    "rejectedNamed": "{{name}}'s request has been rejected."
+  },
+  "schedule": {
+    "tabOrientation": "Orientation",
+    "dateTbc": "Date to be confirmed",
+    "whatsOn": "WHAT'S ON",
+    "eventsSub": "See what is happening around campus, when it starts and where to go.",
+    "orientationSub": "Your orientation timetable, set by the orientation coordinator. Find your way to each session.",
+    "yourVenue": "your venue",
+    "today": "Today · {{date}}",
+    "directionsText": "Start at the main entrance and follow the signs to {{venue}}. You can also ask a How2buddy for help."
+  },
+  "events": {
+    "dateTba": "Date to be announced",
+    "timeTba": "Time to be announced",
+    "thisWeek": "This week",
+    "later": "Later",
+    "now": "Happening now",
+    "organisedBy": "Organised by",
+    "cost": "Cost:",
+    "showWhere": "Show me where",
+    "signUp": "Sign up / more info",
+    "nothingElse": "Nothing else is coming up right now. Check back soon.",
+    "none": "No events have been posted yet. Check back soon, or ask your buddy what is on this week.",
+    "from": "From {{time}}",
+    "pictureFor": "Picture for {{title}}"
+  },
+  "date": {
+    "weekdaysShort": {
+      "0": "Sun",
+      "1": "Mon",
+      "2": "Tue",
+      "3": "Wed",
+      "4": "Thu",
+      "5": "Fri",
+      "6": "Sat"
+    },
+    "weekdaysLong": {
+      "0": "Sunday",
+      "1": "Monday",
+      "2": "Tuesday",
+      "3": "Wednesday",
+      "4": "Thursday",
+      "5": "Friday",
+      "6": "Saturday"
+    },
+    "monthsShort": {
+      "0": "Jan",
+      "1": "Feb",
+      "2": "Mar",
+      "3": "Apr",
+      "4": "May",
+      "5": "Jun",
+      "6": "Jul",
+      "7": "Aug",
+      "8": "Sep",
+      "9": "Oct",
+      "10": "Nov",
+      "11": "Dec"
+    },
+    "monthsLong": {
+      "0": "January",
+      "1": "February",
+      "2": "March",
+      "3": "April",
+      "4": "May",
+      "5": "June",
+      "6": "July",
+      "7": "August",
+      "8": "September",
+      "9": "October",
+      "10": "November",
+      "11": "December"
+    },
+    "weekdayHeads": {
+      "0": "M",
+      "1": "T",
+      "2": "W",
+      "3": "T",
+      "4": "F",
+      "5": "S",
+      "6": "S"
+    }
+  },
+  "cal": {
+    "signInFirst": "Sign in first",
+    "signInText": "Your own calendar entries are saved against your account.",
+    "removeTitle": "Remove this?",
+    "keep": "Keep it",
+    "eyebrow": "Calendar",
+    "title": "Everything you have on",
+    "subtitle": "Orientation, lectures, campus events and your own plans, in one month view.",
+    "timetableTitle": "Your timetable",
+    "timetableSub": "Pick your class to see lectures",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "addOwn": "Add your own entry",
+    "add": "Add",
+    "noFriday": "No Friday lectures are loaded yet. Check your printed timetable — this does not mean you are free.",
+    "loading": "Loading your month…",
+    "emptyDay": "Nothing on this day. Tap Add to put something of your own here.",
+    "allDay": "All day",
+    "form": {
+      "needName": "Give it a name so you recognise it later.",
+      "startFormat": "Start time should look like 18:30.",
+      "endFormat": "End time should look like 20:00.",
+      "endBefore": "The end time is before the start time.",
+      "title": "Add to your calendar",
+      "what": "What is it?",
+      "whatEg": "Res braai, study group, shift…",
+      "entryName": "Entry name",
+      "starts": "Starts (optional)",
+      "startTime": "Start time",
+      "ends": "Ends (optional)",
+      "endTime": "End time",
+      "where": "Where (optional)",
+      "whereEg": "Res common room",
+      "place": "Place",
+      "save": "Save to my calendar",
+      "note": "Saved on this phone only. Staff cannot see what you add here, and it will not appear on another device."
+    },
+    "kind": {
+      "timetable": {
+        "label": "Lectures"
+      },
+      "orientation": {
+        "note": "Worth being there"
+      },
+      "event": {
+        "note": "Come if you can"
+      },
+      "personal": {
+        "label": "Your own plans",
+        "note": "Yours to move"
+      }
+    },
+    "blurb": "Yellow means you are invited, not obliged. If you do have to miss something, that is survivable — tell a lecturer or your FYS buddy early and they will help you catch up.",
+    "addedByYou": "Added by you",
+    "removeText": "\"{{title}}\" will be taken off your calendar.",
+    "tapRemove": "{{title}}. Tap to remove."
+  },
+  "search": {
+    "showLess": "Show less",
+    "readWhole": "Read the whole answer",
+    "readMore": "Read more",
+    "seeFaqs": "See it in FAQs",
+    "relatedQuestions": "Related questions",
+    "openHelp": "Open help options",
+    "openSchedule": "Open schedule",
+    "onlineMap": "Online map",
+    "seeWho": "See who to contact",
+    "seeEvent": "See the event",
+    "howSignUp": "How to sign up",
+    "howJoin": "How to join",
+    "seeProgramme": "See the programme",
+    "seeAnnouncements": "See announcements",
+    "seeOnHome": "See it on Home",
+    "openChecklist": "Open checklist",
+    "openSupport": "Open support",
+    "seeShuttles": "See shuttle times",
+    "openProfile": "Open profile",
+    "openGuide": "Open the guide",
+    "preparing": "Getting everything ready to search...",
+    "whatToFind": "What do you need to find?",
+    "try": "Try",
+    "popular": "Popular searches",
+    "recent": "Recent",
+    "clear": "Clear",
+    "notFound": "We could not find that yet",
+    "notFoundText": "That is okay. Try a shorter or different word, like the number on a building or a word like library, food, timetable or clinic.",
+    "stillStuck": "Still stuck?",
+    "stillStuckText": "Tell us what you need help with, and we will guide you to the right place.",
+    "closestOnly": "Nothing matches every word yet, so here are the closest matches.",
+    "showFewer": "Show fewer",
+    "goBack": "Go back",
+    "wholeApp": "Search the whole app",
+    "offline": "You are searching saved information because your connection is unavailable right now.",
+    "kind": {
+      "faq": "Answers",
+      "support": "Getting help",
+      "schedule": "Schedule",
+      "venue": "Venues",
+      "place": "Campus buildings",
+      "contact": "People to contact",
+      "guide": "Digital guides",
+      "event": "Events",
+      "sport": "Sport & gym",
+      "programme": "Programmes",
+      "announcement": "Announcements",
+      "checklist": "Checklist",
+      "info": "Support information",
+      "shuttle": "Shuttle times",
+      "setting": "Settings"
+    },
+    "scopes": {
+      "all": {
+        "label": "the whole app",
+        "placeholder": "Search everything in the app...",
+        "hint": "Search everything in the app: the schedule and events, answers, contacts, venues and buildings, guides, programmes, sport and more."
+      },
+      "schedule": {
+        "label": "Schedule",
+        "placeholder": "Search the schedule...",
+        "hint": "Search orientation sessions and campus events by name, day, time or venue."
+      },
+      "contacts": {
+        "label": "Contacts",
+        "placeholder": "Search contacts...",
+        "hint": "Search the people you can contact by name, role or support area."
+      },
+      "support": {
+        "label": "Support",
+        "placeholder": "Search support...",
+        "hint": "Search the \"I need help with...\" options and the support information published by your coordinators."
+      },
+      "digital": {
+        "label": "Digital guides",
+        "placeholder": "Search the digital guides...",
+        "hint": "Search the step-by-step guides for Funda, Wi-Fi, printing, email and more."
+      },
+      "checklist": {
+        "label": "Checklist",
+        "placeholder": "Search your checklist...",
+        "hint": "Search the tasks on your new student checklist."
+      },
+      "programmes": {
+        "label": "Programmes",
+        "placeholder": "Search the programmes...",
+        "hint": "Search School of IT programmes by name, module, career or advisor."
+      },
+      "sport": {
+        "label": "Sport & gym",
+        "placeholder": "Search sport and gym...",
+        "hint": "Search sports, clubs, facilities and how to sign up for the gym."
+      },
+      "profile": {
+        "label": "Profile & settings",
+        "placeholder": "Search settings...",
+        "hint": "Search your settings, like language, text size and appearance."
+      }
+    },
+    "wholeAppNote": "To search the whole app, use the search box on the Home screen.",
+    "searchScope": "Search {{scope}}",
+    "noneInScope": "Nothing in {{scope}} matches that. Try a shorter or different word. {{note}}",
+    "showAll": "Show all {{count}} in {{kind}}",
+    "searchingOnly": "Searching {{scope}} only",
+    "resultOne": "1 result. Tap a button to take the next step.",
+    "resultMany": "{{count}} results. Tap a button to take the next step."
+  },
+  "suggest": {
+    "writeFirst": "Write the question first, then send it.",
+    "notSetUp": "Suggestions are not set up yet. Ask a coordinator to run the latest database script.",
+    "notSent": "That did not send yet. Please check your connection and try again.",
+    "thanks": "Thank you. The coordinators will take a look.",
+    "title": "Suggest a question",
+    "intro": "Heard a question that is not answered here? Tell the coordinators so it can be added. Please do not include any student's personal details.",
+    "whatAsk": "What do students keep asking?",
+    "helpAnswer": "Anything that would help answer it? (optional)",
+    "send": "Send to coordinators"
+  },
+  "role": {
+    "buddy": "FYS Buddy",
+    "coordinator": "Orientation Coordinator",
+    "admin": "Administrator",
+    "hod": "Head of Department"
+  },
+  "sport": {
+    "tabSport": "Sport",
+    "tabGym": "Gym",
+    "whoToAsk": "WHO TO ASK",
+    "facility": "Facility",
+    "club": "Sport / club",
+    "howJoin": "HOW TO JOIN",
+    "moreInfo": "More info",
+    "howSignUp": "HOW TO SIGN UP",
+    "hours": "OPENING HOURS",
+    "bring": "WHAT TO BRING",
+    "signOnline": "Sign up online",
+    "eyebrow": "SPORT & RECREATION",
+    "subtitle": "Find a sport or club, and learn how to sign up for the gym.",
+    "seeGym": "See how to sign up for the gym",
+    "wantGym": "Want to join the gym?",
+    "seeHow": "See how to sign up",
+    "noSports": "Sports and clubs have not been added yet. Check back soon.",
+    "noGym": "Gym sign-up details have not been added yet. Ask at the Sport office or your buddy in the meantime."
+  },
+  "shuttleGuide": {
+    "title": "Getting around, without the guesswork",
+    "subtitle": "When the shuttles run, what you need to board, and what to do when you are lost.",
+    "cardRule": "No student card, no shuttle. Carry it every day, along with your registration letter.",
+    "loading": "Loading shuttle times…",
+    "nothing": "Nothing listed",
+    "nothingText": "There are no shuttles listed for this time of day. Check the printed schedule at your stop, or ask a shuttle marshal.",
+    "openMap": "Open the campus map",
+    "findStop": "Find your stop on the map",
+    "lostHelp": "Lost? Open the campus map, find the building nearest you and walk from there.",
+    "shift": {
+      "morning": {
+        "label": "Getting to campus",
+        "hint": "Morning runs. If you have an 07:45, the 06:45 gets you there calmly."
+      },
+      "afternoon": {
+        "label": "Heading home",
+        "hint": "Afternoon runs. Aim for the one before the one you need."
+      },
+      "night": {
+        "label": "Late nights on campus",
+        "hint": "If you are studying late, these are your way back."
+      }
+    },
+    "advice": {
+      "lost": {
+        "title": "Lost, and need to find a stop",
+        "body": "Open the campus map and find the building nearest you, then walk to the stop it lists. If you are off campus and unsure, head for the nearest landmark stop — Feather Market Hall, Kings Beach and Central are all easy to find and easy to ask directions to."
+      },
+      "last": {
+        "title": "The last shuttle is the last one",
+        "body": "Decide before the last departure rather than five minutes after it. If you miss it you are arranging your own way home, late, and probably paying for it."
+      }
+    },
+    "footnote": "{{label}}. Times can change — the printed schedule at your stop is always the final word."
+  },
+  "route": {
+    "start": "Start walking for {{distance}}",
+    "startAlong": "Start walking along {{name}} for {{distance}}",
+    "arrived": "You have arrived",
+    "turn": "Turn {{direction}}, then walk {{distance}}",
+    "turnOnto": "Turn {{direction}} onto {{name}}, then walk {{distance}}",
+    "keep": "Keep going for {{distance}}",
+    "keepOn": "Keep going on {{name}} for {{distance}}",
+    "continue": "Continue for {{distance}}",
+    "direction": {
+      "left": "left",
+      "right": "right",
+      "slight_left": "slightly left",
+      "slight_right": "slightly right",
+      "sharp_left": "sharp left",
+      "sharp_right": "sharp right",
+      "straight": "straight ahead",
+      "uturn": "around (U-turn)",
+      "ahead": "ahead"
+    }
+  },
+  "soc": {
+    "title": "Find your people",
+    "subtitle": "Faith, field of study, or something else entirely. Joining one is the fastest way to stop feeling like a stranger here.",
+    "what": "What is a society?",
+    "searchLabel": "Search societies or a payment code",
+    "search": "Search societies",
+    "noMatch": "No match",
+    "incomplete": "This list is not complete — see the note at the bottom. If your society is not here, it may still exist. Ask at Student Governance and Development.",
+    "about": "About this list",
+    "aboutText": "Taken from the printed society sign-up sheet, which was cut off at the bottom of the page — so the Academic and Developmental sections are incomplete. Fees and codes can change between years. Confirm before you pay.",
+    "whatIs": "A society is a student-run club you can join for the year. Some are built around a faith, some around what you study, and some around a cause or a skill that has nothing to do with your degree. You pay a small once-off fee, and in return you get people who already know what you are going through. You do not need to be good at anything, know anyone, or commit to every meeting — turning up once is enough to start.",
+    "cat": {
+      "religious": {
+        "label": "Religious",
+        "blurb": "Faith communities on campus, across many traditions."
+      },
+      "academic": {
+        "label": "Academic",
+        "blurb": "Tied to a field of study — good for contacts in your industry before you graduate."
+      },
+      "developmental": {
+        "label": "Developmental",
+        "blurb": "Skills, causes and networks that are not about your degree."
+      }
+    },
+    "clashOne": "{{codes}} appears against more than one society on the sheet. Check the code with the society before paying.",
+    "clashMany": "{{codes}} appear against more than one society on the sheet. Check the code with the society before paying."
+  },
+  "ai": {
+    "eyebrow": "Study tools",
+    "title": "Using AI without getting burned",
+    "subtitle": "Different tools suit different problems. Here is what actually helps, and what will get you in trouble.",
+    "rule": "Check your module guide before using AI on any assignment. The rules differ per faculty, and \"I did not know\" has never worked as a defence.",
+    "whatDo": "What do you need to do?",
+    "whichTool": "Which tool is which",
+    "whichToolText": "Grouped by what each one is built for, not ranked. Any ranking would be out of date before the semester ends, and all of them do most things passably.",
+    "before": "Before you use any of them",
+    "suits": "What suits it",
+    "howAsk": "How to ask",
+    "watchOut": "Watch out"
+  },
+  "arcade": {
+    "tagline": "Play. Unlock. Collect.",
+    "subtitle": "Win a round and unlock something worth knowing about Mandela University.",
+    "play": "Play",
+    "vault": "Fact Vault",
+    "opening": "Opening…",
+    "vaultTitle": "What you have unlocked",
+    "comingSoon": "Coming soon",
+    "comingSoonText": "Graduate stories are being collected. There is nothing to unlock here yet.",
+    "openingVault": "Opening the vault…",
+    "nothingYet": "Nothing here yet",
+    "nothingText": "Win a round in the arcade and whatever you unlock is kept here.",
+    "goArcade": "Go to the arcade",
+    "notFound": "Game not found",
+    "notFoundText": "That game is not in the arcade. Head back and pick another.",
+    "played": "Played",
+    "won": "Won",
+    "best": "Best",
+    "you": "You",
+    "pick": "Pick your throw",
+    "draw": "Draw — go again",
+    "youTake": "You take it",
+    "houseTakes": "Madibaz takes it",
+    "throwAgain": "Throw again",
+    "youWin": "You win!",
+    "unlockedNew": "Unlocked",
+    "alreadyHave": "Already in your vault",
+    "allUnlocked": "You have unlocked everything in the vault. More is on the way.",
+    "playAgain": "Play again",
+    "openVault": "Open Fact Vault",
+    "done": "Done",
+    "playGame": "Play {{game}}",
+    "wonOf": "{{won}} won of {{played}}",
+    "vaultLabel": "Fact Vault, {{count}} of {{total}} unlocked",
+    "unlocked": "{{count}} of {{total}} unlocked",
+    "collected": "{{count}} of {{total}} collected.",
+    "stillLocked": "🔒 {{count}} still locked",
+    "openSource": "Open source: {{label}}",
+    "games": {
+      "rps": {
+        "title": "Rock Paper Scissors",
+        "tagline": "Best of one against the house",
+        "howTo": "Pick a throw and beat the Madibaz hand."
+      }
+    },
+    "kind": {
+      "fact": "Did You Know?",
+      "madibaz": "Meet a Madibaz",
+      "tip": "First-Year Tip"
+    }
+  },
+  "about": {
+    "label": "ABOUT THE PROJECT",
+    "appTitle": "About this app",
+    "subtitle": "School of IT Student Orientation App",
+    "summary": "Built to help first-year School of IT students feel welcome, informed and ready. It brings the orientation schedule, venues, contacts, FAQs, support and digital skills guides into one place, so nobody has to piece it together from emails and messages.",
+    "status": "This is a hackathon prototype. Content shown may be sample data until staff publish the real orientation programme.",
+    "supportTitle": "How it supports students",
+    "principles": {
+      "courage": "Clear next steps and small wins, so taking the first step feels doable.",
+      "empathy": "Warm, plain language. We never assume you already know how university works.",
+      "vulnerability": "Not knowing something yet is normal. The guides and FAQs are here for exactly that.",
+      "shame": "Missed a session or feeling lost? You will always be shown what to do next, never blamed."
+    },
+    "insideTitle": "What is inside",
+    "features": {
+      "f1": "Home with announcements, shuttle times and your progress",
+      "f2": "Search across the schedule, FAQs, contacts, venues and help options",
+      "f3": "Orientation schedule with venue directions",
+      "f4": "Campus map for South and North campus: building numbers, search, walking routes",
+      "f6": "Digital readiness guides: computer skills, Funda, printing and Wi-Fi",
+      "f7": "FAQs grouped by category",
+      "f8": "Support pathways (\"I need help with...\") and key contacts",
+      "f9": "Tribe: a chat with the students in your mentor group",
+      "f10": "Language switcher (English, isiXhosa, Afrikaans), dark mode and adjustable text size",
+      "f11": "Saved copy of key information for when your connection drops"
+    },
+    "privacyTitle": "Privacy and your data",
+    "privacy": {
+      "keep": {
+        "label": "What we keep",
+        "text": "Your email address (to sign you in), the chat name you choose for Tribe, the messages you send there, and which digital readiness steps you have finished."
+      },
+      "never": {
+        "label": "What we never ask for",
+        "text": "ID numbers, medical details or financial information."
+      },
+      "who": {
+        "label": "Who can see it",
+        "text": "Tribe messages are visible to the students in your tribe and to orientation staff, who help keep the space safe. Your progress is only yours."
+      },
+      "device": {
+        "label": "On your device",
+        "text": "Your language, text size and theme, your last few searches, plus a saved copy of the schedule, FAQs and contacts so they work offline."
+      },
+      "map": {
+        "label": "The campus map",
+        "text": "The map loads its pictures and walking routes from free OpenStreetMap-based services. They only receive which part of the map you are viewing and the start and end points of a route. The app does not use GPS and never tracks where you are. Your name and account are never sent."
+      },
+      "approach": {
+        "label": "Our approach",
+        "text": "Designed with POPIA principles in mind: collect only what is needed, and keep private details private."
+      }
+    },
+    "helpTitle": "Getting real help",
+    "helpText": "This app points you towards help. It does not replace it. If you are struggling, or you or someone else may be in danger, contact the university counselling and wellness services or campus protection services straight away. Asking for help early is a smart, responsible thing to do.",
+    "openRefer": "Open Refer a student",
+    "openSupport": "Open the Support tab",
+    "infoTitle": "App information",
+    "version": "Version",
+    "platform": "Platform",
+    "data": "Data",
+    "dataValue": "Live from the School of IT database, with a saved copy for offline use"
+  },
+  "lessons": {
+    "file-management": {
+      "title": "Basic file management",
+      "subtitle": "New to files and folders? Work through these short lessons in order."
+    },
+    "files-1-files-and-folders": {
+      "title": "Files and folders",
+      "summary": "What they are and how to open, browse and create them.",
+      "desc": "A file is one piece of work, like an essay or a photo. A folder holds files together, the way a paper folder holds pages.",
+      "steps": {
+        "0": "On a Windows computer, press the Windows key and E together to open File Explorer. On a phone, open the Files app.",
+        "1": "Look at the list on the left. Documents, Downloads and Desktop are places where your files can live.",
+        "2": "Double-click a folder to open it. Click the back arrow at the top to go up one level.",
+        "3": "To make your own folder, right-click an empty space, choose New, then Folder.",
+        "4": "Type a name for the folder and press Enter. Your folder is ready to use."
+      },
+      "tip": "Most things you download end up in Downloads. Move the ones you want to keep into your own folders."
+    },
+    "files-2-naming-and-organising": {
+      "title": "Naming and organising",
+      "summary": "A simple folder plan so you can find your work fast.",
+      "desc": "Clear names and a simple folder plan mean you can find your work in seconds, even the night before a deadline.",
+      "steps": {
+        "0": "Make one main folder for the year, for example '2027 First Year'.",
+        "1": "Inside it, make one folder for each module, such as 'Programming' or 'Networks'.",
+        "2": "Inside each module folder, add 'Assignments', 'Notes' and 'Study material'.",
+        "3": "Give files names that explain themselves, like 'Programming - Assignment 1 - Draft.docx'.",
+        "4": "Avoid names like 'final', 'final2' or 'new'. Add a date or a version number instead, like 'v2'.",
+        "5": "To rename a file, click it once, press F2, type the new name and press Enter."
+      },
+      "tip": "Windows does not allow these characters in a file name: / \\ : * ? \" < > |"
+    },
+    "files-3-save-copy-move": {
+      "title": "Saving, copying and moving",
+      "summary": "Keep your work, make a second version, or put it somewhere else.",
+      "desc": "Saving keeps your work. Copying makes a second version. Moving puts the original in a different place.",
+      "steps": {
+        "0": "Save as you work. In most programs, press Ctrl and S together, and do it every few minutes.",
+        "1": "The first time you save, choose the folder and type a clear name. Use Save As to keep another version under a new name.",
+        "2": "To copy a file, click it, press Ctrl and C, open the folder you want, then press Ctrl and V.",
+        "3": "To move a file, click it, press Ctrl and X, open the folder you want, then press Ctrl and V.",
+        "4": "You can also drag a file into a folder to move it. Hold Ctrl while you drag to copy it instead."
+      },
+      "tip": "A cut file stays where it is until you paste it, so nothing is lost if you get interrupted halfway."
+    },
+    "files-4-find-and-recover": {
+      "title": "Finding and recovering files",
+      "summary": "Search for a file, and get back one you deleted by mistake.",
+      "desc": "Everyone loses a file at some point. These steps help you find it again, or bring it back.",
+      "steps": {
+        "0": "In File Explorer, click the search box at the top right and type part of the file name.",
+        "1": "Open 'Quick access' (called 'Home' in Windows 11) to see the files you opened recently.",
+        "2": "Click the 'Date modified' heading to put your newest work at the top of a folder.",
+        "3": "If you deleted a file by mistake, open the Recycle Bin on your desktop.",
+        "4": "Right-click the file and choose Restore. It goes back to the folder it came from."
+      },
+      "tip": "Once you empty the Recycle Bin, files are very hard to get back. Look through it before you empty it."
+    },
+    "files-5-back-up": {
+      "title": "Backing up your work",
+      "summary": "Keep every assignment in at least two places.",
+      "desc": "Laptops get lost, broken and stolen. Keep your assignments in at least two places, so one problem never costs you your work.",
+      "steps": {
+        "0": "Sign in to OneDrive with your university email address. Your files copy to the cloud whenever you are online.",
+        "1": "Save your assignments in your OneDrive folder, or drag your module folders into it.",
+        "2": "Wait for the green tick on a file. It means the file has finished copying to the cloud.",
+        "3": "Keep a second copy on a USB drive for big deadlines.",
+        "4": "Back up before you submit, and before you update or reset your computer."
+      },
+      "tip": "Lab computers are shared. Save to OneDrive or a USB drive, and do not leave the only copy on the computer."
+    },
+    "files-6-types-and-sharing": {
+      "title": "File types and sharing",
+      "summary": "What .docx and .pdf mean, and how to send files safely.",
+      "desc": "The letters after the dot in a file name show what kind of file it is and which program opens it.",
+      "steps": {
+        "0": ".docx is a Word document, .xlsx is an Excel sheet, .pptx is a PowerPoint and .pdf looks the same on every device.",
+        "1": "To see these letters, open the View tab in File Explorer and tick 'File name extensions'.",
+        "2": "Submit the type of file your lecturer asks for. For a PDF, choose File, then Save As or Export, and pick PDF.",
+        "3": "To send several files at once, select them, right-click, choose 'Compress to ZIP file' and attach the ZIP.",
+        "4": "For large files, share a OneDrive link instead of attaching the file to an email.",
+        "5": "Only open attachments from people you know. Unknown .exe and .zip files can carry viruses."
+      },
+      "tip": "Check the name of the file before you submit it. A lecturer marks what you upload, so make sure it is the latest version."
+    },
+    "cyber-safety": {
+      "title": "Cyber safety",
+      "subtitle": "Spot scams, browse safely, and protect your device and your privacy."
+    },
+    "safety-1-scams": {
+      "title": "Spotting scams and phishing",
+      "summary": "Fake emails and messages that try to trick you.",
+      "desc": "Phishing is a fake email, SMS or WhatsApp message that pretends to be someone you trust, like the university, a bank or a bursary. It tries to steal your details or your money.",
+      "steps": {
+        "0": "Slow down when a message feels urgent. Scammers say things like 'act now' or 'your account will be closed'.",
+        "1": "Check who really sent it. Look at the full email address, not just the name shown.",
+        "2": "Do not tap a link you did not expect. Type the website address yourself instead.",
+        "3": "Never share a password, PIN, one-time code or student number in reply to a message. Real organisations do not ask for these.",
+        "4": "Be suspicious of offers that sound too good to be true, like free data, easy jobs or a bursary you never applied for.",
+        "5": "If you are unsure, do not reply. Forward the message to IT Services and delete it."
+      },
+      "tip": "Check with the sender using a phone number or website you already trust, never one taken from the message."
+    },
+    "safety-2-browsing": {
+      "title": "Safe browsing and public Wi-Fi",
+      "summary": "Habits that keep you safe on websites and networks.",
+      "desc": "Almost everything you do online goes through a website or a Wi-Fi network. A few habits keep you safe on both.",
+      "steps": {
+        "0": "Look for the padlock and https at the start of a website address before you enter personal details.",
+        "1": "Download apps only from the Play Store or App Store, and programs only from the official website.",
+        "2": "Be careful on free public Wi-Fi. Do not bank or enter passwords on a network you do not trust.",
+        "3": "On campus, connect to the official eduroam network, not an open network with a similar name.",
+        "4": "Log out of shared and lab computers when you finish, and close the browser.",
+        "5": "Do not tick 'remember me' or 'save password' on a shared computer."
+      },
+      "tip": "A padlock only means the connection is private. It does not prove the website is honest, so still check the address."
+    },
+    "safety-3-device": {
+      "title": "Protecting your device",
+      "summary": "Keep your phone and laptop safe, and your work with them.",
+      "desc": "Your phone and laptop hold your assignments, photos and accounts. Protect them the way you would protect your wallet.",
+      "steps": {
+        "0": "Lock your phone and laptop with a PIN, password, fingerprint or face unlock.",
+        "1": "Install updates when they appear. Updates fix security holes that criminals use.",
+        "2": "Keep antivirus switched on. Windows Security does this for free on a Windows computer.",
+        "3": "Do not leave your laptop or phone alone in the library, a lab or a taxi.",
+        "4": "Turn on Find My Device on Android, or Find My iPhone, so you can locate or wipe a lost phone.",
+        "5": "Back up your work, so a lost or infected device does not cost you an assignment."
+      },
+      "tip": "Write down your laptop serial number and keep it somewhere safe. It helps if you ever need to report a theft."
+    },
+    "safety-4-privacy": {
+      "title": "Privacy, social media and getting help",
+      "summary": "Think before you share, and know what to do if things go wrong.",
+      "desc": "What you post can stay online for years. Think before you share, and know what to do if something goes wrong.",
+      "steps": {
+        "0": "Think before you post. Anything you share can be copied, even if you delete it later.",
+        "1": "Keep your student number, ID number, address and timetable private.",
+        "2": "Use privacy settings so only people you know can see your posts and photos.",
+        "3": "Never share private photos of yourself or of other people without permission.",
+        "4": "If someone bullies or threatens you online, do not reply. Take screenshots, block them and tell someone you trust.",
+        "5": "If your account is hacked or you fell for a scam, change your password straight away and contact IT Services."
+      },
+      "tip": "Being bullied online is never your fault. The Support section of this app can point you to people who can help."
+    },
+    "password-safety": {
+      "title": "Password safety",
+      "subtitle": "Make a strong password, keep it safe and add extra protection."
+    },
+    "password-1-strong": {
+      "title": "Building a strong password",
+      "summary": "Why length beats tricky symbols.",
+      "desc": "The longer and more unusual a password is, the harder it is to guess. Length matters more than clever symbols.",
+      "steps": {
+        "0": "Aim for at least 12 characters. Longer is better.",
+        "1": "Use a passphrase: four or more random words, like 'purple-bicycle-river-toast'.",
+        "2": "Add numbers or symbols if you like, but do not rely on them to make a short password strong.",
+        "3": "Do not use your name, birthday, student number, cellphone number or 'password123'.",
+        "4": "Avoid common patterns such as 123456, qwerty or the name of your favourite team."
+      },
+      "tip": "A long phrase that only means something to you is easier to remember and harder to crack than a short jumble like P@ssw0rd."
+    },
+    "password-2-keep-safe": {
+      "title": "Keeping your passwords safe",
+      "summary": "One password per account, and never share it.",
+      "desc": "A strong password only helps if nobody else gets it. Keep each one private, and different.",
+      "steps": {
+        "0": "Use a different password for every important account, especially your student email and your banking.",
+        "1": "Never share a password with a friend, a lecturer or anyone who messages you. Nobody real needs it.",
+        "2": "Use a password manager to remember them for you. Your phone or browser may already have one built in.",
+        "3": "Do not keep passwords on sticky notes, or in a plain file called 'passwords' on your computer.",
+        "4": "Never type a password after tapping a link in a message. Go to the website yourself."
+      },
+      "tip": "If one site is hacked and you used the same password everywhere, criminals will try it on all your other accounts."
+    },
+    "password-3-two-step": {
+      "title": "Extra protection, and what to do if it leaks",
+      "summary": "Two-step checks and quick action after a leak.",
+      "desc": "Two-step verification adds a second check, so a stolen password on its own is not enough to get into your account.",
+      "steps": {
+        "0": "Turn on two-step verification, also called multi-factor authentication, for your email and other important accounts.",
+        "1": "Use an authenticator app or a code sent to your phone as the second step.",
+        "2": "Keep your backup codes somewhere safe, in case you lose your phone.",
+        "3": "If you think a password has leaked, change it straight away, then change it anywhere else you used it.",
+        "4": "You can check whether your email address appeared in a known data breach at haveibeenpwned.com.",
+        "5": "If you cannot log in to a university account, contact IT Services to reset it."
+      },
+      "tip": "Never give a verification code to anyone, even someone who says they are from the university or your bank."
+    },
+    "responsible-ai": {
+      "title": "Responsible use of AI tools",
+      "subtitle": "Use AI to learn, check what it tells you, and stay honest in your work."
+    },
+    "ai-1-what-it-is": {
+      "title": "What AI tools can and cannot do",
+      "summary": "Helpful, fast, and not always right.",
+      "desc": "AI tools such as chatbots can write, explain and summarise in seconds. They are useful helpers, but they are not always right.",
+      "steps": {
+        "0": "An AI tool predicts likely words. It does not know whether something is true.",
+        "1": "It can give answers that sound confident but are wrong, or make up facts, quotes and references.",
+        "2": "It can repeat unfair ideas from the material it learned from.",
+        "3": "It does not replace your own thinking, your lecturer or your textbook.",
+        "4": "Treat what it says as a first draft or a starting point, never as the final answer."
+      },
+      "tip": "If an answer really matters, check it against your notes, your textbook or a reliable website."
+    },
+    "ai-2-learn-not-cheat": {
+      "title": "Using AI to learn, not to cheat",
+      "summary": "What is a good use, and what breaks the rules.",
+      "desc": "Handing in work an AI wrote and calling it yours is a form of cheating. Used well, AI can help you understand more.",
+      "steps": {
+        "0": "Read your module guide and assessment instructions. Each lecturer sets the rules for AI use in their module.",
+        "1": "If you are not sure whether a tool is allowed, ask your lecturer before you use it.",
+        "2": "Good uses: ask it to explain an idea in simpler words, quiz you before a test, or suggest how to plan an essay.",
+        "3": "Risky uses: having it write your assignment, code or answers, and then handing that in as your own work.",
+        "4": "If AI use is allowed, say how you used it, in the way your lecturer asks.",
+        "5": "Do the thinking and the writing yourself, so you can explain your work in a test or an oral."
+      },
+      "tip": "A good check: could you explain and defend every line of your work without the AI tool open?"
+    },
+    "ai-3-privacy": {
+      "title": "Protecting your privacy with AI",
+      "summary": "What never to type into an AI chat.",
+      "desc": "What you type into an AI tool may be stored, and used by the company that runs it.",
+      "steps": {
+        "0": "Do not type your student number, ID number, passwords, address or bank details into an AI tool.",
+        "1": "Do not paste in private information about other people, such as their photos or messages.",
+        "2": "Do not paste in work that belongs to someone else, like a lecturer's test or a classmate's assignment, without permission.",
+        "3": "Check the tool's privacy settings, and turn off chat history or training on your data if you can.",
+        "4": "Be careful with free apps that ask for a lot of permissions."
+      },
+      "tip": "A simple rule: if you would not put it on a public noticeboard, do not put it in an AI chat."
+    },
+    "ai-4-check-and-credit": {
+      "title": "Checking and crediting AI output",
+      "summary": "Verify it, put it in your own words, and be honest.",
+      "desc": "Before you use anything an AI tool gives you, check it, and be honest about where it came from.",
+      "steps": {
+        "0": "Check every fact, date, number and name against a reliable source.",
+        "1": "Search for any book, article or quote it gives you. AI tools sometimes invent references that do not exist.",
+        "2": "For code, run it and test it. Make sure you understand each part before you use it.",
+        "3": "Put ideas in your own words. Copying AI text straight into your work can count as plagiarism.",
+        "4": "Use the referencing style your department asks for, and follow its rules on mentioning AI.",
+        "5": "When in doubt, be open about it and ask your lecturer."
+      },
+      "tip": "You are responsible for everything you hand in, including any mistakes an AI tool made for you."
+    }
   }
 }

@@ -8,6 +8,7 @@ import { PageHeader } from './PageHeader';
 import { CampusActionButton as LinkButton } from './CampusActionButton';
 import { ScaledText as Text } from './ScaledText';
 import { ShameResilientBanner } from './ShameResilientBanner';
+import { useTranslation } from 'react-i18next';
 
 export type SportGymTab = 'sport' | 'gym';
 
@@ -32,8 +33,8 @@ type SportItem = {
 const str = (value: unknown) => String(value ?? '').trim();
 
 const TABS: { key: SportGymTab; label: string; icon: keyof typeof Ionicons.glyphMap }[] = [
-  { key: 'sport', label: 'Sport', icon: 'football-outline' },
-  { key: 'gym', label: 'Gym', icon: 'barbell-outline' },
+  { key: 'sport', label: 'sport.tabSport', icon: 'football-outline' },
+  { key: 'gym', label: 'sport.tabGym', icon: 'barbell-outline' },
 ];
 
 // One step per line; a leading "1." the coordinator typed is dropped so numbers are not doubled.
@@ -71,6 +72,7 @@ const safeOpen = (url: string) => {
 };
 
 export function SportGym({ initialTab = 'sport', focusId = '' }: { initialTab?: SportGymTab; focusId?: string }) {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const router = useRouter();
 
@@ -143,11 +145,11 @@ export function SportGym({ initialTab = 'sport', focusId = '' }: { initialTab?: 
     if (!hasContact) return null;
     return (
       <View style={styles.block}>
-        <Text style={[styles.blockLabel, { color: colors.textSecondary }]}>WHO TO ASK</Text>
+        <Text style={[styles.blockLabel, { color: colors.textSecondary }]}>{t('sport.whoToAsk')}</Text>
         {item.contactName ? <Text style={[styles.body, { color: colors.text }]}>{item.contactName}</Text> : null}
         <View style={styles.actions}>
-          {item.email ? <LinkButton icon="mail-outline" label="Email" onPress={() => safeOpen(`mailto:${item.email}`)} /> : null}
-          {item.phone ? <LinkButton icon="call-outline" label="Call" onPress={() => safeOpen(`tel:${item.phone.replace(/\s+/g, '')}`)} /> : null}
+          {item.email ? <LinkButton icon="mail-outline" label={t('common.email')} onPress={() => safeOpen(`mailto:${item.email}`)} /> : null}
+          {item.phone ? <LinkButton icon="call-outline" label={t('emergency.call')} onPress={() => safeOpen(`tel:${item.phone.replace(/\s+/g, '')}`)} /> : null}
         </View>
       </View>
     );
@@ -172,7 +174,7 @@ export function SportGym({ initialTab = 'sport', focusId = '' }: { initialTab?: 
           <View style={styles.eventCopy}>
             <Text style={[styles.title, { color: colors.text }]}>{item.name}</Text>
             <Text style={[styles.meta, { color: colors.textSecondary }]}>
-              {[item.kind === 'facility' ? 'Facility' : 'Sport / club', item.campus, item.venue].filter(Boolean).join('  ·  ')}
+              {[item.kind === 'facility' ? t('sport.facility') : t('sport.club'), item.campus, item.venue].filter(Boolean).join('  ·  ')}
             </Text>
           </View>
           <Ionicons name={open ? 'chevron-up' : 'chevron-down'} size={18} color={colors.textSecondary} />
@@ -195,14 +197,14 @@ export function SportGym({ initialTab = 'sport', focusId = '' }: { initialTab?: 
             ) : null}
             {item.steps.length ? (
               <View style={styles.block}>
-                <Text style={[styles.blockLabel, { color: colors.textSecondary }]}>HOW TO JOIN</Text>
+                <Text style={[styles.blockLabel, { color: colors.textSecondary }]}>{t('sport.howJoin')}</Text>
                 {renderSteps(item.steps)}
               </View>
             ) : null}
             {renderContact(item)}
             <View style={styles.actions}>
-              {item.venue ? <LinkButton icon="location-outline" label="Show me where" primary onPress={() => showOnMap(item.venue)} /> : null}
-              {item.link ? <LinkButton icon="open-outline" label="More info" onPress={() => safeOpen(item.link)} /> : null}
+              {item.venue ? <LinkButton icon="location-outline" label={t('events.showWhere')} primary onPress={() => showOnMap(item.venue)} /> : null}
+              {item.link ? <LinkButton icon="open-outline" label={t('sport.moreInfo')} onPress={() => safeOpen(item.link)} /> : null}
             </View>
           </View>
         ) : null}
@@ -218,7 +220,7 @@ export function SportGym({ initialTab = 'sport', focusId = '' }: { initialTab?: 
         </View>
         <View style={styles.eventCopy}>
           <Text style={[styles.title, { color: colors.text }]}>{item.name}</Text>
-          <Text style={[styles.meta, { color: colors.textSecondary }]}>{[item.campus, item.venue].filter(Boolean).join('  ·  ') || 'Gym'}</Text>
+          <Text style={[styles.meta, { color: colors.textSecondary }]}>{[item.campus, item.venue].filter(Boolean).join('  ·  ') || t('sport.tabGym')}</Text>
         </View>
       </View>
 
@@ -226,7 +228,7 @@ export function SportGym({ initialTab = 'sport', focusId = '' }: { initialTab?: 
         {item.description ? <Text style={[styles.body, { color: colors.text }]}>{item.description}</Text> : null}
         {item.steps.length ? (
           <View style={styles.block}>
-            <Text style={[styles.blockLabel, { color: colors.textSecondary }]}>HOW TO SIGN UP</Text>
+            <Text style={[styles.blockLabel, { color: colors.textSecondary }]}>{t('sport.howSignUp')}</Text>
             {renderSteps(item.steps)}
           </View>
         ) : null}
@@ -238,20 +240,20 @@ export function SportGym({ initialTab = 'sport', focusId = '' }: { initialTab?: 
         ) : null}
         {item.schedule ? (
           <View style={styles.block}>
-            <Text style={[styles.blockLabel, { color: colors.textSecondary }]}>OPENING HOURS</Text>
+            <Text style={[styles.blockLabel, { color: colors.textSecondary }]}>{t('sport.hours')}</Text>
             <Text style={[styles.body, { color: colors.text }]}>{item.schedule}</Text>
           </View>
         ) : null}
         {item.bring ? (
           <View style={styles.block}>
-            <Text style={[styles.blockLabel, { color: colors.textSecondary }]}>WHAT TO BRING</Text>
+            <Text style={[styles.blockLabel, { color: colors.textSecondary }]}>{t('sport.bring')}</Text>
             <Text style={[styles.body, { color: colors.text }]}>{item.bring}</Text>
           </View>
         ) : null}
         {renderContact(item)}
         <View style={styles.actions}>
-          {item.link ? <LinkButton icon="open-outline" label="Sign up online" primary onPress={() => safeOpen(item.link)} /> : null}
-          {item.venue ? <LinkButton icon="location-outline" label="Show me where" onPress={() => showOnMap(item.venue)} /> : null}
+          {item.link ? <LinkButton icon="open-outline" label={t('sport.signOnline')} primary onPress={() => safeOpen(item.link)} /> : null}
+          {item.venue ? <LinkButton icon="location-outline" label={t('events.showWhere')} onPress={() => showOnMap(item.venue)} /> : null}
         </View>
       </View>
     </View>
@@ -266,12 +268,12 @@ export function SportGym({ initialTab = 'sport', focusId = '' }: { initialTab?: 
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={colors.accent} />}
     >
       <PageHeader
-        eyebrow="SPORT & RECREATION"
-        title="Sport & gym"
-        subtitle="Find a sport or club, and learn how to sign up for the gym."
+        eyebrow={t('sport.eyebrow')}
+        title={t('common.sportGymTitle')}
+        subtitle={t('sport.subtitle')}
       />
 
-      {offline ? <ShameResilientBanner message="You are offline, so this may be out of date. It will refresh when you are back online." type="info" /> : null}
+      {offline ? <ShameResilientBanner message={t('common.offlineRefresh')} type="info" /> : null}
 
       <View style={[styles.tabs, { backgroundColor: colors.card, borderColor: colors.border }]} accessibilityRole="tablist">
         {TABS.map(({ key, label, icon }) => {
@@ -285,7 +287,7 @@ export function SportGym({ initialTab = 'sport', focusId = '' }: { initialTab?: 
               style={[styles.tab, active && { backgroundColor: colors.accent }]}
             >
               <Ionicons name={icon} size={16} color={active ? colors.text : colors.textSecondary} />
-              <Text style={[styles.tabText, { color: active ? colors.text : colors.textSecondary }]}>{label}</Text>
+              <Text style={[styles.tabText, { color: active ? colors.text : colors.textSecondary }]}>{t(label)}</Text>
             </Pressable>
           );
         })}
@@ -298,24 +300,24 @@ export function SportGym({ initialTab = 'sport', focusId = '' }: { initialTab?: 
           {gymItems.length ? (
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="See how to sign up for the gym"
+              accessibilityLabel={t('sport.seeGym')}
               onPress={() => setTab('gym')}
               style={({ pressed }) => [styles.gymCallout, { backgroundColor: colors.accent }, pressed && { opacity: 0.85 }]}
             >
               <Ionicons name="barbell-outline" size={22} color={colors.text} />
               <View style={styles.eventCopy}>
-                <Text style={[styles.calloutTitle, { color: colors.text }]}>Want to join the gym?</Text>
-                <Text style={[styles.calloutSub, { color: colors.text }]}>See how to sign up</Text>
+                <Text style={[styles.calloutTitle, { color: colors.text }]}>{t('sport.wantGym')}</Text>
+                <Text style={[styles.calloutSub, { color: colors.text }]}>{t('sport.seeHow')}</Text>
               </View>
               <Ionicons name="arrow-forward" size={18} color={colors.text} />
             </Pressable>
           ) : null}
-          {sportItems.length ? sportItems.map(renderSport) : empty('Sports and clubs have not been added yet. Check back soon.')}
+          {sportItems.length ? sportItems.map(renderSport) : empty(t('sport.noSports'))}
         </>
       ) : gymItems.length ? (
         gymItems.map(renderGym)
       ) : (
-        empty('Gym sign-up details have not been added yet. Ask at the Sport office or your buddy in the meantime.')
+        empty(t('sport.noGym'))
       )}
     </ScrollView>
   );

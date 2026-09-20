@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { supabase } from '../../../../lib/superbase';
 import { useTheme } from '../../../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 type JoinRequest = {
   id: string;
@@ -21,6 +22,7 @@ type JoinRequest = {
 };
 
 export default function MentorGroupRequests() {
+  const { t } = useTranslation();
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { colors } = useTheme();
@@ -42,7 +44,7 @@ export default function MentorGroupRequests() {
         id: request.id,
         name: 'Student',
         studentNumber: request.student_id,
-        programme: 'Mentor group applicant',
+        programme: t('mgm.applicant'),
         requestedAt: new Date(request.requested_at).toLocaleString(),
       })));
     })();
@@ -53,23 +55,23 @@ export default function MentorGroupRequests() {
 
   const handleApprove = (request: JoinRequest) => {
     Alert.alert(
-      'Approve request',
-      `Add ${request.name} to this mentor group?`,
+      t('mgm.approveTitle'),
+      t('mgm.confirmApprove', { name: request.name }),
       [
         {
-          text: 'Cancel',
+          text: t('common.cancel'),
           style: 'cancel',
         },
         {
-          text: 'Approve',
+          text: t('mgm.approve'),
           onPress: () => void (async () => {
             const { error } = await supabase.rpc('review_mentor_group_request', { request_id: request.id, decision: 'approved' });
             if (error) {
-              Alert.alert('Could not approve request', error.message);
+              Alert.alert(t('mgm.approveFail'), error.message);
               return;
             }
             setRequests((current) => current.filter((item) => item.id !== request.id));
-            Alert.alert('Request approved', `${request.name} has been added to the group.`);
+            Alert.alert(t('mgm.approvedToast'), t('mgm.added', { name: request.name }));
           })(),
         },
       ]
@@ -78,24 +80,24 @@ export default function MentorGroupRequests() {
 
   const handleReject = (request: JoinRequest) => {
     Alert.alert(
-      'Reject request',
-      `Reject ${request.name}'s request?`,
+      t('mgm.rejectTitle'),
+      t('mgm.confirmReject', { name: request.name }),
       [
         {
-          text: 'Cancel',
+          text: t('common.cancel'),
           style: 'cancel',
         },
         {
-          text: 'Reject',
+          text: t('mgm.reject'),
           style: 'destructive',
           onPress: () => void (async () => {
             const { error } = await supabase.rpc('review_mentor_group_request', { request_id: request.id, decision: 'rejected' });
             if (error) {
-              Alert.alert('Could not reject request', error.message);
+              Alert.alert(t('mgm.rejectFail'), error.message);
               return;
             }
             setRequests((current) => current.filter((item) => item.id !== request.id));
-            Alert.alert('Request rejected', `${request.name}'s request has been rejected.`);
+            Alert.alert(t('mgm.rejectedToast'), t('mgm.rejectedNamed', { name: request.name }));
           })(),
         },
       ]
@@ -136,7 +138,7 @@ export default function MentorGroupRequests() {
               { color: colors.text },
             ]}
           >
-            Join Requests
+            {t('mgm.joinRequests')}
           </Text>
 
           <Text
@@ -145,7 +147,7 @@ export default function MentorGroupRequests() {
               { color: colors.textSecondary },
             ]}
           >
-            Students waiting for approval
+            {t('mgm.waiting')}
           </Text>
         </View>
       </View>
@@ -189,7 +191,7 @@ export default function MentorGroupRequests() {
               { color: colors.textSecondary },
             ]}
           >
-            Pending requests
+            {t('mgm.pendingRequests')}
           </Text>
         </View>
       </View>
@@ -217,7 +219,7 @@ export default function MentorGroupRequests() {
               { color: colors.text },
             ]}
           >
-            No pending requests
+            {t('mgm.noPending')}
           </Text>
 
           <Text
@@ -226,7 +228,7 @@ export default function MentorGroupRequests() {
               { color: colors.textSecondary },
             ]}
           >
-            New student requests will appear here.
+            {t('mgm.noPendingText')}
           </Text>
         </View>
       ) : (
@@ -237,7 +239,7 @@ export default function MentorGroupRequests() {
               { color: colors.text },
             ]}
           >
-            Pending
+            {t('mgm.pending')}
           </Text>
 
           {requests.map((request) => (
@@ -322,7 +324,7 @@ export default function MentorGroupRequests() {
                       { color: colors.textSecondary },
                     ]}
                   >
-                    Requested {request.requestedAt}
+                    {t('mgm.requested')} {request.requestedAt}
                   </Text>
                 </View>
               </View>
@@ -348,7 +350,7 @@ export default function MentorGroupRequests() {
                       { color: colors.text },
                     ]}
                   >
-                    Reject
+                    {t('mgm.reject')}
                   </Text>
                 </Pressable>
 
@@ -366,7 +368,7 @@ export default function MentorGroupRequests() {
                   />
 
                   <Text style={styles.approveText}>
-                    Approve
+                    {t('mgm.approve')}
                   </Text>
                 </Pressable>
               </View>

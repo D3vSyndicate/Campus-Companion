@@ -5,11 +5,13 @@ import { INTEGRITY, TOOL_NOTES, USE_CASES, type AiUseCase } from '../../data/ai-
 import { useTheme } from '../../theme/ThemeContext';
 import { PageHeader } from '../PageHeader';
 import { ScaledText as Text } from '../ScaledText';
+import { useTranslation } from 'react-i18next';
 
 // "Using AI for your studies" — organised by the problem a student actually has, because nobody
 // opens this wondering which model is best. They open it at 23:00 with code that will not run.
 
 export function AiGuideScreen() {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const [open, setOpen] = useState<string | null>(USE_CASES[0]?.id ?? null);
 
@@ -17,9 +19,9 @@ export function AiGuideScreen() {
     <View style={[styles.screen, { backgroundColor: colors.background }]}>
       <ScrollView contentContainerStyle={styles.content}>
         <PageHeader
-          eyebrow="Study tools"
-          title="Using AI without getting burned"
-          subtitle="Different tools suit different problems. Here is what actually helps, and what will get you in trouble."
+          eyebrow={t('ai.eyebrow')}
+          title={t('ai.title')}
+          subtitle={t('ai.subtitle')}
           showSearch={false}
           showBack
           backFallback="/(student)"
@@ -29,13 +31,12 @@ export function AiGuideScreen() {
         <View style={[styles.banner, { backgroundColor: colors.accent }]}>
           <Ionicons name="warning-outline" size={20} color="#071B2C" />
           <Text style={styles.bannerText}>
-            Check your module guide before using AI on any assignment. The rules differ per faculty,
-            and "I did not know" has never worked as a defence.
+            {t('ai.rule')}
           </Text>
         </View>
 
         <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>
-          What do you need to do?
+          {t('ai.whatDo')}
         </Text>
 
         {USE_CASES.map((useCase) => (
@@ -48,11 +49,10 @@ export function AiGuideScreen() {
         ))}
 
         <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>
-          Which tool is which
+          {t('ai.whichTool')}
         </Text>
         <Text style={[styles.intro, { color: colors.textSecondary }]}>
-          Grouped by what each one is built for, not ranked. Any ranking would be out of date before
-          the semester ends, and all of them do most things passably.
+          {t('ai.whichToolText')}
         </Text>
 
         {TOOL_NOTES.map((tool) => (
@@ -66,7 +66,7 @@ export function AiGuideScreen() {
         ))}
 
         <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>
-          Before you use any of them
+          {t('ai.before')}
         </Text>
 
         {INTEGRITY.map((rule) => (
@@ -95,6 +95,7 @@ function UseCaseCard({
   expanded: boolean;
   onToggle: () => void;
 }) {
+  const { t } = useTranslation();
   const { colors } = useTheme();
 
   return (
@@ -121,9 +122,9 @@ function UseCaseCard({
 
       {expanded ? (
         <View style={styles.cardBody}>
-          <Block label="What suits it" body={useCase.suits} />
-          <Block label="How to ask" body={useCase.howToAsk} quoted />
-          <Block label="Watch out" body={useCase.watchOut} warning />
+          <Block label={t('ai.suits')} body={useCase.suits} />
+          <Block label={t('ai.howAsk')} body={useCase.howToAsk} quoted />
+          <Block label={t('ai.watchOut')} body={useCase.watchOut} warning />
         </View>
       ) : null}
     </Pressable>

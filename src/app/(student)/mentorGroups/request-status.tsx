@@ -10,10 +10,12 @@ import {
     View,
 } from 'react-native';
 import { useTheme } from '../../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 type RequestStatus = 'pending' | 'approved' | 'rejected';
 
 export default function RequestStatusScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   const { colors } = useTheme();
 
@@ -35,25 +37,25 @@ export default function RequestStatusScreen() {
       case 'approved':
         return {
           icon: 'checkmark-circle-outline' as const,
-          title: 'Request Approved',
+          title: t('mg.approved'),
           description:
-            'Your mentor has approved your request. You are now a member of this mentor group.',
+            t('mg.approvedText'),
         };
 
       case 'rejected':
         return {
           icon: 'close-circle-outline' as const,
-          title: 'Request Rejected',
+          title: t('mg.rejected'),
           description:
-            'Your request was not approved by the mentor. You can request to join another available group.',
+            t('mg.rejectedText'),
         };
 
       default:
         return {
           icon: 'time-outline' as const,
-          title: 'Request Pending',
+          title: t('mg.requestPending'),
           description:
-            'Your request has been sent to the mentor. You will become a member once the mentor approves it.',
+            t('mg.pendingText'),
         };
     }
   };
@@ -72,8 +74,8 @@ export default function RequestStatusScreen() {
     }
 
     Alert.alert(
-      'Request Pending',
-      'Your request is still waiting for mentor approval.'
+      t('mg.requestPending'),
+      t('mg.stillWaiting')
     );
   };
 
@@ -109,7 +111,7 @@ export default function RequestStatusScreen() {
           <Text
             style={[styles.headerTitle, { color: colors.text }]}
           >
-            Request Status
+            {t('mg.statusTitle')}
           </Text>
 
           <Text
@@ -118,7 +120,7 @@ export default function RequestStatusScreen() {
               { color: colors.textSecondary },
             ]}
           >
-            Your mentor group request
+            {t('mg.statusSubtitle')}
           </Text>
         </View>
       </View>
@@ -170,7 +172,7 @@ export default function RequestStatusScreen() {
         <Text
           style={[styles.sectionTitle, { color: colors.text }]}
         >
-          Group Details
+          {t('mg.details')}
         </Text>
 
         <View
@@ -230,7 +232,7 @@ export default function RequestStatusScreen() {
                 { color: colors.textSecondary },
               ]}
             >
-              Mentor: {group.mentor}
+              {t('mg.mentorLabel')} {group.mentor}
             </Text>
           </View>
 
@@ -247,7 +249,7 @@ export default function RequestStatusScreen() {
                 { color: colors.textSecondary },
               ]}
             >
-              Requested: {group.requestedAt}
+              {t('mg.requestedLabel')} {group.requestedAt}
             </Text>
           </View>
         </View>
@@ -256,7 +258,7 @@ export default function RequestStatusScreen() {
         <Text
           style={[styles.sectionTitle, { color: colors.text }]}
         >
-          Request Progress
+          {t('mg.progress')}
         </Text>
 
         <View
@@ -299,7 +301,7 @@ export default function RequestStatusScreen() {
                   { color: colors.text },
                 ]}
               >
-                Request Submitted
+                {t('mg.submitted')}
               </Text>
 
               <Text
@@ -308,7 +310,7 @@ export default function RequestStatusScreen() {
                   { color: colors.textSecondary },
                 ]}
               >
-                Your request was successfully sent to the mentor.
+                {t('mg.submittedText')}
               </Text>
             </View>
           </View>
@@ -360,7 +362,7 @@ export default function RequestStatusScreen() {
                   { color: colors.text },
                 ]}
               >
-                Mentor Review
+                {t('mg.review')}
               </Text>
 
               <Text
@@ -370,8 +372,8 @@ export default function RequestStatusScreen() {
                 ]}
               >
                 {status === 'pending'
-                  ? 'Waiting for your mentor to review the request.'
-                  : 'Your mentor has reviewed your request.'}
+                  ? t('mg.reviewWaiting')
+                  : t('mg.reviewDone')}
               </Text>
             </View>
           </View>
@@ -416,8 +418,8 @@ export default function RequestStatusScreen() {
                   ]}
                 >
                   {status === 'approved'
-                    ? 'Approved'
-                    : 'Rejected'}
+                    ? t('mg.approvedShort')
+                    : t('mg.rejectedShort')}
                 </Text>
 
                 <Text
@@ -427,8 +429,8 @@ export default function RequestStatusScreen() {
                   ]}
                 >
                   {status === 'approved'
-                    ? 'You are now a member of the mentor group.'
-                    : 'The mentor did not approve this request.'}
+                    ? t('mg.nowMember')
+                    : t('mg.notApproved')}
                 </Text>
               </View>
             </View>
@@ -462,10 +464,10 @@ export default function RequestStatusScreen() {
             ]}
           >
             {status === 'approved'
-              ? 'Open My Mentor Group'
+              ? t('mg.openMine')
               : status === 'rejected'
-              ? 'Find Another Group'
-              : 'Check Again'}
+              ? t('mg.findAnother')
+              : t('mg.checkAgain')}
           </Text>
         </Pressable>
 
@@ -492,9 +494,7 @@ export default function RequestStatusScreen() {
                 { color: colors.textSecondary },
               ]}
             >
-              You can only belong to one mentor group at a time.
-              Please wait for this request to be reviewed before
-              requesting another group.
+              {t('mg.oneGroupOnly')}
             </Text>
           </View>
         )}
@@ -522,8 +522,7 @@ export default function RequestStatusScreen() {
                 { color: colors.textSecondary },
               ]}
             >
-              You can browse other available mentor groups and
-              submit a new request.
+              {t('mg.browseOthers')}
             </Text>
           </View>
         )}

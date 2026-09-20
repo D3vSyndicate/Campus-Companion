@@ -17,23 +17,21 @@ import { useTheme } from '../../theme/ThemeContext';
 import { PageHeader } from '../PageHeader';
 import { ScaledText as Text } from '../ScaledText';
 import { AddEntryForm } from './AddEntryForm';
+import { useTranslation } from 'react-i18next';
+import { monthLong, weekdayLong } from '../../lib/dates';
 
-const WEEKDAY_HEADS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-const MONTHS = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December',
-];
-const WEEKDAYS_LONG = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+// Monday first, so the grid lines up with the timetable. The letters come from the locale files.
+const WEEKDAY_HEAD_KEYS = [0, 1, 2, 3, 4, 5, 6].map((index) => `date.weekdayHeads.${index}`);
 
 function dayLabel(iso: string) {
   const [year, month, day] = iso.split('-').map(Number);
   const date = new Date(year, (month || 1) - 1, day || 1);
   if (Number.isNaN(date.getTime())) return iso;
-  const weekday = WEEKDAYS_LONG[(date.getDay() || 7) - 1];
-  return `${weekday} ${date.getDate()} ${MONTHS[date.getMonth()]}`;
+  return `${weekdayLong(date.getDay())} ${date.getDate()} ${monthLong(date.getMonth())}`;
 }
 
 export function CalendarScreen() {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const { user } = useAuth();
   const userId = user?.id;
@@ -75,7 +73,7 @@ export function CalendarScreen() {
 
   const saveEntry = async (entry: { title: string; date: string; start: string; end: string; venue: string }) => {
     if (!userId) {
-      Alert.alert('Sign in first', 'Your own calendar entries are saved against your account.');
+      Alert.alert(t('cal.signInFirst'), t('cal.signInText'));
       return;
     }
     await addPersonalEntry(userId, entry);
@@ -85,10 +83,10 @@ export function CalendarScreen() {
 
   const deleteEntry = (entry: CalendarEntry) => {
     if (!userId) return;
-    Alert.alert('Remove this?', `"${entry.title}" will be taken off your calendar.`, [
-      { text: 'Keep it', style: 'cancel' },
+    Alert.alert(t('cal.removeTitle'), t('cal.removeText', { title: entry.title }), [
+      { text: t('cal.keep'), style: 'cancel' },
       {
-        text: 'Remove',
+        text: t('mgm.remove'),
         style: 'destructive',
         onPress: () => {
           void (async () => {
@@ -113,9 +111,9 @@ export function CalendarScreen() {
     <View style={[styles.screen, { backgroundColor: colors.background }]}>
       <ScrollView contentContainerStyle={styles.content}>
         <PageHeader
-          eyebrow="Calendar"
-          title="Everything you have on"
-          subtitle="Orientation, lectures, campus events and your own plans, in one month view."
+          eyebrow={t('cal.eyebrow')}
+          title={t('cal.title')}
+          subtitle={t('cal.subtitle')}
           showSearch={false}
           showBack
           backFallback="/(student)"
@@ -130,7 +128,7 @@ export function CalendarScreen() {
                 <View key={kind} style={styles.legendItem}>
                   <View style={[styles.swatch, { backgroundColor: meta.color }]} />
                   <View style={styles.legendCopy}>
-                    <Text style={[styles.legendLabel, { color: colors.text }]}>{meta.label}</Text>
+                    <Text style={[styles.legendLabel, { color: colors.text }]}>{t(meta.label)}</Text>
                     <Text style={[styles.legendNote, { color: colors.textSecondary }]}>
                       {meta.note}
                     </Text>
@@ -140,13 +138,13 @@ export function CalendarScreen() {
             })}
           </View>
           <View style={[styles.legendRule, { backgroundColor: colors.border }]} />
-          <Text style={[styles.legendBlurb, { color: colors.textSecondary }]}>{LEGEND_BLURB}</Text>
+          <Text style={[styles.legendBlurb, { color: colors.textSecondary }]}>{t(LEGEND_BLURB)}</Text>
         </View>
 
         {streams.length > 0 ? (
           <View style={styles.streamBlock}>
             <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>
-              {stream ? 'Your timetable' : 'Pick your class to see lectures'}
+              {stream ? t('cal.timetableTitle') : t('cal.timetableSub')}
             </Text>
             <View style={styles.streamRow}>
               {streams.map((option) => {
@@ -180,7 +178,7 @@ export function CalendarScreen() {
           <View style={styles.monthHead}>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Previous month"
+              accessibilityLabel={t('cal.prevMonth')}
               onPress={() => shift(-1)}
               hitSlop={12}
               style={({ pressed }) => pressed && { opacity: 0.5 }}
@@ -188,11 +186,11 @@ export function CalendarScreen() {
               <Ionicons name="chevron-back" size={22} color={colors.text} />
             </Pressable>
             <Text style={[styles.monthTitle, { color: colors.text }]}>
-              {MONTHS[month]} {year}
+              {monthLong(month)} {year}
             </Text>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Next month"
+              accessibilityLabel={t('cal.nextMonth')}
               onPress={() => shift(1)}
               hitSlop={12}
               style={({ pressed }) => pressed && { opacity: 0.5 }}
@@ -202,9 +200,9 @@ export function CalendarScreen() {
           </View>
 
           <View style={styles.weekHead}>
-            {WEEKDAY_HEADS.map((head, index) => (
+            {WEEKDAY_HEAD_KEYS.map((headKey, index) => (
               <Text key={index} style={[styles.weekHeadText, { color: colors.textSecondary }]}>
-                {head}
+                {t(headKey)}
               </Text>
             ))}
           </View>
@@ -259,7 +257,7 @@ export function CalendarScreen() {
           <Text style={[styles.dayTitle, { color: colors.text }]}>{dayLabel(selected)}</Text>
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel="Add your own entry"
+            accessibilityLabel={t('cal.addOwn')}
             onPress={() => setAdding(true)}
             style={({ pressed }) => [
               styles.addButton,
@@ -268,7 +266,7 @@ export function CalendarScreen() {
             ]}
           >
             <Ionicons name="add" size={18} color="#071B2C" />
-            <Text style={styles.addLabel}>Add</Text>
+            <Text style={styles.addLabel}>{t('cal.add')}</Text>
           </Pressable>
         </View>
 
@@ -276,17 +274,16 @@ export function CalendarScreen() {
           <View style={[styles.warning, { backgroundColor: colors.surfaceMuted, borderColor: colors.border }]}>
             <Ionicons name="alert-circle-outline" size={16} color={colors.textSecondary} />
             <Text style={[styles.warningText, { color: colors.textSecondary }]}>
-              No Friday lectures are loaded yet. Check your printed timetable — this does not mean
-              you are free.
+              {t('cal.noFriday')}
             </Text>
           </View>
         ) : null}
 
         {loading ? (
-          <Text style={[styles.empty, { color: colors.textSecondary }]}>Loading your month…</Text>
+          <Text style={[styles.empty, { color: colors.textSecondary }]}>{t('cal.loading')}</Text>
         ) : dayEntries.length === 0 ? (
           <Text style={[styles.empty, { color: colors.textSecondary }]}>
-            Nothing on this day. Tap Add to put something of your own here.
+            {t('cal.emptyDay')}
           </Text>
         ) : (
           dayEntries.map((entry) => {
@@ -296,7 +293,7 @@ export function CalendarScreen() {
                 key={entry.id}
                 accessibilityRole={entry.kind === 'personal' ? 'button' : 'text'}
                 accessibilityLabel={
-                  entry.kind === 'personal' ? `${entry.title}. Tap to remove.` : entry.title
+                  entry.kind === 'personal' ? t('cal.tapRemove', { title: entry.title }) : entry.title
                 }
                 onPress={() => (entry.kind === 'personal' ? deleteEntry(entry) : undefined)}
                 style={[styles.entry, { backgroundColor: colors.card, borderColor: colors.border }]}
@@ -305,10 +302,10 @@ export function CalendarScreen() {
                 <View style={styles.entryBody}>
                   <View style={styles.entryTop}>
                     <Text style={[styles.entryKind, { color: meta.color }]}>
-                      {meta.label} · {meta.note}
+                      {t(meta.label)} · {t(meta.note)}
                     </Text>
                     <Text style={[styles.entryTime, { color: colors.textSecondary }]}>
-                      {entry.start ? `${entry.start}${entry.end ? `–${entry.end}` : ''}` : 'All day'}
+                      {entry.start ? `${entry.start}${entry.end ? `–${entry.end}` : ''}` : t('cal.allDay')}
                     </Text>
                   </View>
                   <Text style={[styles.entryTitle, { color: colors.text }]}>{entry.title}</Text>

@@ -9,6 +9,7 @@ import {
   slotsForStream,
   type TimetableSlot,
 } from '../data/timetable-data';
+import i18n from '../i18n';
 
 // Everything a student has on, in one place: orientation sessions, lectures, campus events and
 // whatever they added themselves.
@@ -37,33 +38,34 @@ export interface CalendarEntry {
 // colours carry the same distinction without anyone having to be told off by their own phone.
 export const ENTRY_KINDS: Record<
   EntryKind,
+  // label and note are locale keys; the screen translates them when it draws.
   { label: string; note: string; compulsory: boolean; color: string; icon: string }
 > = {
   orientation: {
-    label: 'Orientation',
-    note: 'Worth being there',
+    label: 'schedule.tabOrientation',
+    note: 'cal.kind.orientation.note',
     compulsory: true,
     color: '#0B4F9E',
     icon: 'school-outline',
   },
   timetable: {
-    label: 'Lectures',
-    note: 'Worth being there',
+    label: 'cal.kind.timetable.label',
+    note: 'cal.kind.orientation.note',
     compulsory: true,
     color: '#1F7A5A',
     icon: 'book-outline',
   },
   // Yellow reads as "you are welcome", not "you are required".
   event: {
-    label: 'Campus events',
-    note: 'Come if you can',
+    label: 'common.eventsTitle',
+    note: 'cal.kind.event.note',
     compulsory: false,
     color: '#F8A705',
     icon: 'megaphone-outline',
   },
   personal: {
-    label: 'Your own plans',
-    note: 'Yours to move',
+    label: 'cal.kind.personal.label',
+    note: 'cal.kind.personal.note',
     compulsory: false,
     color: '#7A4FBF',
     icon: 'person-outline',
@@ -71,8 +73,8 @@ export const ENTRY_KINDS: Record<
 };
 
 // Sits under the legend. The point of the whole colour scheme, said kindly and once.
-export const LEGEND_BLURB =
-  'Yellow means you are invited, not obliged. If you do have to miss something, that is survivable — tell a lecturer or your FYS buddy early and they will help you catch up.';
+// (This is a locale key, not the words: the screen translates it when it draws.)
+export const LEGEND_BLURB = 'cal.blurb';
 
 // -----------------------------------------------------------------------------
 // Dates
@@ -141,7 +143,7 @@ const personalToEntry = (entry: PersonalEntry): CalendarEntry => ({
   start: entry.start,
   end: entry.end,
   venue: entry.venue,
-  detail: 'Added by you',
+  detail: i18n.t('cal.addedByYou'),
 });
 
 // -----------------------------------------------------------------------------

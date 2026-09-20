@@ -8,7 +8,8 @@ import { PageHeader } from '../../components/PageHeader';
 import { ScaledText as Text } from '../../components/ScaledText';
 import { ShameResilientBanner } from '../../components/ShameResilientBanner';
 import { useAuth } from '../../context/AuthContext';
-import { LESSON_SECTIONS } from '../../data/digitalLessons';
+import { LESSON_SECTIONS, type Lesson } from '../../data/digitalLessons';
+import { lessonDesc, lessonSteps, lessonSummary, lessonTip, lessonTitle, sectionSubtitle, sectionTitle } from '../../lib/lessonText';
 import { fetchWithOfflineFallback } from '../../lib/offlineData';
 import { markGuideOpened } from '../../lib/readiness';
 import { useTheme } from '../../theme/ThemeContext';
@@ -78,13 +79,17 @@ function mapDigitalGuide(row: Record<string, unknown>, index: number): DigitalGu
   };
 }
 
-// Every built-in lesson, shaped like the guides from the database so it opens in the same window.
-const LESSON_GUIDES: Record<string, DigitalGuide> = Object.fromEntries(
-  LESSON_SECTIONS.flatMap((section) => section.lessons).map((lesson) => [
-    lesson.id,
-    { id: lesson.id, icon: lesson.icon, title: lesson.title, desc: lesson.desc, steps: lesson.steps, images: [], tip: lesson.tip } satisfies DigitalGuide,
-  ]),
-);
+// A built-in lesson, shaped like the guides from the database so it opens in the same window. It is
+// built when the student taps it, so it is in the language they have chosen.
+const guideFromLesson = (lesson: Lesson): DigitalGuide => ({
+  id: lesson.id,
+  icon: lesson.icon,
+  title: lessonTitle(lesson),
+  desc: lessonDesc(lesson),
+  steps: lessonSteps(lesson),
+  images: [],
+  tip: lessonTip(lesson),
+});
 
 export default function DigitalReadinessScreen() {
   const { colors } = useTheme();
@@ -180,7 +185,7 @@ export default function DigitalReadinessScreen() {
         <View key={item.id} style={[styles.card, { width: tileWidth, backgroundColor: colors.surface, borderColor: colors.border }]}>
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel={`Open guide: ${item.title}`}
+            accessibilityLabel={t('digital.openGuideNamed', { title: item.title })}
             onPress={() => {
               setSelectedGuide(item);
             }}
@@ -215,8 +220,8 @@ export default function DigitalReadinessScreen() {
               <Ionicons name={section.icon} size={22} color={colors.accent} />
             </View>
             <View style={styles.lessonsHeaderCopy}>
-              <Text style={[styles.lessonsTitle, { color: colors.text }]} accessibilityRole="header">{section.title}</Text>
-              <Text style={[styles.lessonsSubtitle, { color: colors.textSecondary }]}>{section.subtitle}</Text>
+              <Text style={[styles.lessonsTitle, { color: colors.text }]} accessibilityRole="header">{sectionTitle(section)}</Text>
+              <Text style={[styles.lessonsSubtitle, { color: colors.textSecondary }]}>{sectionSubtitle(section)}</Text>
             </View>
           </View>
 
@@ -224,16 +229,16 @@ export default function DigitalReadinessScreen() {
             <Pressable
               key={lesson.id}
               accessibilityRole="button"
-              accessibilityLabel={`Open ${section.title} lesson ${index + 1}: ${lesson.title}`}
-              onPress={() => setSelectedGuide(LESSON_GUIDES[lesson.id])}
+              accessibilityLabel={t('digital.openLesson', { section: sectionTitle(section), number: index + 1, title: lessonTitle(lesson) })}
+              onPress={() => setSelectedGuide(guideFromLesson(lesson))}
               style={({ pressed }) => [styles.lessonRow, { backgroundColor: colors.surface, borderColor: colors.border }, pressed && { opacity: 0.8 }]}
             >
               <View style={[styles.lessonNumber, { backgroundColor: colors.accent }]}>
                 <Text style={styles.lessonNumberText}>{index + 1}</Text>
               </View>
               <View style={styles.lessonCopy}>
-                <Text style={[styles.lessonTitle, { color: colors.text }]}>{lesson.title}</Text>
-                <Text style={[styles.lessonSummary, { color: colors.textSecondary }]}>{lesson.summary}</Text>
+                <Text style={[styles.lessonTitle, { color: colors.text }]}>{lessonTitle(lesson)}</Text>
+                <Text style={[styles.lessonSummary, { color: colors.textSecondary }]}>{lessonSummary(lesson)}</Text>
               </View>
               <Ionicons name="chevron-forward" size={19} color={colors.textSecondary} />
             </Pressable>
@@ -244,9 +249,9 @@ export default function DigitalReadinessScreen() {
       <View style={[styles.disclaimer, { backgroundColor: colors.card, borderColor: colors.border }]}>
         <Ionicons name="information-circle-outline" size={20} color={colors.textSecondary} />
         <View style={styles.disclaimerCopy}>
-          <Text style={[styles.disclaimerTitle, { color: colors.text }]}>About this content</Text>
+          <Text style={[styles.disclaimerTitle, { color: colors.text }]}>{t('digital.aboutTitle')}</Text>
           <Text style={[styles.disclaimerText, { color: colors.textSecondary }]}>
-            Some of the content on the Digital screen, particularly the images, was created with the help of generative AI tools. Pictures are there to help you understand and may not match the real screens exactly. Check important details, like links and dates, with IT Services or your lecturer.
+            {t('digital.aiNote')}
           </Text>
         </View>
       </View>
@@ -258,10 +263,10 @@ export default function DigitalReadinessScreen() {
       >
         <View style={[styles.modalScreen, { backgroundColor: colors.background }]}>
           <View style={[styles.modalHeader, { backgroundColor: colors.surface, borderBottomColor: colors.border }]}>
-            <Text style={[styles.modalHeaderTitle, { color: colors.text }]}>Guide</Text>
+            <Text style={[styles.modalHeaderTitle, { color: colors.text }]}>{t('digital.guide')}</Text>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Close guide"
+              accessibilityLabel={t('digital.closeGuide')}
               onPress={closeGuide}
               style={[styles.closeButton, { backgroundColor: colors.card }]}
             >
@@ -279,10 +284,10 @@ export default function DigitalReadinessScreen() {
               </View>
 
               <Text style={[styles.intro, { color: colors.text }]}>
-                {selectedGuide.desc || 'This guide will help you take your next step with confidence.'}
+                {selectedGuide.desc || t('digital.guideIntro')}
               </Text>
 
-              <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>Steps to follow</Text>
+              <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>{t('digital.stepsTitle')}</Text>
               <View style={[styles.stepsContainer, { backgroundColor: colors.card }]}>
                 {selectedGuide.steps.length > 0 ? selectedGuide.steps.map((step, idx) => (
                   <View key={`${selectedGuide.id}-${idx}`} style={styles.stepRow}>
@@ -292,7 +297,7 @@ export default function DigitalReadinessScreen() {
                     <Text style={[styles.stepText, { color: colors.text }]}>{step}</Text>
                   </View>
                 )) : (
-                  <Text style={[styles.stepText, { color: colors.textSecondary }]}>There are no steps to show yet. You can still explore the guide below.</Text>
+                  <Text style={[styles.stepText, { color: colors.textSecondary }]}>{t('digital.noSteps')}</Text>
                 )}
               </View>
 
@@ -309,7 +314,7 @@ export default function DigitalReadinessScreen() {
               {selectedGuide.videoUrl && (
                 <Pressable
                   accessibilityRole="link"
-                  accessibilityLabel="Open optional guide video"
+                  accessibilityLabel={t('digital.videoLabel')}
                   onPress={() => void WebBrowser.openBrowserAsync(selectedGuide.videoUrl!)}
                   style={[styles.mediaFrame, { borderColor: colors.border, backgroundColor: colors.card }]}
                 >
@@ -317,8 +322,8 @@ export default function DigitalReadinessScreen() {
                     <View style={[styles.playButton, { backgroundColor: colors.accent }]}>
                       <Ionicons name="play" size={22} color={colors.text} />
                     </View>
-                    <Text style={[styles.playHint, { color: colors.text }]}>Watch video</Text>
-                    <Text style={[styles.videoLinkHint, { color: colors.textSecondary }]}>Opens separately</Text>
+                    <Text style={[styles.playHint, { color: colors.text }]}>{t('digital.watch')}</Text>
+                    <Text style={[styles.videoLinkHint, { color: colors.textSecondary }]}>{t('digital.opensSeparately')}</Text>
                   </View>
                 </Pressable>
               )}
@@ -326,11 +331,11 @@ export default function DigitalReadinessScreen() {
               {selectedGuide.images.map((image) => (
                 <View key={image.url} style={[styles.imageSection, { borderColor: colors.border }]}>
                   {imageErrors[image.url] ? (
-                    <Text style={[styles.mediaMessage, { color: colors.textSecondary }]}>This picture did not load, but you can still read the steps above.</Text>
+                    <Text style={[styles.mediaMessage, { color: colors.textSecondary }]}>{t('digital.imageFail')}</Text>
                   ) : (
                     <Pressable
                       accessibilityRole="link"
-                      accessibilityLabel={image.caption ? `Open image: ${image.caption}` : 'Open image'}
+                      accessibilityLabel={image.caption ? t('digital.openImageNamed', { title: image.caption }) : t('digital.openImage')}
                       onPress={() => void WebBrowser.openBrowserAsync(image.url)}
                     >
                       <Image
@@ -348,11 +353,11 @@ export default function DigitalReadinessScreen() {
               {selectedGuide.link && (
                 <Pressable
                   accessibilityRole="link"
-                  accessibilityLabel="Open guide"
+                  accessibilityLabel={t('digital.openGuide')}
                   style={[styles.button, { backgroundColor: colors.accent }]}
                   onPress={() => void Linking.openURL(selectedGuide.link!)}
                 >
-                  <Text style={[styles.buttonText, { color: colors.text }]}>Learn more</Text>
+                  <Text style={[styles.buttonText, { color: colors.text }]}>{t('digital.learnMore')}</Text>
                   <Ionicons name="arrow-forward" size={18} color={colors.text} />
                 </Pressable>
               )}

@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import { useRouter } from 'expo-router';
 import { ReactNode, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Platform, Pressable, StyleSheet, View } from 'react-native';
 import { useTheme } from '../theme/ThemeContext';
 import { ScaledText as Text } from './ScaledText';
@@ -11,78 +12,20 @@ type Props = {
   variant?: 'student' | 'mentor' | 'staff';
 };
 
-// Edit these to update what the About section says.
-const PROJECT = {
-  name: 'Campus Companion',
-  subtitle: 'School of IT Student Orientation App',
-  summary:
-    'Built to help first-year School of IT students feel welcome, informed and ready. It brings the orientation schedule, venues, contacts, FAQs, support and digital skills guides into one place, so nobody has to piece it together from emails and messages.',
-  status: 'This is a hackathon prototype. Content shown may be sample data until staff publish the real orientation programme.',
-};
+// The words are in the locale files under about.*. These lists only say which entries to show.
+const PROJECT_NAME = 'Campus Companion';
 
-const PRINCIPLES: { icon: keyof typeof Ionicons.glyphMap; title: string; text: string }[] = [
-  {
-    icon: 'flame-outline',
-    title: 'Courage',
-    text: 'Clear next steps and small wins, so taking the first step feels doable.',
-  },
-  {
-    icon: 'heart-outline',
-    title: 'Empathy',
-    text: 'Warm, plain language. We never assume you already know how university works.',
-  },
-  {
-    icon: 'hand-left-outline',
-    title: 'Vulnerability',
-    text: 'Not knowing something yet is normal. The guides and FAQs are here for exactly that.',
-  },
-  {
-    icon: 'shield-checkmark-outline',
-    title: 'Shame resilience',
-    text: 'Missed a session or feeling lost? You will always be shown what to do next, never blamed.',
-  },
+const PRINCIPLES: { id: string; icon: keyof typeof Ionicons.glyphMap }[] = [
+  { id: 'courage', icon: 'flame-outline' },
+  { id: 'empathy', icon: 'heart-outline' },
+  { id: 'vulnerability', icon: 'hand-left-outline' },
+  { id: 'shame', icon: 'shield-checkmark-outline' },
 ];
 
-const FEATURES = [
-  'Home with announcements, shuttle times and your progress',
-  'Search across the schedule, FAQs, contacts, venues and help options',
-  'Orientation schedule with venue directions',
-  'Campus map for South and North campus: building numbers, search, walking routes',
-  'New student checklist',
-  'Digital readiness guides: computer skills, Funda, printing and Wi-Fi',
-  'FAQs grouped by category',
-  'Support pathways ("I need help with...") and key contacts',
-  'Tribe: a chat with the students in your mentor group',
-  'Language switcher (English, isiXhosa, Afrikaans), dark mode and adjustable text size',
-  'Saved copy of key information for when your connection drops',
-];
+// f5 is the checklist, which reuses the wording of the checklist screen.
+const FEATURES = ['f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9', 'f10', 'f11'];
 
-const PRIVACY: { label: string; text: string }[] = [
-  {
-    label: 'What we keep',
-    text: 'Your email address (to sign you in), the chat name you choose for Tribe, the messages you send there, and which digital readiness steps you have finished.',
-  },
-  {
-    label: 'What we never ask for',
-    text: 'ID numbers, medical details or financial information.',
-  },
-  {
-    label: 'Who can see it',
-    text: 'Tribe messages are visible to the students in your tribe and to orientation staff, who help keep the space safe. Your progress is only yours.',
-  },
-  {
-    label: 'On your device',
-    text: 'Your language, text size and theme, your last few searches, plus a saved copy of the schedule, FAQs and contacts so they work offline.',
-  },
-  {
-    label: 'The campus map',
-    text: 'The map loads its pictures and walking routes from free OpenStreetMap-based services. They only receive which part of the map you are viewing and the start and end points of a route. The app does not use GPS and never tracks where you are. Your name and account are never sent.',
-  },
-  {
-    label: 'Our approach',
-    text: 'Designed with POPIA principles in mind: collect only what is needed, and keep private details private.',
-  },
-];
+const PRIVACY = ['keep', 'never', 'who', 'device', 'map', 'approach'];
 
 function Section({
   icon,
@@ -127,6 +70,7 @@ function Bullet({ text }: { text: string }) {
 }
 
 export function AboutProject({ variant = 'student' }: Props) {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const router = useRouter();
   const [openKey, setOpenKey] = useState<string | null>('about');
@@ -136,49 +80,47 @@ export function AboutProject({ variant = 'student' }: Props) {
 
   return (
     <View>
-      <Text style={[styles.label, { color: colors.textSecondary }]}>ABOUT THE PROJECT</Text>
+      <Text style={[styles.label, { color: colors.textSecondary }]}>{t('about.label')}</Text>
 
-      <Section icon="information-circle-outline" title="About this app" open={openKey === 'about'} onToggle={() => toggle('about')}>
-        <Text style={[styles.name, { color: colors.text }]}>{PROJECT.name}</Text>
-        <Text style={[styles.subtitle, { color: colors.accent }]}>{PROJECT.subtitle}</Text>
-        <Text style={[styles.body, { color: colors.textSecondary }]}>{PROJECT.summary}</Text>
-        <Text style={[styles.note, { color: colors.textSecondary }]}>{PROJECT.status}</Text>
+      <Section icon="information-circle-outline" title={t('about.appTitle')} open={openKey === 'about'} onToggle={() => toggle('about')}>
+        <Text style={[styles.name, { color: colors.text }]}>{PROJECT_NAME}</Text>
+        <Text style={[styles.subtitle, { color: colors.accent }]}>{t('about.subtitle')}</Text>
+        <Text style={[styles.body, { color: colors.textSecondary }]}>{t('about.summary')}</Text>
+        <Text style={[styles.note, { color: colors.textSecondary }]}>{t('about.status')}</Text>
       </Section>
 
-      <Section icon="sparkles-outline" title="How it supports students" open={openKey === 'support'} onToggle={() => toggle('support')}>
+      <Section icon="sparkles-outline" title={t('about.supportTitle')} open={openKey === 'support'} onToggle={() => toggle('support')}>
         {PRINCIPLES.map((principle) => (
-          <View key={principle.title} style={styles.principle}>
+          <View key={principle.id} style={styles.principle}>
             <View style={[styles.principleIcon, { backgroundColor: colors.background }]}>
               <Ionicons name={principle.icon} size={18} color={colors.accent} />
             </View>
             <View style={styles.principleText}>
-              <Text style={[styles.principleTitle, { color: colors.text }]}>{principle.title}</Text>
-              <Text style={[styles.body, { color: colors.textSecondary }]}>{principle.text}</Text>
+              <Text style={[styles.principleTitle, { color: colors.text }]}>{t(`buddyGuide.principles.${principle.id}.title`)}</Text>
+              <Text style={[styles.body, { color: colors.textSecondary }]}>{t(`about.principles.${principle.id}`)}</Text>
             </View>
           </View>
         ))}
       </Section>
 
-      <Section icon="apps-outline" title="What is inside" open={openKey === 'features'} onToggle={() => toggle('features')}>
+      <Section icon="apps-outline" title={t('about.insideTitle')} open={openKey === 'features'} onToggle={() => toggle('features')}>
         {FEATURES.map((feature) => (
-          <Bullet key={feature} text={feature} />
+          <Bullet key={feature} text={feature === 'f5' ? t('common.checklistTitleShort') : t(`about.features.${feature}`)} />
         ))}
       </Section>
 
-      <Section icon="lock-closed-outline" title="Privacy and your data" open={openKey === 'privacy'} onToggle={() => toggle('privacy')}>
+      <Section icon="lock-closed-outline" title={t('about.privacyTitle')} open={openKey === 'privacy'} onToggle={() => toggle('privacy')}>
         {PRIVACY.map((item) => (
-          <View key={item.label} style={styles.privacyItem}>
-            <Text style={[styles.principleTitle, { color: colors.text }]}>{item.label}</Text>
-            <Text style={[styles.body, { color: colors.textSecondary }]}>{item.text}</Text>
+          <View key={item} style={styles.privacyItem}>
+            <Text style={[styles.principleTitle, { color: colors.text }]}>{t(`about.privacy.${item}.label`)}</Text>
+            <Text style={[styles.body, { color: colors.textSecondary }]}>{t(`about.privacy.${item}.text`)}</Text>
           </View>
         ))}
       </Section>
 
-      <Section icon="help-buoy-outline" title="Getting real help" open={openKey === 'help'} onToggle={() => toggle('help')}>
+      <Section icon="help-buoy-outline" title={t('about.helpTitle')} open={openKey === 'help'} onToggle={() => toggle('help')}>
         <Text style={[styles.body, { color: colors.textSecondary }]}>
-          This app points you towards help. It does not replace it. If you are struggling, or you or someone else may be in danger, contact
-          the university counselling and wellness services or campus protection services straight away. Asking for help early is a smart,
-          responsible thing to do.
+          {t('about.helpText')}
         </Text>
         {variant !== 'staff' ? (
           <Pressable
@@ -186,20 +128,20 @@ export function AboutProject({ variant = 'student' }: Props) {
             onPress={() => router.push((variant === 'mentor' ? '/(mentor)/refer' : '/(student)/contacts') as never)}
             style={[styles.button, { backgroundColor: colors.accent }]}
           >
-            <Text style={styles.buttonText}>{variant === 'mentor' ? 'Open Refer a student' : 'Open the Support tab'}</Text>
+            <Text style={styles.buttonText}>{variant === 'mentor' ? t('about.openRefer') : t('about.openSupport')}</Text>
             <Ionicons name="arrow-forward" size={16} color="#071B2C" />
           </Pressable>
         ) : null}
       </Section>
 
-      <Section icon="phone-portrait-outline" title="App information" open={openKey === 'info'} onToggle={() => toggle('info')}>
+      <Section icon="phone-portrait-outline" title={t('about.infoTitle')} open={openKey === 'info'} onToggle={() => toggle('info')}>
         {[
-          ['Version', Constants.expoConfig?.version ?? '1.0.0'],
-          ['Platform', platformName],
-          ['Data', 'Live from the School of IT database, with a saved copy for offline use'],
+          ['version', Constants.expoConfig?.version ?? '1.0.0'],
+          ['platform', platformName],
+          ['data', t('about.dataValue')],
         ].map(([key, value]) => (
           <View key={key} style={styles.infoRow}>
-            <Text style={[styles.infoKey, { color: colors.textSecondary }]}>{key}</Text>
+            <Text style={[styles.infoKey, { color: colors.textSecondary }]}>{t(`about.${key}`)}</Text>
             <Text style={[styles.infoValue, { color: colors.text }]}>{value}</Text>
           </View>
         ))}

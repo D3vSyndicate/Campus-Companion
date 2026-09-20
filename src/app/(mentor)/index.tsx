@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { Image } from 'expo-image';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Pressable, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
 import { ScaledText as Text } from '../../components/ScaledText';
 import { ShameResilientBanner } from '../../components/ShameResilientBanner';
@@ -9,20 +10,27 @@ import { useAuth } from '../../context/AuthContext';
 import { fetchWithOfflineFallback } from '../../lib/offlineData';
 import { useTheme } from '../../theme/ThemeContext';
 
-type Action = { route: string; icon: keyof typeof Ionicons.glyphMap; title: string; text: string };
+// id picks the wording: buddy.actions.<id>.title and .text. Two of them reuse shared wording.
+type Action = { id: string; route: string; icon: keyof typeof Ionicons.glyphMap };
 
 const ACTIONS: Action[] = [
-  { route: '/(mentor)/mentorGroup/index', icon: 'chatbubbles-outline', title: 'My Tribe', text: 'Chat with the first-years in your group.' },
-  { route: '/(mentor)/search', icon: 'search-outline', title: 'Search', text: 'Find answers, sessions, contacts and venues fast.' },
-  { route: '/(mentor)/faqs', icon: 'help-circle-outline', title: 'Quick answers', text: 'Find and share answers to common questions.' },
-  { route: '/(mentor)/announcements', icon: 'megaphone-outline', title: 'Announcements', text: 'Know what students are being told.' },
-  { route: '/(mentor)/schedule', icon: 'calendar-outline', title: 'Orientation schedule', text: 'Where students need to be, and when.' },
-  { route: '/(mentor)/map', icon: 'map-outline', title: 'Campus map', text: 'Find any building and show first-years the way.' },
-  { route: '/(mentor)/venues', icon: 'location-outline', title: 'Venue guide', text: 'Directions you can give with confidence.' },
-  { route: '/(mentor)/refer', icon: 'hand-left-outline', title: 'Refer a student', text: 'Who to point students to for each kind of help.' },
-  { route: '/(mentor)/emergency', icon: 'call-outline', title: 'Emergency contacts', text: 'Numbers to share when a student needs urgent help.' },
-  { route: '/(mentor)/guide', icon: 'book-outline', title: 'Buddy guide', text: 'Kind wording, your boundaries and a first-week checklist.' },
+  { id: 'myTribe', route: '/(mentor)/mentorGroup/index', icon: 'chatbubbles-outline' },
+  { id: 'search', route: '/(mentor)/search', icon: 'search-outline' },
+  { id: 'answers', route: '/(mentor)/faqs', icon: 'help-circle-outline' },
+  { id: 'announcements', route: '/(mentor)/announcements', icon: 'megaphone-outline' },
+  { id: 'schedule', route: '/(mentor)/schedule', icon: 'calendar-outline' },
+  { id: 'map', route: '/(mentor)/map', icon: 'map-outline' },
+  { id: 'venues', route: '/(mentor)/venues', icon: 'location-outline' },
+  { id: 'refer', route: '/(mentor)/refer', icon: 'hand-left-outline' },
+  { id: 'emergency', route: '/(mentor)/emergency', icon: 'call-outline' },
+  { id: 'guide', route: '/(mentor)/guide', icon: 'book-outline' },
 ];
+
+// Where each action gets its title. Most have their own; two reuse wording used elsewhere.
+const ACTION_TITLE: Record<string, string> = {
+  schedule: 'common.scheduleTitleShort',
+  emergency: 'emergency.title',
+};
 
 type Session = { id: string; title: string; time: string; venue: string };
 
@@ -30,12 +38,14 @@ const pad = (value: number) => String(value).padStart(2, '0');
 const localIsoDate = (date: Date) => `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
 
 export default function BuddyHome() {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const router = useRouter();
   const { user } = useAuth();
 
   const [sessions, setSessions] = useState<Session[]>([]);
-  const [heading, setHeading] = useState("Today's sessions");
+  // Which heading to show, kept as data so it changes language with the rest of the screen.
+  const [comingUp, setComingUp] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
 
   const load = async () => {
@@ -65,7 +75,7 @@ export default function BuddyHome() {
 
     // Today's sessions, or the next day that has any.
     const nextDate = upcoming[0]?.date;
-    setHeading(nextDate && nextDate !== today ? `Coming up on ${nextDate}` : "Today's sessions");
+    setComingUp(nextDate && nextDate !== today ? nextDate : null);
     setSessions(upcoming.filter((item) => item.date === nextDate).slice(0, 4));
   };
 
@@ -99,18 +109,18 @@ export default function BuddyHome() {
           contentFit="fill"
         />
         <View style={styles.heroOverlay} />
-        <Text style={[styles.eyebrow, { color: colors.accent }]}>FYS BUDDY</Text>
-        <Text style={[styles.heroTitle, { color: '#FFFFFF' }]}>{name ? `Hi ${name}` : 'Hi there'}, thank you for being a buddy</Text>
+        <Text style={[styles.eyebrow, { color: colors.accent }]}>{t('buddy.eyebrow')}</Text>
+        <Text style={[styles.heroTitle, { color: '#FFFFFF' }]}>{name ? t('buddy.hi', { name }) : t('buddy.hiThere')}</Text>
         <Text style={[styles.heroText, { color: '#FFFFFF' }]}>
-          You are the friendly face that makes a first-year feel they belong. You do not need to know everything. You just need to know where to point.
+          {t('buddy.heroText')}
         </Text>
       </View>
 
-      <ShameResilientBanner message="Many new students ask the questions they think are obvious. Treat every question as a good one." type="encouragement" />
+      <ShameResilientBanner message={t('buddy.banner')} type="encouragement" />
 
-      <Text style={[styles.sectionTitle, { color: colors.text }]}>{heading}</Text>
+      <Text style={[styles.sectionTitle, { color: colors.text }]}>{comingUp ? t('buddy.comingUp', { date: comingUp }) : t('buddy.todaySessions')}</Text>
       {sessions.length === 0 ? (
-        <Text style={[styles.muted, { color: colors.textSecondary }]}>No sessions are scheduled yet. Check the orientation schedule again soon.</Text>
+        <Text style={[styles.muted, { color: colors.textSecondary }]}>{t('buddy.noSessions')}</Text>
       ) : (
         sessions.map((session) => (
           <View key={session.id} style={[styles.session, { backgroundColor: colors.surface, borderColor: colors.border }]}>
@@ -123,10 +133,10 @@ export default function BuddyHome() {
         ))
       )}
 
-      <Text style={[styles.sectionTitle, { color: colors.text }]}>What do you need?</Text>
+      <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('common.whatNeed')}</Text>
       {ACTIONS.map((action) => (
         <Pressable
-          key={action.route}
+          key={action.id}
           accessibilityRole="button"
           onPress={() => router.push(action.route as never)}
           style={({ pressed }) => [
@@ -139,8 +149,8 @@ export default function BuddyHome() {
             <Ionicons name={action.icon} size={22} color={colors.accent} />
           </View>
           <View style={styles.actionText}>
-            <Text style={[styles.actionTitle, { color: colors.text }]}>{action.title}</Text>
-            <Text style={[styles.muted, { color: colors.textSecondary }]}>{action.text}</Text>
+            <Text style={[styles.actionTitle, { color: colors.text }]}>{t(ACTION_TITLE[action.id] ?? `buddy.actions.${action.id}.title`)}</Text>
+            <Text style={[styles.muted, { color: colors.textSecondary }]}>{t(`buddy.actions.${action.id}.text`)}</Text>
           </View>
           <Ionicons name="arrow-forward" size={18} color={colors.accent} />
         </Pressable>

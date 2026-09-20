@@ -9,10 +9,11 @@ import { fetchShuttleRows } from '../../lib/shuttle';
 import { fetchSportRows } from '../../lib/sport';
 import { highlight, prepare, search, snippet, type PreparedDoc, type SearchDoc, type SearchHit, type SearchKind } from '../../lib/search';
 import { buildSearchDocs, type SearchSources } from '../../lib/searchDocs';
-import { SEARCH_SCOPES, type SearchScopeId } from '../../lib/searchScopes';
+import { SEARCH_SCOPES, scopeText, type SearchScopeId } from '../../lib/searchScopes';
 import { useTheme } from '../../theme/ThemeContext';
 import { ScaledText as Text } from '../ScaledText';
 import { ShameResilientBanner } from '../ShameResilientBanner';
+import { useTranslation } from 'react-i18next';
 
 export type SearchArea = 'student' | 'mentor';
 
@@ -54,25 +55,25 @@ const SOURCES: { key: Exclude<keyof SearchSources, 'today'>; table: string; kind
 ];
 
 const KIND_META: Record<SearchKind, { label: string; icon: keyof typeof Ionicons.glyphMap; color: string }> = {
-  faq: { label: 'Answers', icon: 'help-circle-outline', color: '#2563EB' },
-  support: { label: 'Getting help', icon: 'hand-left-outline', color: '#0F766E' },
-  schedule: { label: 'Schedule', icon: 'calendar-outline', color: '#7C3AED' },
-  venue: { label: 'Venues', icon: 'location-outline', color: '#D98E04' },
-  place: { label: 'Campus buildings', icon: 'business-outline', color: '#64748B' },
-  contact: { label: 'People to contact', icon: 'people-outline', color: '#EA580C' },
-  guide: { label: 'Digital guides', icon: 'laptop-outline', color: '#0891B2' },
-  event: { label: 'Events', icon: 'ticket-outline', color: '#DB2777' },
-  sport: { label: 'Sport & gym', icon: 'barbell-outline', color: '#16A34A' },
-  programme: { label: 'Programmes', icon: 'school-outline', color: '#4F46E5' },
-  announcement: { label: 'Announcements', icon: 'megaphone-outline', color: '#B45309' },
-  checklist: { label: 'Checklist', icon: 'checkmark-circle-outline', color: '#15803D' },
-  info: { label: 'Support information', icon: 'information-circle-outline', color: '#0F766E' },
-  shuttle: { label: 'Shuttle times', icon: 'bus-outline', color: '#0369A1' },
-  setting: { label: 'Settings', icon: 'settings-outline', color: '#475569' },
+  faq: { label: 'search.kind.faq', icon: 'help-circle-outline', color: '#2563EB' },
+  support: { label: 'search.kind.support', icon: 'hand-left-outline', color: '#0F766E' },
+  schedule: { label: 'search.kind.schedule', icon: 'calendar-outline', color: '#7C3AED' },
+  venue: { label: 'search.kind.venue', icon: 'location-outline', color: '#D98E04' },
+  place: { label: 'search.kind.place', icon: 'business-outline', color: '#64748B' },
+  contact: { label: 'search.kind.contact', icon: 'people-outline', color: '#EA580C' },
+  guide: { label: 'search.kind.guide', icon: 'laptop-outline', color: '#0891B2' },
+  event: { label: 'search.kind.event', icon: 'ticket-outline', color: '#DB2777' },
+  sport: { label: 'search.kind.sport', icon: 'barbell-outline', color: '#16A34A' },
+  programme: { label: 'search.kind.programme', icon: 'school-outline', color: '#4F46E5' },
+  announcement: { label: 'search.kind.announcement', icon: 'megaphone-outline', color: '#B45309' },
+  checklist: { label: 'search.kind.checklist', icon: 'checkmark-circle-outline', color: '#15803D' },
+  info: { label: 'search.kind.info', icon: 'information-circle-outline', color: '#0F766E' },
+  shuttle: { label: 'search.kind.shuttle', icon: 'bus-outline', color: '#0369A1' },
+  setting: { label: 'search.kind.setting', icon: 'settings-outline', color: '#475569' },
 };
 
 const RECENT_KEY = 'search:recent';
-const WHOLE_APP_NOTE = 'To search the whole app, use the search box on the Home screen.';
+const WHOLE_APP_NOTE_KEY = 'search.wholeAppNote';
 const GROUP_PREVIEW = 3;
 const ink = '#071B2C';
 
@@ -132,6 +133,7 @@ function ResultCard({
   onToggle: () => void;
   actions: Action[];
 }) {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const { doc } = hit;
   const meta = KIND_META[doc.kind];
@@ -155,7 +157,7 @@ function ResultCard({
 
       {long ? (
         <Pressable accessibilityRole="button" onPress={onToggle} hitSlop={8}>
-          <Text style={[styles.readMore, { color: colors.text }]}>{expanded ? 'Show less' : doc.kind === 'faq' ? 'Read the whole answer' : 'Read more'}</Text>
+          <Text style={[styles.readMore, { color: colors.text }]}>{expanded ? t('search.showLess') : doc.kind === 'faq' ? t('search.readWhole') : t('search.readMore')}</Text>
         </Pressable>
       ) : null}
 
@@ -190,6 +192,7 @@ function Chip({ label, count, active, onPress }: { label: string; count?: number
 // ---- The screen -------------------------------------------------------------------------------
 
 export function SearchScreen({ area, initialQuery = '', scope = 'all' }: { area: SearchArea; initialQuery?: string; scope?: SearchScopeId }) {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const router = useRouter();
@@ -311,58 +314,58 @@ export function SearchScreen({ area, initialQuery = '', scope = 'all' }: { area:
 
     switch (doc.kind) {
       case 'faq':
-        list.push({ label: 'See it in FAQs', icon: 'open-outline', primary: true, onPress: () => go(routes.faqs, { category: doc.data.question }) });
+        list.push({ label: t('search.seeFaqs'), icon: 'open-outline', primary: true, onPress: () => go(routes.faqs, { category: doc.data.question }) });
         break;
       case 'support':
-        if (doc.data.relatedFaq) list.push({ label: 'Related questions', icon: 'help-circle-outline', primary: true, onPress: () => go(routes.faqs, { category: doc.data.relatedFaq }) });
-        list.push({ label: 'Open help options', icon: 'hand-left-outline', primary: !doc.data.relatedFaq, onPress: () => go(routes.support) });
+        if (doc.data.relatedFaq) list.push({ label: t('search.relatedQuestions'), icon: 'help-circle-outline', primary: true, onPress: () => go(routes.faqs, { category: doc.data.relatedFaq }) });
+        list.push({ label: t('search.openHelp'), icon: 'hand-left-outline', primary: !doc.data.relatedFaq, onPress: () => go(routes.support) });
         break;
       case 'schedule':
-        if (doc.data.venue) list.push({ label: 'Show me where', icon: 'location-outline', primary: true, onPress: () => go(routes.map, { q: doc.data.venue }) });
-        list.push({ label: 'Open schedule', icon: 'calendar-outline', primary: !doc.data.venue, onPress: () => go(routes.schedule) });
+        if (doc.data.venue) list.push({ label: t('events.showWhere'), icon: 'location-outline', primary: true, onPress: () => go(routes.map, { q: doc.data.venue }) });
+        list.push({ label: t('search.openSchedule'), icon: 'calendar-outline', primary: !doc.data.venue, onPress: () => go(routes.schedule) });
         break;
       case 'venue':
       case 'place':
-        list.push({ label: 'Show me where', icon: 'location-outline', primary: true, onPress: () => go(routes.map, { q: doc.data.name }) });
+        list.push({ label: t('events.showWhere'), icon: 'location-outline', primary: true, onPress: () => go(routes.map, { q: doc.data.name }) });
         if (doc.kind === 'venue' && /^https?:\/\//i.test(doc.data.mapLink ?? '')) {
-          list.push({ label: 'Online map', icon: 'globe-outline', onPress: () => void Linking.openURL(doc.data.mapLink) });
+          list.push({ label: t('search.onlineMap'), icon: 'globe-outline', onPress: () => void Linking.openURL(doc.data.mapLink) });
         }
         break;
       case 'contact':
-        if (doc.data.email) list.push({ label: 'Email', icon: 'mail-outline', primary: true, onPress: () => { remember(trimmed); void Linking.openURL(`mailto:${doc.data.email}`); } });
-        else list.push({ label: 'See who to contact', icon: 'people-outline', primary: true, onPress: () => go(routes.contacts) });
+        if (doc.data.email) list.push({ label: t('common.email'), icon: 'mail-outline', primary: true, onPress: () => { remember(trimmed); void Linking.openURL(`mailto:${doc.data.email}`); } });
+        else list.push({ label: t('search.seeWho'), icon: 'people-outline', primary: true, onPress: () => go(routes.contacts) });
         break;
       case 'event':
-        list.push({ label: 'See the event', icon: 'ticket-outline', primary: true, onPress: () => go(routes.schedule, { tab: 'events', focus: doc.data.id }) });
-        if (doc.data.venue) list.push({ label: 'Show me where', icon: 'location-outline', onPress: () => go(routes.map, { q: doc.data.venue }) });
+        list.push({ label: t('search.seeEvent'), icon: 'ticket-outline', primary: true, onPress: () => go(routes.schedule, { tab: 'events', focus: doc.data.id }) });
+        if (doc.data.venue) list.push({ label: t('events.showWhere'), icon: 'location-outline', onPress: () => go(routes.map, { q: doc.data.venue }) });
         break;
       case 'sport':
         if (routes.sportGym) {
           const gym = doc.data.tab === 'gym';
-          list.push({ label: gym ? 'How to sign up' : 'How to join', icon: gym ? 'barbell-outline' : 'football-outline', primary: true, onPress: () => go(routes.sportGym, { tab: doc.data.tab, focus: doc.data.id }) });
+          list.push({ label: gym ? t('search.howSignUp') : t('search.howJoin'), icon: gym ? 'barbell-outline' : 'football-outline', primary: true, onPress: () => go(routes.sportGym, { tab: doc.data.tab, focus: doc.data.id }) });
         }
-        if (doc.data.venue) list.push({ label: 'Show me where', icon: 'location-outline', onPress: () => go(routes.map, { q: doc.data.venue }) });
+        if (doc.data.venue) list.push({ label: t('events.showWhere'), icon: 'location-outline', onPress: () => go(routes.map, { q: doc.data.venue }) });
         break;
       case 'programme':
-        if (routes.programme) list.push({ label: 'See the programme', icon: 'school-outline', primary: true, onPress: () => go(routes.programme, { id: doc.data.id }) });
+        if (routes.programme) list.push({ label: t('search.seeProgramme'), icon: 'school-outline', primary: true, onPress: () => go(routes.programme, { id: doc.data.id }) });
         break;
       case 'announcement':
-        if (routes.announcements) list.push({ label: area === 'mentor' ? 'See announcements' : 'See it on Home', icon: 'megaphone-outline', primary: true, onPress: () => go(routes.announcements) });
+        if (routes.announcements) list.push({ label: area === 'mentor' ? t('search.seeAnnouncements') : t('search.seeOnHome'), icon: 'megaphone-outline', primary: true, onPress: () => go(routes.announcements) });
         break;
       case 'checklist':
-        if (routes.checklist) list.push({ label: 'Open checklist', icon: 'checkmark-circle-outline', primary: true, onPress: () => go(routes.checklist) });
+        if (routes.checklist) list.push({ label: t('search.openChecklist'), icon: 'checkmark-circle-outline', primary: true, onPress: () => go(routes.checklist) });
         break;
       case 'info':
-        if (routes.supportInfo) list.push({ label: 'Open support', icon: 'help-buoy-outline', primary: true, onPress: () => go(routes.supportInfo) });
+        if (routes.supportInfo) list.push({ label: t('search.openSupport'), icon: 'help-buoy-outline', primary: true, onPress: () => go(routes.supportInfo) });
         break;
       case 'shuttle':
-        if (routes.shuttle) list.push({ label: 'See shuttle times', icon: 'bus-outline', primary: true, onPress: () => go(routes.shuttle) });
+        if (routes.shuttle) list.push({ label: t('search.seeShuttles'), icon: 'bus-outline', primary: true, onPress: () => go(routes.shuttle) });
         break;
       case 'setting':
-        list.push({ label: 'Open profile', icon: 'settings-outline', primary: true, onPress: () => go(routes.profile) });
+        list.push({ label: t('search.openProfile'), icon: 'settings-outline', primary: true, onPress: () => go(routes.profile) });
         break;
       case 'guide':
-        if (routes.guides) list.push({ label: 'Open the guide', icon: 'laptop-outline', primary: true, onPress: () => go(routes.guides, { guide: doc.data.id || doc.data.title }) });
+        if (routes.guides) list.push({ label: t('search.openGuide'), icon: 'laptop-outline', primary: true, onPress: () => go(routes.guides, { guide: doc.data.id || doc.data.title }) });
         break;
     }
 
@@ -404,18 +407,18 @@ export function SearchScreen({ area, initialQuery = '', scope = 'all' }: { area:
     body = (
       <View style={styles.center}>
         <ActivityIndicator color={colors.accent} />
-        <Text style={[styles.hint, { color: colors.textSecondary }]}>Getting everything ready to search...</Text>
+        <Text style={[styles.hint, { color: colors.textSecondary }]}>{t('search.preparing')}</Text>
       </View>
     );
   } else if (!trimmed) {
     body = (
       <View>
-        <Text style={[styles.heading, { color: colors.text }]}>{scoped ? `Search ${scopeInfo.label}` : 'What do you need to find?'}</Text>
-        <Text style={[styles.hint, { color: colors.textSecondary }]}>{scopeInfo.hint}</Text>
+        <Text style={[styles.heading, { color: colors.text }]}>{scoped ? t('search.searchScope', { scope: scopeText(scopeInfo, 'label') }) : t('search.whatToFind')}</Text>
+        <Text style={[styles.hint, { color: colors.textSecondary }]}>{scopeText(scopeInfo, 'hint')}</Text>
 
         {scopeInfo.suggestions.length ? (
           <>
-            <Text style={[styles.label, { color: colors.textSecondary }]}>{scoped ? 'Try' : 'Popular searches'}</Text>
+            <Text style={[styles.label, { color: colors.textSecondary }]}>{scoped ? t('search.try') : t('search.popular')}</Text>
             <View style={styles.chipRow}>
               {scopeInfo.suggestions.map((text) => (
                 <Chip key={text} label={text} active={false} onPress={() => applySuggestion(text)} />
@@ -427,9 +430,9 @@ export function SearchScreen({ area, initialQuery = '', scope = 'all' }: { area:
         {recent.length ? (
           <View>
             <View style={styles.recentHeader}>
-              <Text style={[styles.label, { color: colors.textSecondary }]}>Recent</Text>
+              <Text style={[styles.label, { color: colors.textSecondary }]}>{t('search.recent')}</Text>
               <Pressable accessibilityRole="button" onPress={forgetRecent} hitSlop={8}>
-                <Text style={[styles.readMore, { color: colors.text }]}>Clear</Text>
+                <Text style={[styles.readMore, { color: colors.text }]}>{t('search.clear')}</Text>
               </Pressable>
             </View>
             {recent.map((text) => (
@@ -445,11 +448,11 @@ export function SearchScreen({ area, initialQuery = '', scope = 'all' }: { area:
   } else if (!shownHits.length) {
     body = (
       <View>
-        <Text style={[styles.heading, { color: colors.text }]}>We could not find that yet</Text>
+        <Text style={[styles.heading, { color: colors.text }]}>{t('search.notFound')}</Text>
         <Text style={[styles.hint, { color: colors.textSecondary }]}>
           {scoped
-            ? `Nothing in ${scopeInfo.label} matches that. Try a shorter or different word. ${WHOLE_APP_NOTE}`
-            : 'That is okay. Try a shorter or different word, like the number on a building or a word like library, food, timetable or clinic.'}
+            ? t('search.noneInScope', { scope: scopeText(scopeInfo, 'label'), note: t(WHOLE_APP_NOTE_KEY) })
+            : t('search.notFoundText')}
         </Text>
         {scopeInfo.suggestions.length ? (
           <View style={styles.chipRow}>
@@ -462,9 +465,9 @@ export function SearchScreen({ area, initialQuery = '', scope = 'all' }: { area:
           <View style={[styles.help, { backgroundColor: colors.card, borderColor: colors.border }]}>
             <Ionicons name="hand-left-outline" size={22} color={colors.accent} />
             <View style={styles.helpText}>
-              <Text style={[styles.cardTitle, { color: colors.text }]}>Still stuck?</Text>
-              <Text style={[styles.cardSub, { color: colors.textSecondary }]}>Tell us what you need help with, and we will guide you to the right place.</Text>
-              <ActionButton action={{ label: 'Open help options', icon: 'arrow-forward', primary: true, onPress: () => go(routes.support) }} />
+              <Text style={[styles.cardTitle, { color: colors.text }]}>{t('search.stillStuck')}</Text>
+              <Text style={[styles.cardSub, { color: colors.textSecondary }]}>{t('search.stillStuckText')}</Text>
+              <ActionButton action={{ label: t('search.openHelp'), icon: 'arrow-forward', primary: true, onPress: () => go(routes.support) }} />
             </View>
           </View>
         )}
@@ -474,10 +477,10 @@ export function SearchScreen({ area, initialQuery = '', scope = 'all' }: { area:
     body = (
       <View>
         {closestOnly ? (
-          <ShameResilientBanner message="Nothing matches every word yet, so here are the closest matches." type="info" />
+          <ShameResilientBanner message={t('search.closestOnly')} type="info" />
         ) : (
           <Text style={[styles.hint, { color: colors.textSecondary }]}>
-            {fullHits.length} {fullHits.length === 1 ? 'result' : 'results'}. Tap a button to take the next step.
+            {fullHits.length === 1 ? t('search.resultOne') : t('search.resultMany', { count: fullHits.length })}
           </Text>
         )}
 
@@ -489,7 +492,7 @@ export function SearchScreen({ area, initialQuery = '', scope = 'all' }: { area:
             <View key={kind} style={styles.group}>
               <View style={styles.groupHeader}>
                 <Ionicons name={meta.icon} size={18} color={meta.color} />
-                <Text style={[styles.groupTitle, { color: colors.text }]}>{meta.label}</Text>
+                <Text style={[styles.groupTitle, { color: colors.text }]}>{t(meta.label)}</Text>
               </View>
               {list.map((hit) => (
                 <ResultCard
@@ -504,7 +507,7 @@ export function SearchScreen({ area, initialQuery = '', scope = 'all' }: { area:
               {groupHits.length > GROUP_PREVIEW && kindFilter === 'all' ? (
                 <Pressable accessibilityRole="button" onPress={() => toggleGroup(kind)}>
                   <Text style={[styles.readMore, { color: colors.text }]}>
-                    {open ? 'Show fewer' : `Show all ${groupHits.length} in ${meta.label.toLowerCase()}`}
+                    {open ? t('search.showFewer') : t('search.showAll', { count: groupHits.length, kind: t(meta.label).toLowerCase() })}
                   </Text>
                 </Pressable>
               ) : null}
@@ -519,7 +522,7 @@ export function SearchScreen({ area, initialQuery = '', scope = 'all' }: { area:
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={[styles.top, { paddingTop: insets.top + 8, borderBottomColor: colors.border, backgroundColor: colors.background }]}>
         <View style={styles.searchRow}>
-          <Pressable accessibilityRole="button" accessibilityLabel="Go back" onPress={leave} hitSlop={10} style={styles.back}>
+          <Pressable accessibilityRole="button" accessibilityLabel={t('search.goBack')} onPress={leave} hitSlop={10} style={styles.back}>
             <Ionicons name="arrow-back" size={22} color={colors.text} />
           </Pressable>
           <View style={[styles.input, { backgroundColor: colors.card, borderColor: colors.border }]}>
@@ -532,17 +535,17 @@ export function SearchScreen({ area, initialQuery = '', scope = 'all' }: { area:
                 setKindFilter('all');
               }}
               onSubmitEditing={() => remember(trimmed)}
-              placeholder={scopeInfo.placeholder}
+              placeholder={scopeText(scopeInfo, 'placeholder')}
               placeholderTextColor={colors.textSecondary}
               style={[styles.inputText, { color: colors.text }]}
               autoFocus
               returnKeyType="search"
               autoCapitalize="none"
               autoCorrect={false}
-              accessibilityLabel={scoped ? `Search ${scopeInfo.label}` : 'Search the whole app'}
+              accessibilityLabel={scoped ? t('search.searchScope', { scope: scopeText(scopeInfo, 'label') }) : t('search.wholeApp')}
             />
             {query ? (
-              <Pressable accessibilityRole="button" accessibilityLabel="Clear search" onPress={() => setQuery('')} hitSlop={10}>
+              <Pressable accessibilityRole="button" accessibilityLabel={t('map.clear')} onPress={() => setQuery('')} hitSlop={10}>
                 <Ionicons name="close-circle" size={19} color={colors.textSecondary} />
               </Pressable>
             ) : null}
@@ -552,22 +555,22 @@ export function SearchScreen({ area, initialQuery = '', scope = 'all' }: { area:
         {scoped ? (
           <View style={styles.scopeRow}>
             <Ionicons name="funnel-outline" size={13} color={colors.textSecondary} />
-            <Text style={[styles.scopeText, { color: colors.textSecondary }]}>Searching {scopeInfo.label} only</Text>
+            <Text style={[styles.scopeText, { color: colors.textSecondary }]}>{t('search.searchingOnly', { scope: scopeText(scopeInfo, 'label') })}</Text>
           </View>
         ) : null}
 
         {groups.length > 1 ? (
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filterRow} keyboardShouldPersistTaps="handled">
-            <Chip label="All" count={shownHits.length} active={kindFilter === 'all'} onPress={() => setKindFilter('all')} />
+            <Chip label={t('common.allCategories')} count={shownHits.length} active={kindFilter === 'all'} onPress={() => setKindFilter('all')} />
             {groups.map(([kind, groupHits]) => (
-              <Chip key={kind} label={KIND_META[kind].label} count={groupHits.length} active={kindFilter === kind} onPress={() => setKindFilter(kind)} />
+              <Chip key={kind} label={t(KIND_META[kind].label)} count={groupHits.length} active={kindFilter === kind} onPress={() => setKindFilter(kind)} />
             ))}
           </ScrollView>
         ) : null}
       </View>
 
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
-        {offline ? <ShameResilientBanner message="You are searching saved information because your connection is unavailable right now." type="info" /> : null}
+        {offline ? <ShameResilientBanner message={t('search.offline')} type="info" /> : null}
         {body}
       </ScrollView>
     </View>

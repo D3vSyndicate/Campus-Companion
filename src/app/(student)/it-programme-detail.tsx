@@ -7,6 +7,8 @@ import { ScaledText as Text } from '../../components/ScaledText';
 import { ShameResilientBanner } from '../../components/ShameResilientBanner';
 import { loadProgrammes, type Programme } from '../../lib/programmes';
 import { useTheme } from '../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
+import i18n from '../../i18n';
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const LINK = /^https?:\/\//i;
@@ -14,9 +16,9 @@ const PHONE = /^\+?[\d\s()-]{7,}$/;
 
 // The advisor contact is one free-text field, so work out what kind of contact it is.
 function contactAction(contact: string): { url: string; icon: keyof typeof Ionicons.glyphMap; label: string } | null {
-  if (EMAIL.test(contact)) return { url: `mailto:${contact}`, icon: 'mail-outline', label: 'Email' };
-  if (LINK.test(contact)) return { url: contact, icon: 'open-outline', label: 'Open link' };
-  if (PHONE.test(contact)) return { url: `tel:${contact.replace(/[\s()-]/g, '')}`, icon: 'call-outline', label: 'Call' };
+  if (EMAIL.test(contact)) return { url: `mailto:${contact}`, icon: 'mail-outline', label: i18n.t('common.email') };
+  if (LINK.test(contact)) return { url: contact, icon: 'open-outline', label: i18n.t('common.openLink') };
+  if (PHONE.test(contact)) return { url: `tel:${contact.replace(/[\s()-]/g, '')}`, icon: 'call-outline', label: i18n.t('emergency.call') };
   return null;
 }
 
@@ -41,6 +43,7 @@ function Section({ icon, title, children }: { icon: keyof typeof Ionicons.glyphM
 }
 
 export default function ProgrammeDetailScreen() {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const router = useRouter();
   const params = useLocalSearchParams<{ id?: string | string[] }>();
@@ -80,12 +83,12 @@ export default function ProgrammeDetailScreen() {
   const back = (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel="Back to all programmes"
+      accessibilityLabel={t('programmes.backAll')}
       onPress={goBack}
       style={({ pressed }) => [styles.back, pressed && { opacity: 0.7 }]}
     >
       <Ionicons name="arrow-back" size={18} color={colors.text} />
-      <Text style={[styles.backText, { color: colors.text }]}>All programmes</Text>
+      <Text style={[styles.backText, { color: colors.text }]}>{t('programmes.all')}</Text>
     </Pressable>
   );
 
@@ -103,8 +106,8 @@ export default function ProgrammeDetailScreen() {
         {back}
         <View style={[styles.stateCard, { backgroundColor: colors.surface, borderColor: colors.border }]}>
           <Ionicons name="information-circle-outline" size={28} color={colors.accent} />
-          <Text style={[styles.stateTitle, { color: colors.text }]}>We could not find that programme</Text>
-          <Text style={[styles.stateText, { color: colors.textSecondary }]}>It may have been removed. Go back to see the current list.</Text>
+          <Text style={[styles.stateTitle, { color: colors.text }]}>{t('programmes.notFound')}</Text>
+          <Text style={[styles.stateText, { color: colors.textSecondary }]}>{t('programmes.notFoundText')}</Text>
         </View>
       </ScrollView>
     );
@@ -120,20 +123,20 @@ export default function ProgrammeDetailScreen() {
   return (
     <ScrollView style={[styles.container, { backgroundColor: colors.background }]} contentContainerStyle={styles.content}>
       <PageHeader
-        eyebrow="School of IT programme"
+        eyebrow={t('programmes.detailEyebrow')}
         title={programme.name}
       />
 
-      {offline ? <ShameResilientBanner message="You are offline, so this may be out of date." type="info" /> : null}
+      {offline ? <ShameResilientBanner message={t('common.offlineShort')} type="info" /> : null}
 
       {programme.description ? (
-        <Section icon="information-circle-outline" title="About this programme">
+        <Section icon="information-circle-outline" title={t('programmes.about')}>
           <Text style={[styles.body, { color: colors.text }]}>{programme.description}</Text>
         </Section>
       ) : null}
 
       {years.length ? (
-        <Section icon="layers-outline" title="Year level structure">
+        <Section icon="layers-outline" title={t('programmes.years')}>
           {years.map((line, index) => {
             const { label, rest } = splitLabel(line);
             return (
@@ -147,19 +150,19 @@ export default function ProgrammeDetailScreen() {
       ) : null}
 
       {programme.keyModules.length ? (
-        <Section icon="book-outline" title="Key modules">
+        <Section icon="book-outline" title={t('programmes.modules')}>
           {bullets(programme.keyModules)}
         </Section>
       ) : null}
 
       {programme.careers.length ? (
-        <Section icon="briefcase-outline" title="Career possibilities">
+        <Section icon="briefcase-outline" title={t('programmes.careers')}>
           {bullets(programme.careers)}
         </Section>
       ) : null}
 
       {programme.expectations ? (
-        <Section icon="ribbon-outline" title="Academic expectations">
+        <Section icon="ribbon-outline" title={t('programmes.expectations')}>
           <Text style={[styles.body, { color: colors.text }]}>{programme.expectations}</Text>
         </Section>
       ) : null}
@@ -167,7 +170,7 @@ export default function ProgrammeDetailScreen() {
       <View style={[styles.advice, { backgroundColor: colors.surface, borderColor: colors.accent }]}>
         <View style={styles.sectionHead}>
           <Ionicons name="chatbubbles-outline" size={18} color={colors.accent} />
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>Academic Advice</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('programmes.advice')}</Text>
         </View>
 
         {hasAdvice ? (
@@ -195,7 +198,7 @@ export default function ProgrammeDetailScreen() {
             {action ? (
               <Pressable
                 accessibilityRole="button"
-                accessibilityLabel={`${action.label} ${programme.advisorName || 'the advisor'}`}
+                accessibilityLabel={`${action.label} ${programme.advisorName || t('programmes.theAdvisor')}`}
                 onPress={() => Linking.openURL(action.url).catch(() => undefined)}
                 style={({ pressed }) => [styles.action, { backgroundColor: colors.accent }, pressed && { opacity: 0.85 }]}
               >
@@ -206,7 +209,7 @@ export default function ProgrammeDetailScreen() {
           </>
         ) : (
           <Text style={[styles.body, { color: colors.textSecondary }]}>
-            Advisor details have not been added yet. Ask your buddy or a coordinator who to speak to.
+            {t('programmes.noAdvisor')}
           </Text>
         )}
       </View>

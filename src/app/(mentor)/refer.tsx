@@ -5,6 +5,7 @@ import { ShameResilientBanner } from '../../components/ShameResilientBanner';
 import { SupportPathways } from '../../components/SupportPathways';
 import { fetchWithOfflineFallback } from '../../lib/offlineData';
 import { useTheme } from '../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 type Contact = { id: string; name: string; role: string; category: string; email: string };
 
@@ -12,6 +13,7 @@ const str = (value: unknown) => String(value ?? '').trim();
 
 // "Who do I point this student to?" — the support pathways, then the people behind them.
 export default function ReferScreen() {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [loading, setLoading] = useState(true);
@@ -34,28 +36,28 @@ export default function ReferScreen() {
 
   return (
     <ScrollView style={{ backgroundColor: colors.background }} contentContainerStyle={styles.content}>
-      <Text style={[styles.title, { color: colors.text }]}>Refer a student</Text>
+      <Text style={[styles.title, { color: colors.text }]}>{t('buddy.actions.refer.title')}</Text>
       <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-        You listen and point the way. Asking for help early is a smart, responsible habit, so make it feel normal.
+        {t('buddyRefer.subtitle')}
       </Text>
 
       <ShameResilientBanner
-        message="If someone's safety or wellbeing worries you, do not carry it alone. Refer them to professional counselling and wellness services, and tell the orientation coordinators."
+        message={t('buddyRefer.safety')}
         type="info"
       />
 
       <SupportPathways faqRoute="/(mentor)/faqs" />
 
-      <Text style={[styles.heading, { color: colors.text }]}>People who can help</Text>
+      <Text style={[styles.heading, { color: colors.text }]}>{t('common.peopleWhoCanHelp')}</Text>
       {loading ? (
         <ActivityIndicator color={colors.accent} style={styles.loading} />
       ) : contacts.length === 0 ? (
-        <Text style={[styles.subtitle, { color: colors.textSecondary }]}>No contacts have been published yet.</Text>
+        <Text style={[styles.subtitle, { color: colors.textSecondary }]}>{t('buddyRefer.none')}</Text>
       ) : (
         contacts.map((contact) => (
           <View key={contact.id} style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}>
             <View style={styles.cardText}>
-              <Text style={[styles.name, { color: colors.text }]}>{contact.name || 'Support contact'}</Text>
+              <Text style={[styles.name, { color: colors.text }]}>{contact.name || t('buddyRefer.fallbackName')}</Text>
               <Text style={[styles.meta, { color: colors.textSecondary }]}>
                 {[contact.role, contact.category].filter(Boolean).join(' · ')}
               </Text>
@@ -66,7 +68,7 @@ export default function ReferScreen() {
                 onPress={() => void Linking.openURL(`mailto:${contact.email}`)}
                 style={[styles.button, { backgroundColor: colors.accent }]}
               >
-                <Text style={styles.buttonText}>Email</Text>
+                <Text style={styles.buttonText}>{t('common.email')}</Text>
               </TouchableOpacity>
             ) : null}
           </View>

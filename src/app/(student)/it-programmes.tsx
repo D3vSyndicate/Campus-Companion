@@ -7,8 +7,10 @@ import { ScaledText as Text } from '../../components/ScaledText';
 import { ShameResilientBanner } from '../../components/ShameResilientBanner';
 import { loadProgrammes, type Programme } from '../../lib/programmes';
 import { useTheme } from '../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 export default function ProgrammesScreen() {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const router = useRouter();
 
@@ -46,12 +48,12 @@ export default function ProgrammesScreen() {
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => void refresh()} tintColor={colors.accent} />}
     >
       <PageHeader
-        eyebrow="SCHOOL OF IT"
-        title="Programmes"
-        subtitle="Find out what each programme covers, where it can take you, and who to ask for academic advice."
+        eyebrow={t('common.schoolOfIt')}
+        title={t('programmes.title')}
+        subtitle={t('programmes.subtitle')}
       />
 
-      {offline ? <ShameResilientBanner message="You are offline, so this may be out of date. It will refresh when you are back online." type="info" /> : null}
+      {offline ? <ShameResilientBanner message={t('common.offlineRefresh')} type="info" /> : null}
 
       {loading ? (
         <ActivityIndicator size="large" color={colors.accent} style={styles.loader} />
@@ -59,12 +61,12 @@ export default function ProgrammesScreen() {
         <View style={[styles.stateCard, { backgroundColor: colors.surface, borderColor: colors.border }]}>
           <Ionicons name={failed ? 'cloud-offline-outline' : 'school-outline'} size={28} color={colors.accent} />
           <Text style={[styles.stateTitle, { color: colors.text }]}>
-            {failed ? 'Programmes could not be loaded' : 'No programmes published yet'}
+            {failed ? t('programmes.loadFail') : t('programmes.none')}
           </Text>
           <Text style={[styles.stateText, { color: colors.textSecondary }]}>
             {failed
-              ? 'Please try again when your connection is available.'
-              : 'The School of IT will publish programme information here. In the meantime, ask your buddy or a coordinator.'}
+              ? t('programmes.retry')
+              : t('programmes.noneText')}
           </Text>
         </View>
       ) : (
@@ -72,7 +74,7 @@ export default function ProgrammesScreen() {
           <Pressable
             key={programme.id}
             accessibilityRole="button"
-            accessibilityLabel={`${programme.name}. Open programme details`}
+            accessibilityLabel={t('programmes.openDetail', { name: programme.name })}
             onPress={() => open(programme)}
             style={({ pressed }) => [
               styles.card,

@@ -8,6 +8,7 @@ import {
     View,
 } from 'react-native';
 import { useTheme } from '../../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 const broadcasts = [
   {
@@ -29,6 +30,7 @@ const broadcasts = [
 ];
 
 export default function StudentMentorGroupScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { colors } = useTheme();
@@ -155,7 +157,7 @@ export default function StudentMentorGroupScreen() {
                   { color: colors.textSecondary },
                 ]}
               >
-                Mentor
+                {t('mg.mentor')}
               </Text>
 
               <Text
@@ -184,7 +186,7 @@ export default function StudentMentorGroupScreen() {
                   { color: colors.textSecondary },
                 ]}
               >
-                Members
+                {t('mg.members')}
               </Text>
 
               <Text
@@ -206,7 +208,7 @@ export default function StudentMentorGroupScreen() {
                 { color: colors.text },
               ]}
             >
-              About this group
+              {t('mg.about')}
             </Text>
 
             <Text
@@ -230,7 +232,7 @@ export default function StudentMentorGroupScreen() {
                   { color: colors.text },
                 ]}
               >
-                Mentor Broadcasts
+                {t('mg.broadcasts')}
               </Text>
 
               <Text
@@ -239,7 +241,7 @@ export default function StudentMentorGroupScreen() {
                   { color: colors.textSecondary },
                 ]}
               >
-                Important updates from your mentor
+                {t('mg.broadcastsSub')}
               </Text>
             </View>
 
@@ -338,8 +340,7 @@ export default function StudentMentorGroupScreen() {
                 { color: colors.textSecondary },
               ]}
             >
-              Only mentors can send messages to this group.
-              Students can read broadcasts but cannot reply.
+              {t('mg.readOnly')}
             </Text>
           </View>
         </View>

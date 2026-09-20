@@ -1,3 +1,4 @@
+import i18n from '../i18n';
 import type { SearchKind } from './search';
 
 // Search happens at two levels:
@@ -111,3 +112,8 @@ export const scopeForScreen = (screen: string | undefined): SearchScopeId | null
 
 export const searchHref = (area: 'student' | 'mentor', scope: SearchScopeId = 'all') =>
   `/(${area})/search${scope === 'all' ? '' : `?scope=${scope}`}`;
+
+// The words a scope shows, in the student's language. The English in SEARCH_SCOPES is the fallback.
+// The suggestions stay in English on purpose: they are search words, and the searchable content is English.
+export const scopeText = (scope: SearchScope, field: 'label' | 'placeholder' | 'hint') =>
+  i18n.t(`search.scopes.${scope.id}.${field}`, { defaultValue: scope[field] });

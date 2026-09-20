@@ -8,11 +8,13 @@ import { ScaledText as Text } from '../ScaledText';
 import { gameById } from './games';
 import { UnlockReveal } from './UnlockReveal';
 import type { RoundOutcome } from './types';
+import { useTranslation } from 'react-i18next';
 
 // Wraps whichever game the student opened. This is the only place that knows a win turns into a
 // reward, which is what keeps the games themselves replaceable.
 
 export function GameHost({ gameId }: { gameId: string }) {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const router = useRouter();
   const { ledger, playRound } = useArcade();
@@ -26,9 +28,9 @@ export function GameHost({ gameId }: { gameId: string }) {
     return (
       <View style={[styles.screen, { backgroundColor: colors.background }]}>
         <PageHeader
-          eyebrow="Madibaz Arcade"
-          title="Game not found"
-          subtitle="That game is not in the arcade. Head back and pick another."
+          eyebrow={t('home.cards.arcade.title')}
+          title={t('arcade.notFound')}
+          subtitle={t('arcade.notFoundText')}
           showSearch={false}
           showBack
           backFallback="/(student)/arcade"
@@ -55,9 +57,9 @@ export function GameHost({ gameId }: { gameId: string }) {
     <View style={[styles.screen, { backgroundColor: colors.background }]}>
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
         <PageHeader
-          eyebrow="Madibaz Arcade"
-          title={game.title}
-          subtitle={game.howTo}
+          eyebrow={t('home.cards.arcade.title')}
+          title={t(`arcade.games.${game.id}.title`, { defaultValue: game.title })}
+          subtitle={t(`arcade.games.${game.id}.howTo`, { defaultValue: game.howTo })}
           showSearch={false}
           showBack
           backFallback="/(student)/arcade"
@@ -67,10 +69,10 @@ export function GameHost({ gameId }: { gameId: string }) {
 
         {stats && stats.played > 0 ? (
           <View style={[styles.stats, { backgroundColor: colors.card, borderColor: colors.border }]}>
-            <Stat label="Played" value={String(stats.played)} />
-            <Stat label="Won" value={String(stats.won)} />
+            <Stat label={t('arcade.played')} value={String(stats.played)} />
+            <Stat label={t('arcade.won')} value={String(stats.won)} />
             {stats.bestMs !== undefined ? (
-              <Stat label="Best" value={`${stats.bestMs}ms`} />
+              <Stat label={t('arcade.best')} value={`${stats.bestMs}ms`} />
             ) : null}
           </View>
         ) : null}

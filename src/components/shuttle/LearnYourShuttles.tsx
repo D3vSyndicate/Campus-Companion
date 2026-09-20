@@ -2,10 +2,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { fetchShuttleRows, SHUTTLE_LABEL, SHUTTLE_RULES } from '../../lib/shuttle';
+import { fetchShuttleRows, ruleKey, SHUTTLE_CAMPUS, SHUTTLE_RULES, SHUTTLE_YEAR } from '../../lib/shuttle';
 import { useTheme } from '../../theme/ThemeContext';
 import { PageHeader } from '../PageHeader';
 import { ScaledText as Text } from '../ScaledText';
+import { useTranslation } from 'react-i18next';
 
 // Learn Your Shuttles — the times, plus the things nobody tells a first-year until they have
 // already been turned away at the door.
@@ -25,39 +26,17 @@ interface RouteGroup {
 
 // Written to sound like a person, not a noticeboard. A first-year reading this is often anxious
 // about getting somewhere on time, and a timetable that speaks kindly costs nothing.
-const SHIFTS: { key: Shift; label: string; hint: string; icon: keyof typeof Ionicons.glyphMap }[] = [
-  {
-    key: 'morning',
-    label: 'Getting to campus',
-    hint: 'Morning runs. If you have an 07:45, the 06:45 gets you there calmly.',
-    icon: 'sunny-outline',
-  },
-  {
-    key: 'afternoon',
-    label: 'Heading home',
-    hint: 'Afternoon runs. Aim for the one before the one you need.',
-    icon: 'partly-sunny-outline',
-  },
-  {
-    key: 'night',
-    label: 'Late nights on campus',
-    hint: 'If you are studying late, these are your way back.',
-    icon: 'moon-outline',
-  },
+const SHIFTS: { key: Shift; icon: keyof typeof Ionicons.glyphMap }[] = [
+  { key: 'morning', icon: 'sunny-outline' },
+  { key: 'afternoon', icon: 'partly-sunny-outline' },
+  { key: 'night', icon: 'moon-outline' },
 ];
 
 // Advice that is not already covered by the official rules below, so nothing is said twice.
-const ADVICE: { icon: keyof typeof Ionicons.glyphMap; title: string; body: string }[] = [
-  {
-    icon: 'navigate-outline',
-    title: 'Lost, and need to find a stop',
-    body: 'Open the campus map and find the building nearest you, then walk to the stop it lists. If you are off campus and unsure, head for the nearest landmark stop — Feather Market Hall, Kings Beach and Central are all easy to find and easy to ask directions to.',
-  },
-  {
-    icon: 'time-outline',
-    title: 'The last shuttle is the last one',
-    body: 'Decide before the last departure rather than five minutes after it. If you miss it you are arranging your own way home, late, and probably paying for it.',
-  },
+// The words are in the locale files under shuttleGuide.advice.<id>.
+const ADVICE: { id: string; icon: keyof typeof Ionicons.glyphMap }[] = [
+  { id: 'lost', icon: 'navigate-outline' },
+  { id: 'last', icon: 'time-outline' },
 ];
 
 const str = (value: unknown) => String(value ?? '').trim();
@@ -84,6 +63,7 @@ const currentShift = (now: Date): Shift => {
 };
 
 export function LearnYourShuttles() {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const router = useRouter();
 
@@ -131,9 +111,9 @@ export function LearnYourShuttles() {
     <View style={[styles.screen, { backgroundColor: colors.background }]}>
       <ScrollView contentContainerStyle={styles.content}>
         <PageHeader
-          eyebrow="Learn your shuttles"
-          title="Getting around, without the guesswork"
-          subtitle="When the shuttles run, what you need to board, and what to do when you are lost."
+          eyebrow={t('home.cards.shuttles.title')}
+          title={t('shuttleGuide.title')}
+          subtitle={t('shuttleGuide.subtitle')}
           showSearch={false}
           showBack
           backFallback="/(student)"
@@ -142,7 +122,7 @@ export function LearnYourShuttles() {
         <View style={[styles.cardRule, { backgroundColor: colors.accent }]}>
           <Ionicons name="card-outline" size={20} color="#071B2C" />
           <Text style={styles.cardRuleText}>
-            No student card, no shuttle. Carry it every day, along with your registration letter.
+            {t('shuttleGuide.cardRule')}
           </Text>
         </View>
 
@@ -170,23 +150,22 @@ export function LearnYourShuttles() {
                   color={active ? '#071B2C' : colors.textSecondary}
                 />
                 <Text style={[styles.shiftLabel, { color: active ? '#071B2C' : colors.textSecondary }]}>
-                  {option.label}
+                  {t(`shuttleGuide.shift.${option.key}.label`)}
                 </Text>
               </Pressable>
             );
           })}
         </View>
 
-        <Text style={[styles.shiftHint, { color: colors.textSecondary }]}>{activeShift?.hint}</Text>
+        <Text style={[styles.shiftHint, { color: colors.textSecondary }]}>{activeShift ? t(`shuttleGuide.shift.${activeShift.key}.hint`) : null}</Text>
 
         {loading ? (
-          <Text style={[styles.empty, { color: colors.textSecondary }]}>Loading shuttle times…</Text>
+          <Text style={[styles.empty, { color: colors.textSecondary }]}>{t('shuttleGuide.loading')}</Text>
         ) : routes.length === 0 ? (
           <View style={[styles.notice, { backgroundColor: colors.card, borderColor: colors.border }]}>
-            <Text style={[styles.noticeTitle, { color: colors.text }]}>Nothing listed</Text>
+            <Text style={[styles.noticeTitle, { color: colors.text }]}>{t('shuttleGuide.nothing')}</Text>
             <Text style={[styles.noticeBody, { color: colors.textSecondary }]}>
-              There are no shuttles listed for this time of day. Check the printed schedule at your
-              stop, or ask a shuttle marshal.
+              {t('shuttleGuide.nothingText')}
             </Text>
           </View>
         ) : (
@@ -213,7 +192,7 @@ export function LearnYourShuttles() {
 
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="Open the campus map"
+          accessibilityLabel={t('shuttleGuide.openMap')}
           onPress={() => router.push('/(student)/map')}
           style={({ pressed }) => [
             styles.mapLink,
@@ -225,15 +204,15 @@ export function LearnYourShuttles() {
             <Ionicons name="map-outline" size={20} color={colors.accent} />
           </View>
           <View style={styles.mapCopy}>
-            <Text style={[styles.mapTitle, { color: colors.text }]}>Find your stop on the map</Text>
+            <Text style={[styles.mapTitle, { color: colors.text }]}>{t('shuttleGuide.findStop')}</Text>
             <Text style={[styles.mapBody, { color: colors.textSecondary }]}>
-              Lost? Open the campus map, find the building nearest you and walk from there.
+              {t('shuttleGuide.lostHelp')}
             </Text>
           </View>
           <Ionicons name="chevron-forward" size={18} color={colors.textSecondary} />
         </Pressable>
 
-        <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>Before you board</Text>
+        <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>{t('shuttle.beforeYouBoard')}</Text>
 
         {/* The official rules, straight from the published schedule. */}
         {SHUTTLE_RULES.map((rule) => (
@@ -243,28 +222,27 @@ export function LearnYourShuttles() {
           >
             <Ionicons name="shield-checkmark-outline" size={20} color={colors.accent} />
             <View style={styles.adviceCopy}>
-              <Text style={[styles.adviceTitle, { color: colors.text }]}>{rule.title}</Text>
-              <Text style={[styles.adviceBody, { color: colors.textSecondary }]}>{rule.text}</Text>
+              <Text style={[styles.adviceTitle, { color: colors.text }]}>{t(`shuttle.rules.${ruleKey(rule.title)}.title`, { defaultValue: rule.title })}</Text>
+              <Text style={[styles.adviceBody, { color: colors.textSecondary }]}>{t(`shuttle.rules.${ruleKey(rule.title)}.text`, { defaultValue: rule.text })}</Text>
             </View>
           </View>
         ))}
 
         {ADVICE.map((item) => (
           <View
-            key={item.title}
+            key={item.id}
             style={[styles.advice, { backgroundColor: colors.card, borderColor: colors.border }]}
           >
             <Ionicons name={item.icon} size={20} color={colors.accent} />
             <View style={styles.adviceCopy}>
-              <Text style={[styles.adviceTitle, { color: colors.text }]}>{item.title}</Text>
-              <Text style={[styles.adviceBody, { color: colors.textSecondary }]}>{item.body}</Text>
+              <Text style={[styles.adviceTitle, { color: colors.text }]}>{t(`shuttleGuide.advice.${item.id}.title`)}</Text>
+              <Text style={[styles.adviceBody, { color: colors.textSecondary }]}>{t(`shuttleGuide.advice.${item.id}.body`)}</Text>
             </View>
           </View>
         ))}
 
         <Text style={[styles.footnote, { color: colors.textSecondary }]}>
-          {SHUTTLE_LABEL}. Times can change — the printed schedule at your stop is always the final
-          word.
+          {t('shuttleGuide.footnote', { label: t('shuttle.caption', { campus: SHUTTLE_CAMPUS, year: SHUTTLE_YEAR }) })}
         </Text>
       </ScrollView>
     </View>

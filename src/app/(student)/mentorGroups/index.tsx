@@ -8,8 +8,10 @@ import {
   View,
 } from 'react-native';
 import { useTheme } from '../../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 export default function MentorGroups() {
+  const { t } = useTranslation();
   const router = useRouter();
   const { colors } = useTheme();
 
@@ -29,11 +31,11 @@ export default function MentorGroups() {
 
         <View>
           <Text style={[styles.title, { color: colors.text }]}>
-            Mentor Groups
+            {t('mg.title')}
           </Text>
 
           <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-            Connect with your mentor and fellow students.
+            {t('mg.subtitle')}
           </Text>
         </View>
       </View>
@@ -51,12 +53,11 @@ export default function MentorGroups() {
 
         <View style={styles.welcomeText}>
           <Text style={styles.welcomeTitle}>
-            Find your mentor group
+            {t('mg.findYours')}
           </Text>
 
           <Text style={styles.welcomeDescription}>
-            Join a group for your programme and stay connected with
-            your mentor.
+            {t('mg.findYoursText')}
           </Text>
         </View>
       </View>
@@ -90,7 +91,7 @@ export default function MentorGroups() {
 
         <View style={styles.cardContent}>
           <Text style={[styles.cardTitle, { color: colors.text }]}>
-            Find a Mentor Group
+            {t('mg.findTitle')}
           </Text>
 
           <Text
@@ -99,7 +100,7 @@ export default function MentorGroups() {
               { color: colors.textSecondary },
             ]}
           >
-            Browse available groups and send a request to join.
+            {t('mg.findText')}
           </Text>
         </View>
 
@@ -139,7 +140,7 @@ export default function MentorGroups() {
 
         <View style={styles.cardContent}>
           <Text style={[styles.cardTitle, { color: colors.text }]}>
-            Scan Mentor QR
+            {t('mg.scanTitle')}
           </Text>
 
           <Text
@@ -148,8 +149,7 @@ export default function MentorGroups() {
               { color: colors.textSecondary },
             ]}
           >
-            Scan a QR code provided by your mentor to request
-            access to their group.
+            {t('mg.scanText')}
           </Text>
         </View>
 
@@ -189,7 +189,7 @@ export default function MentorGroups() {
 
         <View style={styles.cardContent}>
           <Text style={[styles.cardTitle, { color: colors.text }]}>
-            My Mentor Group
+            {t('mg.mine')}
           </Text>
 
           <Text
@@ -198,8 +198,7 @@ export default function MentorGroups() {
               { color: colors.textSecondary },
             ]}
           >
-            Check your join request or access your approved
-            mentor group.
+            {t('mg.mineText')}
           </Text>
         </View>
 
@@ -232,9 +231,7 @@ export default function MentorGroups() {
             { color: colors.textSecondary },
           ]}
         >
-          Joining a mentor group is not automatic. Your request
-          must be approved by the mentor before you become a
-          member.
+          {t('mg.notAutomatic')}
         </Text>
       </View>
     </ScrollView>

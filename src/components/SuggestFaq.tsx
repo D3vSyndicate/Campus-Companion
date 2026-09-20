@@ -4,6 +4,7 @@ import { useToast } from '../context/ToastContext';
 import { supabase } from '../lib/superbase';
 import { useTheme } from '../theme/ThemeContext';
 import { ScaledText as Text } from './ScaledText';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   // Start with what the buddy just searched for, so a missing answer is one tap away.
@@ -13,6 +14,7 @@ type Props = {
 
 // A buddy tells the coordinators about a question students keep asking. No student details involved.
 export function SuggestFaq({ initialQuestion = '', onDone }: Props) {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const { showToast } = useToast();
 
@@ -23,7 +25,7 @@ export function SuggestFaq({ initialQuestion = '', onDone }: Props) {
   const send = async () => {
     const trimmed = question.trim();
     if (!trimmed) {
-      showToast('Write the question first, then send it.', 'info');
+      showToast(t('suggest.writeFirst'), 'info');
       return;
     }
 
@@ -38,14 +40,14 @@ export function SuggestFaq({ initialQuestion = '', onDone }: Props) {
       const notSetUp = error.code === '42P01' || error.code === 'PGRST205';
       showToast(
         notSetUp
-          ? 'Suggestions are not set up yet. Ask a coordinator to run the latest database script.'
-          : 'That did not send yet. Please check your connection and try again.',
+          ? t('suggest.notSetUp')
+          : t('suggest.notSent'),
         'error',
       );
       return;
     }
 
-    showToast('Thank you. The coordinators will take a look.');
+    showToast(t('suggest.thanks'));
     onDone();
   };
 
@@ -53,16 +55,16 @@ export function SuggestFaq({ initialQuestion = '', onDone }: Props) {
 
   return (
     <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.accent }]}>
-      <Text style={[styles.title, { color: colors.text }]}>Suggest a question</Text>
+      <Text style={[styles.title, { color: colors.text }]}>{t('suggest.title')}</Text>
       <Text style={[styles.hint, { color: colors.textSecondary }]}>
-        Heard a question that is not answered here? Tell the coordinators so it can be added. Please do not include any student&apos;s personal details.
+        {t('suggest.intro')}
       </Text>
 
       <TextInput
         style={[styles.input, styles.multiline, inputStyle]}
         value={question}
         onChangeText={setQuestion}
-        placeholder="What do students keep asking?"
+        placeholder={t('suggest.whatAsk')}
         placeholderTextColor={colors.textSecondary}
         multiline
       />
@@ -70,7 +72,7 @@ export function SuggestFaq({ initialQuestion = '', onDone }: Props) {
         style={[styles.input, styles.multiline, inputStyle]}
         value={note}
         onChangeText={setNote}
-        placeholder="Anything that would help answer it? (optional)"
+        placeholder={t('suggest.helpAnswer')}
         placeholderTextColor={colors.textSecondary}
         multiline
       />
@@ -82,10 +84,10 @@ export function SuggestFaq({ initialQuestion = '', onDone }: Props) {
           disabled={sending}
           style={[styles.primary, { backgroundColor: colors.accent }, sending && styles.disabled]}
         >
-          <Text style={styles.primaryText}>{sending ? 'Sending...' : 'Send to coordinators'}</Text>
+          <Text style={styles.primaryText}>{sending ? 'Sending...' : t('suggest.send')}</Text>
         </TouchableOpacity>
         <TouchableOpacity accessibilityRole="button" onPress={onDone} disabled={sending} style={styles.secondary}>
-          <Text style={[styles.secondaryText, { color: colors.text }]}>Cancel</Text>
+          <Text style={[styles.secondaryText, { color: colors.text }]}>{t('common.cancel')}</Text>
         </TouchableOpacity>
       </View>
     </View>

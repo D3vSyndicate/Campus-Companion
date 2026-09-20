@@ -173,7 +173,7 @@ export default function ChecklistScreen() {
             },
           ]}
         >
-          <Text style={[styles.celebrationText, { color: colors.text }]}>🎉 You’re crushing it! You’ve finished your checklist.</Text>
+          <Text style={[styles.celebrationText, { color: colors.text }]}>{t('checklist.allDone')}</Text>
         </View>
       )}
 
@@ -181,8 +181,8 @@ export default function ChecklistScreen() {
         <ActivityIndicator size="large" color={colors.accent} />
       ) : tasks.length === 0 ? (
         <View style={[styles.emptyState, { backgroundColor: palette.cardBg, borderColor: colors.border }]}>
-          <Text style={[styles.emptyTitle, { color: palette.taskText }]}>Your checklist is not available yet</Text>
-          <Text style={[styles.emptyText, { color: palette.taskMuted }]}>Your orientation steps will appear here when they are published.</Text>
+          <Text style={[styles.emptyTitle, { color: palette.taskText }]}>{t('checklist.notAvailableTitle')}</Text>
+          <Text style={[styles.emptyText, { color: palette.taskMuted }]}>{t('checklist.notAvailableText')}</Text>
         </View>
       ) : (
         <FlatList

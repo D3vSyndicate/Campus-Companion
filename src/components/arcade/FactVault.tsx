@@ -7,6 +7,7 @@ import { useTheme } from '../../theme/ThemeContext';
 import { PageHeader } from '../PageHeader';
 import { ScaledText as Text } from '../ScaledText';
 import { RewardCard } from './RewardCard';
+import { useTranslation } from 'react-i18next';
 
 // Everything the student has unlocked, newest first. This is the part that makes the arcade a
 // feature rather than a game: what you won is still here tomorrow.
@@ -19,6 +20,7 @@ const FILTERS: { key: RewardKind | 'all'; label: string }[] = [
 ];
 
 export function FactVault() {
+  const { t } = useTranslation();
   const { colors } = useTheme();
   const router = useRouter();
   const { unlockedRewards, totalRewards, loading, madibazComingSoon } = useArcade();
@@ -37,9 +39,9 @@ export function FactVault() {
     <View style={[styles.screen, { backgroundColor: colors.background }]}>
       <ScrollView contentContainerStyle={styles.content}>
         <PageHeader
-          eyebrow="Fact Vault"
-          title="What you have unlocked"
-          subtitle={`${unlockedRewards.length} of ${totalRewards} collected.`}
+          eyebrow={t('arcade.vault')}
+          title={t('arcade.vaultTitle')}
+          subtitle={t('arcade.collected', { count: unlockedRewards.length, total: totalRewards })}
           showSearch={false}
           showBack
           backFallback="/(student)/arcade"
@@ -66,7 +68,7 @@ export function FactVault() {
                 <Text
                   style={[styles.filterLabel, { color: active ? '#071B2C' : colors.textSecondary }]}
                 >
-                  {option.label}
+                  {option.key === 'all' ? t('common.allCategories') : t(`arcade.kind.${option.key}`)}
                 </Text>
               </Pressable>
             );
@@ -77,19 +79,19 @@ export function FactVault() {
         {filter === 'madibaz' && madibazComingSoon ? (
           <View style={[styles.notice, { backgroundColor: colors.card, borderColor: colors.border }]}>
             <Text style={styles.noticeEmoji}>🎓</Text>
-            <Text style={[styles.noticeTitle, { color: colors.text }]}>Coming soon</Text>
+            <Text style={[styles.noticeTitle, { color: colors.text }]}>{t('arcade.comingSoon')}</Text>
             <Text style={[styles.noticeBody, { color: colors.textSecondary }]}>
-              Graduate stories are being collected. There is nothing to unlock here yet.
+              {t('arcade.comingSoonText')}
             </Text>
           </View>
         ) : shown.length === 0 ? (
           <View style={[styles.notice, { backgroundColor: colors.card, borderColor: colors.border }]}>
             <Text style={styles.noticeEmoji}>🔒</Text>
             <Text style={[styles.noticeTitle, { color: colors.text }]}>
-              {loading ? 'Opening the vault…' : 'Nothing here yet'}
+              {loading ? t('arcade.openingVault') : t('arcade.nothingYet')}
             </Text>
             <Text style={[styles.noticeBody, { color: colors.textSecondary }]}>
-              Win a round in the arcade and whatever you unlock is kept here.
+              {t('arcade.nothingText')}
             </Text>
             <Pressable
               accessibilityRole="button"
@@ -100,7 +102,7 @@ export function FactVault() {
                 pressed && { opacity: 0.85 },
               ]}
             >
-              <Text style={styles.noticeButtonLabel}>Go to the arcade</Text>
+              <Text style={styles.noticeButtonLabel}>{t('arcade.goArcade')}</Text>
             </Pressable>
           </View>
         ) : (
@@ -110,7 +112,7 @@ export function FactVault() {
             ))}
             {remaining > 0 ? (
               <Text style={[styles.remaining, { color: colors.textSecondary }]}>
-                🔒 {remaining} still locked
+                {t('arcade.stillLocked', { count: remaining })}
               </Text>
             ) : null}
           </>

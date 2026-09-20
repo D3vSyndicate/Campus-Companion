@@ -88,8 +88,8 @@ export default function ContactsScreen() {
         <ActivityIndicator size="large" color={colors.accent} />
       ) : contacts.length === 0 ? (
         <View style={[styles.emptyState, { backgroundColor: palette.cardBg, borderColor: palette.border }]}>
-          <Text style={[styles.emptyTitle, { color: palette.name }]}>No support contacts yet</Text>
-          <Text style={[styles.emptyText, { color: palette.body }]}>Your support team will appear here when contacts are published.</Text>
+          <Text style={[styles.emptyTitle, { color: palette.name }]}>{t('contacts.noneTitle')}</Text>
+          <Text style={[styles.emptyText, { color: palette.body }]}>{t('contacts.noneText')}</Text>
         </View>
       ) : contacts.map(contact => {
         const isExpanded = selectedContact === contact.id;

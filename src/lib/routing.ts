@@ -1,4 +1,5 @@
 import { distanceMeters } from '../data/campus';
+import i18n from '../i18n';
 
 export type LatLng = [number, number];
 
@@ -17,25 +18,27 @@ type OsrmStep = { distance: number; name?: string; maneuver: { type: string; mod
 
 function describeStep(step: OsrmStep): string | null {
   const { type, modifier } = step.maneuver;
-  const road = step.name ? ` onto ${step.name}` : '';
   const distance = step.distance >= 1000 ? `${(step.distance / 1000).toFixed(1)} km` : `${Math.round(step.distance)} m`;
+  const name = step.name ?? '';
 
   switch (type) {
     case 'depart':
-      return `Start walking${step.name ? ` along ${step.name}` : ''} for ${distance}`;
+      return name ? i18n.t('route.startAlong', { name, distance }) : i18n.t('route.start', { distance });
     case 'arrive':
-      return 'You have arrived';
+      return i18n.t('route.arrived');
     case 'turn':
     case 'end of road':
     case 'fork':
     case 'on ramp':
-    case 'off ramp':
-      return `Turn ${modifier ?? 'ahead'}${road}, then walk ${distance}`;
+    case 'off ramp': {
+      const direction = i18n.t(`route.direction.${(modifier ?? 'ahead').replace(' ', '_')}`, { defaultValue: modifier ?? 'ahead' });
+      return name ? i18n.t('route.turnOnto', { direction, name, distance }) : i18n.t('route.turn', { direction, distance });
+    }
     case 'new name':
     case 'continue':
-      return `Keep going${step.name ? ` on ${step.name}` : ''} for ${distance}`;
+      return name ? i18n.t('route.keepOn', { name, distance }) : i18n.t('route.keep', { distance });
     default:
-      return step.distance > 20 ? `Continue for ${distance}` : null;
+      return step.distance > 20 ? i18n.t('route.continue', { distance }) : null;
   }
 }
 

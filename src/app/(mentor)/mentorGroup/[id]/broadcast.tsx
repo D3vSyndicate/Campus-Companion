@@ -11,10 +11,12 @@ import {
     View,
 } from 'react-native';
 import { useTheme } from '../../../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 type Priority = 'normal' | 'important' | 'urgent';
 
 export default function BroadcastScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { colors } = useTheme();
@@ -26,12 +28,12 @@ export default function BroadcastScreen() {
 
   const sendBroadcast = () => {
     if (!title.trim()) {
-      Alert.alert('Missing title', 'Please enter a broadcast title.');
+      Alert.alert(t('mgm.missingTitle'), t('mgm.enterTitle'));
       return;
     }
 
     if (!message.trim()) {
-      Alert.alert('Missing message', 'Please enter a message.');
+      Alert.alert(t('mgm.missingMessage'), t('mgm.enterMessage'));
       return;
     }
 
@@ -42,11 +44,11 @@ export default function BroadcastScreen() {
       setSending(false);
 
       Alert.alert(
-        'Broadcast Sent',
-        'Your message has been sent to all members of this group.',
+        t('mgm.broadcastSent'),
+        t('mgm.broadcastSentText'),
         [
           {
-            text: 'OK',
+            text: t('common.ok'),
             onPress: () => {
               setTitle('');
               setMessage('');
@@ -65,17 +67,17 @@ export default function BroadcastScreen() {
   }[] = [
     {
       value: 'normal',
-      label: 'Normal',
+      label: t('mgm.priorityNormal'),
       icon: 'chatbubble-outline',
     },
     {
       value: 'important',
-      label: 'Important',
+      label: t('mgm.priorityImportant'),
       icon: 'alert-circle-outline',
     },
     {
       value: 'urgent',
-      label: 'Urgent',
+      label: t('mgm.priorityUrgent'),
       icon: 'warning-outline',
     },
   ];
@@ -106,7 +108,7 @@ export default function BroadcastScreen() {
 
         <View>
           <Text style={[styles.headerTitle, { color: colors.text }]}>
-            Broadcast
+            {t('mgm.broadcast')}
           </Text>
 
           <Text
@@ -115,7 +117,7 @@ export default function BroadcastScreen() {
               { color: colors.textSecondary },
             ]}
           >
-            Send a message to your group
+            {t('mgm.broadcastSub')}
           </Text>
         </View>
       </View>
@@ -142,7 +144,7 @@ export default function BroadcastScreen() {
 
           <View style={styles.infoText}>
             <Text style={[styles.infoTitle, { color: colors.text }]}>
-              Group Broadcast
+              {t('mgm.groupBroadcast')}
             </Text>
 
             <Text
@@ -151,21 +153,20 @@ export default function BroadcastScreen() {
                 { color: colors.textSecondary },
               ]}
             >
-              Send announcements and important information to
-              everyone in your mentor group.
+              {t('mgm.broadcastIntro')}
             </Text>
           </View>
         </View>
 
         {/* Title */}
         <Text style={[styles.label, { color: colors.text }]}>
-          Title
+          {t('mgm.title')}
         </Text>
 
         <TextInput
           value={title}
           onChangeText={setTitle}
-          placeholder="e.g. Orientation meeting"
+          placeholder={t('mgm.titleEg')}
           placeholderTextColor={colors.textSecondary}
           style={[
             styles.input,
@@ -179,13 +180,13 @@ export default function BroadcastScreen() {
 
         {/* Message */}
         <Text style={[styles.label, { color: colors.text }]}>
-          Message
+          {t('mgm.message')}
         </Text>
 
         <TextInput
           value={message}
           onChangeText={setMessage}
-          placeholder="Write your message..."
+          placeholder={t('mgm.messageEg')}
           placeholderTextColor={colors.textSecondary}
           multiline
           textAlignVertical="top"
@@ -201,7 +202,7 @@ export default function BroadcastScreen() {
 
         {/* Priority */}
         <Text style={[styles.label, { color: colors.text }]}>
-          Priority
+          {t('mgm.priority')}
         </Text>
 
         <View style={styles.priorityContainer}>
@@ -275,13 +276,13 @@ export default function BroadcastScreen() {
               { color: colors.background },
             ]}
           >
-            {sending ? 'Sending...' : 'Send Broadcast'}
+            {sending ? 'Sending...' : t('mgm.sendBroadcast')}
           </Text>
         </Pressable>
 
         {/* Previous Broadcasts */}
         <Text style={[styles.sectionTitle, { color: colors.text }]}>
-          Previous Broadcasts
+          {t('mgm.previous')}
         </Text>
 
         <View
@@ -343,7 +344,7 @@ export default function BroadcastScreen() {
                 { color: colors.textSecondary },
               ]}
             >
-              Normal
+              {t('mgm.priorityNormal')}
             </Text>
           </View>
         </View>
@@ -370,8 +371,7 @@ export default function BroadcastScreen() {
               { color: colors.textSecondary },
             ]}
           >
-            Students can read broadcasts but cannot reply or
-            send messages to the group.
+            {t('mgm.readOnlyNote')}
           </Text>
         </View>
       </ScrollView>

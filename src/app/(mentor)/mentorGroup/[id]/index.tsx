@@ -8,8 +8,10 @@ import {
   View,
 } from 'react-native';
 import { useTheme } from '../../../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 export default function MentorGroupDetails() {
+  const { t } = useTranslation();
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { colors } = useTheme();
@@ -135,7 +137,7 @@ export default function MentorGroupDetails() {
                 { color: colors.textSecondary },
               ]}
             >
-              GROUP CAPACITY
+              {t('mgm.capacityUpper')}
             </Text>
 
             <Text
@@ -153,7 +155,7 @@ export default function MentorGroupDetails() {
                 { color: colors.textSecondary },
               ]}
             >
-              {remaining} spaces remaining
+              {remaining} {t('mgm.spacesLeft')}
             </Text>
           </View>
 
@@ -200,13 +202,13 @@ export default function MentorGroupDetails() {
           { color: colors.text },
         ]}
       >
-        Manage Group
+        {t('mgm.manageGroup')}
       </Text>
 
       <ManagementCard
         icon="person-add-outline"
-        title="Join Requests"
-        description="Review students waiting to join your group."
+        title={t('mgm.joinRequests')}
+        description={t('mgm.joinRequestsText')}
         colors={colors}
         onPress={() =>
           router.push(
@@ -217,8 +219,8 @@ export default function MentorGroupDetails() {
 
       <ManagementCard
         icon="people-outline"
-        title="Members"
-        description="View and manage students in your group."
+        title={t('mg.members')}
+        description={t('mgm.membersText')}
         colors={colors}
         onPress={() =>
           router.push(
@@ -229,8 +231,8 @@ export default function MentorGroupDetails() {
 
       <ManagementCard
         icon="qr-code-outline"
-        title="Group QR Code"
-        description="Show students the QR code to request access."
+        title={t('mgm.qrTitle')}
+        description={t('mgm.qrText')}
         colors={colors}
         onPress={() =>
           router.push(
@@ -241,8 +243,8 @@ export default function MentorGroupDetails() {
 
       <ManagementCard
         icon="megaphone-outline"
-        title="Broadcast"
-        description="Send an announcement to your group."
+        title={t('mgm.broadcast')}
+        description={t('mgm.broadcastText')}
         colors={colors}
         onPress={() =>
           router.push(

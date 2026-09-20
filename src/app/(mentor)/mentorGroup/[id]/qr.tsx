@@ -10,8 +10,10 @@ import {
 } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { useTheme } from '../../../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 export default function MentorGroupQR() {
+  const { t } = useTranslation();
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { colors } = useTheme();
@@ -20,19 +22,19 @@ export default function MentorGroupQR() {
 
   const handleRegenerate = () => {
     Alert.alert(
-      'Regenerate QR Code',
-      'Regenerating the QR code will invalidate the previous code. Continue?',
+      t('mgm.regenTitle'),
+      t('mgm.regenText'),
       [
         {
-          text: 'Cancel',
+          text: t('common.cancel'),
           style: 'cancel',
         },
         {
-          text: 'Regenerate',
+          text: t('mgm.regen'),
           onPress: () => {
             Alert.alert(
-              'QR Code regenerated',
-              'A new QR code will be generated when the database is connected.'
+              t('mgm.regenDone'),
+              t('mgm.regenDoneText')
             );
           },
         },
@@ -42,8 +44,8 @@ export default function MentorGroupQR() {
 
   const handleShare = () => {
     Alert.alert(
-      'Share QR Code',
-      'QR sharing will be connected later.'
+      t('mgm.shareQr'),
+      t('mgm.shareQrLater')
     );
   };
 
@@ -81,7 +83,7 @@ export default function MentorGroupQR() {
               { color: colors.text },
             ]}
           >
-            Group QR Code
+            {t('mgm.qrTitle')}
           </Text>
 
           <Text
@@ -90,7 +92,7 @@ export default function MentorGroupQR() {
               { color: colors.textSecondary },
             ]}
           >
-            Students can scan this code to request access.
+            {t('mgm.qrCanScan')}
           </Text>
         </View>
       </View>
@@ -120,7 +122,7 @@ export default function MentorGroupQR() {
             { color: colors.text },
           ]}
         >
-          Scan to join
+          {t('mgm.scanToJoin')}
         </Text>
 
         <Text
@@ -129,9 +131,7 @@ export default function MentorGroupQR() {
             { color: colors.textSecondary },
           ]}
         >
-          Students can scan this QR code using the Campus
-          Companion app. Scanning creates a join request —
-          it does not automatically add them to the group.
+          {t('mgm.qrHow')}
         </Text>
       </View>
 
@@ -158,7 +158,7 @@ export default function MentorGroupQR() {
               { color: colors.text },
             ]}
           >
-            Approval required
+            {t('mgm.approvalRequired')}
           </Text>
 
           <Text
@@ -167,8 +167,7 @@ export default function MentorGroupQR() {
               { color: colors.textSecondary },
             ]}
           >
-            Students will remain pending until you approve
-            their request.
+            {t('mgm.approvalText')}
           </Text>
         </View>
       </View>
@@ -188,7 +187,7 @@ export default function MentorGroupQR() {
         />
 
         <Text style={styles.primaryButtonText}>
-          Share QR Code
+          {t('mgm.shareQr')}
         </Text>
       </Pressable>
 
@@ -214,7 +213,7 @@ export default function MentorGroupQR() {
             { color: colors.text },
           ]}
         >
-          Regenerate QR Code
+          {t('mgm.regenTitle')}
         </Text>
       </Pressable>
 
@@ -232,8 +231,7 @@ export default function MentorGroupQR() {
             { color: colors.textSecondary },
           ]}
         >
-          QR codes should only be shared with students who
-          are part of your programme.
+          {t('mgm.qrShareOnly')}
         </Text>
       </View>
     </ScrollView>
